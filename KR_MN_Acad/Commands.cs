@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AcadLib.Errors;
+﻿using AcadLib.Errors;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
@@ -22,7 +17,7 @@ namespace KR_MN_Acad
       /// Спецификация монолитных блоков
       /// </summary>
       [CommandMethod("PIK", "KR-SpecMonolith", CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-      public void SpecMonolithCommand ()
+      public void SpecMonolithCommand()
       {
          Log.Info("Start Command: KR-SpecMonolith");
          Document doc = Application.DocumentManager.MdiActiveDocument;
@@ -51,7 +46,7 @@ namespace KR_MN_Acad
                }
                ed.WriteMessage("Ошибка - {0}", ex.Message);
             }
-         }         
-      }     
+         }
+      }
    }
 }
