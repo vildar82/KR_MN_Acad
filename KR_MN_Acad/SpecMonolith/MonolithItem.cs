@@ -18,7 +18,7 @@ namespace KR_MN_Acad.SpecMonolith
 
       public string Mark { get; private set; }
 
-      // Наименование
+      // Наименование 1
       public string Name { get; private set; }
       //Масса ед.кг.
       public double Weight { get; private set; }
