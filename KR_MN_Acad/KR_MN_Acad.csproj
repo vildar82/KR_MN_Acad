@@ -62,7 +62,11 @@
   <ItemGroup>
     <Compile Include="Commands.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpecMonolith\MonolithGroup.cs" />
     <Compile Include="SpecMonolith\MonolithItem.cs" />
+    <Compile Include="SpecMonolith\MonolithSpec.cs" />
+    <Compile Include="SpecMonolith\MonolithSpecRecord.cs" />
+    <Compile Include="SpecMonolith\SelectMonolith.cs" />
     <Compile Include="SpecMonolith\Settings.cs" />
     <Compile Include="SpecMonolith\SpecMonolithService.cs" />
   </ItemGroup>

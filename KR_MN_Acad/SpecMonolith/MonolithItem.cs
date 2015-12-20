@@ -1,5 +1,6 @@
 ﻿using System;
 using AcadLib.Blocks;
+using AcadLib.Errors;
 using AcadLib.Extensions;
 using Autodesk.AutoCAD.DatabaseServices;
 
@@ -37,9 +38,8 @@ namespace KR_MN_Acad.SpecMonolith
       //Масса ед.кг.
       public double Weight { get; private set; }
 
-      public bool Define(out string errMsg)
-      {
-         errMsg = string.Empty;
+      public bool Define()
+      {         
          bool resVal = false;
          using (var blRef = IdBlRef.GetObject(OpenMode.ForRead, false, true) as BlockReference)
          {
@@ -49,55 +49,53 @@ namespace KR_MN_Acad.SpecMonolith
                if (blName.StartsWith(Settings.Instance.BlockPrefix))
                {
                   //определение атрибутов
-                  resVal = defineAttrs(blRef.AttributeCollection, ref errMsg);
+                  string errMsg = defineAttrs(blRef.AttributeCollection);
+                  resVal = string.IsNullOrEmpty(errMsg);
+                  if (!resVal)
+                  {
+                     Inspector.AddError("Не определенный как блок монолитной конструкции - {0}: {1}".f(blName, errMsg), blRef);
+                  }
                }
             }
          }
          return resVal;
       }
 
-      private bool checkAttrs(ref string errMsg)
+      private string checkAttrs()
       {
-         bool res = true;
+         string errMsg = string.Empty;
          // ТИП
          if (AttrType == null)
          {
-            errMsg += "Не определен атрибут {0}. ".f(Settings.Instance.AttrType);
-            res = false;
+            errMsg += "Не определен атрибут {0}. ".f(Settings.Instance.AttrType);            
          }
          else if (!string.Equals(AttrType.Text, Settings.Instance.BlockMonolithTypeName, StringComparison.CurrentCultureIgnoreCase))
          {
-            errMsg += "Значение атрибута {0} не равно {1}. ".f(Settings.Instance.AttrType, Settings.Instance.BlockMonolithTypeName);
-            res = false;
+            errMsg += "Значение атрибута {0} не равно {1}. ".f(Settings.Instance.AttrType, Settings.Instance.BlockMonolithTypeName);            
          }
          // НАИМЕНОВАНИЕ
          if (AttrName == null)
          {
-            errMsg += "Не определен атрибут {0}. ".f(Settings.Instance.AttrName);
-            res = false;
+            errMsg += "Не определен атрибут {0}. ".f(Settings.Instance.AttrName);            
          }
          else if (string.IsNullOrEmpty(AttrName.Text))
          {
-            errMsg += "Пустое значение атрибута {0}. ".f(Settings.Instance.AttrName);
-            res = false;
+            errMsg += "Пустое значение атрибута {0}. ".f(Settings.Instance.AttrName);            
          }
          // Марка
          if (AttrMark == null)
          {
-            errMsg += "Не определен атрибут {0}. ".f(Settings.Instance.AttrMark);
-            res = false;
+            errMsg += "Не определен атрибут {0}. ".f(Settings.Instance.AttrMark);            
          }
          else if (string.IsNullOrEmpty(AttrMark.Text))
          {
-            errMsg += "Пустое значение атрибута {0}. ".f(Settings.Instance.AttrMark);
-            res = false;
+            errMsg += "Пустое значение атрибута {0}. ".f(Settings.Instance.AttrMark);            
          }
-
-         return res;
+         return errMsg;
       }
 
-      private bool defineAttrs(AttributeCollection attrs, ref string errMsg)
-      {
+      private string defineAttrs(AttributeCollection attrs)
+      {        
          foreach (ObjectId idAtrRef in attrs)
          {
             var atrRef = idAtrRef.GetObject(OpenMode.ForRead, false, true) as AttributeReference;
@@ -147,7 +145,7 @@ namespace KR_MN_Acad.SpecMonolith
                Description = AttrDescription.Text;
             }
          }
-         return checkAttrs(ref errMsg);
+         return checkAttrs();
       }
    }
 }
