@@ -45,6 +45,7 @@ namespace KR_MN_Acad.SpecMonolith
             // Обработка для спецификации
             MonolithSpec spec = new MonolithSpec(this);
             spec.Calc();
+            //
             spec.CreateTable();
             t.Commit();
          }

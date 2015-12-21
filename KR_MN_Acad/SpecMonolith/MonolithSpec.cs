@@ -28,6 +28,9 @@ namespace KR_MN_Acad.SpecMonolith
          {
             MonolithGroup group = new MonolithGroup(itemGroup.Key);
             group.Calc(itemGroup);
+            // проверка уникальности марок
+            group.Check();
+            Groups.Add(group);
          }
       }
 
@@ -63,13 +66,13 @@ namespace KR_MN_Acad.SpecMonolith
 
          // Марка
          table.Columns[0].Alignment = CellAlignment.MiddleCenter;
-         table.Columns[0].Width = 10;
+         table.Columns[0].Width = 15;
          // Обозн
          table.Columns[1].Alignment = CellAlignment.MiddleLeft;
-         table.Columns[1].Width = 50;
+         table.Columns[1].Width = 60;
          // Наимен
          table.Columns[2].Alignment = CellAlignment.MiddleLeft;
-         table.Columns[2].Width = 50;
+         table.Columns[2].Width = 65;
          // Кол
          table.Columns[3].Alignment = CellAlignment.MiddleCenter;
          table.Columns[3].Width = 10;
@@ -78,11 +81,11 @@ namespace KR_MN_Acad.SpecMonolith
          table.Columns[4].Width = 15;
          // Прим
          table.Columns[5].Alignment = CellAlignment.MiddleLeft;
-         table.Columns[5].Width = 30;
+         table.Columns[5].Width = 20;
 
          table.Rows[1].Height = 15;
 
-         table.Cells[0, 0].TextString = "Спец монолитный элементов";
+         table.Cells[0, 0].TextString = "Спецификация к схеме расположения элементов замаркированных на данном листе";
          table.Cells[1, 0].TextString = "Марка";
          table.Cells[1, 1].TextString = "Обозначение";
          table.Cells[1, 1].Alignment = CellAlignment.MiddleCenter;
@@ -92,10 +95,16 @@ namespace KR_MN_Acad.SpecMonolith
          table.Cells[1, 4].TextString = "Масса, ед. кг";
          table.Cells[1, 5].TextString = "Примечание";
 
+         var rowHeaders = table.Rows[1];
+         var lwBold = rowHeaders.Borders.Top.LineWeight;
+         rowHeaders.Borders.Bottom.LineWeight = lwBold;
+
          int row = 2;
          foreach (var group in Groups)
          {
-            table.Cells[row, 2].TextString = group.Name;
+            table.Cells[row, 2].TextString = "{0}{1}{2}".f("{\\L",group.Name, "}");
+            table.Cells[row, 2].Alignment = CellAlignment.MiddleCenter;            
+
             row++;
             foreach (var rec in group.Records)
             {
@@ -103,11 +112,17 @@ namespace KR_MN_Acad.SpecMonolith
                table.Cells[row, 1].TextString = rec.Indication;
                table.Cells[row, 2].TextString = rec.Name;
                table.Cells[row, 3].TextString = rec.Count.ToString();
-               table.Cells[row, 4].TextString = rec.Weight.ToString("0.0");
+               if (rec.Weight != 0)
+               {
+                  table.Cells[row, 4].TextString = rec.Weight.ToString("0.0");
+               }               
                table.Cells[row, 5].TextString = rec.Description;
                row++;
             }            
          }
+         var lastRow = table.Rows.Last();
+         lastRow.Borders.Bottom.LineWeight = lwBold;
+
          table.GenerateLayout();
          return table;
       }

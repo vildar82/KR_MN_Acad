@@ -22,9 +22,9 @@ namespace KR_MN_Acad.SpecMonolith
          Name = name;
          Items = items ?? new List<MonolithItem>();
          Count = Items.Count;
-         Indication = items.First(r => !string.IsNullOrEmpty(r.Indication))?.Indication ?? string.Empty;
-         Weight= items.First(r => r.Weight!=0)?.Weight ?? 0;
-         Description= items.First(r => !string.IsNullOrEmpty(r.Description))?.Indication ?? string.Empty;
-      }
+         Indication = items.FirstOrDefault(r => !string.IsNullOrEmpty(r.Indication))?.Indication ?? string.Empty;
+         Weight= items.FirstOrDefault(r => r.Weight!=0)?.Weight ?? 0;
+         Description= items.FirstOrDefault(r => !string.IsNullOrEmpty(r.Description))?.Indication ?? string.Empty;         
+      }      
    }
 }

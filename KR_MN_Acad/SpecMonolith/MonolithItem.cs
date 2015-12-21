@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AcadLib.Blocks;
 using AcadLib.Errors;
 using AcadLib.Extensions;
@@ -26,6 +27,7 @@ namespace KR_MN_Acad.SpecMonolith
       public string Description { get; private set; } = string.Empty;
       public string Group { get; private set; } = string.Empty;
       public ObjectId IdBlRef { get; private set; }
+      public Extents3d Extents  { get; private set; }
 
       // Обозначение
       public string Indication { get; private set; } = string.Empty;
@@ -49,9 +51,13 @@ namespace KR_MN_Acad.SpecMonolith
                if (blName.StartsWith(Settings.Instance.BlockPrefix))
                {
                   //определение атрибутов
-                  string errMsg = defineAttrs(blRef.AttributeCollection);
+                  string errMsg = defineAttrs(blRef.GetAttributeDictionary());
                   resVal = string.IsNullOrEmpty(errMsg);
-                  if (!resVal)
+                  if (resVal)
+                  {
+                     Extents = blRef.GeometricExtents;
+                  }
+                  else
                   {
                      Inspector.AddError("Не определенный как блок монолитной конструкции - {0}: {1}".f(blName, errMsg), blRef);
                   }
@@ -94,44 +100,43 @@ namespace KR_MN_Acad.SpecMonolith
          return errMsg;
       }
 
-      private string defineAttrs(AttributeCollection attrs)
+      private string defineAttrs(Dictionary<string, DBText> attrs)
       {        
-         foreach (ObjectId idAtrRef in attrs)
-         {
-            var atrRef = idAtrRef.GetObject(OpenMode.ForRead, false, true) as AttributeReference;
+         foreach (var attr in attrs)
+         {  
             // ТИП
-            if (atrRef.Is(Settings.Instance.AttrType))
+            if (string.Equals(attr.Key,Settings.Instance.AttrType, StringComparison.CurrentCultureIgnoreCase))
             {
-               AttrType = new AttributeRefInfo(atrRef);
+               AttrType = new AttributeRefInfo(attr.Value);
             }
             // ГРУППА
-            else if (atrRef.Is(Settings.Instance.AttrGroup))
+            else if (string.Equals(attr.Key, Settings.Instance.AttrGroup, StringComparison.CurrentCultureIgnoreCase))
             {
-               AttrGroup = new AttributeRefInfo(atrRef);
+               AttrGroup = new AttributeRefInfo(attr.Value);
                Group = AttrGroup.Text;
             }
             // ОБОЗНАЧЕНИЕ
-            else if (atrRef.Is(Settings.Instance.AttrIndication))
+            else if (string.Equals(attr.Key, Settings.Instance.AttrIndication, StringComparison.CurrentCultureIgnoreCase))
             {
-               AttrIndication = new AttributeRefInfo(atrRef);
+               AttrIndication = new AttributeRefInfo(attr.Value);
                Indication = AttrIndication.Text;
             }
             // МАРКА
-            else if (atrRef.Is(Settings.Instance.AttrMark))
+            else if (string.Equals(attr.Key, Settings.Instance.AttrMark, StringComparison.CurrentCultureIgnoreCase))
             {
-               AttrMark = new AttributeRefInfo(atrRef);
+               AttrMark = new AttributeRefInfo(attr.Value);
                Mark = AttrMark.Text;
             }
             // НАИМЕНОВАНИЕ
-            else if (atrRef.Is(Settings.Instance.AttrName))
+            else if (string.Equals(attr.Key, Settings.Instance.AttrName, StringComparison.CurrentCultureIgnoreCase))
             {
-               AttrName = new AttributeRefInfo(atrRef);
+               AttrName = new AttributeRefInfo(attr.Value);
                Name = AttrName.Text;
             }
             // МАССА
-            else if (atrRef.Is(Settings.Instance.AttrWeight))
+            else if (string.Equals(attr.Key, Settings.Instance.AttrWeight, StringComparison.CurrentCultureIgnoreCase))
             {
-               AttrWeight = new AttributeRefInfo(atrRef);
+               AttrWeight = new AttributeRefInfo(attr.Value);
                double weight;
                if (double.TryParse(AttrWeight.Text, out weight))
                {
@@ -139,9 +144,9 @@ namespace KR_MN_Acad.SpecMonolith
                }
             }
             // ПРИМЕЧАНИЕ
-            else if (atrRef.Is(Settings.Instance.AttrDescription))
+            else if (string.Equals(attr.Key, Settings.Instance.AttrDescription, StringComparison.CurrentCultureIgnoreCase))
             {
-               AttrDescription = new AttributeRefInfo(atrRef);
+               AttrDescription = new AttributeRefInfo(attr.Value);
                Description = AttrDescription.Text;
             }
          }
