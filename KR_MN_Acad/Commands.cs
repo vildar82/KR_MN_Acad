@@ -40,11 +40,11 @@ namespace KR_MN_Acad
             }
             catch (System.Exception ex)
             {
-               if (!ex.Message.Contains("Отменено пользователем"))
+               if (!ex.Message.Contains("\nОтменено пользователем"))
                {
                   Log.Error(ex, "Command: KR-SpecMonolith. Doc {0}", doc.Name);
                }
-               ed.WriteMessage("Ошибка - {0}", ex.Message);
+               ed.WriteMessage("\nОшибка - {0}", ex.Message);
             }
          }
       }

@@ -45,7 +45,7 @@ namespace KR_MN_Acad.SpecMonolith
          Database db = Service.Doc.Database;
          Editor ed = Service.Doc.Editor;
 
-         TableJig jigTable = new TableJig(table, 100, "Вставка таблицы");
+         TableJig jigTable = new TableJig(table, 1/db.Cannoscale.Scale, "Вставка таблицы");
          if (ed.Drag(jigTable).Status == PromptStatus.OK)
          {
             //table.ScaleFactors = new Scale3d(100);

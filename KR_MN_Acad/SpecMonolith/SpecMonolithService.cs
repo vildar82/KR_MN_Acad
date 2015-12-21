@@ -37,10 +37,10 @@ namespace KR_MN_Acad.SpecMonolith
 
             if (MonolithItems.Count==0)
             {
-               Doc.Editor.WriteMessage("Не определены блоки монолитных конструкций.");
+               Doc.Editor.WriteMessage("\nНе определены блоки монолитных конструкций.");
                return;
             }
-            Doc.Editor.WriteMessage("Определено блоков монолитных конструкций: {0}", MonolithItems.Count);
+            Doc.Editor.WriteMessage("\nОпределено блоков монолитных конструкций: {0}", MonolithItems.Count);
 
             // Обработка для спецификации
             MonolithSpec spec = new MonolithSpec(this);
