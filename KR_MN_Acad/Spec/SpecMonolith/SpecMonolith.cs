@@ -7,7 +7,7 @@ using Autodesk.AutoCAD.DatabaseServices;
 using SpecBlocks;
 using SpecBlocks.Options;
 
-namespace KR_MN_Acad.SpecService
+namespace KR_MN_Acad.Spec.SpecMonolith
 {
    /// <summary>
    /// Спецификация монолитных блоков

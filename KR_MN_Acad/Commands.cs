@@ -5,7 +5,7 @@ using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Runtime;
-using KR_MN_Acad.SpecService;
+using KR_MN_Acad.Spec.SpecMonolith;
 
 [assembly: CommandClass(typeof(KR_MN_Acad.Commands))]
 
@@ -13,6 +13,7 @@ namespace KR_MN_Acad
 {
    public class Commands
    {
+      private static bool isLoadedSpecBlocks = false;
       public static AutoCAD_PIK_Manager.LogAddin Log { get; private set; } = new AutoCAD_PIK_Manager.LogAddin("Plugin KR_MN_Acad");
 
       /// <summary>
@@ -33,22 +34,7 @@ namespace KR_MN_Acad
                Inspector.Clear();
 
                // Загрузка сборки SpecBlocks
-               var dllSpecBlocks = Path.Combine(AutoCAD_PIK_Manager.Settings.PikSettings.LocalSettingsFolder, @"Script\NET\SpecBlocks\SpecBlocks.dll");
-               if (File.Exists(dllSpecBlocks))
-               {
-                  try
-                  {
-                     Assembly.LoadFrom(dllSpecBlocks);
-                  }
-                  catch (Exception ex)
-                  {
-                     throw ex;
-                  }
-               }
-               else
-               {
-                  throw new System.Exception($"Не найден файл {dllSpecBlocks}.");
-               }
+               LoadSpecBlocks();
 
                // Спецификация монолитных блоков
                SpecMonolith specMonolith = new SpecMonolith();
@@ -67,6 +53,32 @@ namespace KR_MN_Acad
                }
                ed.WriteMessage("\nОшибка - {0}", ex.Message);
             }
+         }
+      }
+
+      private static void LoadSpecBlocks()
+      {
+         if (isLoadedSpecBlocks)
+         {
+            return;
+         }
+         // Загрузка сборки SpecBlocks
+         var dllSpecBlocks = Path.Combine(AutoCAD_PIK_Manager.Settings.PikSettings.LocalSettingsFolder, @"Script\NET\SpecBlocks\SpecBlocks.dll");
+         if (File.Exists(dllSpecBlocks))
+         {
+            try
+            {
+               Assembly.LoadFrom(dllSpecBlocks);
+               isLoadedSpecBlocks = true;
+            }
+            catch (Exception ex)
+            {
+               throw ex;
+            }
+         }
+         else
+         {
+            throw new System.Exception($"Не найден файл {dllSpecBlocks}.");
          }
       }
    }
