@@ -7,57 +7,26 @@ using Autodesk.AutoCAD.DatabaseServices;
 using SpecBlocks;
 using SpecBlocks.Options;
 
-namespace KR_MN_Acad.Spec.SpecMonolith
+namespace KR_MN_Acad.Spec
 {
    /// <summary>
    /// Спецификация монолитных блоков
    /// </summary>
-   public class SpecMonolith
+   public class SpecMonolith : ISpecCustom
    {
-      private const string SpecTemplateName = "КР_Спец_Монолит";           
-
-      public void Spec()
+      public string Name
       {
-         // Настройки спецификации монолитных конструкций
-         SpecOptions specMonilithOptions = getSpecOptions();
-
-         // Клас создания таблицы по заданным настройкам
-         SpecTable specMonolith = new SpecTable(specMonilithOptions);
-         specMonolith.CreateTable();
+         get
+         {
+            return "КР_Спец_Монолит";
+         }
       }
 
-      private SpecOptions getSpecOptions()
-      {
-         var file = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), SpecTemplateName + ".xml");
-         SpecOptions specOptionsMonilith;
-         try
-         {
-            specOptionsMonilith = SpecOptions.Load(file);
-         }
-         catch (Exception ex)
-         {
-            Commands.Log.Error(ex, $"Попытка загрузки настроек таблицы из XML по имени {SpecTemplateName}");
-            // Создать дефолтные
-            specOptionsMonilith = getDefaultSpecMonolithOptions();
-            // Сохранение дефолтных настроек 
-            try
-            {
-               specOptionsMonilith.Save(file);
-            }
-            catch (Exception exSave)
-            {
-               Commands.Log.Error(exSave, $"Попытка сохранение настроек таблицы из XML по имени {SpecTemplateName}");
-            }
-         }
-
-         return specOptionsMonilith;
-      } 
-
-      private SpecOptions getDefaultSpecMonolithOptions()
+      public SpecOptions GetDefaultOptions()
       {
          SpecOptions specMonolOpt = new SpecOptions();
 
-         specMonolOpt.Name = SpecTemplateName;
+         specMonolOpt.Name = Name;
 
          // Фильтр для блоков
          specMonolOpt.BlocksFilter = new BlocksFilter();
@@ -68,6 +37,8 @@ namespace KR_MN_Acad.Spec.SpecMonolith
          {
             "ТИП", "МАРКА", "НАИМЕНОВАНИЕ"
          };
+         // Тип блока - атрибут ТИП = Монолит
+         specMonolOpt.BlocksFilter.Type = new ItemProp() { BlockPropName = "ТИП", Name = "Монолит", BlockPropType = EnumBlockProperty.Attribute };
 
          specMonolOpt.GroupPropName = "ГРУППА";
          specMonolOpt.KeyPropName = "МАРКА";
@@ -85,7 +56,7 @@ namespace KR_MN_Acad.Spec.SpecMonolith
          // Настройки Таблицы
          specMonolOpt.TableOptions = new TableOptions();
          specMonolOpt.TableOptions.Title = "Спецификация к схеме расположения элементов замаркированных на данном листе";
-         specMonolOpt.TableOptions.Layer = "КР_Таблицы";         
+         specMonolOpt.TableOptions.Layer = "КР_Таблицы";
          specMonolOpt.TableOptions.Columns = new List<TableColumn>()
          {
             new TableColumn () { Name = "Марка", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Марка", Width = 15 },
@@ -97,6 +68,6 @@ namespace KR_MN_Acad.Spec.SpecMonolith
          };
 
          return specMonolOpt;
-      }
+      }      
    }
 }

@@ -5,15 +5,14 @@ using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Runtime;
-using KR_MN_Acad.Spec.SpecMonolith;
+using KR_MN_Acad.Spec;
 
 [assembly: CommandClass(typeof(KR_MN_Acad.Commands))]
 
 namespace KR_MN_Acad
 {
    public class Commands
-   {
-      private static bool isLoadedSpecBlocks = false;
+   {      
       public static AutoCAD_PIK_Manager.LogAddin Log { get; private set; } = new AutoCAD_PIK_Manager.LogAddin("Plugin KR_MN_Acad");
 
       /// <summary>
@@ -31,14 +30,11 @@ namespace KR_MN_Acad
          {
             try
             {
-               Inspector.Clear();
-
-               // Загрузка сборки SpecBlocks
-               LoadSpecBlocks();
+               Inspector.Clear();               
 
                // Спецификация монолитных блоков
-               SpecMonolith specMonolith = new SpecMonolith();
-               specMonolith.Spec();
+               SpecService specService = new SpecService(new SpecMonolith());
+               specService.Spec();
 
                if (Inspector.HasErrors)
                {
@@ -49,36 +45,47 @@ namespace KR_MN_Acad
             {
                if (!ex.Message.Contains("\nОтменено пользователем"))
                {
-                  Log.Error(ex, "Command: KR-SpecMonolith. Doc {0}", doc.Name);
+                  Log.Error(ex, $"Command: KR-SpecMonolith. Doc {doc.Name}");
                }
-               ed.WriteMessage("\nОшибка - {0}", ex.Message);
+               ed.WriteMessage($"\nОшибка - {ex.Message}");
             }
          }
       }
 
-      private static void LoadSpecBlocks()
+      /// <summary>
+      /// Спецификация монолитных блоков
+      /// </summary>
+      [CommandMethod("PIK", "KR-SpecOpenings", CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+      public void SpecOpeningsCommand()
       {
-         if (isLoadedSpecBlocks)
-         {
-            return;
-         }
-         // Загрузка сборки SpecBlocks
-         var dllSpecBlocks = Path.Combine(AutoCAD_PIK_Manager.Settings.PikSettings.LocalSettingsFolder, @"Script\NET\SpecBlocks\SpecBlocks.dll");
-         if (File.Exists(dllSpecBlocks))
+         Log.Info("Start Command: KR-SpecOpenings");
+         Document doc = Application.DocumentManager.MdiActiveDocument;
+         if (doc == null) return;
+         Database db = doc.Database;
+         Editor ed = doc.Editor;
+         using (var DocLock = doc.LockDocument())
          {
             try
             {
-               Assembly.LoadFrom(dllSpecBlocks);
-               isLoadedSpecBlocks = true;
+               Inspector.Clear();
+
+               // Спецификация монолитных блоков
+               SpecService specService = new SpecService(new SpecOpenings());
+               specService.Spec();
+
+               if (Inspector.HasErrors)
+               {
+                  Inspector.Show();
+               }
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
-               throw ex;
+               if (!ex.Message.Contains("\nОтменено пользователем"))
+               {
+                  Log.Error(ex, $"Command: KR-SpecOpenings. Doc {doc.Name}");
+               }
+               ed.WriteMessage($"\nОшибка - {ex.Message}");
             }
-         }
-         else
-         {
-            throw new System.Exception($"Не найден файл {dllSpecBlocks}.");
          }
       }
    }
