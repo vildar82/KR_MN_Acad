@@ -3,7 +3,7 @@ using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Runtime;
-using KR_MN_Acad.SpecMonolith;
+using KR_MN_Acad.SpecService;
 
 [assembly: CommandClass(typeof(KR_MN_Acad.Commands))]
 
@@ -30,7 +30,7 @@ namespace KR_MN_Acad
             {
                Inspector.Clear();
                // Спецификация монолитных блоков
-               SpecMonolithService specMonolith = new SpecMonolithService();
+               SpecMonolith specMonolith = new SpecMonolith();
                specMonolith.Spec();
 
                if (Inspector.HasErrors)

@@ -7,10 +7,10 @@ using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 
-namespace KR_MN_Acad.SpecMonolith
+namespace KR_MN_Acad.SpecService
 {
    // Выбор блоков монолитных конструкцийй
-   public class SelectMonolith
+   public class SelectBlocks
    {
       public List<ObjectId> IdsBlRefSelected { get; private set; }
 
@@ -19,8 +19,8 @@ namespace KR_MN_Acad.SpecMonolith
          // запрос выбора пользователю 
          Document doc = Application.DocumentManager.MdiActiveDocument;
          Editor ed = doc.Editor;
-         IdsBlRefSelected = ed.SelectBlRefs("Выбор блоков для расчета спецификации монолитных конструкций.");
-         ed.WriteMessage("\nВыбрано {0} блоков", IdsBlRefSelected.Count);
+         IdsBlRefSelected = ed.SelectBlRefs("Выбор блоков для расчета спецификации.");
+         ed.WriteMessage("\nВыбрано {0} блоков", IdsBlRefSelected.Count);         
       }
    }
 }
