@@ -1,4 +1,6 @@
-﻿using AcadLib.Errors;
+﻿using System.IO;
+using System.Reflection;
+using AcadLib.Errors;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
@@ -29,6 +31,25 @@ namespace KR_MN_Acad
             try
             {
                Inspector.Clear();
+
+               // Загрузка сборки SpecBlocks
+               var dllSpecBlocks = Path.Combine(AutoCAD_PIK_Manager.Settings.PikSettings.LocalSettingsFolder, @"Script\NET\SpecBlocks\SpecBlocks.dll");
+               if (File.Exists(dllSpecBlocks))
+               {
+                  try
+                  {
+                     Assembly.LoadFrom(dllSpecBlocks);
+                  }
+                  catch (Exception ex)
+                  {
+                     throw ex;
+                  }
+               }
+               else
+               {
+                  throw new System.Exception($"Не найден файл {dllSpecBlocks}.");
+               }
+
                // Спецификация монолитных блоков
                SpecMonolith specMonolith = new SpecMonolith();
                specMonolith.Spec();
