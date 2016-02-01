@@ -6,6 +6,7 @@ using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Runtime;
 using KR_MN_Acad.Spec;
+using SpecBlocks;
 
 [assembly: CommandClass(typeof(KR_MN_Acad.Commands))]
 
@@ -13,7 +14,7 @@ namespace KR_MN_Acad
 {
    public class Commands
    {      
-      public static AutoCAD_PIK_Manager.LogAddin Log { get; private set; } = new AutoCAD_PIK_Manager.LogAddin("Plugin KR_MN_Acad");
+      public static AutoCAD_PIK_Manager.LogAddin Log { get; private set; } = new AutoCAD_PIK_Manager.LogAddin("Plugin KR_MN_Acad");                 
 
       /// <summary>
       /// Спецификация монолитных блоков
@@ -30,11 +31,11 @@ namespace KR_MN_Acad
          {
             try
             {
-               Inspector.Clear();               
+               Inspector.Clear();
 
-               // Спецификация монолитных блоков
+               // Спецификация монолитных блоков                         
                SpecService specService = new SpecService(new SpecMonolith());
-               specService.Spec();
+               specService.CreateSpec();
 
                if (Inspector.HasErrors)
                {
@@ -69,9 +70,9 @@ namespace KR_MN_Acad
             {
                Inspector.Clear();
 
-               // Спецификация монолитных блоков
+               // Спецификация проекмов
                SpecService specService = new SpecService(new SpecOpenings());
-               specService.Spec();
+               specService.CreateSpec();
 
                if (Inspector.HasErrors)
                {

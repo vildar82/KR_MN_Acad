@@ -14,11 +14,13 @@ namespace KR_MN_Acad.Spec
    /// </summary>
    public class SpecOpenings : ISpecCustom
    {
-      public string Name
+      private const string name = "КР_Спец_Проемы";
+
+      public string File
       {
          get
          {
-            return "КР_Спец_Проемы";
+            return Path.Combine(AutoCAD_PIK_Manager.Settings.PikSettings.ServerShareSettingsFolder, @"КР-МН\Спецификации\" + name + ".xml");
          }
       }
 
@@ -26,7 +28,7 @@ namespace KR_MN_Acad.Spec
       {
          SpecOptions specMonolOpt = new SpecOptions();
 
-         specMonolOpt.Name = Name;
+         specMonolOpt.Name = name;
 
          // Фильтр для блоков
          specMonolOpt.BlocksFilter = new BlocksFilter();
