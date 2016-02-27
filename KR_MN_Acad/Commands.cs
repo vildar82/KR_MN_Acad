@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using AcadLib.Errors;
 using Autodesk.AutoCAD.ApplicationServices;
@@ -9,12 +10,18 @@ using KR_MN_Acad.Spec;
 using SpecBlocks;
 
 [assembly: CommandClass(typeof(KR_MN_Acad.Commands))]
+[assembly: ExtensionApplication(typeof(KR_MN_Acad.Commands))]
 
 namespace KR_MN_Acad
 {
-   public class Commands
+   public class Commands : IExtensionApplication
    {      
-      public static AutoCAD_PIK_Manager.LogAddin Log { get; private set; } = new AutoCAD_PIK_Manager.LogAddin("Plugin KR_MN_Acad");                 
+      public static AutoCAD_PIK_Manager.LogAddin Log { get; private set; } = new AutoCAD_PIK_Manager.LogAddin("Plugin KR_MN_Acad ");
+
+      public void Initialize()
+      {
+         AcadLib.LoadService.LoadSpecBlocks();
+      }
 
       /// <summary>
       /// Спецификация монолитных блоков
@@ -88,6 +95,10 @@ namespace KR_MN_Acad
                ed.WriteMessage($"\nОшибка - {ex.Message}");
             }
          }
+      }
+
+      public void Terminate()
+      {         
       }
    }
 }
