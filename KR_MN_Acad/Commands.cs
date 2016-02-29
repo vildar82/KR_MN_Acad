@@ -38,6 +38,8 @@ namespace KR_MN_Acad
          {
             try
             {
+               // Проверка дубликатов.
+               AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
                Inspector.Clear();
 
                // Спецификация монолитных блоков                         
@@ -75,6 +77,8 @@ namespace KR_MN_Acad
          {
             try
             {
+               // Проверка дубликатов.
+               AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
                Inspector.Clear();
 
                // Спецификация проекмов
