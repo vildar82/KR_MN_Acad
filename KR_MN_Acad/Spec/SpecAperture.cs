@@ -12,9 +12,9 @@ namespace KR_MN_Acad.Spec
    /// <summary>
    /// Спецификация монолитных блоков
    /// </summary>
-   public class SpecHoles : ISpecCustom
+   public class SpecAperture : ISpecCustom
    {
-      private const string name = "КР_Спец_Отверстия";
+      private const string name = "КР_Спец_Проемы";
 
       public string File
       {
@@ -26,27 +26,27 @@ namespace KR_MN_Acad.Spec
 
       public SpecOptions GetDefaultOptions()
       {
-         SpecOptions specHoleOpt = new SpecOptions();
+         SpecOptions specApertureOpt = new SpecOptions();
 
-         specHoleOpt.Name = name;
+         specApertureOpt.Name = name;
 
          // Фильтр для блоков
-         specHoleOpt.BlocksFilter = new BlocksFilter();
+         specApertureOpt.BlocksFilter = new BlocksFilter();
          // Имя блока начинается с "КР_"
-         specHoleOpt.BlocksFilter.BlockNameMatch = "^КР_Отв";
+         specApertureOpt.BlocksFilter.BlockNameMatch = "^КР_Проем";
          // Обязательные атрибуты
-         specHoleOpt.BlocksFilter.AttrsMustHave = new List<string>()
+         specApertureOpt.BlocksFilter.AttrsMustHave = new List<string>()
          {
             "ТИП", "МАРКА", "РАЗМЕР"
          };
          // Тип блока - атрибут ТИП = Монолит
-         specHoleOpt.BlocksFilter.Type = new ItemProp() { BlockPropName = "ТИП", Name = "Отверстие", BlockPropType = EnumBlockProperty.Attribute };
+         specApertureOpt.BlocksFilter.Type = new ItemProp() { BlockPropName = "ТИП", Name = "Проем", BlockPropType = EnumBlockProperty.Attribute };
 
-         specHoleOpt.GroupPropName = ""; // Нет группировки
-         specHoleOpt.KeyPropName = "МАРКА";
+         specApertureOpt.GroupPropName = ""; // Нет группировки
+         specApertureOpt.KeyPropName = "МАРКА";
 
          // Свойства элемента блока
-         specHoleOpt.ItemProps = new List<ItemProp>()
+         specApertureOpt.ItemProps = new List<ItemProp>()
          {
             new ItemProp () { Name = "Марка", BlockPropName = "МАРКА", BlockPropType = EnumBlockProperty.Attribute },
             new ItemProp () { Name = "Размер", BlockPropName = "РАЗМЕР", BlockPropType = EnumBlockProperty.Attribute },
@@ -56,10 +56,10 @@ namespace KR_MN_Acad.Spec
          };
 
          // Настройки Таблицы
-         specHoleOpt.TableOptions = new TableOptions();
-         specHoleOpt.TableOptions.Title = "Ведомость инженерных отверстий";
-         specHoleOpt.TableOptions.Layer = "КР_Таблицы";
-         specHoleOpt.TableOptions.Columns = new List<TableColumn>()
+         specApertureOpt.TableOptions = new TableOptions();
+         specApertureOpt.TableOptions.Title = "Ведомость дверных и оконных проемов";
+         specApertureOpt.TableOptions.Layer = "КР_Таблицы";
+         specApertureOpt.TableOptions.Columns = new List<TableColumn>()
          {
             new TableColumn () { Name = "Марка отв.", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Марка", Width = 10 },
             new TableColumn () { Name = "Размеры, мм", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Размер", Width = 20 },
@@ -69,7 +69,7 @@ namespace KR_MN_Acad.Spec
             new TableColumn () { Name = "Примечание", Aligment = CellAlignment.MiddleLeft, ItemPropName = "Примечание", Width = 30 },
          };
 
-         return specHoleOpt;
+         return specApertureOpt;
       }      
    }
 }

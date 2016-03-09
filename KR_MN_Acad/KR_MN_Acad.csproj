@@ -67,8 +67,8 @@
   <ItemGroup>
     <Compile Include="Commands.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Spec\SpecHoles.cs" />
     <Compile Include="Spec\SpecOpenings.cs" />
+    <Compile Include="Spec\SpecAperture.cs" />
     <Compile Include="Spec\SpecMonolith.cs" />
   </ItemGroup>
   <ItemGroup>

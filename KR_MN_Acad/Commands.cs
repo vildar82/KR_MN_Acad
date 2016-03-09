@@ -65,10 +65,10 @@ namespace KR_MN_Acad
         /// <summary>
         /// Спецификация монолитных блоков
         /// </summary>
-        [CommandMethod("PIK", "KR-SpecOpenings", CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        [CommandMethod("PIK", "KR-SpecApertures", CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
         public void SpecOpeningsCommand()
         {
-            Log.Info("Start Command: KR-SpecOpenings");
+            Log.Info("Start Command: KR-SpecApertures");
             Document doc = Application.DocumentManager.MdiActiveDocument;
             if (doc == null) return;
             Database db = doc.Database;
@@ -82,7 +82,7 @@ namespace KR_MN_Acad
                     Inspector.Clear();
 
                     // Спецификация проекмов
-                    SpecService specService = new SpecService(new SpecOpenings());
+                    SpecService specService = new SpecService(new SpecAperture());
                     specService.CreateSpec();
 
                     if (Inspector.HasErrors)
@@ -94,7 +94,7 @@ namespace KR_MN_Acad
                 {
                     if (!ex.Message.Contains("\nОтменено пользователем"))
                     {
-                        Log.Error(ex, $"Command: KR-SpecOpenings. Doc {doc.Name}");
+                        Log.Error(ex, $"Command: KR-SpecApertures. Doc {doc.Name}");
                     }
                     ed.WriteMessage($"\nОшибка - {ex.Message}");
                 }
@@ -104,10 +104,10 @@ namespace KR_MN_Acad
         /// <summary>
         /// Спецификация монолитных блоков
         /// </summary>
-        [CommandMethod("PIK", "KR-SpecHoles", CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void SpecHoles()
+        [CommandMethod("PIK", "KR-SpecOpenings", CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void SpecOpenings()
         {
-            Log.Info($"Start Command: {nameof(SpecHoles)}");
+            Log.Info($"Start Command: KR-SpecOpenings");
             Document doc = Application.DocumentManager.MdiActiveDocument;
             if (doc == null) return;
             Database db = doc.Database;
@@ -121,7 +121,7 @@ namespace KR_MN_Acad
                     Inspector.Clear();
 
                     // Спецификация отверстий
-                    SpecService specService = new SpecService(new SpecHoles());
+                    SpecService specService = new SpecService(new SpecOpenings());
                     specService.CreateSpec();
 
                     if (Inspector.HasErrors)
@@ -133,7 +133,7 @@ namespace KR_MN_Acad
                 {
                     if (!ex.Message.Contains("\nОтменено пользователем"))
                     {
-                        Log.Error(ex, $"Command: {nameof(SpecHoles)}. Doc {doc.Name}");
+                        Log.Error(ex, $"Command: SpecOpenings. Doc {doc.Name}");
                     }
                     ed.WriteMessage($"\nОшибка - {ex.Message}");
                 }
