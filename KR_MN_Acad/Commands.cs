@@ -14,7 +14,7 @@ using SpecBlocks;
 
 namespace KR_MN_Acad
 {
-    public class Commands : IExtensionApplication
+    public class Commands: IExtensionApplication
     {
         public static AutoCAD_PIK_Manager.LogAddin Log { get; private set; } = new AutoCAD_PIK_Manager.LogAddin("Plugin KR_MN_Acad ");
 
