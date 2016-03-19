@@ -6,6 +6,7 @@ using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Runtime;
+using KR_MN_Acad.Model.Pile.Numbering;
 using KR_MN_Acad.Spec;
 using SpecBlocks;
 
@@ -53,7 +54,7 @@ namespace KR_MN_Acad
                 }
                 catch (System.Exception ex)
                 {
-                    if (!ex.Message.Contains("\nОтменено пользователем"))
+                    if (!ex.Message.Contains(AcadLib.General.CanceledByUser))
                     {
                         Log.Error(ex, $"Command: KR-SpecMonolith. Doc {doc.Name}");
                     }
@@ -63,7 +64,7 @@ namespace KR_MN_Acad
         }
 
         /// <summary>
-        /// Спецификация монолитных блоков
+        /// Спецификация проемов
         /// </summary>
         [CommandMethod("PIK", "KR-SpecApertures", CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
         public void SpecOpeningsCommand()
@@ -92,7 +93,7 @@ namespace KR_MN_Acad
                 }
                 catch (System.Exception ex)
                 {
-                    if (!ex.Message.Contains("\nОтменено пользователем"))
+                    if (!ex.Message.Contains(AcadLib.General.CanceledByUser))
                     {
                         Log.Error(ex, $"Command: KR-SpecApertures. Doc {doc.Name}");
                     }
@@ -102,7 +103,7 @@ namespace KR_MN_Acad
         }
 
         /// <summary>
-        /// Спецификация монолитных блоков
+        /// Спецификация отверстий
         /// </summary>
         [CommandMethod("PIK", "KR-SpecOpenings", CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
         public void SpecOpenings()
@@ -131,12 +132,45 @@ namespace KR_MN_Acad
                 }
                 catch (System.Exception ex)
                 {
-                    if (!ex.Message.Contains("\nОтменено пользователем"))
+                    if (!ex.Message.Contains(AcadLib.General.CanceledByUser))
                     {
                         Log.Error(ex, $"Command: SpecOpenings. Doc {doc.Name}");
                     }
                     ed.WriteMessage($"\nОшибка - {ex.Message}");
                 }
+            }
+        }
+
+        /// <summary>
+        /// Нумерация свай
+        /// </summary>
+        [CommandMethod("PIK", "KR-PileNumbering", CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void PileNumberingCommand()
+        {
+            Log.Info($"Start Command: KR-PileNumbering");
+            Document doc = Application.DocumentManager.MdiActiveDocument;
+            if (doc == null) return;            
+            Editor ed = doc.Editor;
+            try
+            {
+                // Проверка дубликатов.
+                AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
+                Inspector.Clear();
+
+                PileNumberingService pileNumbService = new PileNumberingService();
+                pileNumbService.Numbering();
+
+                ed.WriteMessage("\nНумерация выполнена.");
+
+                Inspector.Show();
+            }
+            catch (System.Exception ex)
+            {
+                if (!ex.Message.Contains(AcadLib.General.CanceledByUser))
+                {
+                    Log.Error(ex, $"Command: KR-PileNumbering. Doc {doc.Name}");
+                }
+                ed.WriteMessage($"\nОшибка - {ex.Message}");
             }
         }
 
