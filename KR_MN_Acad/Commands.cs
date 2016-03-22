@@ -202,6 +202,42 @@ namespace KR_MN_Acad
             }
         }
 
+        /// <summary>
+        /// Нумерация свай
+        /// </summary>
+        [CommandMethod("PIK", "KR-PileCalc", CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void PileCalcCommand()
+        {
+            Log.Info($"Start Command: KR-PileCalc");
+            Document doc = Application.DocumentManager.MdiActiveDocument;
+            if (doc == null) return;
+            Editor ed = doc.Editor;
+            try
+            {
+                // Проверка дубликатов.
+                AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
+                Inspector.Clear();
+
+                // Выбор свай для нумерации
+                var selblocks = ed.SelectBlRefs("Выбор блоков свай для нумерации");
+
+                // фильтр блоков свай            
+                var piles = Model.Pile.PileFilter.Filter(selblocks, Model.Pile.PileOptions.Load());
+
+                Model.Pile.Calc.PileCalcService pileCalcService = new Model.Pile.Calc.PileCalcService();
+                pileCalcService.Calc(piles);                
+            }
+            catch (System.Exception ex)
+            {
+                if (!ex.Message.Contains(AcadLib.General.CanceledByUser))
+                {
+                    Log.Error(ex, $"Command: KR-PileCalc. Doc {doc.Name}");
+                }
+                ed.WriteMessage($"\nОшибка - {ex.Message}");
+            }
+            Inspector.Show();
+        }
+
         public void Terminate()
         {
         }

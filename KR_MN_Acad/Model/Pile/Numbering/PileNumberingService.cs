@@ -57,7 +57,7 @@ namespace KR_MN_Acad.Model.Pile.Numbering
             var pilesSort = Sort(piles);
 
             // Перенумерация
-            Num(pilesSort);            
+            Num(pilesSort);       
         }
 
         private void CheckPiles(List<Pile> piles)
@@ -132,6 +132,7 @@ namespace KR_MN_Acad.Model.Pile.Numbering
                 {
                     var atrPos = pile.PosAttrRef.IdAtr.GetObject(OpenMode.ForWrite, false, true) as AttributeReference;
                     atrPos.TextString = pos.ToString();
+                    pile.Pos = pos;
                     pos++;
                 }
                 t.Commit();

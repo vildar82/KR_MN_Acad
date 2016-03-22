@@ -24,6 +24,11 @@ namespace KR_MN_Acad.Model.Pile
                         if (checkResult.Success)
                         {
                             resVal.Add(pile);
+                            if (!string.IsNullOrEmpty(pile.Error))
+                            {
+                                Inspector.AddError($"В блоке сваи '{blName}' обнаружены ошибки: {pile.Error}",
+                                blRef, System.Drawing.SystemIcons.Error);
+                            }
                         }
                         else
                         {

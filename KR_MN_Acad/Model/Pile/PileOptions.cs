@@ -34,6 +34,25 @@ namespace KR_MN_Acad.Model.Pile
         //[DefaultValue(3)]
         public double PileRatioLmin { get; set; }
 
+        [Category("Общие")]
+        [DisplayName("Слой таблиц")]
+        [Description("Слой для вставки таблиц свай.")]
+        //[DefaultValue("КР_Таблицы")]
+        public string TableLayer { get; set; }        
+
+        [Category("Ростверк")]
+        [DisplayName("Забивка, мм")]
+        [Description("Расстояние от низа ростверка до верха сваи после забивки, мм.")]
+        //[DefaultValue(300)]
+        public double DimPileBeatToRostwerk { get; set; }
+
+        [Category("Ростверк")]
+        [DisplayName("Срубка, мм")]
+        [Description("Расстояние от низа ростверка до верха сваи после срубки, мм.")]
+        //[DefaultValue(50)]
+        public double DimPileCutToRostwerk { get; set; }
+
+
         public PileOptions PromptOptions()
         {
             PileOptions resVal = this;
@@ -96,6 +115,9 @@ namespace KR_MN_Acad.Model.Pile
             PileBlockNameMatch= "^КР_свая";
             PileAttrPos = "ПОЗ";
             PileRatioLmin = 3;
+            DimPileBeatToRostwerk = 300;
+            DimPileCutToRostwerk = 50;
+            TableLayer = "КР_Таблицы";
         }
 
         private static PileOptions LoadFromXml()
