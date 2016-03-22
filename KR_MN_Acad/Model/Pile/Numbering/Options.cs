@@ -13,9 +13,8 @@ namespace KR_MN_Acad.Model.Pile.Numbering
     {
         private static AcadLib.DictNOD dictNod = new AcadLib.DictNOD("PileNumberingOptions");
         private const string RecOrder = "NumberingOrder";
-        private const string RecRowWidth = "PileRowWidth";
-        private const string RecPileStartNum = "PileStartNum";
-        
+        private const string RecSide = "PileSide";
+        private const string RecPileStartNum = "PileStartNum";        
 
         [Category("Пользовательские")]
         [DisplayName("Порядок нумерации")]
@@ -25,35 +24,21 @@ namespace KR_MN_Acad.Model.Pile.Numbering
         public EnumNumberingOrder NumberingOrder { get; set; }
 
         [Category("Пользовательские")]
-        [DisplayName("Ширина ряда")]
-        [Description("Расстояние между сваями одного ряда.")]
-        [DefaultValue(600)]
-        public int PileRowWidth { get; set; }
+        [DisplayName("Сторона сваи")]
+        [Description("Размер сваи.")]
+        [DefaultValue(300)]
+        public int PileSide { get; set; }
 
         [Category("Пользовательские")]
         [DisplayName("Начальный номер")]
-        [Description("Номер с которого начнется нумерация свай.")]
+        [Description("Номер с которого начнется нумерация свай.")]        
         [DefaultValue(1)]
-        public int PileStartNum { get; set; }
-
-        [Category("Общие")]
-        [DisplayName("Имя блока сваи")]
-        [Description("^КР_свая - имя блока начинается с КР_свая. Регистр игнорируется.")]
-        [DefaultValue("^КР_свая")]
-        public string PileBlockNameMatch { get; set; }
-
-        [Category("Общие")]
-        [DisplayName("Атрибут номера")]
-        [Description("Тэг атрибута номера сваи.")]
-        [DefaultValue("ПОЗ")]
-        public string PileAttrPos { get; set; }        
+        public int PileStartNum { get; set; }        
 
         public void LoadDefault()
         {
-            NumberingOrder = (EnumNumberingOrder)dictNod.Load(RecOrder, 0);
-            PileBlockNameMatch = "^КР_свая";
-            PileAttrPos = "ПОЗ";
-            PileRowWidth = dictNod.Load(RecRowWidth, 600);
+            NumberingOrder = (EnumNumberingOrder)dictNod.Load(RecOrder, 0);            
+            PileSide = dictNod.Load(RecSide, 300);
             PileStartNum = dictNod.Load(RecPileStartNum, 1);
         }
 
@@ -81,7 +66,7 @@ namespace KR_MN_Acad.Model.Pile.Numbering
         private void Save(Options opt)
         {
             dictNod.Save((int)opt.NumberingOrder, RecOrder);
-            dictNod.Save(opt.PileRowWidth, RecRowWidth);
+            dictNod.Save(opt.PileSide, RecSide);
             dictNod.Save(opt.PileStartNum, RecPileStartNum);            
         }
     }           

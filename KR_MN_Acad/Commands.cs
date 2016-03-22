@@ -22,6 +22,7 @@ namespace KR_MN_Acad
         public void Initialize()
         {
             AcadLib.LoadService.LoadSpecBlocks();
+            AcadLib.LoadService.LoadNetTopologySuite();
         }
 
         /// <summary>
@@ -169,6 +170,33 @@ namespace KR_MN_Acad
                 if (!ex.Message.Contains(AcadLib.General.CanceledByUser))
                 {
                     Log.Error(ex, $"Command: KR-PileNumbering. Doc {doc.Name}");
+                }
+                ed.WriteMessage($"\nОшибка - {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Параметры свай
+        /// </summary>
+        [CommandMethod("PIK", "KR-PileOptions", CommandFlags.Modal)]
+        public void PileOptionsCommand()
+        {
+            Log.Info($"Start Command: KR-PileOptions");
+            Document doc = Application.DocumentManager.MdiActiveDocument;
+            if (doc == null) return;
+            Editor ed = doc.Editor;
+            try
+            {
+                var pileOpt = Model.Pile.PileOptions.Load();
+                pileOpt = pileOpt.PromptOptions();
+                pileOpt.Save();
+                ed.WriteMessage("\nНастойки сохранены.");
+            }
+            catch (System.Exception ex)
+            {
+                if (!ex.Message.Contains(AcadLib.General.CanceledByUser))
+                {
+                    Log.Error(ex, $"Command: KR-PileOptions. Doc {doc.Name}");
                 }
                 ed.WriteMessage($"\nОшибка - {ex.Message}");
             }

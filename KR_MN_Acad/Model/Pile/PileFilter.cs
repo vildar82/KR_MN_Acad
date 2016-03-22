@@ -9,9 +9,9 @@ namespace KR_MN_Acad.Model.Pile
 {
     public static class PileFilter
     {
-        public static List<KeyValuePair<Point3d, Pile>> Filter(List<ObjectId> selblocks, PileOptions pileOptions)
+        public static List<Pile> Filter(List<ObjectId> selblocks, PileOptions pileOptions)
         {
-            List<KeyValuePair<Point3d, Pile>> resVal = new List<KeyValuePair<Point3d, Pile>>();
+            List<Pile> resVal = new List<Pile>();
             foreach (var idBlRef in selblocks)
             {
                 using (var blRef = idBlRef.Open( OpenMode.ForRead, false, true) as BlockReference)
@@ -23,7 +23,7 @@ namespace KR_MN_Acad.Model.Pile
                         var checkResult = pile.Check();
                         if (checkResult.Success)
                         {
-                            resVal.Add(new KeyValuePair<Point3d, Pile>(blRef.Position, pile));
+                            resVal.Add(pile);
                         }
                         else
                         {

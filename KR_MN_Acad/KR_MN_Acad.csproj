@@ -50,6 +50,18 @@
       <HintPath>..\..\..\AutoCAD_PIK_Manager\AutoCAD_PIK_Manager\bin\Release\AutoCAD_PIK_Manager.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="GeoAPI, Version=1.7.4.0, Culture=neutral, PublicKeyToken=a1a0da7def465678, processorArchitecture=MSIL">
+      <HintPath>..\packages\GeoAPI.1.7.4\lib\net45\GeoAPI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NetTopologySuite, Version=1.14.0.0, Culture=neutral, PublicKeyToken=f580a05016ebada1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NetTopologySuite.1.14\lib\net45\NetTopologySuite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PowerCollections, Version=1.0.0.0, Culture=neutral, PublicKeyToken=2573bf8a1bdddcd5, processorArchitecture=MSIL">
+      <HintPath>..\packages\NetTopologySuite.1.14\lib\net45\PowerCollections.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SpecBlocks">
       <HintPath>..\..\..\ОБЩЕЕ\SpecBlocks\SpecBlocks\bin\Release\SpecBlocks.dll</HintPath>
       <Private>False</Private>
@@ -76,8 +88,6 @@
       <DependentUpon>FormNumbering.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\Pile\Numbering\Options.cs" />
-    <Compile Include="Model\Pile\Numbering\PileNumbering.cs" />
-    <Compile Include="Model\Pile\Numbering\PileSorting.cs" />
     <Compile Include="Model\Pile\Pile.cs" />
     <Compile Include="Model\Pile\PileFilter.cs" />
     <Compile Include="Model\Pile\Numbering\PileNumberingService.cs" />
@@ -89,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="AutoCADNetLoad.scr" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Model\Pile\Numbering\FormNumbering.resx">
