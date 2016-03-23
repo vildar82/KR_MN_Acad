@@ -17,10 +17,11 @@ namespace KR_MN_Acad.Model.Pile
         public const string ParamName = "НАИМЕНОВАНИЕ";
         public const string ParamDescriptionName = "ПРИМЕЧАНИЕ";
         public const string ParamWeightName = "МАССА";
-        public const string ParamLengthName = "Длина сваи";
+        public const string ParamLengthName = "Длина_сваи_мм";
         public const string ParamSideName = "Размер сваи";
         public const string ParamViewName = "Вид";
         public const string ParamBottomGrillageName = "Низ_ростверка_м";
+        public const string ParamPitHeightName = "Высота_приямка_мм";
 
         public static HashSet<string> _ignoreParams = new HashSet<string> { "origin" };
 
@@ -64,6 +65,10 @@ namespace KR_MN_Acad.Model.Pile
 
         public double Weight { get; set; }
         public int Length { get; set; }
+        /// <summary>
+        /// Высота приямка
+        /// </summary>
+        public int PitHeight { get; set; }
         public int Side { get; set; }
         /// <summary>
         /// Отметка низа ростверка,м
@@ -116,9 +121,9 @@ namespace KR_MN_Acad.Model.Pile
         public void CalcHightMarks()
         {
             // отметка верха сваи после забивки
-            TopPileAfterBeat = BottomGrillage + (PileCalcService.PileOptions.DimPileBeatToRostwerk * 0.001);
+            TopPileAfterBeat = BottomGrillage + (PileCalcService.PileOptions.DimPileBeatToCut+ PileCalcService.PileOptions.DimPileCutToRostwerk) * 0.001;
             // отметка верха сваи после срубки = 'низ ростверка' + 'расст от низа ростверка до верха сваи после срубки'(50). 
-            TopPileAfterCut = BottomGrillage + (PileCalcService.PileOptions.DimPileCutToRostwerk * 0.001);
+            TopPileAfterCut = BottomGrillage + (PileCalcService.PileOptions.DimPileCutToRostwerk-PitHeight) * 0.001;
             // отметка острия сваи
             PilePike = TopPileAfterBeat - (Length * 0.001);
         }
@@ -146,6 +151,8 @@ namespace KR_MN_Acad.Model.Pile
             View = GetParamValueString(ParamViewName, dictParams);
             // длина сваи
             Length = GetParamValueInt(ParamLengthName, dictParams);
+            // высота приямка
+            PitHeight = GetParamValueInt(ParamPitHeightName, dictParams);
             // сторона сваи
             Side = GetParamValueInt(ParamSideName, dictParams);
             // Низ ростверка

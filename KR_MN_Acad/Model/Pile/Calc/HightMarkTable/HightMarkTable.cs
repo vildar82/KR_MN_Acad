@@ -69,7 +69,7 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
             // столбец Номеров свай.
             col = table.Columns[1];
             col.Alignment = CellAlignment.MiddleCenter;
-            col.Width = 6000;
+            col.Width = 7000;
             // столбец Верха сваи после забивки.
             col = table.Columns[2];
             col.Alignment = CellAlignment.MiddleCenter;

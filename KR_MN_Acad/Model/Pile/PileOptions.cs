@@ -35,13 +35,13 @@ namespace KR_MN_Acad.Model.Pile
         public double PileRatioLmin { get; set; }        
 
         [Category("Ростверк")]
-        [DisplayName("Забивка, мм")]
-        [Description("Расстояние от низа ростверка до верха сваи после забивки, мм.")]
+        [DisplayName("Срубка, мм")]
+        [Description("Расстояние от верха сваи до срубки, мм.")]
         //[DefaultValue(300)]
-        public double DimPileBeatToRostwerk { get; set; }
+        public double DimPileBeatToCut { get; set; }
 
         [Category("Ростверк")]
-        [DisplayName("Срубка, мм")]
+        [DisplayName("Заделка, мм")]
         [Description("Расстояние от низа ростверка до верха сваи после срубки, мм.")]
         //[DefaultValue(50)]
         public double DimPileCutToRostwerk { get; set; }
@@ -114,7 +114,7 @@ namespace KR_MN_Acad.Model.Pile
             PileBlockNameMatch= "^КР_свая";
             PileAttrPos = "ПОЗ";
             PileRatioLmin = 3;
-            DimPileBeatToRostwerk = 300;
+            DimPileBeatToCut = 250;
             DimPileCutToRostwerk = 50;
             TableLayer = "КР_Таблицы";
         }
