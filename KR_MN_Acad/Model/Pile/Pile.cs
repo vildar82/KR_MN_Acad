@@ -7,6 +7,7 @@ using AcadLib.Blocks;
 using AcadLib.Errors;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
+using KR_MN_Acad.Model.Pile.Calc;
 
 namespace KR_MN_Acad.Model.Pile
 { 
@@ -19,12 +20,13 @@ namespace KR_MN_Acad.Model.Pile
         public const string ParamLengthName = "Длина сваи";
         public const string ParamSideName = "Размер сваи";
         public const string ParamViewName = "Вид";
-        public const string ParamBottomGrillageName = "Низ_ростверка";
+        public const string ParamBottomGrillageName = "Низ_ростверка_м";
 
         public static HashSet<string> _ignoreParams = new HashSet<string> { "origin" };
 
         public string BlName { get; set; }        
         public ObjectId IdBlRef { get; set; }
+        public ObjectId IdBtrAnonym { get; set; }
         public Point3d Pt { get; set; }                
         public AttributeInfo PosAttrRef { get; set; }
         public PileOptions Options { get; set; }
@@ -41,6 +43,25 @@ namespace KR_MN_Acad.Model.Pile
         /// </summary>
         public string Name { get; set; }
         public string Description { get; set; }
+
+        public static ObjectId GetAttDefpos(ObjectId idBtr)
+        {
+            using (var btr = idBtr.Open( OpenMode.ForRead) as BlockTableRecord)
+            {
+                foreach (var idEnt in btr)
+                {
+                    using (var atrDef = idEnt.Open( OpenMode.ForRead, false, true)as AttributeDefinition)
+                    {
+                        if (atrDef != null && atrDef.Tag.Equals(PileCalcService.PileOptions.PileAttrPos))
+                        {
+                            return atrDef.Id;
+                        }
+                    }
+                }
+            }
+            return ObjectId.Null;
+        }
+
         public double Weight { get; set; }
         public int Length { get; set; }
         public int Side { get; set; }
@@ -72,6 +93,7 @@ namespace KR_MN_Acad.Model.Pile
         {
             BlName = blName;
             IdBlRef = blRef.Id;
+            IdBtrAnonym = blRef.BlockTableRecord;
             Pt = blRef.Position;                        
             Options = pileOptions;
             // Определение параметров сваи
@@ -91,12 +113,12 @@ namespace KR_MN_Acad.Model.Pile
         /// Расчет высотных отметок сваи
         /// </summary>
         /// <param name="pileOptions"></param>
-        public void CalcHightMarks(PileOptions pileOptions)
+        public void CalcHightMarks()
         {
             // отметка верха сваи после забивки
-            TopPileAfterBeat = BottomGrillage + (pileOptions.DimPileBeatToRostwerk * 0.001);
+            TopPileAfterBeat = BottomGrillage + (PileCalcService.PileOptions.DimPileBeatToRostwerk * 0.001);
             // отметка верха сваи после срубки = 'низ ростверка' + 'расст от низа ростверка до верха сваи после срубки'(50). 
-            TopPileAfterCut = BottomGrillage + (pileOptions.DimPileCutToRostwerk * 0.001);
+            TopPileAfterCut = BottomGrillage + (PileCalcService.PileOptions.DimPileCutToRostwerk * 0.001);
             // отметка острия сваи
             PilePike = TopPileAfterBeat - (Length * 0.001);
         }
@@ -206,7 +228,7 @@ namespace KR_MN_Acad.Model.Pile
         {
             if (Error == null)
             {
-                Error = $"Ошибки в блоке {BlName}: {err}";
+                Error = err;
             }
             else
             {

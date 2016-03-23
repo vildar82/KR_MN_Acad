@@ -83,6 +83,8 @@
     <Compile Include="Model\Pile\Calc\HightMarkTable\HightMarkRow.cs" />
     <Compile Include="Model\Pile\Calc\HightMarkTable\HightMarkTable.cs" />
     <Compile Include="Model\Pile\Calc\PileCalcService.cs" />
+    <Compile Include="Model\Pile\Calc\Spec\SpecRow.cs" />
+    <Compile Include="Model\Pile\Calc\Spec\SpecTable.cs" />
     <Compile Include="Model\Pile\Numbering\EnumNumberingOrder.cs" />
     <Compile Include="Model\Pile\Numbering\FormNumbering.cs">
       <SubType>Form</SubType>

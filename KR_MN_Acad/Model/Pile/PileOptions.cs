@@ -32,13 +32,7 @@ namespace KR_MN_Acad.Model.Pile
         [DisplayName("Минимальное расстояние")]
         [Description("Коэфициент минимального расстояния между сваями. Lmin = k * 'сторона сваи'.")]
         //[DefaultValue(3)]
-        public double PileRatioLmin { get; set; }
-
-        [Category("Общие")]
-        [DisplayName("Слой таблиц")]
-        [Description("Слой для вставки таблиц свай.")]
-        //[DefaultValue("КР_Таблицы")]
-        public string TableLayer { get; set; }        
+        public double PileRatioLmin { get; set; }        
 
         [Category("Ростверк")]
         [DisplayName("Забивка, мм")]
@@ -52,6 +46,11 @@ namespace KR_MN_Acad.Model.Pile
         //[DefaultValue(50)]
         public double DimPileCutToRostwerk { get; set; }
 
+        [Category("Разное")]
+        [DisplayName("Слой таблиц")]
+        [Description("Слой для вставки таблиц свай.")]
+        //[DefaultValue("КР_Таблицы")]
+        public string TableLayer { get; set; }
 
         public PileOptions PromptOptions()
         {

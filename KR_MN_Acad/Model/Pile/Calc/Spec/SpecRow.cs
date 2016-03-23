@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Autodesk.AutoCAD.DatabaseServices;
 
-namespace KR_MN_Acad.Model.Pile.Calc.HightMark
+namespace KR_MN_Acad.Model.Pile.Calc.Spec
 {
-    public class HightMarkRow
+    public class SpecRow
     {
         /// <summary>
         /// Условное обозначение сваи
@@ -18,38 +18,42 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
         /// </summary>
         public string Nums { get; set; }
         /// <summary>
-        /// Верх сваи после забивки
+        /// Обозначения
         /// </summary>
-        public double TopPileAfterBeat { get; set; }
+        public string DocLink { get; set; }
         /// <summary>
-        /// Верх сваи после срубки
+        /// Наименование
         /// </summary>
-        public double TopPileAfterCut { get; set; }
+        public string Name { get; set; }
         /// <summary>
-        /// Отметка низа ростверка
+        /// Кол
         /// </summary>
-        public double BottomGrillage { get; set; }
+        public int Count { get; set; }
         /// <summary>
-        /// Отметка острия сваи
+        /// Масса
         /// </summary>
-        public double PilePike { get; set; }
+        public double Weight { get; set; }
+        /// <summary>
+        /// Примечание
+        /// </summary>
+        public string Description { get; set; }
 
         public List<Pile> Piles { get; set; }
         public ObjectId IdBtr { get; set; }
         public ObjectId IdAtrDefPos { get; set; }
 
-        private HashSet<int> _nums { get; set; }
-
-        public HightMarkRow(Pile p, List<Pile> piles)
+        public SpecRow(Pile p, List<Pile> piles)
         {
             View = p.View;
-            TopPileAfterBeat = p.TopPileAfterBeat;
-            TopPileAfterCut = p.TopPileAfterCut;
-            BottomGrillage = p.BottomGrillage;
-            PilePike = p.PilePike;
             Piles = piles;
+            DocLink = p.DocLink;
+            Name = p.Name;
+            Count = piles.Count;
+            Weight = p.Weight;
+            Description = p.Description;
             IdBtr = p.IdBtrAnonym;
             IdAtrDefPos = Pile.GetAttDefpos(IdBtr);
+            CalcNums();
         }
 
         public void CalcNums()

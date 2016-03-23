@@ -8,23 +8,23 @@ using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 
-namespace KR_MN_Acad.Model.Pile.Calc.HightMark
+namespace KR_MN_Acad.Model.Pile.Calc.Spec
 {
-    public class HightMarkTable
+    public class SpecTable
     {
         PileOptions options;
         Database db;
         Editor ed;
         Document doc;
-        List<HightMarkRow> hmRows;
+        List<SpecRow> specRows;
 
-        public HightMarkTable(List<HightMarkRow> hmRows)
+        public SpecTable(List<SpecRow> specRows)
         {
             doc = Application.DocumentManager.MdiActiveDocument;
             db = doc.Database;
             ed = doc.Editor;
             this.options = PileCalcService.PileOptions;
-            this.hmRows = hmRows;
+            this.specRows = specRows;
         }
 
         /// <summary>
@@ -53,14 +53,14 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
                 table.LayerId = AcadLib.Layers.LayerExt.GetLayerOrCreateNew(new AcadLib.Layers.LayerInfo(options.TableLayer));
             }
 
-            int rows = hmRows.Count + 2;
-            table.SetSize(rows, 6);
+            int rows = specRows.Count + 2;
+            table.SetSize(rows, 7);
 
             // Название таблицы
             var rowTitle = table.Cells[0, 0];
             rowTitle.Alignment = CellAlignment.MiddleCenter;
             rowTitle.TextHeight = 500;
-            rowTitle.TextString = "ТАБЛИЦА ОТМЕТОК СВАЙ";
+            rowTitle.TextString = "СПЕЦИФИКАЦИЯ К СХЕМЕ РАСПОЛОЖЕНИЯ СВАЙ";
 
             // столбец Условн обозн.
             var col = table.Columns[0];
@@ -70,22 +70,26 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
             col = table.Columns[1];
             col.Alignment = CellAlignment.MiddleCenter;
             col.Width = 6000;
-            // столбец Верха сваи после забивки.
+            // столбец Обозначения
             col = table.Columns[2];
             col.Alignment = CellAlignment.MiddleCenter;
-            col.Width = 2500;
-            // столбец Верха сваи после срубки.
+            col.Width = 4500;
+            // столбец Наименование
             col = table.Columns[3];
             col.Alignment = CellAlignment.MiddleCenter;
             col.Width = 2500;
-            // столбец Низ ростверка.
+            // столбец Кол
             col = table.Columns[4];
             col.Alignment = CellAlignment.MiddleCenter;
-            col.Width = 2500;
-            // столбец Острие сваи.
+            col.Width = 1200;
+            // столбец Масса
             col = table.Columns[5];
             col.Alignment = CellAlignment.MiddleCenter;
-            col.Width = 2500;
+            col.Width = 1200;
+            // столбец Примечания
+            col = table.Columns[6];
+            col.Alignment = CellAlignment.MiddleCenter;
+            col.Width = 1600;
 
             // Заголовок Условн обозн
             var cellColName = table.Cells[1, 0];
@@ -95,21 +99,25 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
             cellColName = table.Cells[1, 1];
             cellColName.TextString = "Номера свай на схеме";
             //cellColName.Alignment = CellAlignment.MiddleCenter;
-            // Заголовок Верх сваи после забивки
+            // Заголовок Обозначения
             cellColName = table.Cells[1, 2];
-            cellColName.TextString = "Верх сваи после забивки, м";
+            cellColName.TextString = "Обозначение";
             //cellColName.Alignment = CellAlignment.MiddleCenter;
-            // Заголовок Верх сваи после срубки
+            // Заголовок Наименование
             cellColName = table.Cells[1, 3];
-            cellColName.TextString = "Верх сваи после срубки, м";
+            cellColName.TextString = "Наименование";
             //cellColName.Alignment = CellAlignment.MiddleCenter;
-            // Заголовок Низ ростверка
+            // Заголовок Кол
             cellColName = table.Cells[1, 4];
-            cellColName.TextString = "Низ ростверка, м";
+            cellColName.TextString = "Кол-во, шт";
             //cellColName.Alignment = CellAlignment.MiddleCenter;
-            // Заголовок Отметка острия сваи
+            // Заголовок Масса
             cellColName = table.Cells[1, 5];
-            cellColName.TextString = "Отметка острия сваи, м";
+            cellColName.TextString = "Масса ед., кг";
+            //cellColName.Alignment = CellAlignment.MiddleCenter;                        
+            // Заголовок Примечание
+            cellColName = table.Cells[1, 6];
+            cellColName.TextString = "Примечание";
             //cellColName.Alignment = CellAlignment.MiddleCenter;                        
 
             // Строка заголовков столбцов
@@ -119,17 +127,18 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
             rowHeaders.Borders.Bottom.LineWeight = lwBold;
 
             int row = 2;
-            foreach (var hmr in hmRows)
+            foreach (var sr in specRows)
             {
-                //table.Cells[row, 0].TextString = hmr.View;
-                table.Cells[row, 0].BlockTableRecordId = hmr.IdBtr;
-                table.Cells[row, 0].SetBlockAttributeValue(hmr.IdAtrDefPos, "");
-                table.Cells[row, 1].TextString = hmr.Nums;
-                table.Cells[row, 2].TextString = hmr.TopPileAfterBeat.ToString("0.000");
-                table.Cells[row, 3].TextString = hmr.TopPileAfterCut.ToString("0.000");
-                table.Cells[row, 4].TextString = hmr.BottomGrillage.ToString("0.000");
-                table.Cells[row, 5].TextString = hmr.PilePike.ToString("0.000");
-                row++;             
+                //table.Cells[row, 0].TextString = sr.View;
+                table.Cells[row, 0].BlockTableRecordId = sr.IdBtr;
+                table.Cells[row, 0].SetBlockAttributeValue(sr.IdAtrDefPos, "");
+                table.Cells[row, 1].TextString = sr.Nums;
+                table.Cells[row, 2].TextString = sr.DocLink;
+                table.Cells[row, 3].TextString = sr.Name;
+                table.Cells[row, 4].TextString = sr.Count.ToString();
+                table.Cells[row, 5].TextString = sr.Weight.ToString();
+                table.Cells[row, 6].TextString = sr.Description;
+                row++;
             }
             var lastRow = table.Rows.Last();
             lastRow.Borders.Bottom.LineWeight = lwBold;
@@ -139,8 +148,8 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
         }
 
         private void insertTable(Table table)
-        {  
-            TableJig jigTable = new TableJig(table, 1, "Вставка таблицы отметок свай");
+        {
+            TableJig jigTable = new TableJig(table, 1, "Вставка спецификации свай");
             if (ed.Drag(jigTable).Status == PromptStatus.OK)
             {
                 var cs = db.CurrentSpaceId.GetObject(OpenMode.ForWrite) as BlockTableRecord;
