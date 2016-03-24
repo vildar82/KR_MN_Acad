@@ -114,7 +114,7 @@ namespace KR_MN_Acad.Model.Pile
             PileBlockNameMatch= "^КР_свая";
             PileAttrPos = "ПОЗ";
             PileRatioLmin = 3;
-            DimPileBeatToCut = 250;
+            DimPileBeatToCut = 300;
             DimPileCutToRostwerk = 50;
             TableLayer = "КР_Таблицы";
         }
