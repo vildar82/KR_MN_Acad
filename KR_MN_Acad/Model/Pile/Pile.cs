@@ -160,6 +160,8 @@ namespace KR_MN_Acad.Model.Pile
             TopPileAfterCut = BottomGrillage + (PileCalcService.PileOptions.DimPileCutToRostwerk-PitHeight) * 0.001;
             // отметка острия сваи
             PilePike = TopPileAfterBeat - (Length * 0.001);
+            // Отметка низа ростверка
+            BottomGrillage -= PitHeight*0.001;
         }
 
         private void defineParameters(BlockReference blRef)
