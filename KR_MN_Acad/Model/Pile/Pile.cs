@@ -18,7 +18,7 @@ namespace KR_MN_Acad.Model.Pile
         public const string ParamDescriptionName = "ПРИМЕЧАНИЕ";
         public const string ParamWeightName = "МАССА";
         public const string ParamLengthName = "Длина_сваи_мм";
-        public const string ParamSideName = "Размер сваи";
+        public const string ParamSideName = "Размер сваи";        
         public const string ParamViewName = "Вид";
         public const string ParamBottomGrillageName = "Низ_ростверка_м";
         public const string ParamPitHeightName = "Высота_приямка_мм";
@@ -113,6 +113,40 @@ namespace KR_MN_Acad.Model.Pile
             }            
             return AcadLib.Result.Ok();
         }
+
+        public static void Check(List<Pile> piles)
+        {
+            // Проверка последовательности номеров.
+            var sortNums = piles.OrderBy(p => p.Pos);
+
+            // Проверка повторяющихся номеров
+            var repeatNums = sortNums.GroupBy(g => g.Pos).Where(g => g.Skip(1).Any());
+            foreach (var repaet in repeatNums)
+            {
+                foreach (var item in repaet)
+                {
+                    Inspector.AddError($"Повтор номера {item.Pos}", item.IdBlRef, System.Drawing.SystemIcons.Error);
+                }
+            }
+
+            // Проверка пропущенных номеров
+            var minNum = sortNums.First().Pos;
+            var maxNum = sortNums.Last().Pos;
+            var trueSeq = Enumerable.Range(minNum, maxNum - minNum);
+            var missNums = trueSeq.Except(sortNums.Select(p => p.Pos)).Where(p=>p>0);
+            foreach (var item in missNums)
+            {
+                Inspector.AddError($"Пропущен номер сваи {item}", System.Drawing.SystemIcons.Error);
+            }
+
+            // Недопустимые номера - меньше 1
+            var negateNums = sortNums.Where(p => p.Pos < 1);
+            foreach (var item in negateNums)
+            {
+                Inspector.AddError($"Недопустимый номер сваи {item.Pos}", item.IdBlRef, System.Drawing.SystemIcons.Error);
+            }
+        }
+
 
         /// <summary>
         /// Расчет высотных отметок сваи

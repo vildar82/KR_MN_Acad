@@ -55,6 +55,7 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
 
             int rows = hmRows.Count + 2;
             table.SetSize(rows, 6);
+            table.SetRowHeight(800);
 
             // Название таблицы
             var rowTitle = table.Cells[0, 0];
@@ -90,31 +91,37 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
             // Заголовок Условн обозн
             var cellColName = table.Cells[1, 0];
             cellColName.TextString = "Условн. обозн.";
+            cellColName.TextHeight = 250;
             //cellColName.Alignment = CellAlignment.MiddleCenter;
             // Заголовок Номер сваи
             cellColName = table.Cells[1, 1];
             cellColName.TextString = "Номера свай на схеме";
+            cellColName.TextHeight = 250;
             //cellColName.Alignment = CellAlignment.MiddleCenter;
             // Заголовок Верх сваи после забивки
             cellColName = table.Cells[1, 2];
             cellColName.TextString = "Верх сваи после забивки, м";
+            cellColName.TextHeight = 250;
             //cellColName.Alignment = CellAlignment.MiddleCenter;
             // Заголовок Верх сваи после срубки
             cellColName = table.Cells[1, 3];
             cellColName.TextString = "Верх сваи после срубки, м";
+            cellColName.TextHeight = 250;
             //cellColName.Alignment = CellAlignment.MiddleCenter;
             // Заголовок Низ ростверка
             cellColName = table.Cells[1, 4];
             cellColName.TextString = "Низ ростверка, м";
+            cellColName.TextHeight = 250;
             //cellColName.Alignment = CellAlignment.MiddleCenter;
             // Заголовок Отметка острия сваи
             cellColName = table.Cells[1, 5];
             cellColName.TextString = "Отметка острия сваи, м";
+            cellColName.TextHeight = 250;
             //cellColName.Alignment = CellAlignment.MiddleCenter;                        
 
             // Строка заголовков столбцов
             var rowHeaders = table.Rows[1];
-            rowHeaders.Height = 15;
+            rowHeaders.Height = 1500;
             var lwBold = rowHeaders.Borders.Top.LineWeight;
             rowHeaders.Borders.Bottom.LineWeight = lwBold;
 
@@ -122,6 +129,7 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
             foreach (var hmr in hmRows)
             {
                 //table.Cells[row, 0].TextString = hmr.View;
+                table.Rows[row].TextHeight = 250;
                 table.Cells[row, 0].BlockTableRecordId = hmr.IdBtr;
                 table.Cells[row, 0].SetBlockAttributeValue(hmr.IdAtrDefPos, "");
                 table.Cells[row, 1].TextString = hmr.Nums;

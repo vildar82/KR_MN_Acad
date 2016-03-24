@@ -14,14 +14,13 @@ namespace KR_MN_Acad.Model.Pile.Calc
 
         public void Calc(List<Pile> piles, PileOptions pileOpt = null)
         {
-            if (pileOpt == null)
-            {
-                PileOptions = PileOptions.Load();
-            }
-            else
-            {
+            if (pileOpt == null)            
+                PileOptions = PileOptions.Load();            
+            else            
                 PileOptions = pileOpt;
-            }
+
+            // проверка номеров свай
+            Pile.Check(piles);
 
             // Подсчет отметок в каждой сваи
             foreach (var p in piles)           

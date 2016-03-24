@@ -55,6 +55,7 @@ namespace KR_MN_Acad.Model.Pile.Calc.Spec
 
             int rows = specRows.Count + 2;
             table.SetSize(rows, 7);
+            table.SetRowHeight(800);
 
             // Название таблицы
             var rowTitle = table.Cells[0, 0];
@@ -65,19 +66,19 @@ namespace KR_MN_Acad.Model.Pile.Calc.Spec
             // столбец Условн обозн.
             var col = table.Columns[0];
             col.Alignment = CellAlignment.MiddleCenter;
-            col.Width = 1500;
+            col.Width = 1500;            
             // столбец Номеров свай.
             col = table.Columns[1];
             col.Alignment = CellAlignment.MiddleCenter;
-            col.Width = 6000;
+            col.Width = 6000;            
             // столбец Обозначения
             col = table.Columns[2];
             col.Alignment = CellAlignment.MiddleCenter;
-            col.Width = 4500;
+            col.Width = 4500;            
             // столбец Наименование
             col = table.Columns[3];
             col.Alignment = CellAlignment.MiddleCenter;
-            col.Width = 2500;
+            col.Width = 2500;            
             // столбец Кол
             col = table.Columns[4];
             col.Alignment = CellAlignment.MiddleCenter;
@@ -94,42 +95,49 @@ namespace KR_MN_Acad.Model.Pile.Calc.Spec
             // Заголовок Условн обозн
             var cellColName = table.Cells[1, 0];
             cellColName.TextString = "Условн. обозн.";
+            cellColName.TextHeight = 250;
             //cellColName.Alignment = CellAlignment.MiddleCenter;
             // Заголовок Номер сваи
             cellColName = table.Cells[1, 1];
             cellColName.TextString = "Номера свай на схеме";
+            cellColName.TextHeight = 250;
             //cellColName.Alignment = CellAlignment.MiddleCenter;
             // Заголовок Обозначения
             cellColName = table.Cells[1, 2];
             cellColName.TextString = "Обозначение";
+            cellColName.TextHeight = 250;
             //cellColName.Alignment = CellAlignment.MiddleCenter;
             // Заголовок Наименование
             cellColName = table.Cells[1, 3];
             cellColName.TextString = "Наименование";
+            cellColName.TextHeight = 250;
             //cellColName.Alignment = CellAlignment.MiddleCenter;
             // Заголовок Кол
             cellColName = table.Cells[1, 4];
             cellColName.TextString = "Кол-во, шт";
+            cellColName.TextHeight = 250;
             //cellColName.Alignment = CellAlignment.MiddleCenter;
             // Заголовок Масса
             cellColName = table.Cells[1, 5];
             cellColName.TextString = "Масса ед., кг";
+            cellColName.TextHeight = 250;
             //cellColName.Alignment = CellAlignment.MiddleCenter;                        
             // Заголовок Примечание
             cellColName = table.Cells[1, 6];
             cellColName.TextString = "Примечание";
+            cellColName.TextHeight = 250;
             //cellColName.Alignment = CellAlignment.MiddleCenter;                        
 
             // Строка заголовков столбцов
             var rowHeaders = table.Rows[1];
-            rowHeaders.Height = 15;
+            rowHeaders.Height = 1500;
             var lwBold = rowHeaders.Borders.Top.LineWeight;
             rowHeaders.Borders.Bottom.LineWeight = lwBold;
 
             int row = 2;
             foreach (var sr in specRows)
             {
-                //table.Cells[row, 0].TextString = sr.View;
+                table.Rows[row].TextHeight = 250;
                 table.Cells[row, 0].BlockTableRecordId = sr.IdBtr;
                 table.Cells[row, 0].SetBlockAttributeValue(sr.IdAtrDefPos, "");
                 table.Cells[row, 1].TextString = sr.Nums;
