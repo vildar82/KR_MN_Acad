@@ -21,7 +21,7 @@ namespace KR_MN_Acad.Model.Pile
         public const string ParamSideName = "Размер сваи";        
         public const string ParamViewName = "Вид";
         public const string ParamBottomGrillageName = "Низ_ростверка_м";
-        public const string ParamPitHeightName = "Высота_приямка_мм";
+        public const string ParamPitHeightName = "Глубина_приямка_мм";
 
         public static HashSet<string> _ignoreParams = new HashSet<string> { "origin" };
 
@@ -204,7 +204,7 @@ namespace KR_MN_Acad.Model.Pile
             }
             else
             {
-                addError($"Не определен параметр {paramName}");
+                addError($"Не определен параметр '{paramName}'");
                 return string.Empty;                
             }
         }
@@ -220,7 +220,7 @@ namespace KR_MN_Acad.Model.Pile
                 }
                 catch { }
             }            
-            addError($"Не определен параметр {paramName}");
+            addError($"Не определен параметр '{paramName}'");
             return 0;
         }
 
@@ -235,7 +235,7 @@ namespace KR_MN_Acad.Model.Pile
                 }
                 catch { }
             }
-            addError($"Не определен параметр {paramName}");
+            addError($"Не определен параметр '{paramName}'");
             return 0;
         }
 
@@ -257,7 +257,7 @@ namespace KR_MN_Acad.Model.Pile
         {
             if (parameters.ContainsKey(name))
             {
-                addError($"Дублирование параметра {name}");                
+                addError($"Дублирование параметра '{name}'");                
             }
             else
             {                
