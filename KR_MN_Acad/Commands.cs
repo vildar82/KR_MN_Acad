@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using AcadLib.Errors;
 using Autodesk.AutoCAD.ApplicationServices;
@@ -40,9 +41,9 @@ namespace KR_MN_Acad
             {
                 try
                 {
-                    // Проверка дубликатов.
-                    AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
-                    Inspector.Clear();
+                    //// Проверка дубликатов.
+                    //AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
+                    //Inspector.Clear();
 
                     // Спецификация монолитных блоков                         
                     SpecService specService = new SpecService(new SpecMonolith());
@@ -79,9 +80,9 @@ namespace KR_MN_Acad
             {
                 try
                 {
-                    // Проверка дубликатов.
-                    AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
-                    Inspector.Clear();
+                    //// Проверка дубликатов.
+                    //AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
+                    //Inspector.Clear();
 
                     // Спецификация проекмов
                     SpecService specService = new SpecService(new SpecAperture());
@@ -118,9 +119,9 @@ namespace KR_MN_Acad
             {
                 try
                 {
-                    // Проверка дубликатов.
-                    AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
-                    Inspector.Clear();
+                    //// Проверка дубликатов.
+                    //AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
+                    //Inspector.Clear();
 
                     // Спецификация отверстий
                     SpecService specService = new SpecService(new SpecOpenings());
@@ -154,9 +155,9 @@ namespace KR_MN_Acad
             Editor ed = doc.Editor;
             try
             {
-                // Проверка дубликатов.
-                AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
-                Inspector.Clear();
+                //// Проверка дубликатов.
+                //AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
+                //Inspector.Clear();
 
                 PileNumberingService pileNumbService = new PileNumberingService();
                 pileNumbService.Numbering();
@@ -214,15 +215,18 @@ namespace KR_MN_Acad
             Editor ed = doc.Editor;
             try
             {
-                // Проверка дубликатов.
-                AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
-                Inspector.Clear();
+                //// Проверка дубликатов.
+                //AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
+                //Inspector.Clear();
 
                 // Выбор свай для нумерации
                 var selblocks = ed.SelectBlRefs("Выбор блоков свай для нумерации");
 
                 // фильтр блоков свай            
                 var piles = Model.Pile.PileFilter.Filter(selblocks, Model.Pile.PileOptions.Load());
+
+                // Проверка дубликатов
+                AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check(piles.Select(p => p.IdBlRef));
 
                 Model.Pile.Calc.PileCalcService pileCalcService = new Model.Pile.Calc.PileCalcService();
                 pileCalcService.Calc(piles);                

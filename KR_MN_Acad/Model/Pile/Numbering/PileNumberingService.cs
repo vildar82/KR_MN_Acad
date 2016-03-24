@@ -50,6 +50,9 @@ namespace KR_MN_Acad.Model.Pile.Numbering
             // фильтр блоков свай            
             var piles = PileFilter.Filter(selblocks, PileOptions);
 
+            // Проверка дубликатов
+            AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check(piles.Select(p => p.IdBlRef));
+
             // Проверка сваи и расстояний между ними.
             CheckPiles(piles);
 
