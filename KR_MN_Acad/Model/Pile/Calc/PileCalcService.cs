@@ -27,8 +27,7 @@ namespace KR_MN_Acad.Model.Pile.Calc
                 p.CalcHightMarks();
 
             // Расчет отметок свай
-            var hmRows = getHightMarkRows(piles);
-            hmRows.ForEach(r => r.CalcNums());
+            var hmRows = getHightMarkRows(piles);            
 
             // Расчет спецификации свай
             var specRows = getSpecRows(piles);

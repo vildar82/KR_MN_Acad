@@ -43,16 +43,13 @@ namespace KR_MN_Acad
                 {
                     //// Проверка дубликатов.
                     //AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
-                    //Inspector.Clear();
+                    Inspector.Clear();
 
                     // Спецификация монолитных блоков                         
                     SpecService specService = new SpecService(new SpecMonolith());
                     specService.CreateSpec();
-
-                    if (Inspector.HasErrors)
-                    {
-                        Inspector.Show();
-                    }
+                    
+                    Inspector.Show();                    
                 }
                 catch (System.Exception ex)
                 {
@@ -82,16 +79,13 @@ namespace KR_MN_Acad
                 {
                     //// Проверка дубликатов.
                     //AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
-                    //Inspector.Clear();
+                    Inspector.Clear();
 
                     // Спецификация проекмов
                     SpecService specService = new SpecService(new SpecAperture());
                     specService.CreateSpec();
-
-                    if (Inspector.HasErrors)
-                    {
-                        Inspector.Show();
-                    }
+                    
+                    Inspector.Show();
                 }
                 catch (System.Exception ex)
                 {
@@ -121,16 +115,13 @@ namespace KR_MN_Acad
                 {
                     //// Проверка дубликатов.
                     //AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
-                    //Inspector.Clear();
+                    Inspector.Clear();
 
                     // Спецификация отверстий
                     SpecService specService = new SpecService(new SpecOpenings());
                     specService.CreateSpec();
-
-                    if (Inspector.HasErrors)
-                    {
-                        Inspector.Show();
-                    }
+                    
+                    Inspector.Show();                    
                 }
                 catch (System.Exception ex)
                 {
@@ -157,7 +148,7 @@ namespace KR_MN_Acad
             {
                 //// Проверка дубликатов.
                 //AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
-                //Inspector.Clear();
+                Inspector.Clear();
 
                 PileNumberingService pileNumbService = new PileNumberingService();
                 pileNumbService.Numbering();
@@ -217,7 +208,7 @@ namespace KR_MN_Acad
             {
                 //// Проверка дубликатов.
                 //AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
-                //Inspector.Clear();
+                Inspector.Clear();
 
                 // Выбор свай для нумерации
                 var selblocks = ed.SelectBlRefs("Выбор блоков свай для нумерации");
@@ -229,7 +220,9 @@ namespace KR_MN_Acad
                 AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check(piles.Select(p => p.IdBlRef));
 
                 Model.Pile.Calc.PileCalcService pileCalcService = new Model.Pile.Calc.PileCalcService();
-                pileCalcService.Calc(piles);                
+                pileCalcService.Calc(piles);
+
+                Inspector.Show();
             }
             catch (System.Exception ex)
             {
@@ -238,8 +231,7 @@ namespace KR_MN_Acad
                     Log.Error(ex, $"Command: KR-PileCalc. Doc {doc.Name}");
                 }
                 ed.WriteMessage($"\nОшибка - {ex.Message}");
-            }
-            Inspector.Show();
+            }            
         }
 
         public void Terminate()

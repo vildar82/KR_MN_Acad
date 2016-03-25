@@ -56,7 +56,7 @@ namespace KR_MN_Acad.Model.Pile.Calc.Spec
             CalcNums();
         }
 
-        public void CalcNums()
+        private void CalcNums()
         {
             // Вычислить строку номеров свай
             var sortPos = Piles.OrderBy(p => p.Pos).Select(p => p.Pos);
