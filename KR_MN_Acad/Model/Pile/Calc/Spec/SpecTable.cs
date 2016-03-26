@@ -138,7 +138,15 @@ namespace KR_MN_Acad.Model.Pile.Calc.Spec
             foreach (var sr in specRows)
             {
                 table.Rows[row].TextHeight = 250;
-                table.Cells[row, 0].BlockTableRecordId = sr.IdBtr;
+
+                var cellBlock = table.Cells[row, 0];
+                cellBlock.BlockTableRecordId = sr.IdBtr;
+                cellBlock.SetBlockAttributeValue(sr.IdAtrDefPos, "");
+                var blockContent = cellBlock.Contents[0];
+                blockContent.IsAutoScale = false;
+                blockContent.Scale = 1;
+
+                
                 table.Cells[row, 0].SetBlockAttributeValue(sr.IdAtrDefPos, "");
                 table.Cells[row, 1].TextString = sr.Nums;
                 table.Cells[row, 2].TextString = sr.DocLink;

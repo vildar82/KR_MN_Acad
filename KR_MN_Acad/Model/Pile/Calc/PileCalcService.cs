@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AcadLib.Errors;
+using Autodesk.AutoCAD.ApplicationServices;
 using KR_MN_Acad.Model.Pile.Calc.HightMark;
 using KR_MN_Acad.Model.Pile.Calc.Spec;
 
@@ -19,8 +21,13 @@ namespace KR_MN_Acad.Model.Pile.Calc
             else            
                 PileOptions = pileOpt;
 
+            piles = piles.OrderBy(p => p.Pos).ToList();
+
             // проверка номеров свай
             Pile.Check(piles);
+
+            Inspector.ShowDialog();
+            Inspector.Clear();
 
             // Подсчет отметок в каждой сваи
             foreach (var p in piles)           
@@ -31,6 +38,15 @@ namespace KR_MN_Acad.Model.Pile.Calc
 
             // Расчет спецификации свай
             var specRows = getSpecRows(piles);
+
+            // Форма дерева свай
+            FormPiles formPiles = new FormPiles(hmRows, specRows);
+            if (Application.ShowModalDialog(formPiles) != System.Windows.Forms.DialogResult.OK)
+            {
+                formPiles.ButtonDialogVisible(false);
+                Application.ShowModelessDialog(formPiles);
+                throw new Exception(AcadLib.General.CanceledByUser);
+            }
 
             // Вставка таблицы отметок
             HightMarkTable hmTable = new HightMarkTable(hmRows);

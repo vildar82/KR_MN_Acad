@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AcadLib;
 using AcadLib.Blocks;
 using AcadLib.Errors;
+using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
 using KR_MN_Acad.Model.Pile.Calc;
 
@@ -43,25 +46,7 @@ namespace KR_MN_Acad.Model.Pile
         /// Наименование
         /// </summary>
         public string Name { get; set; }
-        public string Description { get; set; }
-
-        public static ObjectId GetAttDefpos(ObjectId idBtr)
-        {
-            using (var btr = idBtr.Open( OpenMode.ForRead) as BlockTableRecord)
-            {
-                foreach (var idEnt in btr)
-                {
-                    using (var atrDef = idEnt.Open( OpenMode.ForRead, false, true)as AttributeDefinition)
-                    {
-                        if (atrDef != null && atrDef.Tag.Equals(PileCalcService.PileOptions.PileAttrPos))
-                        {
-                            return atrDef.Id;
-                        }
-                    }
-                }
-            }
-            return ObjectId.Null;
-        }
+        public string Description { get; set; }               
 
         public double Weight { get; set; }
         public int Length { get; set; }
@@ -117,10 +102,10 @@ namespace KR_MN_Acad.Model.Pile
         public static void Check(List<Pile> piles)
         {
             // Проверка последовательности номеров.
-            var sortNums = piles.OrderBy(p => p.Pos);
+            //var sortNums = piles.OrderBy(p => p.Pos);
 
             // Проверка повторяющихся номеров
-            var repeatNums = sortNums.GroupBy(g => g.Pos).Where(g => g.Skip(1).Any());
+            var repeatNums = piles.GroupBy(g => g.Pos).Where(g => g.Skip(1).Any());
             foreach (var repaet in repeatNums)
             {
                 foreach (var item in repaet)
@@ -130,23 +115,65 @@ namespace KR_MN_Acad.Model.Pile
             }
 
             // Проверка пропущенных номеров
-            var minNum = sortNums.First().Pos;
-            var maxNum = sortNums.Last().Pos;
+            var minNum = piles.First().Pos;
+            var maxNum = piles.Last().Pos;
             var trueSeq = Enumerable.Range(minNum, maxNum - minNum);
-            var missNums = trueSeq.Except(sortNums.Select(p => p.Pos)).Where(p=>p>0);
+            var missNums = trueSeq.Except(piles.Select(p => p.Pos)).Where(p=>p>0);
             foreach (var item in missNums)
             {
                 Inspector.AddError($"Пропущен номер сваи {item}", System.Drawing.SystemIcons.Error);
             }
 
             // Недопустимые номера - меньше 1
-            var negateNums = sortNums.Where(p => p.Pos < 1);
+            var negateNums = piles.Where(p => p.Pos < 1);
             foreach (var item in negateNums)
             {
                 Inspector.AddError($"Недопустимый номер сваи {item.Pos}", item.IdBlRef, System.Drawing.SystemIcons.Error);
             }
         }
 
+        public static ObjectId GetAttDefPos(ObjectId idBtr)
+        {
+            using (var btr = idBtr.Open(OpenMode.ForRead) as BlockTableRecord)
+            {
+                foreach (var idEnt in btr)
+                {
+                    using (var atrDef = idEnt.Open(OpenMode.ForRead, false, true) as AttributeDefinition)
+                    {
+                        if (atrDef != null && atrDef.Tag.Equals(PileCalcService.PileOptions.PileAttrPos))
+                        {
+                            return atrDef.Id;
+                        }
+                    }
+                }
+            }
+            return ObjectId.Null;
+        }
+
+        private bool _extendsHasCalc;        
+        private Extents3d _extents;
+        public void Show(Editor ed)
+        {
+            if (!_extendsHasCalc)
+            {
+                _extendsHasCalc = true;
+                using (var blRef = IdBlRef.Open(OpenMode.ForRead, false, true) as BlockReference)
+                {
+                    try
+                    {
+                        _extents= blRef.GeometricExtents;
+                    }
+                    catch
+                    {
+                        var ptMin = new Point3d(Pt.X - Side, Pt.Y - Side, 0);
+                        var ptMax = new Point3d(Pt.X + Side, Pt.Y + Side, 0);
+                        _extents = new Extents3d(ptMin, ptMax);
+                    }
+                }
+            }
+            ed.Zoom(_extents);
+            IdBlRef.FlickObjectHighlight(2, 100, 100);
+        }
 
         /// <summary>
         /// Расчет высотных отметок сваи

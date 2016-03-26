@@ -130,8 +130,14 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
             {
                 //table.Cells[row, 0].TextString = hmr.View;
                 table.Rows[row].TextHeight = 250;
-                table.Cells[row, 0].BlockTableRecordId = hmr.IdBtr;
-                table.Cells[row, 0].SetBlockAttributeValue(hmr.IdAtrDefPos, "");
+
+                var cellBlock = table.Cells[row, 0];                
+                cellBlock.BlockTableRecordId = hmr.IdBtr;
+                cellBlock.SetBlockAttributeValue(hmr.IdAtrDefPos, "");
+                var blockContent = cellBlock.Contents[0];
+                blockContent.IsAutoScale = false;
+                blockContent.Scale = 1;                                                
+                
                 table.Cells[row, 1].TextString = hmr.Nums;
                 table.Cells[row, 2].TextString = hmr.TopPileAfterBeat.ToString("0.000");
                 table.Cells[row, 3].TextString = hmr.TopPileAfterCut.ToString("0.000");

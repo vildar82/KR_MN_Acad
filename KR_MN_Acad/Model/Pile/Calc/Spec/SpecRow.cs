@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using Autodesk.AutoCAD.DatabaseServices;
 
 namespace KR_MN_Acad.Model.Pile.Calc.Spec
@@ -42,6 +44,16 @@ namespace KR_MN_Acad.Model.Pile.Calc.Spec
         public ObjectId IdBtr { get; set; }
         public ObjectId IdAtrDefPos { get; set; }
 
+        public Icon Icon { get; set; }
+
+        public string Info
+        {
+            get
+            {
+                return View + ": Серия=" + DocLink + ", Нименование=" + Name + ", Масса=" + Weight;
+            }
+        }
+
         public SpecRow(Pile p, List<Pile> piles)
         {
             View = p.View;
@@ -52,15 +64,24 @@ namespace KR_MN_Acad.Model.Pile.Calc.Spec
             Weight = p.Weight;
             Description = p.Description;
             IdBtr = p.IdBtrAnonym;
-            IdAtrDefPos = Pile.GetAttDefpos(IdBtr);
+            IdAtrDefPos = Pile.GetAttDefPos(IdBtr);
             CalcNums();
+            setImage();
+        }
+
+        private void setImage()
+        {
+            using (var btr = IdBtr.Open(OpenMode.ForRead) as BlockTableRecord)
+            {
+                Icon = AcadLib.Blocks.Visual.BlockPreviewHelper.GetPreviewIcon(btr);
+            }
         }
 
         private void CalcNums()
         {
             // Вычислить строку номеров свай
-            var sortPos = Piles.OrderBy(p => p.Pos).Select(p => p.Pos);
-            Nums = AcadLib.MathExt.IntsToStringSequence(sortPos.ToArray());
+            var poses = Piles.Select(p => p.Pos);
+            Nums = AcadLib.MathExt.IntsToStringSequence(poses.ToArray());
         }
     }
 }
