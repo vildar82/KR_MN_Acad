@@ -22,7 +22,14 @@ namespace KR_MN_Acad.Model.Pile.Calc
         {
             InitializeComponent();
 
-            UpdateData(rowsHM, rowsCalc);
+            try
+            {
+                UpdateData(rowsHM, rowsCalc);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log.Error(ex, "FormPiles UpdateData()");
+            }
         }
 
         public void ButtonDialogVisible(bool visible)
