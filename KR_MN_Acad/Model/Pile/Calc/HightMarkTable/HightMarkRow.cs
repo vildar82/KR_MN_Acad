@@ -41,8 +41,6 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
 
         private HashSet<int> _nums { get; set; }
 
-        public System.Drawing.Icon Icon { get; set; }
-
         public string Info
         {
             get
@@ -61,17 +59,8 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
             Piles = piles;
             IdBtr = p.IdBtrAnonym;
             IdAtrDefPos = Pile.GetAttDefPos(IdBtr);
-            CalcNums();
-            setImage();            
-        }
-
-        private void setImage()
-        {
-            using (var btr = IdBtr.Open( OpenMode.ForRead) as BlockTableRecord)
-            {
-                Icon = AcadLib.Blocks.Visual.BlockPreviewHelper.GetPreviewIcon(btr);
-            }
-        }
+            CalcNums();            
+        }       
 
         private void CalcNums()
         {

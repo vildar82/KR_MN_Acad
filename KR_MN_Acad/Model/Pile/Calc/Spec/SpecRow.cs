@@ -42,9 +42,7 @@ namespace KR_MN_Acad.Model.Pile.Calc.Spec
 
         public List<Pile> Piles { get; set; }
         public ObjectId IdBtr { get; set; }
-        public ObjectId IdAtrDefPos { get; set; }
-
-        public Icon Icon { get; set; }
+        public ObjectId IdAtrDefPos { get; set; }        
 
         public string Info
         {
@@ -65,17 +63,8 @@ namespace KR_MN_Acad.Model.Pile.Calc.Spec
             Description = p.Description;
             IdBtr = p.IdBtrAnonym;
             IdAtrDefPos = Pile.GetAttDefPos(IdBtr);
-            CalcNums();
-            setImage();
-        }
-
-        private void setImage()
-        {
-            using (var btr = IdBtr.Open(OpenMode.ForRead) as BlockTableRecord)
-            {
-                Icon = AcadLib.Blocks.Visual.BlockPreviewHelper.GetPreviewIcon(btr);
-            }
-        }
+            CalcNums();            
+        }        
 
         private void CalcNums()
         {

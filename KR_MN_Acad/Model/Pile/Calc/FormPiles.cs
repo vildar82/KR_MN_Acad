@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using Autodesk.AutoCAD.ApplicationServices;
+using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 
 namespace KR_MN_Acad.Model.Pile.Calc
@@ -35,7 +36,17 @@ namespace KR_MN_Acad.Model.Pile.Calc
             ImageList im = new ImageList();            
             treeViewPiles.ImageList = im;
             treeViewPiles.ImageIndex = 100;
-            treeViewPiles.SelectedImageIndex = 100;        
+            treeViewPiles.SelectedImageIndex = 100;
+
+            var views = rowsHM.GroupBy(g => g.View);
+            foreach (var item in views)
+            {
+                using (var btr = item.First().IdBtr.Open( Autodesk.AutoCAD.DatabaseServices.OpenMode.ForRead) as BlockTableRecord)
+                {
+                    var icon = AcadLib.Blocks.Visual.BlockPreviewHelper.GetPreviewIcon(btr);
+                    im.Images.Add(item.Key, icon);
+                }
+            }
 
             TreeNode rootHM = new TreeNode("Отметки свай");            
             treeViewPiles.Nodes.Add(rootHM);
@@ -46,9 +57,7 @@ namespace KR_MN_Acad.Model.Pile.Calc
             rootCalc.Expand();            
 
             foreach (var row in rowsHM)
-            {                
-                im.Images.Add(row.View, row.Icon);
-
+            {   
                 TreeNode nodeRow = new TreeNode(row.Info);
                 nodeRow.ImageKey = row.View;
                 nodeRow.SelectedImageKey = row.View;
