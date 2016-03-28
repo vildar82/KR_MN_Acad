@@ -61,7 +61,7 @@ namespace KR_MN_Acad.Model.Pile.Calc.Spec
             var rowTitle = table.Cells[0, 0];
             rowTitle.Alignment = CellAlignment.MiddleCenter;
             rowTitle.TextHeight = 500;
-            rowTitle.TextString = "СПЕЦИФИКАЦИЯ К СХЕМЕ РАСПОЛОЖЕНИЯ СВАЙ";
+            rowTitle.TextString = "Спецификация к схеме расположения свай";
 
             // столбец Условн обозн.
             var col = table.Columns[0];

@@ -61,7 +61,7 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
             var rowTitle = table.Cells[0, 0];
             rowTitle.Alignment = CellAlignment.MiddleCenter;
             rowTitle.TextHeight = 500;
-            rowTitle.TextString = "ТАБЛИЦА ОТМЕТОК СВАЙ";
+            rowTitle.TextString = "Таблица отметок свай";
 
             // столбец Условн обозн.
             var col = table.Columns[0];
