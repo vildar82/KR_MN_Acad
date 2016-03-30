@@ -47,7 +47,7 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
         {
             Table table = new Table();
             table.SetDatabaseDefaults(db);
-            table.TableStyle = db.GetTableStylePIK("ПИК100"); // если нет стиля ПИк в этом чертеже, то он скопируетс из шаблона, если он найдется
+            table.TableStyle = db.GetTableStylePIK("ПИК100", true); // если нет стиля ПИк в этом чертеже, то он скопируетс из шаблона, если он найдется
             if (!string.IsNullOrEmpty(options.TableLayer))
             {
                 table.LayerId = AcadLib.Layers.LayerExt.GetLayerOrCreateNew(new AcadLib.Layers.LayerInfo(options.TableLayer));
