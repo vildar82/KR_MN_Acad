@@ -7,6 +7,7 @@ using AcadLib.Jigs;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
+using AcadLib;
 
 namespace KR_MN_Acad.Model.Pile.Calc.HightMark
 {
@@ -55,7 +56,8 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
 
             int rows = hmRows.Count + 2;
             table.SetSize(rows, 6);
-            table.SetRowHeight(800);
+            table.SetBorders(LineWeight.LineWeight050);
+            table.SetRowHeight(800);            
 
             // Название таблицы
             var rowTitle = table.Cells[0, 0];
@@ -150,7 +152,7 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
 
             table.GenerateLayout();
             return table;
-        }
+        }       
 
         private void insertTable(Table table)
         {  
@@ -161,6 +163,6 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
                 cs.AppendEntity(table);
                 db.TransactionManager.TopTransaction.AddNewlyCreatedDBObject(table, true);
             }
-        }
+        }        
     }
 }

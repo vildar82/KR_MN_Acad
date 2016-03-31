@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AcadLib;
 using AcadLib.Jigs;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
@@ -55,6 +56,7 @@ namespace KR_MN_Acad.Model.Pile.Calc.Spec
 
             int rows = specRows.Count + 2;
             table.SetSize(rows, 7);
+            table.SetBorders(LineWeight.LineWeight050);
             table.SetRowHeight(800);
 
             // Название таблицы
