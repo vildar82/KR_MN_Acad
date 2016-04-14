@@ -57,7 +57,7 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
             int rows = hmRows.Count + 2;
             table.SetSize(rows, 6);
             table.SetBorders(LineWeight.LineWeight050);
-            table.SetRowHeight(800);            
+            table.SetRowHeight(1600);            
 
             // Название таблицы
             var rowTitle = table.Cells[0, 0];
@@ -141,10 +141,19 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
                 blockContent.Scale = 1;                                                
                 
                 table.Cells[row, 1].TextString = hmr.Nums;
-                table.Cells[row, 2].TextString = hmr.TopPileAfterBeat.ToString("0.000");
-                table.Cells[row, 3].TextString = hmr.TopPileAfterCut.ToString("0.000");
-                table.Cells[row, 4].TextString = hmr.BottomGrillage.ToString("0.000");
-                table.Cells[row, 5].TextString = hmr.PilePike.ToString("0.000");
+
+                table.Cells[row, 2].TextString = hmr.TopPileAfterBeat.ToString("0.000") + "\n\r" +
+                    "(" + getAbsMark(hmr.TopPileAfterBeat).ToString("0.00") + ")";
+
+                table.Cells[row, 3].TextString = hmr.TopPileAfterCut.ToString("0.000") + "\n\r" +
+                    "(" + getAbsMark(hmr.TopPileAfterCut).ToString("0.00") + ")";
+
+                table.Cells[row, 4].TextString = hmr.BottomGrillage.ToString("0.000") + "\n\r" +
+                    "(" + getAbsMark(hmr.BottomGrillage).ToString("0.00") + ")";
+
+                table.Cells[row, 5].TextString = hmr.PilePike.ToString("0.000") + "\n\r" +
+                    "(" + getAbsMark(hmr.PilePike).ToString("0.00") + ")";
+
                 row++;             
             }
             var lastRow = table.Rows.Last();
@@ -152,7 +161,12 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
 
             table.GenerateLayout();
             return table;
-        }       
+        }
+
+        private double getAbsMark(double topPileAfterBeat)
+        {
+            return options.AbsoluteZero + topPileAfterBeat;
+        }
 
         private void insertTable(Table table)
         {  

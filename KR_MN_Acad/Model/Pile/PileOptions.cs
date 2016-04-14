@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Autodesk.AutoCAD.ApplicationServices;
+using Autodesk.AutoCAD.DatabaseServices;
 
 namespace KR_MN_Acad.Model.Pile
 {
@@ -15,6 +16,8 @@ namespace KR_MN_Acad.Model.Pile
     {   
         [XmlIgnore]
         public static string FileXml = Path.Combine(AutoCAD_PIK_Manager.Settings.PikSettings.ServerShareSettingsFolder, @"КР-МН\Сваи\PileOptions.xml");
+        public const string DictNod = "PIK";
+        public const string RecAbsoluteZero = "AbsoluteZero";
 
         [Category("Общие")]
         [DisplayName("Имя блока сваи")]
@@ -45,6 +48,13 @@ namespace KR_MN_Acad.Model.Pile
         [Description("Расстояние от низа ростверка до верха сваи после срубки, мм.")]
         //[DefaultValue(50)]
         public double DimPileCutToRostwerk { get; set; }
+
+        [XmlIgnore]
+        [Category("Ростверк")]
+        [DisplayName("Абс.отметка")]
+        [Description("Абсолютная отметка 0. Например 141.700")]
+        //[DefaultValue(50)]
+        public double AbsoluteZero { get; set; }
 
         [Category("Разное")]
         [DisplayName("Слой таблиц")]
@@ -84,6 +94,8 @@ namespace KR_MN_Acad.Model.Pile
                 {
                     // Загрузка настроек таблицы из файла XML
                     options = PileOptions.LoadFromXml();
+                    // Загрузка начтроек чертежа
+                    options.LoadFromNOD();
                 }
                 catch (Exception ex)
                 {
@@ -107,7 +119,7 @@ namespace KR_MN_Acad.Model.Pile
                 }
             }
             return options;
-        }
+        }       
 
         private void SetDefault()
         {
@@ -116,7 +128,7 @@ namespace KR_MN_Acad.Model.Pile
             PileRatioLmin = 3;
             DimPileBeatToCut = 300;
             DimPileCutToRostwerk = 50;
-            TableLayer = "КР_Таблицы";
+            TableLayer = "КР_Таблицы";            
         }
 
         private static PileOptions LoadFromXml()
@@ -126,9 +138,22 @@ namespace KR_MN_Acad.Model.Pile
         }
 
         public void Save()
-        {            
+        {
+            SaveToNOD();
             AcadLib.Files.SerializerXml ser = new AcadLib.Files.SerializerXml(FileXml);
             ser.SerializeList(this);
+        }
+
+        private void SaveToNOD()
+        {
+            var nod = new AcadLib.DictNOD(DictNod);
+            nod.Save(AbsoluteZero, RecAbsoluteZero);
+        }
+
+        private void LoadFromNOD()
+        {
+            var nod = new AcadLib.DictNOD(DictNod);
+            AbsoluteZero = nod.Load(RecAbsoluteZero, 150.00);
         }
     }
 }
