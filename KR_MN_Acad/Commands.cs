@@ -18,7 +18,14 @@ namespace KR_MN_Acad
 {
     public class Commands: IExtensionApplication
     {
-        public static AutoCAD_PIK_Manager.LogAddin Log { get; private set; } = new AutoCAD_PIK_Manager.LogAddin("Plugin KR_MN_Acad ");
+        const string groupPik = AutoCAD_PIK_Manager.Commands.Group;
+        const string commandSpecMonolith = "KR-SpecMonolith";
+        const string commandSpecApertures = "KR-SpecApertures";
+        const string commandSpecOpenings = "KR-SpecOpenings";
+        const string commandSpecSlabOpenings = "KR-SpecSlabOpenings";
+        const string commandPileNumbering = "KR-PileNumbering";
+        const string commandPileOptions = "KR-PileOptions";
+        const string commandPileCalc = "KR-PileCalc";        
 
         public void Initialize()
         {
@@ -29,209 +36,119 @@ namespace KR_MN_Acad
         /// <summary>
         /// Спецификация монолитных блоков
         /// </summary>
-        [CommandMethod("PIK", "KR-SpecMonolith", CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        [CommandMethod(groupPik, commandSpecMonolith, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
         public void SpecMonolithCommand()
         {
-            Log.Info("Start Command: KR-SpecMonolith");
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            if (doc == null) return;
-            Database db = doc.Database;
-            Editor ed = doc.Editor;
-            using (var DocLock = doc.LockDocument())
-            {
-                try
-                {
-                    //// Проверка дубликатов.
-                    //AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
-                    Inspector.Clear();
-
-                    // Спецификация монолитных блоков                         
-                    SpecService specService = new SpecService(new SpecMonolith());
-                    specService.CreateSpec();
-                    
-                    Inspector.Show();                    
-                }
-                catch (System.Exception ex)
-                {
-                    if (!ex.Message.Contains(AcadLib.General.CanceledByUser))
-                    {
-                        Log.Error(ex, $"Command: KR-SpecMonolith. Doc {doc.Name}");
-                    }
-                    ed.WriteMessage($"\nОшибка - {ex.Message}");
-                }
-            }
+            AcadLib.CommandStart.Start(doc =>
+            {                
+                Inspector.Clear();
+                // Спецификация монолитных блоков                         
+                SpecService specService = new SpecService(new SpecMonolith());
+                specService.CreateSpec();
+                Inspector.Show();
+            });            
         }
 
         /// <summary>
         /// Спецификация проемов
         /// </summary>
-        [CommandMethod("PIK", "KR-SpecApertures", CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void SpecOpeningsCommand()
+        [CommandMethod(groupPik, commandSpecApertures, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void SpecAperturesCommand()
         {
-            Log.Info("Start Command: KR-SpecApertures");
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            if (doc == null) return;
-            Database db = doc.Database;
-            Editor ed = doc.Editor;
-            using (var DocLock = doc.LockDocument())
+            AcadLib.CommandStart.Start(doc =>
             {
-                try
-                {
-                    //// Проверка дубликатов.
-                    //AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
-                    Inspector.Clear();
-
-                    // Спецификация проекмов
-                    SpecService specService = new SpecService(new SpecAperture());
-                    specService.CreateSpec();
-                    
-                    Inspector.Show();
-                }
-                catch (System.Exception ex)
-                {
-                    if (!ex.Message.Contains(AcadLib.General.CanceledByUser))
-                    {
-                        Log.Error(ex, $"Command: KR-SpecApertures. Doc {doc.Name}");
-                    }
-                    ed.WriteMessage($"\nОшибка - {ex.Message}");
-                }
-            }
+                Inspector.Clear();
+                // Спецификация проекмов
+                SpecService specService = new SpecService(new SpecAperture());
+                specService.CreateSpec();
+                Inspector.Show();
+            });                
         }
 
         /// <summary>
         /// Спецификация отверстий
         /// </summary>
-        [CommandMethod("PIK", "KR-SpecOpenings", CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        [CommandMethod(groupPik, commandSpecOpenings, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
         public void SpecOpenings()
         {
-            Log.Info($"Start Command: KR-SpecOpenings");
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            if (doc == null) return;
-            Database db = doc.Database;
-            Editor ed = doc.Editor;
-            using (var DocLock = doc.LockDocument())
+            AcadLib.CommandStart.Start(doc =>
             {
-                try
-                {
-                    //// Проверка дубликатов.
-                    //AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
-                    Inspector.Clear();
+                Inspector.Clear();
+                // Спецификация отверстий
+                SpecService specService = new SpecService(new SpecOpenings());
+                specService.CreateSpec();
+                Inspector.Show();
+            });            
+        }
 
-                    // Спецификация отверстий
-                    SpecService specService = new SpecService(new SpecOpenings());
-                    specService.CreateSpec();
-                    
-                    Inspector.Show();                    
-                }
-                catch (System.Exception ex)
-                {
-                    if (!ex.Message.Contains(AcadLib.General.CanceledByUser))
-                    {
-                        Log.Error(ex, $"Command: SpecOpenings. Doc {doc.Name}");
-                    }
-                    ed.WriteMessage($"\nОшибка - {ex.Message}");
-                }
-            }
+        /// <summary>
+        /// Спецификация отверстий в плите
+        /// </summary>
+        [CommandMethod(groupPik, commandSpecSlabOpenings, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void SpecSlabOpenings()
+        {
+            AcadLib.CommandStart.Start(doc =>
+            {
+                Inspector.Clear();
+                // Спецификация отверстий
+                SpecService specService = new SpecService(new SpecSlabOpenings());
+                specService.CreateSpec();
+                Inspector.Show();
+            });
         }
 
         /// <summary>
         /// Нумерация свай
         /// </summary>
-        [CommandMethod("PIK", "KR-PileNumbering", CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        [CommandMethod(groupPik, commandPileNumbering, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
         public void PileNumberingCommand()
         {
-            Log.Info($"Start Command: KR-PileNumbering");
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            if (doc == null) return;            
-            Editor ed = doc.Editor;
-            try
+            AcadLib.CommandStart.Start(doc =>
             {
-                //// Проверка дубликатов.
-                //AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
                 Inspector.Clear();
-
                 PileNumberingService pileNumbService = new PileNumberingService();
                 pileNumbService.Numbering();
-
-                ed.WriteMessage("\nНумерация выполнена.");
-
+                doc.Editor.WriteMessage("\nНумерация выполнена.");
                 Inspector.Show();
-            }
-            catch (System.Exception ex)
-            {
-                if (!ex.Message.Contains(AcadLib.General.CanceledByUser))
-                {
-                    Log.Error(ex, $"Command: KR-PileNumbering. Doc {doc.Name}");
-                }
-                ed.WriteMessage($"\nОшибка - {ex.Message}");
-            }
+            });           
         }
 
         /// <summary>
         /// Параметры свай
         /// </summary>
-        [CommandMethod("PIK", "KR-PileOptions", CommandFlags.Modal)]
+        [CommandMethod(groupPik, commandPileOptions, CommandFlags.Modal)]
         public void PileOptionsCommand()
         {
-            Log.Info($"Start Command: KR-PileOptions");
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            if (doc == null) return;
-            Editor ed = doc.Editor;
-            try
+            AcadLib.CommandStart.Start(doc =>
             {
                 var pileOpt = Model.Pile.PileOptions.Load();
                 pileOpt = pileOpt.PromptOptions();
                 pileOpt.Save();
-                ed.WriteMessage("\nНастойки сохранены.");
-            }
-            catch (System.Exception ex)
-            {
-                if (!ex.Message.Contains(AcadLib.General.CanceledByUser))
-                {
-                    Log.Error(ex, $"Command: KR-PileOptions. Doc {doc.Name}");
-                }
-                ed.WriteMessage($"\nОшибка - {ex.Message}");
-            }
+                doc.Editor.WriteMessage("\nНастойки сохранены.");
+            });            
         }
 
         /// <summary>
         /// Нумерация свай
         /// </summary>
-        [CommandMethod("PIK", "KR-PileCalc", CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        [CommandMethod(groupPik, commandPileCalc, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
         public void PileCalcCommand()
         {
-            Log.Info($"Start Command: KR-PileCalc");
-            Document doc = Application.DocumentManager.MdiActiveDocument;
-            if (doc == null) return;
-            Editor ed = doc.Editor;
-            try
+            AcadLib.CommandStart.Start(doc =>
             {
-                //// Проверка дубликатов.
-                //AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check();
                 Inspector.Clear();
-
                 // Выбор свай для нумерации
-                var selblocks = ed.SelectBlRefs("Выбор блоков свай для нумерации");
-
+                var selblocks = doc.Editor.SelectBlRefs("Выбор блоков свай для нумерации");
                 // фильтр блоков свай            
                 var piles = Model.Pile.PileFilter.Filter(selblocks, Model.Pile.PileOptions.Load());
-
                 // Проверка дубликатов
                 AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check(piles.Select(p => p.IdBlRef));
-
+                // Расчет свай
                 Model.Pile.Calc.PileCalcService pileCalcService = new Model.Pile.Calc.PileCalcService();
                 pileCalcService.Calc(piles);
-
+                // Вывод ошибок если есть.
                 Inspector.Show();
-            }
-            catch (System.Exception ex)
-            {
-                if (!ex.Message.Contains(AcadLib.General.CanceledByUser))
-                {
-                    Log.Error(ex, $"Command: KR-PileCalc. Doc {doc.Name}");
-                }
-                ed.WriteMessage($"\nОшибка - {ex.Message}");
-            }            
+            });            
         }
 
         public void Terminate()
