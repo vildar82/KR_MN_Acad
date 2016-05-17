@@ -38,7 +38,7 @@ namespace KR_MN_Acad.Spec
             // Обязательные атрибуты
             specHoleOpt.BlocksFilter.AttrsMustHave = new List<string>()
          {
-            "ТИП", "МАРКА", "РАЗМЕР"
+            "ТИП", "МАРКА", "НАЗНАЧЕНИЕ", "РАЗМЕР"
          };
             // Тип блока - атрибут ТИП = Отверстие в плите
             specHoleOpt.BlocksFilter.Type = new ItemProp() { BlockPropName = "ТИП", Name = "Отверстие в плите", BlockPropType = EnumBlockProperty.Attribute };
