@@ -23,6 +23,7 @@ namespace KR_MN_Acad
         const string commandSpecApertures = "KR-SpecApertures";
         const string commandSpecOpenings = "KR-SpecOpenings";
         const string commandSpecSlabOpenings = "KR-SpecSlabOpenings";
+        const string commandSlabOpeningsNumbering = "KR-SlabOpeningsNumbering";        
         const string commandPileNumbering = "KR-PileNumbering";
         const string commandPileOptions = "KR-PileOptions";
         const string commandPileCalc = "KR-PileCalc";        
@@ -93,6 +94,20 @@ namespace KR_MN_Acad
                 // Спецификация отверстий
                 SpecService specService = new SpecService(new SpecSlabOpenings());
                 specService.CreateSpec();
+                Inspector.Show();                                
+            });
+        }
+
+        /// <summary>
+        /// Нумерация блоков отверстий в плите
+        /// </summary>
+        [CommandMethod(groupPik, commandSlabOpeningsNumbering, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void SpecSlabOpeningsNumbering()
+        {
+            AcadLib.CommandStart.Start(doc =>
+            {
+                Inspector.Clear();
+                SlabOpeningsNumbering.Numbering();
                 Inspector.Show();
             });
         }

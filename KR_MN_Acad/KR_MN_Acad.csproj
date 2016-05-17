@@ -107,6 +107,8 @@
     <Compile Include="Model\Pile\PileFilter.cs" />
     <Compile Include="Model\Pile\Numbering\PileNumberingService.cs" />
     <Compile Include="Model\Pile\PileOptions.cs" />
+    <Compile Include="Model\Spec\SlabOpeningsNumbering\SlabOpeningsBlock.cs" />
+    <Compile Include="Model\Spec\SlabOpeningsNumbering\SlabOpeningsNumbering.cs" />
     <Compile Include="Model\Spec\SpecSlabOpenings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\Spec\SpecOpenings.cs" />
