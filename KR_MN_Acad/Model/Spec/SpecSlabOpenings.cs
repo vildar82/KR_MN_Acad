@@ -26,49 +26,56 @@ namespace KR_MN_Acad.Spec
 
         public SpecOptions GetDefaultOptions()
         {
-            SpecOptions specHoleOpt = new SpecOptions();
+            SpecOptions specOpt = new SpecOptions();
 
-            specHoleOpt.CheckDublicates = true;
-            specHoleOpt.Name = name;
+            specOpt.CheckDublicates = true;
+            specOpt.Name = name;
 
             // Фильтр для блоков
-            specHoleOpt.BlocksFilter = new BlocksFilter();
+            specOpt.BlocksFilter = new BlocksFilter();
             // Имя блока начинается с "КР_"
-            specHoleOpt.BlocksFilter.BlockNameMatch = "КР_Отв в плите";
+            specOpt.BlocksFilter.BlockNameMatch = "КР_Отв в плите|КР_Гильза в плите";
             // Обязательные атрибуты
-            specHoleOpt.BlocksFilter.AttrsMustHave = new List<string>()
-         {
-            "ТИП", "МАРКА", "НАЗНАЧЕНИЕ", "РАЗМЕР"
-         };
+            specOpt.BlocksFilter.AttrsMustHave = new List<string>()
+            {
+                "ТИП", "МАРКА", "НАЗНАЧЕНИЕ", "РАЗМЕР"
+            };
             // Тип блока - атрибут ТИП = Отверстие в плите
-            specHoleOpt.BlocksFilter.Type = new ItemProp() { BlockPropName = "ТИП", Name = "Отверстие в плите", BlockPropType = EnumBlockProperty.Attribute };
+            specOpt.BlocksFilter.Type = new ItemProp() { BlockPropName = "ТИП", Name = "Отверстие в плите", BlockPropType = EnumBlockProperty.Attribute };
 
-            specHoleOpt.GroupPropName = ""; // Нет группировки
-            specHoleOpt.KeyPropName = "МАРКА";
+            specOpt.GroupPropName = ""; // Нет группировки
+            specOpt.KeyPropName = "МАРКА";
 
             // Свойства элемента блока
-            specHoleOpt.ItemProps = new List<ItemProp>()
-         {
-            new ItemProp () { Name = "Марка", BlockPropName = "МАРКА", BlockPropType = EnumBlockProperty.Attribute },
-            new ItemProp () { Name = "Размер", BlockPropName = "РАЗМЕР", BlockPropType = EnumBlockProperty.Attribute },            
-            new ItemProp () { Name = "Назначение", BlockPropName = "НАЗНАЧЕНИЕ", BlockPropType = EnumBlockProperty.Attribute },
-            new ItemProp () { Name = "Примечание", BlockPropName = "ПРИМЕЧАНИЕ", BlockPropType = EnumBlockProperty.Attribute },
-         };
+            specOpt.ItemProps = new List<ItemProp>()
+            {
+                new ItemProp () { Name = "Марка", BlockPropName = "МАРКА", BlockPropType = EnumBlockProperty.Attribute },
+                new ItemProp () { Name = "Размер", BlockPropName = "РАЗМЕР", BlockPropType = EnumBlockProperty.Attribute },            
+                new ItemProp () { Name = "Назначение", BlockPropName = "НАЗНАЧЕНИЕ", BlockPropType = EnumBlockProperty.Attribute },
+                new ItemProp () { Name = "Примечание", BlockPropName = "ПРИМЕЧАНИЕ", BlockPropType = EnumBlockProperty.Attribute },
+            };
 
             // Настройки Таблицы
-            specHoleOpt.TableOptions = new TableOptions();
-            specHoleOpt.TableOptions.Title = "Ведомость инженерных отверстий плиты";
-            specHoleOpt.TableOptions.Layer = "КР_Таблицы";
-            specHoleOpt.TableOptions.Columns = new List<TableColumn>()
-         {
-            new TableColumn () { Name = "Марка отв.", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Марка", Width = 10 },
-            new TableColumn () { Name = "Размеры, мм", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Размер", Width = 20 },            
-            new TableColumn () { Name = "Назначение", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Назначение", Width = 20 },
-            new TableColumn () { Name = "Кол-во, шт.", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Count", Width = 15 },
-            new TableColumn () { Name = "Примечание", Aligment = CellAlignment.MiddleLeft, ItemPropName = "Примечание", Width = 30 },
-         };
+            specOpt.TableOptions = new TableOptions();
+            specOpt.TableOptions.Title = "Ведомость инженерных отверстий плиты";
+            specOpt.TableOptions.Layer = "КР_Таблицы";
+            specOpt.TableOptions.Columns = new List<TableColumn>()
+            {
+                new TableColumn () { Name = "Марка отв.", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Марка", Width = 10 },
+                new TableColumn () { Name = "Размеры, мм", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Размер", Width = 20 },            
+                new TableColumn () { Name = "Назначение", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Назначение", Width = 20 },
+                new TableColumn () { Name = "Кол-во, шт.", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Count", Width = 15 },
+                new TableColumn () { Name = "Примечание", Aligment = CellAlignment.MiddleLeft, ItemPropName = "Примечание", Width = 30 },
+            };
 
-            return specHoleOpt;
+            // Настройки нумерации
+            specOpt.NumOptions = new NumberingOptions();
+            specOpt.NumOptions.PrefixByBlockName = new XmlSerializableDictionary<string, string>
+            {                
+                { "КР_Гильза в плите", "Г" }
+            };
+
+            return specOpt;
         }
     }
 }

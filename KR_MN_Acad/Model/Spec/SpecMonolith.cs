@@ -26,51 +26,61 @@ namespace KR_MN_Acad.Spec
 
         public SpecOptions GetDefaultOptions()
         {
-            SpecOptions specMonolOpt = new SpecOptions();
+            SpecOptions specOpt = new SpecOptions();
 
-            specMonolOpt.CheckDublicates = true;
-            specMonolOpt.Name = name;
+            specOpt.CheckDublicates = true;
+            specOpt.Name = name;
 
             // Фильтр для блоков
-            specMonolOpt.BlocksFilter = new BlocksFilter();
+            specOpt.BlocksFilter = new BlocksFilter();
             // Имя блока начинается с "КР_"
-            specMonolOpt.BlocksFilter.BlockNameMatch = "^КР_";
+            specOpt.BlocksFilter.BlockNameMatch = "^КР_";
             // Обязательные атрибуты
-            specMonolOpt.BlocksFilter.AttrsMustHave = new List<string>()
-         {
-            "ТИП", "МАРКА", "НАИМЕНОВАНИЕ"
-         };
+            specOpt.BlocksFilter.AttrsMustHave = new List<string>()
+            {
+                "ТИП", "МАРКА", "НАИМЕНОВАНИЕ"
+            };
             // Тип блока - атрибут ТИП = Монолит
-            specMonolOpt.BlocksFilter.Type = new ItemProp() { BlockPropName = "ТИП", Name = "Монолит", BlockPropType = EnumBlockProperty.Attribute };
+            specOpt.BlocksFilter.Type = new ItemProp() { BlockPropName = "ТИП", Name = "Монолит", BlockPropType = EnumBlockProperty.Attribute };
 
-            specMonolOpt.GroupPropName = "ГРУППА";
-            specMonolOpt.KeyPropName = "МАРКА";
+            specOpt.GroupPropName = "ГРУППА";
+            specOpt.KeyPropName = "МАРКА";
 
             // Свойства элемента блока
-            specMonolOpt.ItemProps = new List<ItemProp>()
-         {
-            new ItemProp () { Name = "Марка", BlockPropName = "МАРКА", BlockPropType = EnumBlockProperty.Attribute },
-            new ItemProp () { Name = "Обозначение", BlockPropName = "ОБОЗНАЧЕНИЕ", BlockPropType = EnumBlockProperty.Attribute },
-            new ItemProp () { Name = "Наименование", BlockPropName = "НАИМЕНОВАНИЕ", BlockPropType = EnumBlockProperty.Attribute },
-            new ItemProp () { Name = "Масса", BlockPropName = "МАССА", BlockPropType = EnumBlockProperty.Attribute },
-            new ItemProp () { Name = "Примечание", BlockPropName = "ПРИМЕЧАНИЕ", BlockPropType = EnumBlockProperty.Attribute },
-         };
+            specOpt.ItemProps = new List<ItemProp>()
+            {
+                new ItemProp () { Name = "Марка", BlockPropName = "МАРКА", BlockPropType = EnumBlockProperty.Attribute },
+                new ItemProp () { Name = "Обозначение", BlockPropName = "ОБОЗНАЧЕНИЕ", BlockPropType = EnumBlockProperty.Attribute },
+                new ItemProp () { Name = "Наименование", BlockPropName = "НАИМЕНОВАНИЕ", BlockPropType = EnumBlockProperty.Attribute },
+                new ItemProp () { Name = "Масса", BlockPropName = "МАССА", BlockPropType = EnumBlockProperty.Attribute },
+                new ItemProp () { Name = "Примечание", BlockPropName = "ПРИМЕЧАНИЕ", BlockPropType = EnumBlockProperty.Attribute },
+            };
 
             // Настройки Таблицы
-            specMonolOpt.TableOptions = new TableOptions();
-            specMonolOpt.TableOptions.Title = "Спецификация к схеме расположения элементов замаркированных на данном листе";
-            specMonolOpt.TableOptions.Layer = "КР_Таблицы";
-            specMonolOpt.TableOptions.Columns = new List<TableColumn>()
-         {
-            new TableColumn () { Name = "Марка", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Марка", Width = 15 },
-            new TableColumn () { Name = "Обозначение", Aligment = CellAlignment.MiddleLeft, ItemPropName = "Обозначение", Width = 60 },
-            new TableColumn () { Name = "Наименование", Aligment = CellAlignment.MiddleLeft, ItemPropName = "Наименование", Width = 65 },
-            new TableColumn () { Name = "Кол.", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Count", Width = 10 },
-            new TableColumn () { Name = "Масса, ед. кг", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Масса", Width = 15 },
-            new TableColumn () { Name = "Примечание", Aligment = CellAlignment.MiddleLeft, ItemPropName = "Примечание", Width = 20 },
-         };
+            specOpt.TableOptions = new TableOptions();
+            specOpt.TableOptions.Title = "Спецификация к схеме расположения элементов замаркированных на данном листе";
+            specOpt.TableOptions.Layer = "КР_Таблицы";
+            specOpt.TableOptions.Columns = new List<TableColumn>()
+            {
+                new TableColumn () { Name = "Марка", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Марка", Width = 15 },
+                new TableColumn () { Name = "Обозначение", Aligment = CellAlignment.MiddleLeft, ItemPropName = "Обозначение", Width = 60 },
+                new TableColumn () { Name = "Наименование", Aligment = CellAlignment.MiddleLeft, ItemPropName = "Наименование", Width = 65 },
+                new TableColumn () { Name = "Кол.", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Count", Width = 10 },
+                new TableColumn () { Name = "Масса, ед. кг", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Масса", Width = 15 },
+                new TableColumn () { Name = "Примечание", Aligment = CellAlignment.MiddleLeft, ItemPropName = "Примечание", Width = 20 },
+            };
 
-            return specMonolOpt;
+            // Настройки нумерации
+            specOpt.NumOptions = new NumberingOptions();
+            specOpt.NumOptions.PrefixByBlockName = new XmlSerializableDictionary<string, string>
+            {
+                { "КР_Колонна", "К-" },
+                { "КР_Пилон", "П-" },
+                { "КР_Балка", "Б-" },
+                { "КР_Стена", "См-" }
+            };
+
+            return specOpt;
         }
     }
 }

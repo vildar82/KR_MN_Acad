@@ -23,6 +23,9 @@ namespace KR_MN_Acad
         const string commandSpecApertures = "KR-SpecApertures";
         const string commandSpecOpenings = "KR-SpecOpenings";
         const string commandSpecSlabOpenings = "KR-SpecSlabOpenings";
+        const string commandMonolithNumbering = "KR-MonolithNumbering";
+        const string commandAperturesNumbering = "KR-AperturesNumbering";
+        const string commandOpeningsNumbering = "KR-OpeningsNumbering";
         const string commandSlabOpeningsNumbering = "KR-SlabOpeningsNumbering";        
         const string commandPileNumbering = "KR-PileNumbering";
         const string commandPileOptions = "KR-PileOptions";
@@ -51,7 +54,7 @@ namespace KR_MN_Acad
         }
 
         /// <summary>
-        /// Спецификация проемов
+        /// Спецификация проемов - Дверных и Оконных
         /// </summary>
         [CommandMethod(groupPik, commandSpecApertures, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
         public void SpecAperturesCommand()
@@ -67,7 +70,7 @@ namespace KR_MN_Acad
         }
 
         /// <summary>
-        /// Спецификация отверстий
+        /// Спецификация отверстий в стене
         /// </summary>
         [CommandMethod(groupPik, commandSpecOpenings, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
         public void SpecOpenings()
@@ -99,18 +102,64 @@ namespace KR_MN_Acad
         }
 
         /// <summary>
-        /// Нумерация блоков отверстий в плите
+        /// Нумерация блоков монолита
         /// </summary>
-        [CommandMethod(groupPik, commandSlabOpeningsNumbering, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void SpecSlabOpeningsNumbering()
+        [CommandMethod(groupPik, commandMonolithNumbering, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void MonolithNumbering()
         {
             AcadLib.CommandStart.Start(doc =>
             {
                 Inspector.Clear();
-                SlabOpeningsNumbering.Numbering();
+                SpecService specService = new SpecService(new SpecMonolith());
+                specService.Numbering();
                 Inspector.Show();
             });
         }
+
+        /// <summary>
+        /// Нумерация блоков проемов
+        /// </summary>
+        [CommandMethod(groupPik, commandAperturesNumbering, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void AperturesNumbering()
+        {
+            AcadLib.CommandStart.Start(doc =>
+            {
+                Inspector.Clear();
+                SpecService specService = new SpecService(new SpecAperture());
+                specService.Numbering();
+                Inspector.Show();
+            });
+        }
+
+        /// <summary>
+        /// Нумерация блоков отверстий в стене
+        /// </summary>
+        [CommandMethod(groupPik, commandOpeningsNumbering, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void OpeningsNumbering()
+        {
+            AcadLib.CommandStart.Start(doc =>
+            {
+                Inspector.Clear();
+                SpecService specService = new SpecService(new SpecOpenings());
+                specService.Numbering();
+                Inspector.Show();
+            });
+        }
+
+        /// <summary>
+        /// Нумерация блоков отверстий в плите
+        /// </summary>
+        [CommandMethod(groupPik, commandSlabOpeningsNumbering, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void SlabOpeningsNumbering()
+        {
+            AcadLib.CommandStart.Start(doc =>
+            {
+                Inspector.Clear();
+                SpecService specService = new SpecService(new SpecSlabOpenings());
+                specService.Numbering();
+                Inspector.Show();
+            });
+        }        
 
         /// <summary>
         /// Нумерация свай
