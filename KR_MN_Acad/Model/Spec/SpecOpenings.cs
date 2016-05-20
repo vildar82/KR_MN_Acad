@@ -38,7 +38,7 @@ namespace KR_MN_Acad.Spec
             // Обязательные атрибуты
             specOpt.BlocksFilter.AttrsMustHave = new List<string>()
             {
-                "ТИП", "МАРКА", "РАЗМЕР"
+                "ТИП", "МАРКА", "НАЗНАЧЕНИЕ",  "РАЗМЕР"
             };
             // Тип блока - атрибут ТИП = Монолит
             specOpt.BlocksFilter.Type = new ItemProp() { BlockPropName = "ТИП", Name = "Отверстие", BlockPropType = EnumBlockProperty.Attribute };
@@ -71,15 +71,15 @@ namespace KR_MN_Acad.Spec
             };
 
             // Префиксы для параметров
-            specOpt.PrefixParam = new XmlSerializableDictionary<string, string>
+            specOpt.PrefixParam = new XmlSerializableDictionary<string>
             {
                 // Префикс для Гильзы - Ось отв.
-                { "КР_Гильза" + "ОТМЕТКА_НИЗА", "ось отв. " }
+                { "КР_Гильза" + "Отметка_низа", "ось отв. " }
             };
 
             // Настройки нумерации
             specOpt.NumOptions = new NumberingOptions();
-            specOpt.NumOptions.PrefixByBlockName = new XmlSerializableDictionary<string, string>
+            specOpt.NumOptions.PrefixByBlockName = new XmlSerializableDictionary<string>
             {
                 { "КР_Гильза", "Г" }
             };
