@@ -51,7 +51,7 @@ namespace KR_MN_Acad.Spec
             {
                 new ItemProp () { Name = "Марка", BlockPropName = "МАРКА", BlockPropType = EnumBlockProperty.Attribute },
                 new ItemProp () { Name = "Размер", BlockPropName = "РАЗМЕР", BlockPropType = EnumBlockProperty.Attribute },
-                new ItemProp () { Name = "Отметка_низа", BlockPropName = "ОТМЕТКА_НИЗА", BlockPropType = EnumBlockProperty.Attribute },
+                new ItemProp () { Name = "Отметка", BlockPropName = "ОТМЕТКА", BlockPropType = EnumBlockProperty.Attribute },
                 new ItemProp () { Name = "Назначение", BlockPropName = "НАЗНАЧЕНИЕ", BlockPropType = EnumBlockProperty.Attribute },
                 new ItemProp () { Name = "Примечание", BlockPropName = "ПРИМЕЧАНИЕ", BlockPropType = EnumBlockProperty.Attribute },
             };
@@ -64,7 +64,7 @@ namespace KR_MN_Acad.Spec
             {
                 new TableColumn () { Name = "Марка отв.", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Марка", Width = 10 },
                 new TableColumn () { Name = "Размеры, мм", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Размер", Width = 20 },
-                new TableColumn () { Name = "Отм. низа проема, м", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Отметка_низа", Width = 20 },
+                new TableColumn () { Name = "Отм. низа проема, м", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Отметка", Width = 20 },
                 new TableColumn () { Name = "Назначение", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Назначение", Width = 20 },
                 new TableColumn () { Name = "Кол-во, шт.", Aligment = CellAlignment.MiddleCenter, ItemPropName = "Count", Width = 15 },
                 new TableColumn () { Name = "Примечание", Aligment = CellAlignment.MiddleLeft, ItemPropName = "Примечание", Width = 30 },
@@ -74,7 +74,7 @@ namespace KR_MN_Acad.Spec
             specOpt.PrefixParam = new XmlSerializableDictionary<string>
             {
                 // Префикс для Гильзы - Ось отв.
-                { "КР_Гильза" + "Отметка_низа", "ось отв. " }
+                { "КР_Гильза" + "Отметка", "ось отв. " }
             };
 
             // Настройки нумерации
@@ -83,7 +83,7 @@ namespace KR_MN_Acad.Spec
             {
                 { "КР_Гильза", "Г" }
             };
-            specOpt.NumOptions.ExGroupNumbering = "ОТМЕТКА_НИЗА";
+            specOpt.NumOptions.ExGroupNumbering = "ОТМЕТКА";
 
             return specOpt;
         }
