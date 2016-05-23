@@ -44,12 +44,10 @@ namespace KR_MN_Acad
         public void SpecMonolithCommand()
         {
             AcadLib.CommandStart.Start(doc =>
-            {                
-                Inspector.Clear();
+            {                               
                 // Спецификация монолитных блоков                         
                 SpecService specService = new SpecService(new SpecMonolith());
-                specService.CreateSpec();
-                Inspector.Show();
+                specService.CreateSpec();                
             });            
         }
 
@@ -60,12 +58,10 @@ namespace KR_MN_Acad
         public void SpecAperturesCommand()
         {
             AcadLib.CommandStart.Start(doc =>
-            {
-                Inspector.Clear();
+            {                
                 // Спецификация проекмов
                 SpecService specService = new SpecService(new SpecAperture());
-                specService.CreateSpec();
-                Inspector.Show();
+                specService.CreateSpec();             
             });                
         }
 
@@ -76,12 +72,10 @@ namespace KR_MN_Acad
         public void SpecOpenings()
         {
             AcadLib.CommandStart.Start(doc =>
-            {
-                Inspector.Clear();
+            {                
                 // Спецификация отверстий
                 SpecService specService = new SpecService(new SpecOpenings());
-                specService.CreateSpec();
-                Inspector.Show();
+                specService.CreateSpec();                
             });            
         }
 
@@ -92,12 +86,10 @@ namespace KR_MN_Acad
         public void SpecSlabOpenings()
         {
             AcadLib.CommandStart.Start(doc =>
-            {
-                Inspector.Clear();
+            {                
                 // Спецификация отверстий
                 SpecService specService = new SpecService(new SpecSlabOpenings());
-                specService.CreateSpec();
-                Inspector.Show();                                
+                specService.CreateSpec();                
             });
         }
 
@@ -108,11 +100,9 @@ namespace KR_MN_Acad
         public void MonolithNumbering()
         {
             AcadLib.CommandStart.Start(doc =>
-            {
-                Inspector.Clear();
+            {                
                 SpecService specService = new SpecService(new SpecMonolith());
-                specService.Numbering();
-                Inspector.Show();
+                specService.Numbering();                
             });
         }
 
@@ -123,11 +113,9 @@ namespace KR_MN_Acad
         public void AperturesNumbering()
         {
             AcadLib.CommandStart.Start(doc =>
-            {
-                Inspector.Clear();
+            {                
                 SpecService specService = new SpecService(new SpecAperture());
-                specService.Numbering();
-                Inspector.Show();
+                specService.Numbering();                
             });
         }
 
@@ -138,11 +126,9 @@ namespace KR_MN_Acad
         public void OpeningsNumbering()
         {
             AcadLib.CommandStart.Start(doc =>
-            {
-                Inspector.Clear();
+            {                
                 SpecService specService = new SpecService(new SpecOpenings());
-                specService.Numbering();
-                Inspector.Show();
+                specService.Numbering();                
             });
         }
 
@@ -153,11 +139,9 @@ namespace KR_MN_Acad
         public void SlabOpeningsNumbering()
         {
             AcadLib.CommandStart.Start(doc =>
-            {
-                Inspector.Clear();
+            {                
                 SpecService specService = new SpecService(new SpecSlabOpenings());
-                specService.Numbering();
-                Inspector.Show();
+                specService.Numbering();                
             });
         }        
 
@@ -168,12 +152,10 @@ namespace KR_MN_Acad
         public void PileNumberingCommand()
         {
             AcadLib.CommandStart.Start(doc =>
-            {
-                Inspector.Clear();
+            {                
                 PileNumberingService pileNumbService = new PileNumberingService();
                 pileNumbService.Numbering();
-                doc.Editor.WriteMessage("\nНумерация выполнена.");
-                Inspector.Show();
+                doc.Editor.WriteMessage("\nНумерация выполнена.");                
             });           
         }
 
@@ -199,8 +181,7 @@ namespace KR_MN_Acad
         public void PileCalcCommand()
         {
             AcadLib.CommandStart.Start(doc =>
-            {
-                Inspector.Clear();
+            {                
                 // Выбор свай для нумерации
                 var selblocks = doc.Editor.SelectBlRefs("Выбор блоков свай для нумерации");
                 // фильтр блоков свай            
@@ -209,9 +190,7 @@ namespace KR_MN_Acad
                 AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check(piles.Select(p => p.IdBlRef));
                 // Расчет свай
                 Model.Pile.Calc.PileCalcService pileCalcService = new Model.Pile.Calc.PileCalcService();
-                pileCalcService.Calc(piles);
-                // Вывод ошибок если есть.
-                Inspector.Show();
+                pileCalcService.Calc(piles);                
             });            
         }
 

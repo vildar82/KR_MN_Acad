@@ -38,7 +38,7 @@ namespace KR_MN_Acad.Spec
             // Обязательные атрибуты
             specOpt.BlocksFilter.AttrsMustHave = new List<string>()
             {
-                "ТИП", "МАРКА", "РАЗМЕР"
+                "ТИП", "МАРКА", "РАЗМЕР", "ОТМЕТКА_НИЗА"
             };
             // Тип блока - атрибут ТИП = Монолит
             specOpt.BlocksFilter.Type = new ItemProp() { BlockPropName = "ТИП", Name = "Проем", BlockPropType = EnumBlockProperty.Attribute };
