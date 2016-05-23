@@ -38,7 +38,7 @@ namespace KR_MN_Acad.Spec
             // Обязательные атрибуты
             specOpt.BlocksFilter.AttrsMustHave = new List<string>()
             {
-                "ТИП", "МАРКА", "РАЗМЕР", "ОТМЕТКА_НИЗА"
+                "ТИП", "МАРКА", "РАЗМЕР", "ОТМЕТКА_НИЗА", "НАЗНАЧЕНИЕ"
             };
             // Тип блока - атрибут ТИП = Монолит
             specOpt.BlocksFilter.Type = new ItemProp() { BlockPropName = "ТИП", Name = "Проем", BlockPropType = EnumBlockProperty.Attribute };
@@ -72,6 +72,10 @@ namespace KR_MN_Acad.Spec
 
             // Настройки нумерации
             specOpt.NumOptions = new NumberingOptions();
+            specOpt.NumOptions.GroupProperties = new List<string>()
+            {
+                "РАЗМЕР", "НАЗНАЧЕНИЕ"
+            };
             specOpt.NumOptions.PrefixByBlockName = new XmlSerializableDictionary<string>
             {
                 { "КР_Проем_Дверной-Стены", "ДП-" },

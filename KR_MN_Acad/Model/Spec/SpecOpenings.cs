@@ -79,6 +79,10 @@ namespace KR_MN_Acad.Spec
 
             // Настройки нумерации
             specOpt.NumOptions = new NumberingOptions();
+            specOpt.NumOptions.GroupProperties = new List<string>()
+            {
+                "НАЗНАЧЕНИЕ",  "РАЗМЕР"
+            };
             specOpt.NumOptions.PrefixByBlockName = new XmlSerializableDictionary<string>
             {
                 { "КР_Гильза", "Г" }
