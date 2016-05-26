@@ -9,7 +9,7 @@ namespace KR_MN_Acad.Model.Pile
 {
     public static class PileFilter
     {
-        public static List<Pile> Filter(List<ObjectId> selblocks, PileOptions pileOptions)
+        public static List<Pile> Filter(List<ObjectId> selblocks, PileOptions pileOptions, bool checkNum)
         {
             List<Pile> resVal = new List<Pile>();
             foreach (var idBlRef in selblocks)
@@ -20,7 +20,7 @@ namespace KR_MN_Acad.Model.Pile
                     if (Regex.IsMatch(blName, pileOptions.PileBlockNameMatch))
                     {
                         Pile pile = new Pile(blRef, blName, pileOptions);
-                        var checkResult = pile.Check();
+                        var checkResult = pile.Check(checkNum);
                         if (checkResult.Success)
                         {
                             resVal.Add(pile);

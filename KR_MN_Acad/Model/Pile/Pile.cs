@@ -90,13 +90,20 @@ namespace KR_MN_Acad.Model.Pile
             defineParameters(blRef);           
         }       
 
-        public AcadLib.Result Check()
+        public Result Check(bool checkNum)
         {            
             if (PosAttrRef == null)
             {
-                return AcadLib.Result.Fail($"Не найден атрибут '{Options.PileAttrPos}'");
+                return Result.Fail($"Не найден атрибут '{Options.PileAttrPos}'");
             }            
-            return AcadLib.Result.Ok();
+            if (checkNum)
+            {
+                if (Pos == 0)
+                {
+                    return Result.Fail($"Не допустимый номер сваи '{Pos}'");
+                }
+            }
+            return Result.Ok();
         }
 
         public static void Check(List<Pile> piles)
@@ -202,8 +209,12 @@ namespace KR_MN_Acad.Model.Pile
 
             // ПОЗ
             PosAttrRef = attrRefs.FirstOrDefault(a => a.Tag.Equals(Options.PileAttrPos, StringComparison.OrdinalIgnoreCase));
-            if (PosAttrRef != null)            
-                Pos = int.Parse(PosAttrRef.Text);
+            if (PosAttrRef != null)
+            {
+                int num;
+                int.TryParse(PosAttrRef.Text, out num);
+                Pos = num;
+            }
             // Обозначение
             DocLink = GetParamValueString(ParamDocLinkName, dictParams);
             // Наименование

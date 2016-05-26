@@ -175,7 +175,7 @@ namespace KR_MN_Acad
         }
 
         /// <summary>
-        /// Нумерация свай
+        /// Спецификация свай
         /// </summary>
         [CommandMethod(groupPik, commandPileCalc, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
         public void PileCalcCommand()
@@ -183,9 +183,9 @@ namespace KR_MN_Acad
             AcadLib.CommandStart.Start(doc =>
             {                
                 // Выбор свай для нумерации
-                var selblocks = doc.Editor.SelectBlRefs("Выбор блоков свай для нумерации");
+                var selblocks = doc.Editor.SelectBlRefs("\nВыбор блоков свай:");
                 // фильтр блоков свай            
-                var piles = Model.Pile.PileFilter.Filter(selblocks, Model.Pile.PileOptions.Load());
+                var piles = Model.Pile.PileFilter.Filter(selblocks, Model.Pile.PileOptions.Load(), true);
                 // Проверка дубликатов
                 AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check(piles.Select(p => p.IdBlRef));
                 // Расчет свай

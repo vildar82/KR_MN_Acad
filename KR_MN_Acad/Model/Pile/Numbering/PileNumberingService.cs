@@ -48,7 +48,7 @@ namespace KR_MN_Acad.Model.Pile.Numbering
             var selblocks = Ed.SelectBlRefs("Выбор блоков свай для нумерации");
 
             // фильтр блоков свай            
-            var piles = PileFilter.Filter(selblocks, PileOptions);
+            var piles = PileFilter.Filter(selblocks, PileOptions, false);
 
             // Проверка дубликатов
             AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check(piles.Select(p => p.IdBlRef));

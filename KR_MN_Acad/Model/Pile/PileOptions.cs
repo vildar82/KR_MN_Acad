@@ -60,7 +60,7 @@ namespace KR_MN_Acad.Model.Pile
         [DisplayName("Слой таблиц")]
         [Description("Слой для вставки таблиц свай.")]
         //[DefaultValue("КР_Таблицы")]
-        public string TableLayer { get; set; }
+        public string TableLayer { get; set; }        
 
         public PileOptions PromptOptions()
         {
