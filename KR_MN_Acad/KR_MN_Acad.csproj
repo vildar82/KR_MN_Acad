@@ -83,7 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands.cs" />
-    <Compile Include="Logger.cs" />
     <Compile Include="Model\Pile\Calc\FormPiles.cs">
       <SubType>Form</SubType>
     </Compile>
