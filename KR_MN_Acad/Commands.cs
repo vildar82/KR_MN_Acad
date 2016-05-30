@@ -18,18 +18,7 @@ namespace KR_MN_Acad
 {
     public class Commands: IExtensionApplication
     {
-        const string groupPik = AutoCAD_PIK_Manager.Commands.Group;
-        const string commandSpecMonolith = "KR-SpecMonolith";
-        const string commandSpecApertures = "KR-SpecApertures";
-        const string commandSpecOpenings = "KR-SpecOpenings";
-        const string commandSpecSlabOpenings = "KR-SpecSlabOpenings";
-        const string commandMonolithNumbering = "KR-MonolithNumbering";
-        const string commandAperturesNumbering = "KR-AperturesNumbering";
-        const string commandOpeningsNumbering = "KR-OpeningsNumbering";
-        const string commandSlabOpeningsNumbering = "KR-SlabOpeningsNumbering";        
-        const string commandPileNumbering = "KR-PileNumbering";
-        const string commandPileOptions = "KR-PileOptions";
-        const string commandPileCalc = "KR-PileCalc";        
+        const string groupPik = AutoCAD_PIK_Manager.Commands.Group;                       
 
         public void Initialize()
         {
@@ -40,8 +29,8 @@ namespace KR_MN_Acad
         /// <summary>
         /// Спецификация монолитных блоков
         /// </summary>
-        [CommandMethod(groupPik, commandSpecMonolith, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void SpecMonolithCommand()
+        [CommandMethod(groupPik, nameof(KR_SpecMonolith), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void KR_SpecMonolith()
         {
             AcadLib.CommandStart.Start(doc =>
             {                               
@@ -54,8 +43,8 @@ namespace KR_MN_Acad
         /// <summary>
         /// Спецификация проемов - Дверных и Оконных
         /// </summary>
-        [CommandMethod(groupPik, commandSpecApertures, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void SpecAperturesCommand()
+        [CommandMethod(groupPik, nameof(KR_SpecApertures), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void KR_SpecApertures()
         {
             AcadLib.CommandStart.Start(doc =>
             {                
@@ -68,8 +57,8 @@ namespace KR_MN_Acad
         /// <summary>
         /// Спецификация отверстий в стене
         /// </summary>
-        [CommandMethod(groupPik, commandSpecOpenings, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void SpecOpenings()
+        [CommandMethod(groupPik, nameof(KR_SpecOpenings), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void KR_SpecOpenings()
         {
             AcadLib.CommandStart.Start(doc =>
             {                
@@ -82,8 +71,8 @@ namespace KR_MN_Acad
         /// <summary>
         /// Спецификация отверстий в плите
         /// </summary>
-        [CommandMethod(groupPik, commandSpecSlabOpenings, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void SpecSlabOpenings()
+        [CommandMethod(groupPik, nameof(KR_SpecSlabOpenings), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void KR_SpecSlabOpenings()
         {
             AcadLib.CommandStart.Start(doc =>
             {                
@@ -96,8 +85,8 @@ namespace KR_MN_Acad
         /// <summary>
         /// Нумерация блоков монолита
         /// </summary>
-        [CommandMethod(groupPik, commandMonolithNumbering, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void MonolithNumbering()
+        [CommandMethod(groupPik, nameof(KR_MonolithNumbering), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void KR_MonolithNumbering()
         {
             AcadLib.CommandStart.Start(doc =>
             {                
@@ -109,8 +98,8 @@ namespace KR_MN_Acad
         /// <summary>
         /// Нумерация блоков проемов
         /// </summary>
-        [CommandMethod(groupPik, commandAperturesNumbering, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void AperturesNumbering()
+        [CommandMethod(groupPik, nameof(KR_AperturesNumbering), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void KR_AperturesNumbering()
         {
             AcadLib.CommandStart.Start(doc =>
             {                
@@ -122,8 +111,8 @@ namespace KR_MN_Acad
         /// <summary>
         /// Нумерация блоков отверстий в стене
         /// </summary>
-        [CommandMethod(groupPik, commandOpeningsNumbering, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void OpeningsNumbering()
+        [CommandMethod(groupPik,nameof(KR_OpeningsNumbering), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void KR_OpeningsNumbering()
         {
             AcadLib.CommandStart.Start(doc =>
             {                
@@ -135,8 +124,8 @@ namespace KR_MN_Acad
         /// <summary>
         /// Нумерация блоков отверстий в плите
         /// </summary>
-        [CommandMethod(groupPik, commandSlabOpeningsNumbering, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void SlabOpeningsNumbering()
+        [CommandMethod(groupPik, nameof(KR_SlabOpeningsNumbering), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void KR_SlabOpeningsNumbering()
         {
             AcadLib.CommandStart.Start(doc =>
             {                
@@ -148,8 +137,8 @@ namespace KR_MN_Acad
         /// <summary>
         /// Нумерация свай
         /// </summary>
-        [CommandMethod(groupPik, commandPileNumbering, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void PileNumberingCommand()
+        [CommandMethod(groupPik,nameof(KR_PileNumbering), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void KR_PileNumbering()
         {
             AcadLib.CommandStart.Start(doc =>
             {                
@@ -162,8 +151,8 @@ namespace KR_MN_Acad
         /// <summary>
         /// Параметры свай
         /// </summary>
-        [CommandMethod(groupPik, commandPileOptions, CommandFlags.Modal)]
-        public void PileOptionsCommand()
+        [CommandMethod(groupPik,nameof(KR_PileOptions), CommandFlags.Modal)]
+        public void KR_PileOptions()
         {
             AcadLib.CommandStart.Start(doc =>
             {
@@ -177,8 +166,8 @@ namespace KR_MN_Acad
         /// <summary>
         /// Спецификация свай
         /// </summary>
-        [CommandMethod(groupPik, commandPileCalc, CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void PileCalcCommand()
+        [CommandMethod(groupPik,nameof(KR_PileCalc), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void KR_PileCalc()
         {
             AcadLib.CommandStart.Start(doc =>
             {                

@@ -76,7 +76,7 @@ namespace KR_MN_Acad.Model.Pile
             formProp.propertyGrid1.SelectedObject = thisCopy;
             if (Application.ShowModalDialog(formProp) != System.Windows.Forms.DialogResult.OK)
             {
-                throw new System.Exception(AcadLib.General.CanceledByUser);
+                throw new Exception(General.CanceledByUser);
             }
             try
             {
@@ -140,7 +140,7 @@ namespace KR_MN_Acad.Model.Pile
 
         private void SaveToNOD()
         {
-            var nod = new AcadLib.DictNOD(DictNod);
+            var nod = new DictNOD(DictNod);
             nod.Save(AbsoluteZero, RecAbsoluteZero);
             nod.Save(DimPileBeatToCut, RecDimPileBeatToCut);
             nod.Save(DimPileCutToRostwerk, RecDimPileCutToRostwerk);
@@ -148,7 +148,7 @@ namespace KR_MN_Acad.Model.Pile
 
         private void LoadFromNOD()
         {
-            var nod = new AcadLib.DictNOD(DictNod);
+            var nod = new DictNOD(DictNod);
             AbsoluteZero = nod.Load(RecAbsoluteZero, AbsoluteZero);
             DimPileBeatToCut = nod.Load(RecDimPileBeatToCut, DimPileBeatToCut);
             DimPileCutToRostwerk = nod.Load(RecDimPileCutToRostwerk, DimPileCutToRostwerk);
