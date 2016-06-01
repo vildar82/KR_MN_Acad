@@ -30,7 +30,7 @@ namespace KR_MN_Acad.Scheme.Wall
             // Выбор блоков стен
             var ids = SelectService.Select();
             // Определение стен
-            var walls = WallBlock.GetWalls(ids);
+            //var walls = WallBlock.GetWalls(ids);
         }
     }
 }

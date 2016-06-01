@@ -84,6 +84,10 @@
   <ItemGroup>
     <Compile Include="Commands.cs" />
     <Compile Include="Model\ConstructionServices\Armature.cs" />
+    <Compile Include="Model\ConstructionServices\ArmatureDivision.cs" />
+    <Compile Include="Model\ConstructionServices\ArmatureRunning.cs" />
+    <Compile Include="Model\ConstructionServices\Gost.cs" />
+    <Compile Include="Model\ConstructionServices\RoundHelper.cs" />
     <Compile Include="Model\Pile\Calc\FormPiles.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,7 +111,15 @@
     <Compile Include="Model\Pile\PileFilter.cs" />
     <Compile Include="Model\Pile\Numbering\PileNumberingService.cs" />
     <Compile Include="Model\Pile\PileOptions.cs" />
+    <Compile Include="Model\Scheme\Elements\Bar.cs" />
+    <Compile Include="Model\Scheme\SchemeBlockFactory.cs" />
+    <Compile Include="Model\Scheme\SchemeOptions.cs" />
+    <Compile Include="Model\Scheme\SchemeService.cs" />
     <Compile Include="Model\Scheme\SelectService.cs" />
+    <Compile Include="Model\Scheme\SchemeBlock.cs" />
+    <Compile Include="Model\Scheme\Spec\GroupScheme.cs" />
+    <Compile Include="Model\Scheme\Spec\RowScheme.cs" />
+    <Compile Include="Model\Scheme\Spec\TableShceme.cs" />
     <Compile Include="Model\Scheme\Wall\WallSchemeOptions.cs" />
     <Compile Include="Model\Scheme\Wall\WallBlock.cs" />
     <Compile Include="Model\Scheme\Wall\WallSchemeService.cs" />
