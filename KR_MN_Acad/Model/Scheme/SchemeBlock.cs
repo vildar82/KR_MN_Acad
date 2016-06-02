@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AcadLib.Blocks;
 using AcadLib.Errors;
 using Autodesk.AutoCAD.DatabaseServices;
+using KR_MN_Acad.ConstructionServices.Materials;
 using KR_MN_Acad.Scheme.Spec;
 
 namespace KR_MN_Acad.Scheme
@@ -36,7 +37,7 @@ namespace KR_MN_Acad.Scheme
         /// Получение всех элементов спецификации в блоке
         /// </summary>
         /// <returns></returns>
-        public abstract List<RowScheme> GetElements();
+        public abstract List<IMaterial> GetMaterials();
 
         private Dictionary<string, Property> GetProperties(BlockReference blRef)
         {

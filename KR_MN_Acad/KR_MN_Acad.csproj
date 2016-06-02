@@ -83,10 +83,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands.cs" />
-    <Compile Include="Model\ConstructionServices\Armature.cs" />
-    <Compile Include="Model\ConstructionServices\ArmatureDivision.cs" />
-    <Compile Include="Model\ConstructionServices\ArmatureRunning.cs" />
+    <Compile Include="Model\ConstructionServices\Materials\Armature.cs" />
+    <Compile Include="Model\ConstructionServices\Materials\ArmatureDivision.cs" />
+    <Compile Include="Model\ConstructionServices\Materials\ArmatureRunning.cs" />
+    <Compile Include="Model\ConstructionServices\Materials\ArmatureRunningStep.cs" />
     <Compile Include="Model\ConstructionServices\Gost.cs" />
+    <Compile Include="Model\ConstructionServices\Materials\IMaterial.cs" />
+    <Compile Include="Model\ConstructionServices\Materials\Material.cs" />
     <Compile Include="Model\ConstructionServices\RoundHelper.cs" />
     <Compile Include="Model\Pile\Calc\FormPiles.cs">
       <SubType>Form</SubType>

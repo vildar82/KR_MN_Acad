@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AcadLib.Blocks;
 using Autodesk.AutoCAD.DatabaseServices;
 using KR_MN_Acad.ConstructionServices;
+using KR_MN_Acad.ConstructionServices.Materials;
 using KR_MN_Acad.Scheme.Spec;
 
 namespace KR_MN_Acad.Scheme.Wall
@@ -16,6 +17,8 @@ namespace KR_MN_Acad.Scheme.Wall
     /// </summary>
     public class WallBlock : SchemeBlock
     {
+        private SchemeService service;        
+                     
         const string PropNameConcrete = "Бетон";
         const string PropNameHeight = "Высота";
         const string PropNameLength = "Длина стены";
@@ -58,11 +61,11 @@ namespace KR_MN_Acad.Scheme.Wall
         /// <summary>
         /// Горизонтальные арматурные стержни - погоннаж
         /// </summary>
-        public ArmatureRunning ArmHor { get; set; }
+        public ArmatureRunningStep ArmHor { get; set; }
 
-        public WallBlock(BlockReference blRef, string blName) : base (blRef, blName)
+        public WallBlock(BlockReference blRef, string blName, SchemeService service) : base (blRef, blName)
         {
-            
+            this.service = service;            
         }
 
         public override void Calculate()
@@ -79,12 +82,12 @@ namespace KR_MN_Acad.Scheme.Wall
             }
         }
 
-        public override List<RowScheme> GetElements()
+        public override List<IMaterial> GetMaterials()
         {
-            List<RowScheme> elems = new List<RowScheme>();
+            List<IMaterial> elems = new List<IMaterial>();
 
             elems.Add(ArmVertic.Armature);
-            elems.Add(ArmHor);
+            elems.Add(ArmHor.ArmatureRun);
 
             return elems;
         }
@@ -107,17 +110,18 @@ namespace KR_MN_Acad.Scheme.Wall
             int diam = GetPropValue<int>(PropNameArmVerticDiam);
             int step = GetPropValue<int>(PropNameArmVerticStep);
             int width = getWidthVerticArm(step);
-            int len = Height + Outline;
-            return new ArmatureDivision(diam, len, width, step);
+            int len = Height + Outline;            
+            var armDiv = new ArmatureDivision(diam, len, width, step);
+            return armDiv;
         }
 
-        private ArmatureRunning defineArmHor()
+        private ArmatureRunningStep defineArmHor()
         {
             int diam = GetPropValue<int>(PropNameArmHorDiam);
             int step = GetPropValue<int>(PropNameArmHorStep);
             int width = Height - 100;
             int len = getLengthHorArm();
-            return new ArmatureRunning(diam, len, width, step);
+            return new ArmatureRunningStep (diam, len, width, step);            
         }        
 
         /// <summary>

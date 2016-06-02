@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KR_MN_Acad.Scheme;
 
-namespace KR_MN_Acad.ConstructionServices
+namespace KR_MN_Acad.ConstructionServices.Materials
 {
     /// <summary>
     /// Распределенные стержни на участке
@@ -27,10 +28,9 @@ namespace KR_MN_Acad.ConstructionServices
         public ArmatureDivision (int diam, int length, int width, int step)
         {
             Width = width;
-            Step = step;
+            Step = step;            
             Armature = new Armature(diam, length);
-            CalcCount();
-            Armature.PrepareConstTable();
+            CalcCount();            
         }        
 
         private void CalcCount()

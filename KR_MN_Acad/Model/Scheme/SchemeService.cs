@@ -8,6 +8,7 @@ using AcadLib.Errors;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
+using KR_MN_Acad.ConstructionServices.Materials;
 using KR_MN_Acad.Scheme.Spec;
 
 namespace KR_MN_Acad.Scheme
@@ -23,33 +24,14 @@ namespace KR_MN_Acad.Scheme
 
         public SchemeOptions Options { get; set; }
         public List<ObjectId> IdBlRefs { get; set; }
-        public List<SchemeBlock> Blocks { get; set; } 
-        
-        public Dictionary<RowScheme, RowScheme> AllElements { get; set; }    
-        
-        public RowScheme GetElement (RowScheme elem)
-        {
-            RowScheme res;
-            if (AllElements.ContainsKey(elem))
-            {
-                res = AllElements[elem];
-                res.Add(elem);
-            }
-            else
-            {
-                res = elem;
-                AllElements.Add(res, res);                    
-            }
-            return res;
-        }                                              
+        public List<SchemeBlock> Blocks { get; set; }         
 
         public SchemeService(SchemeOptions options)
         {
             Doc = Application.DocumentManager.MdiActiveDocument;
             Ed = Doc.Editor;
             Db = Doc.Database;
-            Options = options;
-            AllElements = new Dictionary<RowScheme, RowScheme>();
+            Options = options;            
         }
 
         /// <summary>
@@ -116,10 +98,10 @@ namespace KR_MN_Acad.Scheme
             List<GroupScheme> groups = new List<GroupScheme>();
 
             // Все элементы 
-            List<RowScheme> elems = new List<RowScheme>();
+            List<IMaterial> elems = new List<IMaterial>();
             foreach (var block in Blocks)
             {
-                elems.AddRange(block.GetElements());
+                elems.AddRange(block.GetMaterials());
             }
             // Группировка элементов по типам
             var elemTypes = elems.GroupBy(g => g.Type);

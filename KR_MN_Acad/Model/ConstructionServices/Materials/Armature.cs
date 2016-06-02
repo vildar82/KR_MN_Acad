@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 using KR_MN_Acad.Scheme.Spec;
 using static AcadLib.Units.UnitsConvertHelper;
 
-namespace KR_MN_Acad.ConstructionServices
+namespace KR_MN_Acad.ConstructionServices.Materials
 {
     /// <summary>
     /// арматурный стержень
     /// </summary>
-    public class Armature : RowScheme
+    public class Armature : Material
     {
         public const int DefaultDiameter = 10;
         public const string DefaultClass = "A500C";
         public static readonly Gost GostNew = Gost.GetGost("ГОСТ Р 52544-2006");
 
+        public override string Position { get; set; }
         /// <summary>
         /// Кол стержней - во всем расчете
         /// </summary>
@@ -49,15 +50,20 @@ namespace KR_MN_Acad.ConstructionServices
         /// <summary>
         /// Класс арматуры
         /// </summary>
-        public string Class { get; set; } = DefaultClass;        
+        public string Class { get; set; } = DefaultClass;       
+        public override GroupType Type { get; set; }
+        public override string Prefix { get; set; }
+
+        private Armature() { }
 
         /// <summary>
         /// Дефолтный конструктор по диаметру, остальные дефолтные значения
         /// </summary>
         /// <param name="diameter"></param>
-        public Armature(int diameter) : base( GroupType.Armatures, "")
+        public Armature(int diameter)
         {
             Type = GroupType.Armatures;
+            Prefix = "";
             Diameter = diameter;
             defineBaseParams();            
         }
@@ -74,27 +80,8 @@ namespace KR_MN_Acad.ConstructionServices
         public virtual void CalcWeight ()
         {
             // Масса одного стержня
-            Weight = RoundHelper.RoundSpec(WeightUnit * ConvertMmToMLength(Length));
-        }
-
-        /// <summary>
-        /// Заполнение постоянных табличных свойств
-        /// </summary>
-        public override void PrepareConstTable()
-        {            
-            DocumentColumn = Gost.Number;
-            NameColumn = $"∅{Diameter} {Class}, L={Length}";            
-            WeightColumn = Weight.ToString();            
-        }
-
-        /// <summary>
-        /// Окончательное заполнение табличных свойств
-        /// </summary>
-        public override void PrepareFinalTable()
-        {
-            CountColumn = Count.ToString();
-            DescriptionColumn = (Weight * Count).ToString();
-        }
+            Weight = RoundHelper.RoundSpec(WeightUnit * ConvertMmToMLength(Length));            
+        }        
 
         /// <summary>
         /// Диаметры арматуры
@@ -104,7 +91,7 @@ namespace KR_MN_Acad.ConstructionServices
             new Armature(16),new Armature(18),new Armature(20),new Armature(22),new Armature(25),
             new Armature(28),new Armature(32),new Armature(36),new Armature(40),new Armature(45),
             new Armature(50),new Armature(55),new Armature(60),new Armature(70),new Armature(80)
-        };
+        };        
 
         private void defineBaseParams()
         {
@@ -199,23 +186,47 @@ namespace KR_MN_Acad.ConstructionServices
         /// Установка позиции элементу, по порядку при калькуляции
         /// </summary>
         /// <param name="value"></param>
-        public override void SetPosition(int value)
+        public override string GetPosition(int value)
         {
-            PositionColumn = value.ToString();
+            return value.ToString();
         }
 
-        /// <summary>
-        /// Суммирование элементов
-        /// </summary>
-        /// <param name="elem"></param>
-        public override void Add(RowScheme elem)
+        private RowScheme row;
+        public override RowScheme GetRow()
         {
-            var addArm = elem as Armature;
-            if (addArm == null)
+            if (row == null)
             {
-                throw new Exception("Не соответствие типов элементов арматурных стержней.");
+                row = new RowScheme(Type, Prefix);
+                row.DocumentColumn = Gost.Number;
+                row.NameColumn = $"∅{Diameter} {Class} L={Length}";            
+                row.WeightColumn = Weight.ToString();
+                row.CountColumn = Count.ToString();
+                row.DescriptionColumn = (Weight * Count).ToString();               
             }
-            Count += addArm.Count;
+            return row;
+        }
+
+        public override void Add(IMaterial elem)
+        {
+            var add = (Armature)elem;
+            Count += add.Count;
+        }
+
+        public override IMaterial Copy()
+        {
+            Armature res = new Armature();
+            res.Area = Area;
+            res.Class = Class;
+            res.Count = Count;
+            res.Diameter = Diameter;
+            res.Gost = Gost;
+            res.Length = Length;
+            res.Prefix = Prefix;
+            res.row = row;
+            res.Type = Type;
+            res.Weight = Weight;
+            res.WeightUnit = WeightUnit;
+            return res;
         }
     }
 }
