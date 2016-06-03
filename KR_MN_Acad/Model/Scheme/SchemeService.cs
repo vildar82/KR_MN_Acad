@@ -24,7 +24,8 @@ namespace KR_MN_Acad.Scheme
 
         public SchemeOptions Options { get; set; }
         public List<ObjectId> IdBlRefs { get; set; }
-        public List<SchemeBlock> Blocks { get; set; }         
+        public List<SchemeBlock> Blocks { get; set; }
+        public List<SchemeGroup> Groups { get; set; }
 
         public SchemeService(SchemeOptions options)
         {
@@ -44,13 +45,46 @@ namespace KR_MN_Acad.Scheme
             // Определение блоков схемы армирования
             Blocks = FilterBlocks();
             // Калькуляция всех элементов
-            Calculate();
-        }        
+            Groups = Calculate();
+            // Заполнение позиций в блоках
+            NumberingBlocks();
+        }
+
+        /// <summary>
+        /// Спецификация материалов 
+        /// </summary>
+        public void Spec()
+        {
+            // Выбор блоков
+            IdBlRefs = SelectBlocks();
+            // Определение блоков схемы армирования
+            Blocks = FilterBlocks();
+            // Калькуляция всех элементов
+            Groups = Calculate();
+            // Заполнение позиций в блоках
+            NumberingBlocks();
+            // Создание спецификации.
+            SchemeTable table = new SchemeTable(this);
+            table.CreateTable();
+        }
+
+        private void NumberingBlocks()
+        {
+            // Заполнение позиций в блоках
+            using (var t = Db.TransactionManager.StartTransaction())
+            {
+                foreach (var item in Blocks)
+                {
+                    item.Numbering();
+                }
+                t.Commit();
+            }
+        }
 
         /// <summary>
         /// Выбор блоков и получение списка IdBlRefs 
         /// </summary>
-        public List<ObjectId> SelectBlocks ()
+        private List<ObjectId> SelectBlocks ()
         {
             return SelectService.Select();
         }    
@@ -58,7 +92,7 @@ namespace KR_MN_Acad.Scheme
         /// <summary>
         /// Фильтр выбранных блоков и определение блоков схемы армирования в соотв с настройками
         /// </summary>
-        public List<SchemeBlock> FilterBlocks ()
+        private List<SchemeBlock> FilterBlocks ()
         {
             var blocks = new List<SchemeBlock>();
             var ids = IdBlRefs;
@@ -73,7 +107,7 @@ namespace KR_MN_Acad.Scheme
 
                     string blName = blRef.GetEffectiveName();
 
-                    SchemeBlock block = SchemeBlockFactory.CreateBlock(blRef, blName);
+                    SchemeBlock block = SchemeBlockFactory.CreateBlock(blRef, blName, this);
                     if (block == null)
                     {
                         Ed.WriteMessage($"\nПропущен блок '{blName}'");
@@ -93,9 +127,9 @@ namespace KR_MN_Acad.Scheme
         /// <summary>
         /// Подсчет элементов схемы армирования
         /// </summary>
-        private List<GroupScheme> Calculate()
+        private List<SchemeGroup> Calculate()
         {
-            List<GroupScheme> groups = new List<GroupScheme>();
+            List<SchemeGroup> groups = new List<SchemeGroup>();
 
             // Все элементы 
             List<IMaterial> elems = new List<IMaterial>();
@@ -107,7 +141,8 @@ namespace KR_MN_Acad.Scheme
             var elemTypes = elems.GroupBy(g => g.Type);
             foreach (var type in elemTypes)
             {
-                GroupScheme group = new GroupScheme(type);
+                SchemeGroup group = new SchemeGroup(type);
+                groups.Add(group);
             }
 
             return groups;

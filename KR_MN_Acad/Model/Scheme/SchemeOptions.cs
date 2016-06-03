@@ -22,6 +22,11 @@ namespace KR_MN_Acad.Scheme
         /// Имя блока должно соответствовать этому регулярному выражения Regex.IsMatch(blockName, thisPattern, ignoreCase);
         /// </summary>
         public string BlockNameMatch { get; set; }
+
+        public FilterBlocks(string blNameMatch)
+        {
+            BlockNameMatch = blNameMatch;
+        }
     }
 
     public class TableOptions
@@ -34,5 +39,10 @@ namespace KR_MN_Acad.Scheme
         /// Слой для вставки таблицы
         /// </summary>
         public string Layer { get; set; }
+
+        public TableOptions(string title)
+        {
+            Title = title;
+        }
     }
 }

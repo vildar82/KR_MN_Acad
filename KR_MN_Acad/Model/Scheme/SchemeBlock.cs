@@ -14,7 +14,7 @@ namespace KR_MN_Acad.Scheme
     /// <summary>
     /// Базовый интерфейс блока для схемы армирования
     /// </summary>
-    public abstract class SchemeBlock
+    public abstract class SchemeBlock : ISchemeBlock
     {        
         public ObjectId IdBlref { get; set; }
         public string BlName { get; set; }
@@ -38,6 +38,10 @@ namespace KR_MN_Acad.Scheme
         /// </summary>
         /// <returns></returns>
         public abstract List<IMaterial> GetMaterials();
+        /// <summary>
+        /// Заполнение нумерации материалов блока
+        /// </summary>
+        public abstract void Numbering();
 
         private Dictionary<string, Property> GetProperties(BlockReference blRef)
         {
@@ -64,6 +68,6 @@ namespace KR_MN_Acad.Scheme
                 Error = new Error($"Ошибка в блоке {BlName}: ", IdBlref, System.Drawing.SystemIcons.Error);
             }
             Error.AdditionToMessage(msg);
-        }
+        }        
     }
 }

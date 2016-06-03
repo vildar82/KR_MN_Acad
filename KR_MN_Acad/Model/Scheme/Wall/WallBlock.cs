@@ -20,7 +20,7 @@ namespace KR_MN_Acad.Scheme.Wall
         private SchemeService service;        
                      
         const string PropNameConcrete = "Бетон";
-        const string PropNameHeight = "Высота";
+        const string PropNameHeight = "Высота стены";
         const string PropNameLength = "Длина стены";
         const string PropNameThickness = "Толщина стены";
         const string PropNameOutline = "Выпуск";
@@ -28,6 +28,10 @@ namespace KR_MN_Acad.Scheme.Wall
         const string PropNameArmVerticStep = "ШагВертикАрм";
         const string PropNameArmHorDiam = "ДиамГорАрм";
         const string PropNameArmHorStep = "ШагГорАрм";
+        const string PropNamePosVerticArm = "ПОЗВЕРТИКАРМ";
+        const string PropNamePosHorArm = "ПОЗГОРАРМ";
+        const string PropNameDescHorArm = "ОПИСАНИЕГОРАРМ";
+        const string PropNameDescVerticArm = "ОПИСАНИЕВЕРТИКАРМ";
 
         /// <summary>
         /// Защитный салой бктона
@@ -122,7 +126,7 @@ namespace KR_MN_Acad.Scheme.Wall
             int width = Height - 100;
             int len = getLengthHorArm();
             return new ArmatureRunningStep (diam, len, width, step);            
-        }        
+        }
 
         /// <summary>
         /// преобразование object value свойства Property в указанный тип
@@ -131,17 +135,24 @@ namespace KR_MN_Acad.Scheme.Wall
         private T GetPropValue<T>(string propName)
         {
             T resVal = default(T);
-            Property prop;
-            if (!Properties.TryGetValue(propName, out prop))
-            {
-                AddError($"Не определен параметр {propName}.");
-            }
-            else
+            Property prop = GetProperty(propName);
+            if (prop != null)
             {
                 resVal = (T)Convert.ChangeType(prop.Value, typeof(T));
             }
             return resVal;
         }
+
+        private Property GetProperty(string propName)
+        {
+            Property prop;
+            if (!Properties.TryGetValue(propName, out prop))
+            {
+                AddError($"Не определен параметр {propName}.");
+            }
+            return prop;            
+        }
+
 
         /// <summary>
         /// Определение ширины распределения вертикальных стержней в стене
@@ -160,6 +171,33 @@ namespace KR_MN_Acad.Scheme.Wall
         private int getLengthHorArm()
         {
             return Length;
-        }        
+        }
+
+        /// <summary>
+        /// Заполнение позиций
+        /// </summary>
+        public override void Numbering()
+        {
+            // ПозГорАрм
+            FillProp(GetProperty(PropNamePosHorArm), ArmHor.ArmatureRun.Position.PositionColumn);
+            // ПозВертикАрм
+            FillProp(GetProperty(PropNamePosVerticArm), ArmVertic.Armature.Position.PositionColumn);
+            // ОписГорАрм
+            FillProp(GetProperty(PropNameDescHorArm), ArmHor.GetDesc());
+            // ОписВертикАрм
+            FillProp(GetProperty(PropNameDescVerticArm), ArmVertic.GetDesc());
+        }
+
+        private void FillProp(Property prop, object value)
+        {
+            if (prop == null) return;
+            if (prop.Type == PropertyType.Attribute && !prop.IdAtrRef.IsNull)
+            {
+                using (var atr = prop.IdAtrRef.GetObject(OpenMode.ForWrite, false, true) as AttributeReference)
+                {
+                    atr.TextString = value.ToString();
+                }
+            }
+        }
     }
 }

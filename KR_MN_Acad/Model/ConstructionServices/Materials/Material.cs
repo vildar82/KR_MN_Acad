@@ -11,26 +11,26 @@ namespace KR_MN_Acad.ConstructionServices.Materials
     {        
         public abstract string Prefix { get; set; }
         public abstract GroupType Type { get; set; }
-        public abstract RowScheme Position { get; set; }
-
-        public abstract string GetPosition(int value);
-        public abstract RowScheme GetRow();
+        public abstract SchemeRow Position { get; set; }
+        public abstract SchemeRow RowScheme { get; }
+        public abstract string GetPosition(int value);        
         public abstract void Add(IMaterial elem);
         public abstract IMaterial Copy();
+        public abstract string GetLeaderDesc();
 
-        public virtual int CompareTo(RowScheme other)
+        public virtual int CompareTo(SchemeRow other)
         {
-            var row = GetRow();
+            var row = RowScheme;
             return row.CompareTo(other);
         }
-        public virtual bool Equals(RowScheme other)
+        public virtual bool Equals(SchemeRow other)
         {
-            var row = GetRow();
+            var row = RowScheme;
             return row.CompareTo(other) == 0;
         }
         public override int GetHashCode()
         {
-            return GetRow().GetHashCode();
-        }        
+            return RowScheme.GetHashCode();
+        }
     }
 }

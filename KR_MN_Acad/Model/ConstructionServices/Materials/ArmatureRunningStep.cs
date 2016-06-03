@@ -38,5 +38,10 @@ namespace KR_MN_Acad.ConstructionServices.Materials
         {
             return RoundHelper.RoundSpec(ConvertMmToMLength((width / (step + 1)) * length));
         }
+
+        public string GetDesc()
+        {
+            return $"{ArmatureRun.GetLeaderDesc()}, шаг {Step}";
+        }
     }
 }

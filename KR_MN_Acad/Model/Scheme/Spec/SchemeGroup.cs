@@ -31,7 +31,7 @@ namespace KR_MN_Acad.Scheme.Spec
     /// <summary>
     /// Группа в спецификации материалов схемы армирования
     /// </summary>
-    public class GroupScheme
+    public class SchemeGroup
     {
         /// <summary>
         /// Имя группы
@@ -40,13 +40,15 @@ namespace KR_MN_Acad.Scheme.Spec
         /// <summary>
         /// Елементы группы
         /// </summary>
-        public List<RowScheme> Rows { get; set; }
+        public List<SchemeRow> Rows { get; set; }
+        public string Name { get; set; }
 
-        public GroupScheme(IGrouping<GroupType, IMaterial> type)
+        public SchemeGroup(IGrouping<GroupType, IMaterial> type)
         {
-            Rows = new List<RowScheme>();
+            Rows = new List<SchemeRow>();
             Type = type.Key;
-            var rowsGroup = type.GroupBy(g => g).OrderBy(o => o);
+            Name = GetGroupName(Type);
+            var rowsGroup = type.GroupBy(g => g.RowScheme, s=>s).OrderByDescending(o => o.Key.NameColumn, SchemeRow.Alpha);
 
             int pos = 1;
             foreach (var rowPos in rowsGroup)
@@ -57,11 +59,12 @@ namespace KR_MN_Acad.Scheme.Spec
                 {
                     mater.Add(item);
                 }
-                RowScheme row = mater.GetRow();
+                SchemeRow row = mater.RowScheme;
                 row.Materials = rowPos.ToList();
                 row.SetPosition(pos);
                 Rows.Add(row);
-            }
+                pos++;
+            }            
         }        
 
         public static string GetGroupName(GroupType type)

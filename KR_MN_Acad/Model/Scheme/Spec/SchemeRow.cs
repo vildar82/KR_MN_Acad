@@ -10,8 +10,10 @@ namespace KR_MN_Acad.Scheme.Spec
     /// <summary>
     /// Строчка в спецификации материалов схемы армирования
     /// </summary>
-    public class RowScheme : IComparable<RowScheme>, IEquatable<RowScheme>
+    public class SchemeRow : IComparable<SchemeRow>, IEquatable<SchemeRow>
     {
+        public readonly static AcadLib.Comparers.AlphanumComparator Alpha = AcadLib.Comparers.AlphanumComparator.New;
+
         public List<IMaterial> Materials { get; set; }
         /// <summary>
         /// Позиция - столбец
@@ -46,24 +48,24 @@ namespace KR_MN_Acad.Scheme.Spec
         /// </summary>
         public string PositionPrefix { get; set; }
 
-        public RowScheme(GroupType type, string posPrefix)
+        public SchemeRow(GroupType type, string posPrefix)
         {
             PositionPrefix = posPrefix;
             Type = type;
         }
 
-        public int CompareTo(RowScheme other)
-        {
+        public int CompareTo(SchemeRow other)
+        {            
             var result = Type.CompareTo(other.Type);
             if (result != 0) return result;
 
-            result = string.Compare(PositionPrefix, other.PositionPrefix, true);
+            result = Alpha.Compare(PositionPrefix, other.PositionPrefix);
             if (result != 0) return result;
 
             result = string.Compare(DocumentColumn,other.DocumentColumn, true);
             if (result != 0) return result;
 
-            result = string.Compare(NameColumn, other.NameColumn, true);
+            result = Alpha.Compare(NameColumn, other.NameColumn);
             if (result != 0) return result;
 
             return 0;            
@@ -78,7 +80,7 @@ namespace KR_MN_Acad.Scheme.Spec
             }
         }
 
-        public bool Equals(RowScheme other)
+        public bool Equals(SchemeRow other)
         {
             return this.CompareTo(other) == 0;
         }

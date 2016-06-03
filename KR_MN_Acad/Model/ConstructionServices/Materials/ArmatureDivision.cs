@@ -23,7 +23,7 @@ namespace KR_MN_Acad.ConstructionServices.Materials
         /// <summary>
         /// Шаг распределения
         /// </summary>
-        public int Step { get; set; }        
+        public int Step { get; set; }                
 
         public ArmatureDivision (int diam, int length, int width, int step)
         {
@@ -39,5 +39,10 @@ namespace KR_MN_Acad.ConstructionServices.Materials
             int count = Width / Step + 1;
             Armature.Count = count;                     
         }        
+
+        public string GetDesc()
+        {
+            return $"{Armature.GetLeaderDesc()}, шаг {Step}";
+        }
     }
 }

@@ -183,6 +183,33 @@ namespace KR_MN_Acad
             });            
         }
 
+        
+        /// <summary>
+        /// Схема армирования стен - Нумерация
+        /// </summary>
+        [CommandMethod(groupPik, nameof(KR_ArmWallNumbering), CommandFlags.Modal)]
+        public void KR_ArmWallNumbering()
+        {
+            AcadLib.CommandStart.Start(doc =>
+            {
+                var service = new Scheme.SchemeService(Scheme.Wall.WallSchemeOptions.GetSchemeOptions());
+                service.Numbering();
+            });
+        }
+
+        /// <summary>
+        /// Схема армирования стен - спецификация
+        /// </summary>
+        [CommandMethod(groupPik, nameof(KR_ArmWallSpec), CommandFlags.Modal)]
+        public void KR_ArmWallSpec()
+        {
+            AcadLib.CommandStart.Start(doc =>
+            {
+                var service = new Scheme.SchemeService(Scheme.Wall.WallSchemeOptions.GetSchemeOptions());
+                service.Spec();
+            });
+        }
+
         public void Terminate()
         {
         }

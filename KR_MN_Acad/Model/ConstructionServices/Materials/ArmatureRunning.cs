@@ -34,6 +34,28 @@ namespace KR_MN_Acad.ConstructionServices.Materials
             Weight = RoundHelper.RoundSpec(WeightUnit);
             // Масса общая
             WeightRunning = RoundHelper.RoundSpec(Weight * Meters);
-        }        
+        }
+
+        public override void Add(IMaterial elem)
+        {
+            var add = (ArmatureRunning)elem;
+            Meters += add.Meters;
+        }
+
+        public override SchemeRow RowScheme 
+        {
+            get
+            {
+                row = base.RowScheme;
+                row.CountColumn = Meters.ToString();
+                row.NameColumn = $"∅{Diameter} {Class} L=п.м.";
+                return row;
+            }
+        }
+
+        public override string GetLeaderDesc()
+        {
+            return base.GetLeaderDesc() + "-" + Meters;
+        }
     }
 }

@@ -17,7 +17,19 @@ namespace KR_MN_Acad.ConstructionServices.Materials
         public const string DefaultClass = "A500C";
         public static readonly Gost GostNew = Gost.GetGost("ГОСТ Р 52544-2006");
 
-        public override string Position { get; set; }
+        protected SchemeRow row;
+        public override SchemeRow RowScheme
+        {
+            get
+            {
+                if (row == null)
+                {
+                    row = GetRow();
+                }
+                return row;
+            }
+        }
+        public override SchemeRow Position { get; set; }
         /// <summary>
         /// Кол стержней - во всем расчете
         /// </summary>
@@ -70,6 +82,7 @@ namespace KR_MN_Acad.ConstructionServices.Materials
 
         public Armature (int diam, int length) : this(diam)
         {
+            Length = length;
             CalcWeight();
         }        
 
@@ -91,7 +104,7 @@ namespace KR_MN_Acad.ConstructionServices.Materials
             new Armature(16),new Armature(18),new Armature(20),new Armature(22),new Armature(25),
             new Armature(28),new Armature(32),new Armature(36),new Armature(40),new Armature(45),
             new Armature(50),new Armature(55),new Armature(60),new Armature(70),new Armature(80)
-        };        
+        };       
 
         private void defineBaseParams()
         {
@@ -191,12 +204,12 @@ namespace KR_MN_Acad.ConstructionServices.Materials
             return value.ToString();
         }
 
-        private RowScheme row;
-        public override RowScheme GetRow()
+        
+        private SchemeRow GetRow()
         {
             if (row == null)
             {
-                row = new RowScheme(Type, Prefix);
+                row = new SchemeRow(Type, Prefix);
                 row.DocumentColumn = Gost.Number;
                 row.NameColumn = $"∅{Diameter} {Class} L={Length}";            
                 row.WeightColumn = Weight.ToString();
@@ -227,6 +240,11 @@ namespace KR_MN_Acad.ConstructionServices.Materials
             res.Weight = Weight;
             res.WeightUnit = WeightUnit;
             return res;
+        }
+
+        public override string GetLeaderDesc()
+        {
+            return $"{Position.PositionColumn}, {Position.NameColumn}";
         }
     }
 }
