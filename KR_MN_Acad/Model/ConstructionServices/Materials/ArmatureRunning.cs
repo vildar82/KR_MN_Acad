@@ -44,12 +44,13 @@ namespace KR_MN_Acad.ConstructionServices.Materials
         {
             var add = (ArmatureRunning)elem;
             Meters += add.Meters;
+            WeightRunning += add.WeightRunning;
         }
 
         public override IMaterial Copy()
         {
             ArmatureRunning res = new ArmatureRunning();
-            res.CopyFields(res);
+            CopyFields(res);
             res.Meters = Meters;
             res.WeightRunning = WeightRunning;
             return res;
@@ -62,6 +63,7 @@ namespace KR_MN_Acad.ConstructionServices.Materials
                 row = base.RowScheme;
                 row.CountColumn = Meters.ToString();
                 row.NameColumn = $"∅{Diameter} {Class} L=п.м.";
+                row.DescriptionColumn = WeightRunning.ToString();
                 return row;
             }
         }
