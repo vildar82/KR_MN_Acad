@@ -55,7 +55,7 @@ namespace KR_MN_Acad.Scheme.Spec
             {
                 var mater = rowPos.First().Copy();
                 // суммирование материалов
-                foreach (var item in rowPos)
+                foreach (var item in rowPos.Skip(1))
                 {
                     mater.Add(item);
                 }

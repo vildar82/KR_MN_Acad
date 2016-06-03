@@ -149,7 +149,7 @@ namespace KR_MN_Acad.Scheme.Spec
 
                     cell = table.Cells[row, 5];
                     cell.TextString = item.DescriptionColumn;
-                    cell.Alignment = CellAlignment.MiddleLeft;
+                    cell.Alignment = CellAlignment.MiddleCenter;
 
                     row++;
                 }                

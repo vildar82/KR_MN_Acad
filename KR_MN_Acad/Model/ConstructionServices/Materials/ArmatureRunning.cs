@@ -22,6 +22,10 @@ namespace KR_MN_Acad.ConstructionServices.Materials
         /// </summary>
         public double WeightRunning { get; set; }
 
+        private ArmatureRunning()
+        {
+        }
+
         public ArmatureRunning(int diam, double meters) : base(diam)
         {
             Meters = meters;
@@ -42,6 +46,15 @@ namespace KR_MN_Acad.ConstructionServices.Materials
             Meters += add.Meters;
         }
 
+        public override IMaterial Copy()
+        {
+            ArmatureRunning res = new ArmatureRunning();
+            res.CopyFields(res);
+            res.Meters = Meters;
+            res.WeightRunning = WeightRunning;
+            return res;
+        }
+
         public override SchemeRow RowScheme 
         {
             get
@@ -52,10 +65,9 @@ namespace KR_MN_Acad.ConstructionServices.Materials
                 return row;
             }
         }
-
         public override string GetLeaderDesc()
         {
-            return base.GetLeaderDesc() + "-" + Meters;
-        }
+            return base.GetLeaderDesc() + Meters;
+        }        
     }
 }

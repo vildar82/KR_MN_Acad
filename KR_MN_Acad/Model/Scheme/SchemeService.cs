@@ -63,6 +63,8 @@ namespace KR_MN_Acad.Scheme
             Groups = Calculate();
             // Заполнение позиций в блоках
             NumberingBlocks();
+            List<string> rty;
+            
             // Создание спецификации.
             SchemeTable table = new SchemeTable(this);
             table.CreateTable();

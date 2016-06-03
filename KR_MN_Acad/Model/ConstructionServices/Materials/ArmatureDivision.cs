@@ -42,7 +42,7 @@ namespace KR_MN_Acad.ConstructionServices.Materials
 
         public string GetDesc()
         {
-            return $"{Armature.GetLeaderDesc()}, шаг {Step}";
+            return $"{Armature.GetLeaderDesc()}, шаг {Step}, шт. {Armature.Count}";
         }
     }
 }

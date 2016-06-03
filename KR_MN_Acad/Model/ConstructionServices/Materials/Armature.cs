@@ -66,7 +66,7 @@ namespace KR_MN_Acad.ConstructionServices.Materials
         public override GroupType Type { get; set; }
         public override string Prefix { get; set; }
 
-        private Armature() { }
+        protected Armature() { }
 
         /// <summary>
         /// Дефолтный конструктор по диаметру, остальные дефолтные значения
@@ -203,7 +203,6 @@ namespace KR_MN_Acad.ConstructionServices.Materials
         {
             return value.ToString();
         }
-
         
         private SchemeRow GetRow()
         {
@@ -228,18 +227,22 @@ namespace KR_MN_Acad.ConstructionServices.Materials
         public override IMaterial Copy()
         {
             Armature res = new Armature();
-            res.Area = Area;
-            res.Class = Class;
-            res.Count = Count;
-            res.Diameter = Diameter;
-            res.Gost = Gost;
-            res.Length = Length;
-            res.Prefix = Prefix;
-            res.row = row;
-            res.Type = Type;
-            res.Weight = Weight;
-            res.WeightUnit = WeightUnit;
+            CopyFields(res);
             return res;
+        }
+
+        protected void CopyFields(Armature arm)
+        {
+            arm.Area = Area;
+            arm.Class = Class;
+            arm.Count = Count;
+            arm.Diameter = Diameter;
+            arm.Gost = Gost;
+            arm.Length = Length;
+            arm.Prefix = Prefix;            
+            arm.Type = Type;
+            arm.Weight = Weight;
+            arm.WeightUnit = WeightUnit;
         }
 
         public override string GetLeaderDesc()
