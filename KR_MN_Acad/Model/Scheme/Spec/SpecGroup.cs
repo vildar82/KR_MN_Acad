@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KR_MN_Acad.ConstructionServices.Materials;
+using KR_MN_Acad.Scheme.Elements;
 
 namespace KR_MN_Acad.Scheme.Spec
 {
@@ -31,8 +32,8 @@ namespace KR_MN_Acad.Scheme.Spec
     /// <summary>
     /// Группа в спецификации материалов схемы армирования
     /// </summary>
-    public class SchemeGroup
-    {
+    public class SpecGroup
+    {    
         /// <summary>
         /// Имя группы
         /// </summary>
@@ -40,32 +41,16 @@ namespace KR_MN_Acad.Scheme.Spec
         /// <summary>
         /// Елементы группы
         /// </summary>
-        public List<SchemeRow> Rows { get; set; }
+        public List<ISpecRow> Rows { get; set; }
         public string Name { get; set; }
+        public List<IElement> Elements { get; set; }
 
-        public SchemeGroup(IGrouping<GroupType, IMaterial> type)
+        public SpecGroup(IGrouping<GroupType, IElement> elems)
         {
-            Rows = new List<SchemeRow>();
-            Type = type.Key;
+            Type = elems.Key;
             Name = GetGroupName(Type);
-            var rowsGroup = type.GroupBy(g => g.RowScheme, s=>s).OrderByDescending(o => o.Key.NameColumn, SchemeRow.Alpha);
-
-            int pos = 1;
-            foreach (var rowPos in rowsGroup)
-            {
-                var mater = rowPos.First().Copy();
-                // суммирование материалов
-                foreach (var item in rowPos.Skip(1))
-                {
-                    mater.Add(item);
-                }
-                SchemeRow row = mater.RowScheme;
-                row.Materials = rowPos.ToList();
-                row.SetPosition(pos);
-                Rows.Add(row);
-                pos++;
-            }            
-        }        
+            Elements = elems.ToList();
+        }
 
         public static string GetGroupName(GroupType type)
         {
@@ -83,6 +68,25 @@ namespace KR_MN_Acad.Scheme.Spec
                     return "Материалы";
                 default:
                     return "";
+            }
+        }
+
+        /// <summary>
+        /// Калькуляция группы - сортировка по элементам и назначение позиций
+        /// </summary>
+        public void Calculate()
+        {
+            Rows = new List<ISpecRow>();
+            // Группировка элементов по типам
+            var someElems = Elements.GroupBy(g => g).OrderBy(o => o.Key);
+            int posIndex = 1;
+            foreach (var item in someElems)
+            {
+                // Составить строчку таблицы
+                ISpecRow row = new SpecRow(item.Key.Prefix+posIndex, item.ToList());
+                row.Calculate();
+                Rows.Add(row);
+                posIndex++;
             }
         }
     }

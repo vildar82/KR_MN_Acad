@@ -9,7 +9,7 @@ namespace KR_MN_Acad.ConstructionServices
     /// <summary>
     /// Гост
     /// </summary>
-    public class Gost
+    public class Gost : IComparable<Gost>, IEquatable<Gost>
     {
         /// <summary>
         /// Номер госта "ГОСТ Р 52544-2006"
@@ -30,11 +30,23 @@ namespace KR_MN_Acad.ConstructionServices
         {
             switch (number.ToUpper())
             {
-                case "ГОСТ Р 52544-2006":
-                    return new Gost("ГОСТ Р 52544-2006", "Прокат арматурный свариваемый периодического профиля классов А500С и В500С для армирования железобетонных конструкций. Технические условия");
+                case Materials.Armature.GostNewNumber:
+                    return new Gost(Materials.Armature.GostNewNumber, "Прокат арматурный свариваемый периодического профиля классов А500С и В500С для армирования железобетонных конструкций. Технические условия");
+                case Materials.Armature.GostOldNumber:
+                    return new Gost(Materials.Armature.GostOldNumber, "ГОСТ 5781-82.Сталь горячекатаная для армирования железобетонных конструкций.");                    
                 default:
                     return new Gost("", "");                    
             }
+        }
+
+        public int CompareTo(Gost other)
+        {            
+            return Name.CompareTo(other?.Name);
+        }
+
+        public bool Equals(Gost other)
+        {
+            return Name.Equals(other?.Name);
         }
     }
 }

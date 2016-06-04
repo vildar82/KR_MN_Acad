@@ -9,6 +9,7 @@ using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using KR_MN_Acad.ConstructionServices.Materials;
+using KR_MN_Acad.Scheme.Elements;
 using KR_MN_Acad.Scheme.Spec;
 
 namespace KR_MN_Acad.Scheme
@@ -25,7 +26,7 @@ namespace KR_MN_Acad.Scheme
         public SchemeOptions Options { get; set; }
         public List<ObjectId> IdBlRefs { get; set; }
         public List<SchemeBlock> Blocks { get; set; }
-        public List<SchemeGroup> Groups { get; set; }
+        public List<SpecGroup> Groups { get; set; }
 
         public SchemeService(SchemeOptions options)
         {
@@ -62,11 +63,10 @@ namespace KR_MN_Acad.Scheme
             // Калькуляция всех элементов
             Groups = Calculate();
             // Заполнение позиций в блоках
-            NumberingBlocks();
-            List<string> rty;
+            NumberingBlocks();            
             
             // Создание спецификации.
-            SchemeTable table = new SchemeTable(this);
+            SpecTable table = new SpecTable(this);
             table.CreateTable();
         }
 
@@ -129,21 +129,22 @@ namespace KR_MN_Acad.Scheme
         /// <summary>
         /// Подсчет элементов схемы армирования
         /// </summary>
-        private List<SchemeGroup> Calculate()
+        private List<SpecGroup> Calculate()
         {
-            List<SchemeGroup> groups = new List<SchemeGroup>();
+            List<SpecGroup> groups = new List<SpecGroup>();
 
             // Все элементы 
-            List<IMaterial> elems = new List<IMaterial>();
+            List<IElement> elems = new List<IElement>();
             foreach (var block in Blocks)
             {
-                elems.AddRange(block.GetMaterials());
+                elems.AddRange(block.GetElements());
             }
             // Группировка элементов по типам
             var elemTypes = elems.GroupBy(g => g.Type);
             foreach (var type in elemTypes)
             {
-                SchemeGroup group = new SchemeGroup(type);
+                SpecGroup group = new SpecGroup(type);
+                group.Calculate();
                 groups.Add(group);
             }
 

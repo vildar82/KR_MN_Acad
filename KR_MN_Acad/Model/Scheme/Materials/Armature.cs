@@ -11,42 +11,31 @@ namespace KR_MN_Acad.ConstructionServices.Materials
     /// <summary>
     /// арматурный стержень
     /// </summary>
-    public class Armature : Material
+    public class Armature : IMaterial
     {
-        public const int DefaultDiameter = 10;
-        public const string DefaultClass = "A500C";
-        public static readonly Gost GostNew = Gost.GetGost("ГОСТ Р 52544-2006");
+        public const string ClassA500C = "А500С";
+        public const string ClassA240C = "А240С";
+        public const string GostNewNumber = "ГОСТ Р 52544-2006";
+        public const string GostOldNumber = "ГОСТ 5781-82";
+        public static Gost GostNew = Gost.GetGost(GostNewNumber);
+        public static Gost GostOld = Gost.GetGost(GostOldNumber);
 
-        protected SchemeRow row;
-        public override SchemeRow RowScheme
+        public const int DefaultDiameter = 10;
+        public const string DefaultClass = ClassA500C;
+        public static readonly Gost DefaultGost = GostNew;
+
+        public string Name
         {
             get
             {
-                if (row == null)
-                {
-                    row = GetRow();
-                }
-                return row;
+                return "⌀" + Diameter + " " + Class;
             }
         }
-        public override SchemeRow Position { get; set; }
-        /// <summary>
-        /// Кол стержней - во всем расчете
-        /// </summary>
-        public int Count { get; set; } = 1;
+                
         /// <summary>
         /// Диаметр
         /// </summary>
-        public int Diameter { get; set; }
-        /// <summary>
-        /// Длина стержня
-        /// </summary>
-        public int Length { get; set; }
-        /// <summary>
-        /// Масса ед. кг.
-        /// Округлено до 2 знаков
-        /// </summary>
-        public double Weight { get; set; }        
+        public int Diameter { get; set; }      
         /// <summary>
         /// Масса 1 п.м.,кг
         /// </summary>
@@ -58,43 +47,27 @@ namespace KR_MN_Acad.ConstructionServices.Materials
         /// <summary>
         /// ГОСТ
         /// </summary>
-        public Gost Gost { get; set; } = GostNew;
+        public Gost Gost { get; set; } = DefaultGost;
         /// <summary>
         /// Класс арматуры
         /// </summary>
-        public string Class { get; set; } = DefaultClass;       
-        public override GroupType Type { get; set; }
-        public override string Prefix { get; set; }
-
-        protected Armature() { }
+        public string Class { get; set; } = DefaultClass;        
 
         /// <summary>
         /// Дефолтный конструктор по диаметру, остальные дефолтные значения
         /// </summary>
         /// <param name="diameter"></param>
         public Armature(int diameter)
-        {
-            Type = GroupType.Armatures;
-            Prefix = "";
+        {            
             Diameter = diameter;
             defineBaseParams();            
         }
 
-        public Armature (int diam, int length) : this(diam)
+        public Armature(int diameter, string classArm, Gost gost) : this(diameter)
         {
-            Length = length;
-            CalcWeight();
-        }        
-
-        /// <summary>
-        /// Расчет массы 1 стержня. 
-        /// Должна быть задана длина предварительно.
-        /// </summary>
-        public virtual void CalcWeight ()
-        {
-            // Масса одного стержня
-            Weight = RoundHelper.RoundSpec(WeightUnit * ConvertMmToMLength(Length));            
-        }        
+            Class = classArm;
+            Gost = gost;
+        }
 
         /// <summary>
         /// Диаметры арматуры
@@ -104,7 +77,7 @@ namespace KR_MN_Acad.ConstructionServices.Materials
             new Armature(16),new Armature(18),new Armature(20),new Armature(22),new Armature(25),
             new Armature(28),new Armature(32),new Armature(36),new Armature(40),new Armature(45),
             new Armature(50),new Armature(55),new Armature(60),new Armature(70),new Armature(80)
-        };       
+        };        
 
         private void defineBaseParams()
         {
@@ -193,61 +166,6 @@ namespace KR_MN_Acad.ConstructionServices.Materials
                 default:
                     break;
             }
-        }
-
-        /// <summary>
-        /// Установка позиции элементу, по порядку при калькуляции
-        /// </summary>
-        /// <param name="value"></param>
-        public override string GetPosition(int value)
-        {
-            return value.ToString();
-        }
-        
-        private SchemeRow GetRow()
-        {
-            if (row == null)
-            {
-                row = new SchemeRow(Type, Prefix);
-                row.DocumentColumn = Gost.Number;
-                row.NameColumn = $"∅{Diameter} {Class} L={Length}";            
-                row.WeightColumn = Weight.ToString();
-                row.CountColumn = Count.ToString();
-                row.DescriptionColumn = (Weight * Count).ToString();               
-            }
-            return row;
-        }
-
-        public override void Add(IMaterial elem)
-        {
-            var add = (Armature)elem;
-            Count += add.Count;
-        }
-
-        public override IMaterial Copy()
-        {
-            Armature res = new Armature();
-            CopyFields(res);
-            return res;
-        }
-
-        protected void CopyFields(Armature arm)
-        {
-            arm.Area = Area;
-            arm.Class = Class;
-            arm.Count = Count;
-            arm.Diameter = Diameter;
-            arm.Gost = Gost;
-            arm.Length = Length;
-            arm.Prefix = Prefix;            
-            arm.Type = Type;
-            arm.Weight = Weight;
-            arm.WeightUnit = WeightUnit;
-        }
-
-        public override string GetLeaderDesc()
-        {
-            return $"{Position.PositionColumn}, {Position.NameColumn}";
-        }
+        }        
     }
 }

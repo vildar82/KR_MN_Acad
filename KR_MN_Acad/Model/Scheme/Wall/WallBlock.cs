@@ -8,6 +8,8 @@ using AcadLib.Blocks;
 using Autodesk.AutoCAD.DatabaseServices;
 using KR_MN_Acad.ConstructionServices;
 using KR_MN_Acad.ConstructionServices.Materials;
+using KR_MN_Acad.Scheme.Elements;
+using KR_MN_Acad.Scheme.Elements.Bars;
 using KR_MN_Acad.Scheme.Spec;
 
 namespace KR_MN_Acad.Scheme.Wall
@@ -28,15 +30,24 @@ namespace KR_MN_Acad.Scheme.Wall
         const string PropNameArmVerticStep = "ШагВертикАрм";
         const string PropNameArmHorDiam = "ДиамГорАрм";
         const string PropNameArmHorStep = "ШагГорАрм";
+        const string PropNameSpringDiam = "ДиамШпилек";
+        const string PropNameSpringStepHor = "ШагШпилекГор";
+        const string PropNameSpringStepVertic = "ШагШпилекВерт";
         const string PropNamePosVerticArm = "ПОЗВЕРТИКАРМ";
         const string PropNamePosHorArm = "ПОЗГОРАРМ";
+        const string PropNamePosSpring = "ПОЗШПИЛЬКИ";
         const string PropNameDescHorArm = "ОПИСАНИЕГОРАРМ";
         const string PropNameDescVerticArm = "ОПИСАНИЕВЕРТИКАРМ";
+        const string PropNameDescSpring = "ОПИСАНИЕШПИЛЬКИ";
 
         /// <summary>
         /// Защитный салой бктона
         /// </summary>
         private const int a = 45;
+        /// <summary>
+        /// Отступ вертикальной арматуры от торца стены
+        /// </summary>
+        private int indentVerticArm;
 
         /// <summary>
         /// Класс Бетона
@@ -61,11 +72,15 @@ namespace KR_MN_Acad.Scheme.Wall
         /// <summary>
         /// Распределенные вертикальные арматурные стержни
         /// </summary>
-        public ArmatureDivision ArmVertic { get; set; }
+        public BarDivision ArmVertic { get; set; }
         /// <summary>
         /// Горизонтальные арматурные стержни - погоннаж
         /// </summary>
-        public ArmatureRunningStep ArmHor { get; set; }
+        public BarRunningStep ArmHor { get; set; }
+        /// <summary>
+        /// Шпильки
+        /// </summary>
+        public Spring Spring { get; set; }
 
         public WallBlock(BlockReference blRef, string blName, SchemeService service) : base (blRef, blName)
         {
@@ -86,12 +101,13 @@ namespace KR_MN_Acad.Scheme.Wall
             }
         }
 
-        public override List<IMaterial> GetMaterials()
+        public override List<IElement> GetElements()
         {
-            List<IMaterial> elems = new List<IMaterial>();
+            List<IElement> elems = new List<IElement>();
 
-            elems.Add(ArmVertic.Armature);
-            elems.Add(ArmHor.ArmatureRun);
+            elems.Add(ArmVertic);
+            elems.Add(ArmHor);
+            elems.Add(Spring);
 
             return elems;
         }
@@ -107,25 +123,49 @@ namespace KR_MN_Acad.Scheme.Wall
             ArmVertic = defineArmVertic();
             // Определние горизонтальной арматуры
             ArmHor = defineArmHor();
-        }                
+            // Шпильки
+            Spring = defineSpring();
+        }
 
-        private ArmatureDivision defineArmVertic ()
+        
+
+        private BarDivision defineArmVertic ()
         {
             int diam = GetPropValue<int>(PropNameArmVerticDiam);
             int step = GetPropValue<int>(PropNameArmVerticStep);
             int width = getWidthVerticArm(step);
             int len = Height + Outline;            
-            var armDiv = new ArmatureDivision(diam, len, width, step);
+            var armDiv = new BarDivision(diam, len, width, step);
+            armDiv.Calc();
             return armDiv;
         }
 
-        private ArmatureRunningStep defineArmHor()
+        private BarRunningStep defineArmHor()
         {
             int diam = GetPropValue<int>(PropNameArmHorDiam);
             int step = GetPropValue<int>(PropNameArmHorStep);
             int width = Height - 100;
             int len = getLengthHorArm();
-            return new ArmatureRunningStep (diam, len, width, step);            
+            var armHor = new BarRunningStep (diam, len, width, step);
+            armHor.Calc();
+            return armHor;                    
+        }
+
+        private Spring defineSpring()
+        {
+            int diam = GetPropValue<int>(PropNameSpringDiam);
+            int stepHor = GetPropValue<int>(PropNameSpringStepHor);
+            int stepVert = GetPropValue<int>(PropNameSpringStepVertic);
+            int len = (Thickness - (2 * a)) + 2 * 75;
+
+            // кол шпилек по горизонтале
+            int countHor = (Length - indentVerticArm * 2) / stepHor + 1;
+            int countVert = Height  / stepVert + 1;
+            int countSprings = countHor * countVert;
+
+            Spring sp = new Spring(diam, len, stepHor, stepVert, countSprings);
+            sp.Calc();
+            return sp;
         }
 
         /// <summary>
@@ -158,10 +198,10 @@ namespace KR_MN_Acad.Scheme.Wall
         /// Определение ширины распределения вертикальных стержней в стене
         /// </summary>        
         private int getWidthVerticArm(int step)
-        {            
+        {
             // Вычесть отступ у торцов стены = шаг вертик стержней - а.
-            int indent = step - a;
-            return Length - (indent * 2);
+            indentVerticArm = step - a;
+            return Length - (indentVerticArm * 2);
         }
 
         /// <summary>
@@ -179,13 +219,17 @@ namespace KR_MN_Acad.Scheme.Wall
         public override void Numbering()
         {
             // ПозГорАрм
-            FillProp(GetProperty(PropNamePosHorArm), ArmHor.ArmatureRun.Position.PositionColumn);
+            FillProp(GetProperty(PropNamePosHorArm), ArmHor.SpecRow.PositionColumn);
             // ПозВертикАрм
-            FillProp(GetProperty(PropNamePosVerticArm), ArmVertic.Armature.Position.PositionColumn);
+            FillProp(GetProperty(PropNamePosVerticArm), ArmVertic.SpecRow.PositionColumn);
+            // ПозШпильки
+            FillProp(GetProperty(PropNamePosSpring), Spring.SpecRow.PositionColumn);
             // ОписГорАрм
             FillProp(GetProperty(PropNameDescHorArm), ArmHor.GetDesc());
             // ОписВертикАрм
             FillProp(GetProperty(PropNameDescVerticArm), ArmVertic.GetDesc());
+            // ОписШпилтьки
+            FillProp(GetProperty(PropNameDescSpring), Spring.GetDesc());
         }
 
         private void FillProp(Property prop, object value)

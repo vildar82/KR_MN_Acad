@@ -13,12 +13,12 @@ namespace KR_MN_Acad.Scheme.Spec
     /// <summary>
     /// Таблица спецификации материалов схемы армирования
     /// </summary>
-    public class SchemeTable
+    public class SpecTable
     {
         SchemeService service;
         TableOptions options;
-        List<SchemeGroup> data;
-        public SchemeTable (SchemeService service)
+        List<SpecGroup> data;
+        public SpecTable (SchemeService service)
         {
             this.service = service;
             options = service.Options.Table;

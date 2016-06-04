@@ -7,6 +7,7 @@ using AcadLib.Blocks;
 using AcadLib.Errors;
 using Autodesk.AutoCAD.DatabaseServices;
 using KR_MN_Acad.ConstructionServices.Materials;
+using KR_MN_Acad.Scheme.Elements;
 using KR_MN_Acad.Scheme.Spec;
 
 namespace KR_MN_Acad.Scheme
@@ -24,7 +25,7 @@ namespace KR_MN_Acad.Scheme
         public SchemeBlock(BlockReference blRef, string blName)
         {
             IdBlref = blRef.Id;
-            BlName = BlName;
+            BlName = blName;
             Properties = GetProperties(blRef);
         }
 
@@ -37,7 +38,7 @@ namespace KR_MN_Acad.Scheme
         /// Получение всех элементов спецификации в блоке
         /// </summary>
         /// <returns></returns>
-        public abstract List<IMaterial> GetMaterials();
+        public abstract List<IElement> GetElements();
         /// <summary>
         /// Заполнение нумерации материалов блока
         /// </summary>
@@ -61,11 +62,12 @@ namespace KR_MN_Acad.Scheme
             return dictProps;
         }
 
-        internal void AddError(string msg)
+        protected void AddError(string msg)
         {
             if (Error == null)
             {
                 Error = new Error($"Ошибка в блоке {BlName}: ", IdBlref, System.Drawing.SystemIcons.Error);
+                Inspector.AddError(Error);
             }
             Error.AdditionToMessage(msg);
         }        

@@ -83,13 +83,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands.cs" />
-    <Compile Include="Model\ConstructionServices\Materials\Armature.cs" />
-    <Compile Include="Model\ConstructionServices\Materials\ArmatureDivision.cs" />
-    <Compile Include="Model\ConstructionServices\Materials\ArmatureRunning.cs" />
-    <Compile Include="Model\ConstructionServices\Materials\ArmatureRunningStep.cs" />
+    <Compile Include="Model\Scheme\Elements\Bars\BarDetail.cs" />
+    <Compile Include="Model\Scheme\Elements\Bars\Spring.cs" />
+    <Compile Include="Model\Scheme\Elements\IElement.cs" />
+    <Compile Include="Model\Scheme\Materials\Armature.cs" />
+    <Compile Include="Model\Scheme\Elements\Bars\BarDivision.cs" />
+    <Compile Include="Model\Scheme\Elements\Bars\BarRunning.cs" />
+    <Compile Include="Model\Scheme\Elements\Bars\BarRunningStep.cs" />
     <Compile Include="Model\ConstructionServices\Gost.cs" />
-    <Compile Include="Model\ConstructionServices\Materials\IMaterial.cs" />
-    <Compile Include="Model\ConstructionServices\Materials\Material.cs" />
+    <Compile Include="Model\Scheme\Materials\IMaterial.cs" />
     <Compile Include="Model\ConstructionServices\RoundHelper.cs" />
     <Compile Include="Model\Pile\Calc\FormPiles.cs">
       <SubType>Form</SubType>
@@ -114,16 +116,17 @@
     <Compile Include="Model\Pile\PileFilter.cs" />
     <Compile Include="Model\Pile\Numbering\PileNumberingService.cs" />
     <Compile Include="Model\Pile\PileOptions.cs" />
-    <Compile Include="Model\Scheme\Elements\Bar.cs" />
-    <Compile Include="Model\Scheme\ISchemeBlock.cs" />
-    <Compile Include="Model\Scheme\SchemeBlockFactory.cs" />
+    <Compile Include="Model\Scheme\Elements\Bars\Bar.cs" />
+    <Compile Include="Model\Scheme\Blocks\ISchemeBlock.cs" />
+    <Compile Include="Model\Scheme\Blocks\SchemeBlockFactory.cs" />
     <Compile Include="Model\Scheme\SchemeOptions.cs" />
     <Compile Include="Model\Scheme\SchemeService.cs" />
     <Compile Include="Model\Scheme\SelectService.cs" />
-    <Compile Include="Model\Scheme\SchemeBlock.cs" />
-    <Compile Include="Model\Scheme\Spec\SchemeGroup.cs" />
-    <Compile Include="Model\Scheme\Spec\SchemeRow.cs" />
-    <Compile Include="Model\Scheme\Spec\SchemeTable.cs" />
+    <Compile Include="Model\Scheme\Blocks\SchemeBlock.cs" />
+    <Compile Include="Model\Scheme\Spec\ISpecRow.cs" />
+    <Compile Include="Model\Scheme\Spec\SpecGroup.cs" />
+    <Compile Include="Model\Scheme\Spec\SpecRow.cs" />
+    <Compile Include="Model\Scheme\Spec\SpecTable.cs" />
     <Compile Include="Model\Scheme\Wall\WallSchemeOptions.cs" />
     <Compile Include="Model\Scheme\Wall\WallBlock.cs" />
     <Compile Include="Model\Spec\SpecSlabOpenings.cs" />
