@@ -13,9 +13,19 @@ namespace KR_MN_Acad.Scheme.Elements
     /// </summary>
     public interface IElement : IMaterial, IComparable<IElement>, IEquatable<IElement>
     {
+        /// <summary>
+        /// Позиция элемента взятая из блока.
+        /// Заполненная юзером или при нумермации
+        /// </summary>
+        string PositionInBlock { get; set; }
         string Prefix { get; set; }
         ISpecRow SpecRow { get; set; }
         GroupType Type { get; set; }         
+        ISchemeBlock Block { get; set; }
+        /// <summary>
+        /// Человеческое название элемента в блоке - верхняя арматура, шпилька и т.п.
+        /// </summary>
+        string FriendlyName { get; set; }
 
         /// <summary>
         /// Расчет матариала (массы)

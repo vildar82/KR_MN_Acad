@@ -24,6 +24,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         };
 
         public string Prefix { get; set; } = "";
+        public string PositionInBlock { get; set; }
 
         /// <summary>
         /// Длина стержня
@@ -44,9 +45,14 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public double WeightTotal { get; set; }
         public ISpecRow SpecRow { get; set; }
         public GroupType Type { get; set; }
+        public ISchemeBlock Block { get; set; }
+        public string FriendlyName { get; set; }
 
-        public Bar(int diam, int len) : base(diam)
+        public Bar(int diam, int len, string pos, ISchemeBlock block, string friendlyName) : base(diam)
         {
+            FriendlyName = friendlyName;
+            Block = block;
+            PositionInBlock = pos;
             Type = GroupType.Armatures;
             Length = len;
             Count = 1;

@@ -13,7 +13,7 @@ namespace KR_MN_Acad.Scheme.Spec
     public class SpecRow : IComparable<SpecRow>, IEquatable<SpecRow>, ISpecRow
     {
         public readonly static AcadLib.Comparers.AlphanumComparator Alpha = AcadLib.Comparers.AlphanumComparator.New;
-
+                
         public List<IElement> Elements { get; set; }
         /// <summary>
         /// Позиция - столбец
@@ -41,7 +41,7 @@ namespace KR_MN_Acad.Scheme.Spec
         public string DescriptionColumn { get; set; }             
 
         public SpecRow(string pos, List<IElement> elems)
-        {   
+        {            
             Elements = elems;
             foreach (var elem in elems)
             {

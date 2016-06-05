@@ -32,22 +32,22 @@ namespace KR_MN_Acad.Scheme
             Doc = Application.DocumentManager.MdiActiveDocument;
             Ed = Doc.Editor;
             Db = Doc.Database;
-            Options = options;            
+            Options = options;
         }
 
         /// <summary>
         /// Расчет и нумерация позиций в блоках схемы стен армирования
         /// </summary>
-        public void Numbering ()
+        public void Numbering()
         {
             // Выбор блоков
             IdBlRefs = SelectBlocks();
             // Определение блоков схемы армирования
             Blocks = FilterBlocks();
             // Калькуляция всех элементов
-            Groups = Calculate();
+            Groups = Calculate(true);
             // Заполнение позиций в блоках
-            NumberingBlocks();
+            NumberingBlocks();            
         }
 
         /// <summary>
@@ -60,14 +60,15 @@ namespace KR_MN_Acad.Scheme
             // Определение блоков схемы армирования
             Blocks = FilterBlocks();
             // Калькуляция всех элементов
-            Groups = Calculate();
-            // Заполнение позиций в блоках
-            NumberingBlocks();            
-            
+            Groups = Calculate(false);
+            // Проверка позиций
+            CheckPositions();
+
             // Создание спецификации.
             SpecTable table = new SpecTable(this);
             table.CreateTable();
         }
+
 
         private void NumberingBlocks()
         {
@@ -85,15 +86,15 @@ namespace KR_MN_Acad.Scheme
         /// <summary>
         /// Выбор блоков и получение списка IdBlRefs 
         /// </summary>
-        private List<ObjectId> SelectBlocks ()
+        private List<ObjectId> SelectBlocks()
         {
             return SelectService.Select();
-        }    
-        
+        }
+
         /// <summary>
         /// Фильтр выбранных блоков и определение блоков схемы армирования в соотв с настройками
         /// </summary>
-        private List<SchemeBlock> FilterBlocks ()
+        private List<SchemeBlock> FilterBlocks()
         {
             var blocks = new List<SchemeBlock>();
             var ids = IdBlRefs;
@@ -115,10 +116,10 @@ namespace KR_MN_Acad.Scheme
                         continue;
                     }
                     block.Calculate();
-                    if (block.Error == null)                    
-                        blocks.Add(block);                    
-                    else                    
-                        Inspector.Errors.Add(block.Error);                    
+                    if (block.Error == null)
+                        blocks.Add(block);
+                    else
+                        Inspector.Errors.Add(block.Error);
                 }
                 t.Commit();
             }
@@ -128,7 +129,7 @@ namespace KR_MN_Acad.Scheme
         /// <summary>
         /// Подсчет элементов схемы армирования
         /// </summary>
-        private List<SpecGroup> Calculate()
+        private List<SpecGroup> Calculate(bool isNumbering)
         {
             List<SpecGroup> groups = new List<SpecGroup>();
 
@@ -139,15 +140,42 @@ namespace KR_MN_Acad.Scheme
                 elems.AddRange(block.GetElements());
             }
             // Группировка элементов по типам
-            var elemTypes = elems.GroupBy(g => g.Type);
+            var elemTypes = elems.GroupBy(g => g.Type).OrderBy(g => g.Key);
             foreach (var type in elemTypes)
             {
                 SpecGroup group = new SpecGroup(type);
-                group.Calculate();
+                group.Calculate(isNumbering);
                 groups.Add(group);
             }
-
             return groups;
+        }
+
+        /// <summary>
+        /// Проверка позиций
+        /// </summary>
+        private void CheckPositions()
+        {
+            foreach (var group in Groups)
+            {
+                if (!group.HasPosition) continue;
+                // все элементы в строчке группы должны быть с одной позицией
+                foreach (var row in group.Rows)
+                {
+                    var posGroups = row.Elements.OrderBy(e => e.PositionInBlock).GroupBy(e => e.PositionInBlock);
+                    var firstPos = posGroups.First();
+                    foreach (var errPos in posGroups.Skip(1))
+                    {
+                        var firstElem = errPos.First();
+                        // Элементы с ошибочной позицией
+                        string err = $"Ошибка позиции элемента '{firstElem.FriendlyName}' в блоке '{firstElem.Block.BlName}':" +
+                            $" стоит позиция '{firstElem.PositionInBlock}', но уже задана позиция '{firstPos.Key}' для этого элемента в другом блоке.";
+                        foreach (var elem in errPos)
+                        {
+                            Inspector.AddError(err, elem.Block.IdBlref, System.Drawing.SystemIcons.Error);
+                        }
+                    }
+                }
+            }
         }
     }
 }

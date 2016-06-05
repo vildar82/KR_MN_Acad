@@ -20,16 +20,18 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// </summary>
         public int Width { get; set; }
 
-        public BarRunningStep(int diam, int length, int width, int step) : base(diam)
+        public BarRunningStep(int diam, double length, int width, int step, string pos, 
+            ISchemeBlock block, string friendlyName)
+            : base(diam, pos, block, friendlyName)
         {
             Width = width;
             Step = step;
             Meters = CalcMeters(length, width, step);            
         }
                 
-        private double CalcMeters(int length, int width, int step)
+        private double CalcMeters(double length, int width, int step)
         {
-            return RoundHelper.RoundSpec(ConvertMmToMLength((width / (step + 1)) * length));
+            return RoundHelper.RoundSpec(ConvertMmToMLength((width / (step + 1)) * length ));
         }
 
         public override string GetDesc()

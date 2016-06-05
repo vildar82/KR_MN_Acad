@@ -16,7 +16,9 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// </summary>
         public int Step { get; set; }
 
-        public BarDetail(int diam, int len, int step, int count, string prefix) : base(diam, len)
+        public BarDetail(int diam, int len, int step, int count, string prefix, string pos,
+            ISchemeBlock block, string friendlyName) 
+            : base(diam, len, pos, block, friendlyName)
         {
             Prefix = prefix;
             Type = Spec.GroupType.Details;

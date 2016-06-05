@@ -22,7 +22,8 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// </summary>
         public int Step { get; set; }                
 
-        public BarDivision (int diam, int length, int width, int step) : base(diam, length)
+        public BarDivision (int diam, int length, int width, int step, string pos, ISchemeBlock block, string friendlyName) 
+            : base(diam, length, pos, block, friendlyName)
         {
             Width = width;
             Step = step;                        

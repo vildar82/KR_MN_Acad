@@ -15,18 +15,21 @@ namespace KR_MN_Acad.Scheme.Elements.Concretes
     /// </summary>
     public class ConcreteH : Concrete, IElement
     {
-        public ConcreteH(string concrete, double len, double width, double height) : base(concrete)
-        {
-            UnitsNet.Volume vol = UnitsNet.Volume.FromCubicMillimeters(len * width * height);            
-            Volume = RoundSpec(vol.CubicMeters);
-        }
-
+        public string FriendlyName { get; set; }
         public string Prefix { get; set; }
-
+        public string PositionInBlock { get; set; }
         public ISpecRow SpecRow { get; set; }
-
         public GroupType Type { get; set; } = GroupType.Materials;
+        public ISchemeBlock Block { get; set; }
 
+        public ConcreteH(string concrete, double len, double width, double height, ISchemeBlock block)
+            : base(concrete)
+        {
+            FriendlyName = Name;
+            Block = block;
+            Volume = RoundSpec(len * width * height * 0.000000001);            
+        }
+        
         public virtual void Calc()
         {            
         }

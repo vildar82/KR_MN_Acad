@@ -13,21 +13,27 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
     /// Арматура измеряемая поганажом
     /// </summary>
     public class BarRunning : Bar
-    {        
+    {
+        private static Dictionary<int, Dictionary<string , double>> KLapDict;
         /// <summary>
         /// Количество погонных метров
         /// </summary>
-        public double Meters { get; set; }       
+        public double Meters { get; set; }        
 
-        public BarRunning(int diam) : base(diam, 1)
+        public BarRunning(int diam, string pos, ISchemeBlock block, string friendlyName)
+            : base(diam, 0, pos, block, friendlyName)
         {            
         }
 
-        public BarRunning(int diam, double meters) : base(diam, 0)
+        public BarRunning(int diam, double meters, string pos, ISchemeBlock block, string friendlyName) 
+            : this(diam, pos, block, friendlyName)
         {
             Meters = RoundHelper.RoundSpec(meters);            
-        }        
+        }
 
+        /// <summary>
+        /// Перед вызовом
+        /// </summary>
         public override void Calc()
         {
             // Масса ед
@@ -106,6 +112,66 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
             SpecRow.CountColumn = metersTotal.ToString();
             SpecRow.WeightColumn = Weight.ToString();
             SpecRow.DescriptionColumn = weightTotal.ToString();
+        }
+
+        /// <summary>
+        /// Определение коэфициента нахлеста для погонной арматуры
+        /// </summary>
+        /// <param name="classB">Класс бетона</param>
+        /// <returns></returns>
+        public static double GetKLap(int diam, string classB)
+        {
+            if (KLapDict == null) KLapDict = LoadKLap();
+            double res = 1;
+            Dictionary<string, double> dict;
+            if (KLapDict.TryGetValue(diam, out dict))
+            {
+                dict.TryGetValue(classB, out res);
+            }
+            return res;
+        }
+
+        private static Dictionary<int, Dictionary<string, double>> LoadKLap()
+        {
+            return new Dictionary<int, Dictionary<string, double>>()
+            {
+                { 6, new Dictionary<string, double>() {
+                        { Materials.Concrete.ClassB25, 1.025 },
+                        { Materials.Concrete.ClassB30, 1.023 }} },
+                { 8, new Dictionary<string, double>() {
+                        { Materials.Concrete.ClassB25, 1.034 },
+                        { Materials.Concrete.ClassB30, 1.031 }} },
+                { 10, new Dictionary<string, double>() {
+                        { Materials.Concrete.ClassB25, 1.042 },
+                        { Materials.Concrete.ClassB30, 1.039 }} },
+                { 12, new Dictionary<string, double>() {
+                        { Materials.Concrete.ClassB25, 1.051 },
+                        { Materials.Concrete.ClassB30, 1.047 }} },
+                { 14, new Dictionary<string, double>() {
+                        { Materials.Concrete.ClassB25, 1.059 },
+                        { Materials.Concrete.ClassB30, 1.054 }} },
+                { 16, new Dictionary<string, double>() {
+                        { Materials.Concrete.ClassB25, 1.068 },
+                        { Materials.Concrete.ClassB30, 1.062 }} },
+                { 18, new Dictionary<string, double>() {
+                        { Materials.Concrete.ClassB25, 1.076 },
+                        { Materials.Concrete.ClassB30, 1.070 }} },
+                { 20, new Dictionary<string, double>() {
+                        { Materials.Concrete.ClassB25, 1.085 },
+                        { Materials.Concrete.ClassB30, 1.078 }} },
+                { 22, new Dictionary<string, double>() {
+                        { Materials.Concrete.ClassB25, 1.093 },
+                        { Materials.Concrete.ClassB30, 1.085 }} },
+                { 25, new Dictionary<string, double>() {
+                        { Materials.Concrete.ClassB25, 1.106 },
+                        { Materials.Concrete.ClassB30, 1.097 }} },
+                { 28, new Dictionary<string, double>() {
+                        { Materials.Concrete.ClassB25, 1.119 },
+                        { Materials.Concrete.ClassB30, 1.109 }} },
+                { 32, new Dictionary<string, double>() {
+                        { Materials.Concrete.ClassB25, 1.136 },
+                        { Materials.Concrete.ClassB30, 1.124 }} },
+            };
         }
     }
 }

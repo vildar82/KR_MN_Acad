@@ -117,7 +117,7 @@ namespace KR_MN_Acad.Scheme.Wall
             Thickness = Convert.ToInt32(GetPropValue<double>(PropNameThickness));
             Outline = Convert.ToInt32(GetPropValue<double>(PropNameOutline));
             var concrete = GetPropValue<string>(PropNameConcrete);
-            Concrete = new ConcreteH(concrete, Length, Thickness, Height);
+            Concrete = new ConcreteH(concrete, Length, Thickness, Height, this);
             Concrete.Calc();
             // Определние вертикальной арматуры
             ArmVertic = defineArmVertic();
@@ -129,28 +129,31 @@ namespace KR_MN_Acad.Scheme.Wall
 
         private BarDivision defineArmVertic ()
         {
+            string pos = GetPropValue<string>(PropNamePosVerticArm);
             int diam = GetPropValue<int>(PropNameArmVerticDiam);
             int step = GetPropValue<int>(PropNameArmVerticStep);
             int width = getWidthVerticArm(step);
             int len = Height + Outline;            
-            var armDiv = new BarDivision(diam, len, width, step);
-            armDiv.Calc();
+            var armDiv = new BarDivision(diam, len, width, step, pos, this, "Вертикальная арматура");
+            armDiv.Calc();            
             return armDiv;
         }
 
         private BarRunningStep defineArmHor()
         {
+            string pos = GetPropValue<string>(PropNamePosHorArm);
             int diam = GetPropValue<int>(PropNameArmHorDiam);
             int step = GetPropValue<int>(PropNameArmHorStep);
             int width = Height - 100;
-            int len = getLengthHorArm();
-            var armHor = new BarRunningStep (diam, len, width, step);
+            double len = getLengthHorArm(diam, Concrete.ClassB);
+            var armHor = new BarRunningStep (diam, len, width, step, pos, this, "Горизонтальная арматура");
             armHor.Calc();
             return armHor;                    
         }
 
         private Spring defineSpring()
         {
+            string pos = GetPropValue<string>(PropNamePosSpring);
             int diam = GetPropValue<int>(PropNameSpringDiam);
             int stepHor = GetPropValue<int>(PropNameSpringStepHor);
             int stepVert = GetPropValue<int>(PropNameSpringStepVertic);
@@ -161,7 +164,7 @@ namespace KR_MN_Acad.Scheme.Wall
             int countVert = Height  / stepVert + 1;
             int countSprings = countHor * countVert;
 
-            Spring sp = new Spring(diam, len, stepHor, stepVert, countSprings);
+            Spring sp = new Spring(diam, len, stepHor, stepVert, countSprings, pos, this);
             sp.Calc();
             return sp;
         }
@@ -206,9 +209,10 @@ namespace KR_MN_Acad.Scheme.Wall
         /// Определение длины горизонтальных стержней
         /// </summary>
         /// <returns></returns>
-        private int getLengthHorArm()
+        private double getLengthHorArm(int diam, string classB)
         {
-            return Length;
+            double kLap = BarRunning.GetKLap(diam, classB);
+            return Length * kLap;
         }
 
         /// <summary>

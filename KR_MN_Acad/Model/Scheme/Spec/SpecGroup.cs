@@ -81,16 +81,37 @@ namespace KR_MN_Acad.Scheme.Spec
         /// <summary>
         /// Калькуляция группы - сортировка по элементам и назначение позиций
         /// </summary>
-        public void Calculate()
+        public void Calculate(bool isNumbering)
         {
             Rows = new List<ISpecRow>();
             // Группировка элементов по типам
-            var someElems = Elements.GroupBy(g => g).OrderBy(o => o.Key);
+            IOrderedEnumerable<IGrouping<IElement, IElement>> someElems;
+            if (isNumbering)
+            {
+                // При нумерации - сортировка по элементам
+                someElems = Elements.GroupBy(g => g).OrderBy(o => o.Key);
+            }
+            else
+            {
+                // Без нумерации - сортировка по позициям
+                someElems = Elements.GroupBy(g => g).OrderBy(o => o.Key.PositionInBlock);
+            }
             int posIndex = 1;
             foreach (var item in someElems)
             {
                 // Составить строчку таблицы
-                var pos = HasPosition? item.Key.Prefix + posIndex: string.Empty;
+                string pos = string.Empty;
+                if (HasPosition)
+                {
+                    if (isNumbering)
+                    {
+                        pos = item.Key.Prefix + posIndex;
+                    }
+                    else
+                    {
+                        pos = item.Key.PositionInBlock;
+                    }
+                }                
                 ISpecRow row = new SpecRow(pos , item.ToList());
                 row.Calculate();
                 Rows.Add(row);

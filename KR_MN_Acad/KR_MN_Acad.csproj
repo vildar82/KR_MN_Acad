@@ -28,6 +28,11 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+    <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
+    <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
+    <AssemblyVersionSettings>None.None.DayOfYearStamp.Increment</AssemblyVersionSettings>
+    <AssemblyFileVersionSettings>None.None.DayOfYearStamp.Increment</AssemblyFileVersionSettings>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AcadLib">
@@ -79,10 +84,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="UnitsNet, Version=3.36.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\UnitsNet.3.36.0\lib\net35\UnitsNet.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
