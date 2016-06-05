@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using KR_MN_Acad.ConstructionServices.Materials;
+using KR_MN_Acad.Scheme.Materials;
 using KR_MN_Acad.Scheme.Spec;
 
 namespace KR_MN_Acad.Scheme.Elements
@@ -21,10 +21,15 @@ namespace KR_MN_Acad.Scheme.Elements
         /// Расчет матариала (массы)
         /// </summary>
         void Calc();
-        string GetDesc();
-        double GetCount();
-        double GetWeight();
-        double GetWeightTotal();
-        string GetName();
+        /// <summary>
+        /// Суммирование элементов и заполнение строк:
+        /// Обозначения, Наименования, Кол, Массы ед, примечания
+        /// </summary>        
+        void Sum(List<IElement> elems);
+        /// <summary>
+        /// Строка элемента для заполнения в выноску в блоке
+        /// </summary>
+        /// <returns></returns>
+        string GetDesc();        
     }        
 }

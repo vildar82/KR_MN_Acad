@@ -79,18 +79,24 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="UnitsNet, Version=3.36.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UnitsNet.3.36.0\lib\net35\UnitsNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands.cs" />
     <Compile Include="Model\Scheme\Elements\Bars\BarDetail.cs" />
     <Compile Include="Model\Scheme\Elements\Bars\Spring.cs" />
+    <Compile Include="Model\Scheme\Elements\Concretes\ConcreteH.cs" />
     <Compile Include="Model\Scheme\Elements\IElement.cs" />
     <Compile Include="Model\Scheme\Materials\Armature.cs" />
     <Compile Include="Model\Scheme\Elements\Bars\BarDivision.cs" />
     <Compile Include="Model\Scheme\Elements\Bars\BarRunning.cs" />
     <Compile Include="Model\Scheme\Elements\Bars\BarRunningStep.cs" />
     <Compile Include="Model\ConstructionServices\Gost.cs" />
+    <Compile Include="Model\Scheme\Materials\Concrete.cs" />
     <Compile Include="Model\Scheme\Materials\IMaterial.cs" />
     <Compile Include="Model\ConstructionServices\RoundHelper.cs" />
     <Compile Include="Model\Pile\Calc\FormPiles.cs">

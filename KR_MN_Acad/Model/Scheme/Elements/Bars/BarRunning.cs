@@ -81,16 +81,31 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public override string GetDesc()
         {
             return $"{SpecRow?.PositionColumn}, {GetName()}{Meters}";
-        }
-
-        public override double GetCount()
-        {
-            return Meters;
-        }
+        }        
 
         public override string GetName()
         {
             return Name + " L=п.м.";
+        }
+
+        public override void Sum(List<IElement> elems)
+        {
+            // Обозначения, Наименования, Кол, Массы ед, примечания
+            SpecRow.DocumentColumn = Gost.Number;
+            SpecRow.NameColumn = GetName();
+
+            double metersTotal = 0;
+            double weightTotal = 0;
+            foreach (var item in elems)
+            {
+                var bar = item as BarRunning;
+                metersTotal += bar.Meters;
+                weightTotal += bar.WeightTotal;
+            }
+
+            SpecRow.CountColumn = metersTotal.ToString();
+            SpecRow.WeightColumn = Weight.ToString();
+            SpecRow.DescriptionColumn = weightTotal.ToString();
         }
     }
 }

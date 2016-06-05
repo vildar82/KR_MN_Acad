@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KR_MN_Acad.ConstructionServices;
 using KR_MN_Acad.Scheme.Spec;
 
-namespace KR_MN_Acad.ConstructionServices.Materials
+namespace KR_MN_Acad.Scheme.Materials
 {
     public interface IMaterial
     {

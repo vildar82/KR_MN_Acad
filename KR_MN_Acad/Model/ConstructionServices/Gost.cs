@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KR_MN_Acad.Scheme.Materials;
 
 namespace KR_MN_Acad.ConstructionServices
 {
@@ -11,6 +12,8 @@ namespace KR_MN_Acad.ConstructionServices
     /// </summary>
     public class Gost : IComparable<Gost>, IEquatable<Gost>
     {
+        private static Dictionary<string, Gost> gosts;
+        private static Gost GostEmpty = new Gost("", "");
         /// <summary>
         /// Номер госта "ГОСТ Р 52544-2006"
         /// </summary>
@@ -28,15 +31,11 @@ namespace KR_MN_Acad.ConstructionServices
 
         public static Gost GetGost (string number)
         {
-            switch (number.ToUpper())
-            {
-                case Materials.Armature.GostNewNumber:
-                    return new Gost(Materials.Armature.GostNewNumber, "Прокат арматурный свариваемый периодического профиля классов А500С и В500С для армирования железобетонных конструкций. Технические условия");
-                case Materials.Armature.GostOldNumber:
-                    return new Gost(Materials.Armature.GostOldNumber, "ГОСТ 5781-82.Сталь горячекатаная для армирования железобетонных конструкций.");                    
-                default:
-                    return new Gost("", "");                    
-            }
+            if (gosts == null) gosts = Load();
+            if (string.IsNullOrEmpty(number)) return GostEmpty;
+            Gost res;
+            gosts.TryGetValue(number, out res);
+            return res;
         }
 
         public int CompareTo(Gost other)
@@ -47,6 +46,16 @@ namespace KR_MN_Acad.ConstructionServices
         public bool Equals(Gost other)
         {
             return Name.Equals(other?.Name);
+        }
+
+        private static Dictionary<string, Gost> Load()
+        {
+            return new Dictionary<string, Gost>()
+            {                
+                {Armature.GostNewNumber,  new Gost(Armature.GostNewNumber,Armature.GostNewName ) },
+                {Armature.GostOldNumber,  new Gost(Armature.GostOldNumber, Armature.GostOldName) },
+                {Concrete.GostNumber, new Gost(Concrete.GostNumber, Concrete.GostName) }
+            };
         }
     }
 }

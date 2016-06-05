@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using KR_MN_Acad.ConstructionServices.Materials;
 using KR_MN_Acad.Scheme.Elements;
 
 namespace KR_MN_Acad.Scheme.Spec
@@ -33,7 +32,8 @@ namespace KR_MN_Acad.Scheme.Spec
     /// Группа в спецификации материалов схемы армирования
     /// </summary>
     public class SpecGroup
-    {    
+    {
+        public bool HasPosition { get; set; } = true;
         /// <summary>
         /// Имя группы
         /// </summary>
@@ -48,26 +48,33 @@ namespace KR_MN_Acad.Scheme.Spec
         public SpecGroup(IGrouping<GroupType, IElement> elems)
         {
             Type = elems.Key;
-            Name = GetGroupName(Type);
+            GetGroupName(Type);
             Elements = elems.ToList();
         }
 
-        public static string GetGroupName(GroupType type)
+        private void GetGroupName(GroupType type)
         {
             switch (type)
             {
                 case GroupType.Unknown:
-                    return "";
+                    Name = "";
+                    break;
                 case GroupType.Armatures:
-                    return "Стержни";
+                    Name = "Стержни";
+                    break;
                 case GroupType.Details:
-                    return "Детали";
+                    Name = "Детали";
+                    break;
                 case GroupType.EmbeddedDetails:
-                    return "Закладные детали";
+                    Name = "Закладные детали";
+                    break;
                 case GroupType.Materials:
-                    return "Материалы";
+                    Name = "Материалы";
+                    HasPosition = false;
+                    break;
                 default:
-                    return "";
+                    Name = "";
+                    break;
             }
         }
 
@@ -83,7 +90,8 @@ namespace KR_MN_Acad.Scheme.Spec
             foreach (var item in someElems)
             {
                 // Составить строчку таблицы
-                ISpecRow row = new SpecRow(item.Key.Prefix+posIndex, item.ToList());
+                var pos = HasPosition? item.Key.Prefix + posIndex: string.Empty;
+                ISpecRow row = new SpecRow(pos , item.ToList());
                 row.Calculate();
                 Rows.Add(row);
                 posIndex++;

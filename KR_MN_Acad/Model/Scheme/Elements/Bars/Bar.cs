@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KR_MN_Acad.ConstructionServices;
-using KR_MN_Acad.ConstructionServices.Materials;
+using KR_MN_Acad.Scheme.Materials;
 using KR_MN_Acad.Scheme.Spec;
 using static AcadLib.Units.UnitsConvertHelper;
 
@@ -134,23 +134,11 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         protected bool EqualBarClasses(Bar bar1, Bar bar2)
         {
             return CompareBarClasses(bar1, bar2) == 0;
-        }
+        }          
 
-        public virtual double GetCount()
-        {
-            return Count;
-        }
-
-        public virtual double GetWeightTotal()
-        {
-            return WeightTotal;
-        }
-
-        public virtual double GetWeight()
-        {
-            return Weight;
-        }
-
+        /// <summary>
+        /// Столбез наименования
+        /// </summary>        
         public virtual string GetName()
         {
             return Name + " L=" + Length;           
@@ -159,6 +147,26 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public override int GetHashCode()
         {            
             return Prefix.GetHashCode() ^ Type.GetHashCode() ^ GetIndex(this).GetHashCode();
+        }
+
+        public virtual void Sum(List<IElement> elems)
+        {
+            // Обозначения, Наименования, Кол, Массы ед, примечания
+            SpecRow.DocumentColumn = Gost.Number;
+            SpecRow.NameColumn = GetName();
+
+            int countTotal = 0;
+            double weightTotal = 0;
+            foreach (var item in elems)
+            {
+                var bar = item as Bar;
+                countTotal += bar.Count;
+                weightTotal += bar.WeightTotal;
+            }
+
+            SpecRow.CountColumn = countTotal.ToString();
+            SpecRow.WeightColumn = Weight.ToString();
+            SpecRow.DescriptionColumn = weightTotal.ToString();                
         }
     }
 }

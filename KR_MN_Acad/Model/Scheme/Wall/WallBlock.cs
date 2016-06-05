@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using AcadLib.Blocks;
 using Autodesk.AutoCAD.DatabaseServices;
 using KR_MN_Acad.ConstructionServices;
-using KR_MN_Acad.ConstructionServices.Materials;
 using KR_MN_Acad.Scheme.Elements;
 using KR_MN_Acad.Scheme.Elements.Bars;
+using KR_MN_Acad.Scheme.Elements.Concretes;
 using KR_MN_Acad.Scheme.Spec;
 
 namespace KR_MN_Acad.Scheme.Wall
@@ -50,10 +50,6 @@ namespace KR_MN_Acad.Scheme.Wall
         private int indentVerticArm;
 
         /// <summary>
-        /// Класс Бетона
-        /// </summary>
-        public string Concrete { get; set; }
-        /// <summary>
         /// Высота стены
         /// </summary>
         public int Height { get; set; }
@@ -81,6 +77,7 @@ namespace KR_MN_Acad.Scheme.Wall
         /// Шпильки
         /// </summary>
         public Spring Spring { get; set; }
+        public ConcreteH Concrete { get; set; }
 
         public WallBlock(BlockReference blRef, string blName, SchemeService service) : base (blRef, blName)
         {
@@ -108,26 +105,27 @@ namespace KR_MN_Acad.Scheme.Wall
             elems.Add(ArmVertic);
             elems.Add(ArmHor);
             elems.Add(Spring);
+            elems.Add(Concrete);
 
             return elems;
         }
 
         private void defineFields()
         {
-            Concrete = GetPropValue<string>(PropNameConcrete);
-            Height = Convert.ToInt32(GetPropValue<double>(PropNameHeight));
             Length = Convert.ToInt32(GetPropValue<double>(PropNameLength));
+            Height = Convert.ToInt32(GetPropValue<double>(PropNameHeight));            
             Thickness = Convert.ToInt32(GetPropValue<double>(PropNameThickness));
             Outline = Convert.ToInt32(GetPropValue<double>(PropNameOutline));
+            var concrete = GetPropValue<string>(PropNameConcrete);
+            Concrete = new ConcreteH(concrete, Length, Thickness, Height);
+            Concrete.Calc();
             // Определние вертикальной арматуры
             ArmVertic = defineArmVertic();
             // Определние горизонтальной арматуры
             ArmHor = defineArmHor();
             // Шпильки
             Spring = defineSpring();
-        }
-
-        
+        }        
 
         private BarDivision defineArmVertic ()
         {

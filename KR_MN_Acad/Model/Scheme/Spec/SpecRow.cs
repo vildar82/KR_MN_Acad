@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using KR_MN_Acad.ConstructionServices.Materials;
 using KR_MN_Acad.Scheme.Elements;
 
 namespace KR_MN_Acad.Scheme.Spec
@@ -48,12 +47,8 @@ namespace KR_MN_Acad.Scheme.Spec
             {
                 elem.SpecRow = this;
             }
-            var item = elems.First();
-            
-            PositionColumn = pos;
-            DocumentColumn = item.Gost.Number;
-            NameColumn = item.GetName();
-            WeightColumn = item.GetWeight().ToString();
+            var item = elems.First();            
+            PositionColumn = pos;                  
         }
 
         public int CompareTo(SpecRow other)
@@ -77,15 +72,8 @@ namespace KR_MN_Acad.Scheme.Spec
         // Суммирование элементов
         public void Calculate()
         {
-            double countSum = 0;
-            double weightTotalSum = 0;
-            foreach (var item in Elements)
-            {
-                countSum += item.GetCount();
-                weightTotalSum += item.GetWeightTotal();
-            }
-            CountColumn = countSum.ToString();
-            DescriptionColumn = weightTotalSum.ToString();
+            var elem = Elements.First();
+            elem.Sum(Elements);
         }
     }
 }

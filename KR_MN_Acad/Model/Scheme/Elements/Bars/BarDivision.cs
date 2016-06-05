@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KR_MN_Acad.ConstructionServices;
-using KR_MN_Acad.ConstructionServices.Materials;
 using KR_MN_Acad.Scheme;
 
 namespace KR_MN_Acad.Scheme.Elements.Bars

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KR_MN_Acad.ConstructionServices;
 using KR_MN_Acad.Scheme.Spec;
 using static AcadLib.Units.UnitsConvertHelper;
 
-namespace KR_MN_Acad.ConstructionServices.Materials
+namespace KR_MN_Acad.Scheme.Materials
 {
     /// <summary>
     /// арматурный стержень
@@ -15,8 +16,10 @@ namespace KR_MN_Acad.ConstructionServices.Materials
     {
         public const string ClassA500C = "А500С";
         public const string ClassA240C = "А240С";
-        public const string GostNewNumber = "ГОСТ Р 52544-2006";
-        public const string GostOldNumber = "ГОСТ 5781-82";
+        public const string GostNewNumber = "ГОСТ Р 52544-2006";//http://docs.cntd.ru/document/gost-r-52544-2006
+        public const string GostNewName = "Прокат арматурный свариваемый периодического профиля классов А500С и В500С для армирования железобетонных конструкций. Технические условия";
+        public const string GostOldNumber = "ГОСТ 5781-82"; //http://docs.cntd.ru/document/gost-5781-82
+        public const string GostOldName = "Сталь горячекатаная для армирования железобетонных конструкций.";
         public static Gost GostNew = Gost.GetGost(GostNewNumber);
         public static Gost GostOld = Gost.GetGost(GostOldNumber);
 
