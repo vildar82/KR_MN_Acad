@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static AcadLib.General;
 
 namespace KR_MN_Acad.Scheme.Elements.Bars
 {
@@ -11,19 +12,13 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
     /// </summary>
     public class BarDetail : Bar
     {
-        /// <summary>
-        /// Шаг распределения
-        /// </summary>
-        public int Step { get; set; }
-
-        public BarDetail(int diam, int len, int step, int count, string prefix, string pos,
+        public BarDetail(int diam, int len, int count, string prefix, string pos,
             ISchemeBlock block, string friendlyName) 
             : base(diam, len, pos, block, friendlyName)
         {
             Prefix = prefix;
             Type = Spec.GroupType.Details;
-            Count = count;
-            Step = step;            
+            Count = count;            
         }        
 
         public override int CompareTo(IElement other)
@@ -49,7 +44,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
 
         public override string GetDesc()
         {
-            return base.GetDesc() + ", шаг " + Step + ", шт. " + Count;
+            return $"{SpecRow?.PositionColumn}, {Symbols.Diam}{Diameter}";
         }
     }
 }

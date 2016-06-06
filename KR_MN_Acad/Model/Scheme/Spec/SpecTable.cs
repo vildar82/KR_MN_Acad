@@ -60,19 +60,22 @@ namespace KR_MN_Acad.Scheme.Spec
             // столбец ПОЗ
             var col = table.Columns[0];
             col.Alignment = CellAlignment.MiddleCenter;
-            col.Width = 15;
+            col.Width = 15;            
             // столбец Обозн.
             col = table.Columns[1];
             col.Alignment = CellAlignment.MiddleCenter;
             col.Width = 60;
+            col.Borders.Left.Margin = 150;
             // столбец Наимен
             col = table.Columns[2];
             col.Alignment = CellAlignment.MiddleCenter;
             col.Width = 65;
+            col.Borders.Left.Margin = 150;
             // столбец Кол
             col = table.Columns[3];
             col.Alignment = CellAlignment.MiddleCenter;
             col.Width = 10;
+            col.Borders.Horizontal.Margin = 0;
             // столбец Масса
             col = table.Columns[4];
             col.Alignment = CellAlignment.MiddleCenter;

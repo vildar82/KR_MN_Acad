@@ -27,7 +27,7 @@ namespace KR_MN_Acad.Scheme.Elements.Concretes
         {
             FriendlyName = Name;
             Block = block;
-            Volume = RoundSpec(len * width * height * 0.000000001);            
+            Volume = Round2(len * width * height * 0.000000001);            
         }
         
         public virtual void Calc()

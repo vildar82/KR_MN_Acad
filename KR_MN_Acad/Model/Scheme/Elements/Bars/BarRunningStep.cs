@@ -19,24 +19,31 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// Ширина распределения
         /// </summary>
         public int Width { get; set; }
+        /// <summary>
+        /// Кол. рядов арматуры
+        /// </summary>
+        public int Rows { get; set; } = 1;
 
-        public BarRunningStep(int diam, double length, int width, int step, string pos, 
+        public BarRunningStep(int diam, double length, int width, int step, int rows, string pos, 
             ISchemeBlock block, string friendlyName)
             : base(diam, pos, block, friendlyName)
         {
+            Rows = rows;
             Width = width;
-            Step = step;
-            Meters = CalcMeters(length, width, step);            
+            Step = step;            
+            Meters = CalcMeters(length);            
         }
                 
-        private double CalcMeters(double length, int width, int step)
+        private double CalcMeters(double length)
         {
-            return RoundHelper.RoundSpec(ConvertMmToMLength((width / (step + 1)) * length ));
+            // Кол стержней в распределении
+            int count = BarDivision.CalcCountByStep(Width, Step)*Rows;
+            return RoundHelper.Round2(ConvertMmToMLength(length)* count);
         }
 
         public override string GetDesc()
         {
-            return base.GetDesc() + ", шаг " + Step; 
+            return base.GetDesc() + ", ш." + Step; 
         }
     }
 }

@@ -28,6 +28,11 @@ namespace KR_MN_Acad.Scheme.Materials
         }
 
         /// <summary>
+        /// Расход бетона, м3
+        /// </summary>
+        public double Consumption { get; set; }
+
+        /// <summary>
         /// Класс бетона по прочности на сжатие
         /// </summary>
         public string ClassB { get; set; }
@@ -50,7 +55,7 @@ namespace KR_MN_Acad.Scheme.Materials
         /// <summary>
         /// Ед изм - м3
         /// </summary>
-        public string Units { get; set; } = "м³";
+        public string Units { get; set; } = "м³";       
 
         /// <summary>
         /// Парсинг бетона по строке названия

@@ -69,7 +69,6 @@ namespace KR_MN_Acad.Scheme
             table.CreateTable();
         }
 
-
         private void NumberingBlocks()
         {
             // Заполнение позиций в блоках

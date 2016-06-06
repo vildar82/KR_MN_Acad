@@ -134,7 +134,7 @@ namespace KR_MN_Acad.Scheme.Wall
             int step = GetPropValue<int>(PropNameArmVerticStep);
             int width = getWidthVerticArm(step);
             int len = Height + Outline;            
-            var armDiv = new BarDivision(diam, len, width, step, pos, this, "Вертикальная арматура");
+            var armDiv = new BarDivision(diam, len, width, step, 2, pos, this, "Вертикальная арматура");
             armDiv.Calc();            
             return armDiv;
         }
@@ -146,7 +146,7 @@ namespace KR_MN_Acad.Scheme.Wall
             int step = GetPropValue<int>(PropNameArmHorStep);
             int width = Height - 100;
             double len = getLengthHorArm(diam, Concrete.ClassB);
-            var armHor = new BarRunningStep (diam, len, width, step, pos, this, "Горизонтальная арматура");
+            var armHor = new BarRunningStep (diam, len, width, step, 2, pos, this, "Горизонтальная арматура");
             armHor.Calc();
             return armHor;                    
         }
@@ -159,12 +159,11 @@ namespace KR_MN_Acad.Scheme.Wall
             int stepVert = GetPropValue<int>(PropNameSpringStepVertic);
             int len = (Thickness - (2 * a)) + 2 * 75;
 
-            // кол шпилек по горизонтале
-            int countHor = (Length - indentVerticArm * 2) / stepHor + 1;
-            int countVert = Height  / stepVert + 1;
-            int countSprings = countHor * countVert;
+            // ширина распределения шпилек по горизонтале
+            int widthHor = Length;
+            int widthVertic = Height;           
 
-            Spring sp = new Spring(diam, len, stepHor, stepVert, countSprings, pos, this);
+            Spring sp = new Spring(diam, len, stepHor, stepVert, widthHor, widthVertic, pos, this);
             sp.Calc();
             return sp;
         }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using KR_MN_Acad.ConstructionServices;
 using KR_MN_Acad.Scheme.Spec;
 using static AcadLib.Units.UnitsConvertHelper;
+using static AcadLib.General;
 
 namespace KR_MN_Acad.Scheme.Materials
 {
@@ -27,11 +28,19 @@ namespace KR_MN_Acad.Scheme.Materials
         public const string DefaultClass = ClassA500C;
         public static readonly Gost DefaultGost = GostNew;
 
+        /// <summary>
+        /// Расход
+        /// </summary>
+        public double Consumption { get; set; }
+
+        /// <summary>
+        /// Наименование - "⌀12 A500C"
+        /// </summary>
         public string Name
         {
             get
             {
-                return "⌀" + Diameter + " " + Class;
+                return Symbols.Diam + Diameter + " " + Class;
             }
         }
                 

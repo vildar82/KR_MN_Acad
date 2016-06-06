@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using KR_MN_Acad.ConstructionServices;
 using KR_MN_Acad.Scheme.Spec;
 using static AcadLib.Units.UnitsConvertHelper;
+using static AcadLib.General;
 
 namespace KR_MN_Acad.Scheme.Elements.Bars
 {
@@ -28,7 +29,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public BarRunning(int diam, double meters, string pos, ISchemeBlock block, string friendlyName) 
             : this(diam, pos, block, friendlyName)
         {
-            Meters = RoundHelper.RoundSpec(meters);            
+            Meters = RoundHelper.Round2(meters);            
         }
 
         /// <summary>
@@ -37,9 +38,9 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public override void Calc()
         {
             // Масса ед
-            Weight = RoundHelper.RoundSpec(WeightUnit);
+            Weight = RoundHelper.Round3(WeightUnit);
             // Масса общая
-            WeightTotal = RoundHelper.RoundSpec(Weight * Meters);
+            WeightTotal = RoundHelper.Round2(Weight * Meters);
         }
 
         public override int CompareTo(IElement other)
@@ -86,7 +87,8 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
 
         public override string GetDesc()
         {
-            return $"{SpecRow?.PositionColumn}, {GetName()}{Meters}";
+            // 3, ⌀12
+            return $"{SpecRow?.PositionColumn}, {Symbols.Diam}{Diameter}";
         }        
 
         public override string GetName()
@@ -106,8 +108,10 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
             {
                 var bar = item as BarRunning;
                 metersTotal += bar.Meters;
-                weightTotal += bar.WeightTotal;
+                //weightTotal += bar.WeightTotal;
             }
+            metersTotal = RoundHelper.RoundWhole(metersTotal);
+            weightTotal = RoundHelper.Round2( metersTotal * Weight);
 
             SpecRow.CountColumn = metersTotal.ToString();
             SpecRow.WeightColumn = Weight.ToString();

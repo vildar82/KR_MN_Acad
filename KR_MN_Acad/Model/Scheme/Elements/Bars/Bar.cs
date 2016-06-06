@@ -7,6 +7,7 @@ using KR_MN_Acad.ConstructionServices;
 using KR_MN_Acad.Scheme.Materials;
 using KR_MN_Acad.Scheme.Spec;
 using static AcadLib.Units.UnitsConvertHelper;
+using static AcadLib.General;
 
 namespace KR_MN_Acad.Scheme.Elements.Bars
 {
@@ -61,9 +62,9 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public virtual void Calc()
         {
             // Масса ед. кг.
-            Weight = RoundHelper.RoundSpec(WeightUnit * ConvertMmToMLength(Length));
+            Weight = RoundHelper.Round3(WeightUnit * ConvertMmToMLength(Length));
             // Масса всех стержней
-            WeightTotal = Weight * Count;
+            WeightTotal =RoundHelper.Round2(Weight * Count);
         }
 
         public virtual int CompareTo(IElement other)
@@ -117,7 +118,8 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
 
         public virtual string GetDesc()
         {
-            return $"{SpecRow?.PositionColumn}, {GetName()}";
+            // 3, ⌀12, L=3050
+            return $"{SpecRow?.PositionColumn}, {Symbols.Diam}{Diameter}, L={Length}";
         }
 
         /// <summary>
@@ -167,8 +169,9 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
             {
                 var bar = item as Bar;
                 countTotal += bar.Count;
-                weightTotal += bar.WeightTotal;
+                //weightTotal += bar.WeightTotal;
             }
+            weightTotal = RoundHelper.Round2(Weight * countTotal);
 
             SpecRow.CountColumn = countTotal.ToString();
             SpecRow.WeightColumn = Weight.ToString();

@@ -19,14 +19,41 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// Шаг шпилек по вертик
         /// </summary>
         public int StepVertic { get; set; }
+        /// <summary>
+        /// Ширина распределения шпилек по горизонтали
+        /// </summary>
+        public int WidthHor { get; set; }
+        /// <summary>
+        /// Ширина распределения шпилек по вертикали
+        /// </summary>
+        public int WidthVertic { get; set; }
 
-        public Spring(int diam, int len, int stepHor, int stepVert, int count, string pos, ISchemeBlock block) 
-            : base(diam, len, stepHor, count, "Ш-", pos, block, "Шпилька")
+        public Spring(int diam, int len, int stepHor, int stepVert, int widthHor,int widthVertic, string pos, ISchemeBlock block) 
+            : base(diam, len, 1, "Ш-", pos, block, "Шпилька")
         {
             Class = ClassA240C;
             Gost = GostOld;
             StepHor = stepHor;
             StepVertic = stepVert;
+            WidthHor = widthHor;
+            WidthVertic = widthVertic;
+            Count = CalcCount();
+        }
+
+        /// <summary>
+        /// Определение кол шпилек
+        /// </summary>
+        /// <returns></returns>
+        private int CalcCount()
+        {
+            int countVert = BarDivision.CalcCountByStep(WidthVertic, StepVertic);
+            int countHor = BarDivision.CalcCountByStep(WidthHor, StepHor);
+            return countVert * countHor;
+        }
+
+        public override string GetDesc()
+        {
+            return base.GetDesc() + $", ш.{StepHor}х{StepVertic}";
         }
     }
 }
