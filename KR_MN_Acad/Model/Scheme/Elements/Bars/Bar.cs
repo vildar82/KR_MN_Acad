@@ -16,6 +16,10 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
     /// </summary>
     public class Bar : Armature, IElement
     {
+        /// <summary>
+        /// Типы арматуры в группе "Стержни" - для сортировки в спецификации.
+        /// П.м - выше обычной.
+        /// </summary>
         protected static Dictionary<Type, int> barTypes = new Dictionary<Type, int>
         {
             { typeof(BarRunning), 1 },

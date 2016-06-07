@@ -9,13 +9,9 @@ namespace KR_MN_Acad.Scheme
 {
     public static class SchemeBlockFactory
     {
-        static Dictionary<string, Type> typesDict = new Dictionary<string, Type>
-        {
-            { "КР_Арм_Схема_Стена" , typeof(Wall.WallBlock) }
-        };
-
         public static SchemeBlock CreateBlock(BlockReference blRef, string blName, SchemeService service)
         {
+            var typesDict = service.Options.TypesBlock;
             Type typeBlock;
             if (typesDict.TryGetValue(blName, out typeBlock))
             {

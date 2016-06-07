@@ -85,6 +85,8 @@
   <ItemGroup>
     <Compile Include="Commands.cs" />
     <Compile Include="Model\Scheme\Elements\Bars\BarDetail.cs" />
+    <Compile Include="Model\Scheme\Elements\Bars\Bracket.cs" />
+    <Compile Include="Model\Scheme\Elements\Bars\Shackle.cs" />
     <Compile Include="Model\Scheme\Elements\Bars\Spring.cs" />
     <Compile Include="Model\Scheme\Elements\Concretes\ConcreteH.cs" />
     <Compile Include="Model\Scheme\Elements\IElement.cs" />
@@ -135,6 +137,7 @@
     <Compile Include="Model\Scheme\Spec\SpecGroup.cs" />
     <Compile Include="Model\Scheme\Spec\SpecRow.cs" />
     <Compile Include="Model\Scheme\Spec\SpecTable.cs" />
+    <Compile Include="Model\Scheme\Wall\WallJoinBlock.cs" />
     <Compile Include="Model\Scheme\Wall\WallSchemeOptions.cs" />
     <Compile Include="Model\Scheme\Wall\WallBlock.cs" />
     <Compile Include="Model\Spec\SpecSlabOpenings.cs" />

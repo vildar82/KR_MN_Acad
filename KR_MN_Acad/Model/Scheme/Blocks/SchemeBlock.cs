@@ -15,14 +15,18 @@ namespace KR_MN_Acad.Scheme
     /// Базовый интерфейс блока для схемы армирования
     /// </summary>
     public abstract class SchemeBlock : ISchemeBlock
-    {        
+    {
+        private List<IElement> elements = new List<IElement>();
+
+        public SchemeService Service { get; set; }
         public ObjectId IdBlref { get; set; }
         public string BlName { get; set; }
         public Dictionary<string, Property> Properties { get; set; }
-        public Error Error { get; set; }
+        public Error Error { get; set; }        
 
-        public SchemeBlock(BlockReference blRef, string blName)
+        public SchemeBlock(BlockReference blRef, string blName, SchemeService service)
         {
+            Service = service;
             IdBlref = blRef.Id;
             BlName = blName;
             Properties = GetProperties(blRef);
@@ -37,7 +41,10 @@ namespace KR_MN_Acad.Scheme
         /// Получение всех элементов спецификации в блоке
         /// </summary>
         /// <returns></returns>
-        public abstract List<IElement> GetElements();
+        public List<IElement> GetElements()
+        {
+            return elements;
+        }
         /// <summary>
         /// Заполнение нумерации материалов блока
         /// </summary>
@@ -69,6 +76,51 @@ namespace KR_MN_Acad.Scheme
                 Inspector.AddError(Error);
             }
             Error.AdditionToMessage(msg);
-        }        
+        }
+
+        /// <summary>
+        /// преобразование object value свойства Property в указанный тип
+        /// Тип T должен точно соответствовать типу object value Property
+        /// </summary>        
+        protected T GetPropValue<T>(string propName)
+        {
+            T resVal = default(T);
+            Property prop = GetProperty(propName);
+            if (prop != null)
+            {
+                resVal = (T)Convert.ChangeType(prop.Value, typeof(T));
+            }
+            return resVal;
+        }
+
+        protected void AddElement(IElement elem)
+        {
+            if (elem != null)
+            {
+                elements.Add(elem);
+            }
+        }
+
+        protected Property GetProperty(string propName)
+        {
+            Property prop;
+            if (!Properties.TryGetValue(propName, out prop))
+            {
+                AddError($"Не определен параметр {propName}.");
+            }
+            return prop;
+        }
+
+        protected void FillProp(Property prop, object value)
+        {
+            if (prop == null) return;
+            if (prop.Type == PropertyType.Attribute && !prop.IdAtrRef.IsNull)
+            {
+                using (var atr = prop.IdAtrRef.GetObject(OpenMode.ForWrite, false, true) as AttributeReference)
+                {                                        
+                    atr.TextString = value?.ToString() ?? "";
+                }
+            }
+        }
     }
 }

@@ -15,11 +15,11 @@ using KR_MN_Acad.Scheme.Spec;
 namespace KR_MN_Acad.Scheme.Wall
 {
     /// <summary>
-    /// Описание блока стены
+    /// Описание блока стены "КР_Арм_Стена"
     /// </summary>
     public class WallBlock : SchemeBlock
-    {
-        private SchemeService service;        
+    {        
+        public const string WallBlockName = "КР_Арм_Стена";     
                      
         const string PropNameConcrete = "Бетон";
         const string PropNameHeight = "Высота стены";
@@ -79,9 +79,8 @@ namespace KR_MN_Acad.Scheme.Wall
         public Spring Spring { get; set; }
         public ConcreteH Concrete { get; set; }
 
-        public WallBlock(BlockReference blRef, string blName, SchemeService service) : base (blRef, blName)
-        {
-            this.service = service;            
+        public WallBlock(BlockReference blRef, string blName, SchemeService service) : base (blRef, blName, service)
+        {            
         }
 
         public override void Calculate()
@@ -91,6 +90,7 @@ namespace KR_MN_Acad.Scheme.Wall
             try
             {
                 defineFields();
+                AddElements();
             }
             catch(Exception ex)
             {
@@ -98,16 +98,12 @@ namespace KR_MN_Acad.Scheme.Wall
             }
         }
 
-        public override List<IElement> GetElements()
-        {
-            List<IElement> elems = new List<IElement>();
-
-            elems.Add(ArmVertic);
-            elems.Add(ArmHor);
-            elems.Add(Spring);
-            elems.Add(Concrete);
-
-            return elems;
+        private void AddElements()
+        {           
+            AddElement(ArmHor);
+            AddElement(ArmVertic);
+            AddElement(Spring);
+            AddElement(Concrete);
         }
 
         private void defineFields()
@@ -157,42 +153,16 @@ namespace KR_MN_Acad.Scheme.Wall
             int diam = GetPropValue<int>(PropNameSpringDiam);
             int stepHor = GetPropValue<int>(PropNameSpringStepHor);
             int stepVert = GetPropValue<int>(PropNameSpringStepVertic);
-            int len = (Thickness - (2 * a)) + 2 * 75;
+            int len = (Thickness - (2 * a)) + 2 * 75 + ArmVertic.Diameter;
 
             // ширина распределения шпилек по горизонтале
             int widthHor = Length;
-            int widthVertic = Height;           
+            int widthVertic = Height;
 
             Spring sp = new Spring(diam, len, stepHor, stepVert, widthHor, widthVertic, pos, this);
             sp.Calc();
             return sp;
-        }
-
-        /// <summary>
-        /// преобразование object value свойства Property в указанный тип
-        /// Тип T должен точно соответствовать типу object value Property
-        /// </summary>        
-        private T GetPropValue<T>(string propName)
-        {
-            T resVal = default(T);
-            Property prop = GetProperty(propName);
-            if (prop != null)
-            {
-                resVal = (T)Convert.ChangeType(prop.Value, typeof(T));
-            }
-            return resVal;
-        }
-
-        private Property GetProperty(string propName)
-        {
-            Property prop;
-            if (!Properties.TryGetValue(propName, out prop))
-            {
-                AddError($"Не определен параметр {propName}.");
-            }
-            return prop;            
-        }
-
+        }      
 
         /// <summary>
         /// Определение ширины распределения вертикальных стержней в стене
@@ -231,18 +201,6 @@ namespace KR_MN_Acad.Scheme.Wall
             FillProp(GetProperty(PropNameDescVerticArm), ArmVertic.GetDesc());
             // ОписШпилтьки
             FillProp(GetProperty(PropNameDescSpring), Spring.GetDesc());
-        }
-
-        private void FillProp(Property prop, object value)
-        {
-            if (prop == null) return;
-            if (prop.Type == PropertyType.Attribute && !prop.IdAtrRef.IsNull)
-            {
-                using (var atr = prop.IdAtrRef.GetObject(OpenMode.ForWrite, false, true) as AttributeReference)
-                {
-                    atr.TextString = value.ToString();
-                }
-            }
-        }
+        }        
     }
 }

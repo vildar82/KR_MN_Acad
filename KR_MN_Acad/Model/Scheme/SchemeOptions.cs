@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace KR_MN_Acad.Scheme
-{
-    [Serializable]
+{    
     /// <summary>
     /// Настройки схемы - фильтр блоков и т.п.
     /// </summary>    
     public class SchemeOptions
     {
+        public Dictionary<string, Type> TypesBlock { get; set; }
         public FilterBlocks Filter { get; set; }
         public TableOptions Table { get; set; }        
     }

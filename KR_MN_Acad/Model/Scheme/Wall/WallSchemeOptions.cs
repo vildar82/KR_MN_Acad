@@ -11,18 +11,24 @@ using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 
 namespace KR_MN_Acad.Scheme.Wall
-{    
+{
     public static class WallSchemeOptions
-    {   
+    {
         public static SchemeOptions GetSchemeOptions()
         {
             SchemeOptions options = new SchemeOptions();
             // Фильтр блоков
-            options.Filter = new FilterBlocks("КР_Арм_Схема_Стена");
+            options.Filter = new FilterBlocks(WallBlock.WallBlockName);
             // Спецификация
             options.Table = new TableOptions("Спецификация материалов на вертикальные конструкции");
 
-            return options;       
+            // Типы блоков для схемы
+            options.TypesBlock = new Dictionary<string, Type>
+            {
+                { WallBlock.WallBlockName , typeof(WallBlock) },
+                { WallJoinBlock.WallJoinBlockName , typeof(WallJoinBlock) }
+            };
+            return options;
         }
     }
 }
