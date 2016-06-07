@@ -34,6 +34,7 @@ namespace KR_MN_Acad.Scheme.Elements
         /// <summary>
         /// Суммирование элементов и заполнение строк:
         /// Обозначения, Наименования, Кол, Массы ед, примечания
+        /// Результат записать в SpecRow
         /// </summary>        
         void Sum(List<IElement> elems);
         /// <summary>

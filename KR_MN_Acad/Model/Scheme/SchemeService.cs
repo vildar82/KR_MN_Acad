@@ -43,7 +43,7 @@ namespace KR_MN_Acad.Scheme
             // Выбор блоков
             IdBlRefs = SelectBlocks();
             // Определение блоков схемы армирования
-            Blocks = FilterBlocks();
+            Blocks = FilterBlocks();            
             // Калькуляция всех элементов
             Groups = Calculate(true);
             // Заполнение позиций в блоках
@@ -67,6 +67,10 @@ namespace KR_MN_Acad.Scheme
             // Создание спецификации.
             SpecTable table = new SpecTable(this);
             table.CreateTable();
+
+            // Создание ведомости расхода стали
+            BillService bill = new BillService(this);
+            bill.CreateTable();
         }
 
         private void NumberingBlocks()
@@ -121,6 +125,10 @@ namespace KR_MN_Acad.Scheme
                         Inspector.Errors.Add(block.Error);
                 }
                 t.Commit();
+            }
+            if (blocks.Count == 0)
+            {                
+                throw new Exception($"\nБлоки для схемы не определены.");
             }
             return blocks;
         }

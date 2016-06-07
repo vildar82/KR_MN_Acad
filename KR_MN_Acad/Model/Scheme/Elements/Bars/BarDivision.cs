@@ -44,7 +44,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public override string GetDesc()
         {
             // 3, ⌀12, L=3050, ш.200
-            return base.GetDesc() + ", ш" + Step;
+            return base.GetDesc() + ", ш." + Step;
         }
 
         /// <summary>

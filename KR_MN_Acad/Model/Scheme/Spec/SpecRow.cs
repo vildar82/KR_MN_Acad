@@ -38,11 +38,16 @@ namespace KR_MN_Acad.Scheme.Spec
         /// <summary>
         /// Примечание
         /// </summary>
-        public string DescriptionColumn { get; set; }             
+        public string DescriptionColumn { get; set; }
+
+        public IElement SomeElement { get; set; }
+
+        public double Amount { get; set; }
 
         public SpecRow(string pos, List<IElement> elems)
         {            
             Elements = elems;
+            SomeElement = elems.First();
             foreach (var elem in elems)
             {
                 elem.SpecRow = this;

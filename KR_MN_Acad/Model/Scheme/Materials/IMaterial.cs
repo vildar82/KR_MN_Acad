@@ -18,9 +18,6 @@ namespace KR_MN_Acad.Scheme.Materials
         /// ГОСТ
         /// </summary>
         Gost Gost { get; }     
-        /// <summary>
-        /// Расход
-        /// </summary>
-        double Consumption { get; }
+        
     }
 }

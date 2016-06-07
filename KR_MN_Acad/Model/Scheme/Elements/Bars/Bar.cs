@@ -157,6 +157,10 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
             return Prefix.GetHashCode() ^ Type.GetHashCode() ^ GetIndex(this).GetHashCode();
         }
 
+        /// <summary>
+        /// Суммирование элементов и запись результата в SpecRow
+        /// </summary>
+        /// <param name="elems"></param>
         public virtual void Sum(List<IElement> elems)
         {
             // Обозначения, Наименования, Кол, Массы ед, примечания
@@ -175,7 +179,8 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
 
             SpecRow.CountColumn = countTotal.ToString();
             SpecRow.WeightColumn = Weight.ToString();
-            SpecRow.DescriptionColumn = weightTotal.ToString();                
+            SpecRow.DescriptionColumn = weightTotal.ToString();
+            SpecRow.Amount = weightTotal;
         }
     }
 }

@@ -63,6 +63,7 @@ namespace KR_MN_Acad.Scheme.Elements.Concretes
             var volumeTotal = elems.OfType<Concrete>().Sum(c => c.Volume);
             SpecRow.WeightColumn = volumeTotal.ToString();
             SpecRow.DescriptionColumn = "";
+            SpecRow.Amount = volumeTotal;
         }
 
         public override int GetHashCode()

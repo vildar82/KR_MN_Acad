@@ -13,25 +13,20 @@ namespace KR_MN_Acad.Scheme.Materials
     /// <summary>
     /// арматурный стержень
     /// </summary>
-    public class Armature : IMaterial
+    public abstract class Armature : IMaterial, IBillMaterial
     {
         public const string ClassA500C = "А500С";
         public const string ClassA240C = "А240С";
         public const string GostNewNumber = "ГОСТ Р 52544-2006";//http://docs.cntd.ru/document/gost-r-52544-2006
         public const string GostNewName = "Прокат арматурный свариваемый периодического профиля классов А500С и В500С для армирования железобетонных конструкций. Технические условия";
-        public const string GostOldNumber = "ГОСТ 5781-82"; //http://docs.cntd.ru/document/gost-5781-82
+        public const string GostOldNumber = "ГОСТ 5781-82";//http://docs.cntd.ru/document/gost-5781-82
         public const string GostOldName = "Сталь горячекатаная для армирования железобетонных конструкций.";
         public static Gost GostNew = Gost.GetGost(GostNewNumber);
         public static Gost GostOld = Gost.GetGost(GostOldNumber);
 
         public const int DefaultDiameter = 10;
         public const string DefaultClass = ClassA500C;
-        public static readonly Gost DefaultGost = GostNew;
-
-        /// <summary>
-        /// Расход
-        /// </summary>
-        public double Consumption { get; set; }
+        public static readonly Gost DefaultGost = GostNew;       
 
         /// <summary>
         /// Наименование - "⌀12 A500C"
@@ -63,7 +58,12 @@ namespace KR_MN_Acad.Scheme.Materials
         /// <summary>
         /// Класс арматуры
         /// </summary>
-        public string Class { get; set; } = DefaultClass;        
+        public string Class { get; set; } = DefaultClass;
+
+        public string BillTitle { get; set; } = "Изделия арматурные";
+        public string BillGroup { get; set; } = "Арматура класса";
+        public string BillMark { get { return Class; } }
+        public string BillName { get { return Symbols.Diam + Diameter; } }
 
         /// <summary>
         /// Дефолтный конструктор по диаметру, остальные дефолтные значения
@@ -81,15 +81,15 @@ namespace KR_MN_Acad.Scheme.Materials
             Gost = gost;
         }
 
-        /// <summary>
-        /// Диаметры арматуры
-        /// </summary>
-        public static List<Armature> Diameters { get; } = new List<Armature>
-        { new Armature(6), new Armature(8),new Armature(10),new Armature(12),new Armature(14),
-            new Armature(16),new Armature(18),new Armature(20),new Armature(22),new Armature(25),
-            new Armature(28),new Armature(32),new Armature(36),new Armature(40),new Armature(45),
-            new Armature(50),new Armature(55),new Armature(60),new Armature(70),new Armature(80)
-        };        
+        ///// <summary>
+        ///// Диаметры арматуры
+        ///// </summary>
+        //public static List<Armature> Diameters { get; } = new List<Armature>
+        //{ new Armature(6), new Armature(8),new Armature(10),new Armature(12),new Armature(14),
+        //    new Armature(16),new Armature(18),new Armature(20),new Armature(22),new Armature(25),
+        //    new Armature(28),new Armature(32),new Armature(36),new Armature(40),new Armature(45),
+        //    new Armature(50),new Armature(55),new Armature(60),new Armature(70),new Armature(80)
+        //};        
 
         private void defineBaseParams()
         {

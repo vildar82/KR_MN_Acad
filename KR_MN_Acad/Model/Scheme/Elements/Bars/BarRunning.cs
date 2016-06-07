@@ -116,6 +116,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
             SpecRow.CountColumn = metersTotal.ToString();
             SpecRow.WeightColumn = Weight.ToString();
             SpecRow.DescriptionColumn = weightTotal.ToString();
+            SpecRow.Amount = weightTotal;
         }
 
         /// <summary>
