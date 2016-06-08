@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AcadLib.Blocks;
 using AcadLib.Errors;
+using AcadLib.RTree.SpatialIndex;
 using Autodesk.AutoCAD.DatabaseServices;
 using KR_MN_Acad.Scheme.Elements;
 using KR_MN_Acad.Scheme.Spec;
@@ -23,6 +24,8 @@ namespace KR_MN_Acad.Scheme
         public string BlName { get; set; }
         public Dictionary<string, Property> Properties { get; set; }
         public Error Error { get; set; }        
+        public Extents3d Extents { get; set; }
+        public Rectangle Rectangle { get; set; }
 
         public SchemeBlock(BlockReference blRef, string blName, SchemeService service)
         {
@@ -30,6 +33,8 @@ namespace KR_MN_Acad.Scheme
             IdBlref = blRef.Id;
             BlName = blName;
             Properties = GetProperties(blRef);
+            Extents = blRef.GeometricExtentsСlean();
+            Rectangle = GetRtreeRectangle(Extents);
         }
 
         /// <summary>
@@ -82,15 +87,28 @@ namespace KR_MN_Acad.Scheme
         /// преобразование object value свойства Property в указанный тип
         /// Тип T должен точно соответствовать типу object value Property
         /// </summary>        
-        protected T GetPropValue<T>(string propName)
+        protected T GetPropValue<T>(string propName, bool isRequired = true)
         {
             T resVal = default(T);
-            Property prop = GetProperty(propName);
+            Property prop = GetProperty(propName, isRequired);
             if (prop != null)
             {
                 resVal = (T)Convert.ChangeType(prop.Value, typeof(T));
             }
             return resVal;
+        }
+
+        protected Property GetProperty(string propName, bool isRequired = true)
+        {
+            Property prop;
+            if (!Properties.TryGetValue(propName, out prop))
+            {
+                if (isRequired)
+                {
+                    AddError($"Не определен параметр {propName}.");
+                }
+            }
+            return prop;
         }
 
         protected void AddElement(IElement elem)
@@ -99,17 +117,7 @@ namespace KR_MN_Acad.Scheme
             {
                 elements.Add(elem);
             }
-        }
-
-        protected Property GetProperty(string propName)
-        {
-            Property prop;
-            if (!Properties.TryGetValue(propName, out prop))
-            {
-                AddError($"Не определен параметр {propName}.");
-            }
-            return prop;
-        }
+        }        
 
         protected void FillProp(Property prop, object value)
         {
@@ -121,6 +129,12 @@ namespace KR_MN_Acad.Scheme
                     atr.TextString = value?.ToString() ?? "";
                 }
             }
+        }
+
+        protected static Rectangle GetRtreeRectangle(Extents3d extents)
+        {
+            return new Rectangle(extents.MinPoint.X, extents.MinPoint.Y,
+                extents.MaxPoint.X, extents.MaxPoint.Y, 0, 0);
         }
     }
 }

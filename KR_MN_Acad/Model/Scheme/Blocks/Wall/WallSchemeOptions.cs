@@ -28,6 +28,10 @@ namespace KR_MN_Acad.Scheme.Wall
                 { WallBlock.WallBlockName , typeof(WallBlock) },
                 { WallJoinBlock.WallJoinBlockName , typeof(WallJoinBlock) }
             };
+
+            // Правила блоков
+            options.Rule = new WallRule();
+
             return options;
         }
     }

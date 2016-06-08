@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AcadLib.Blocks;
 using AcadLib.Errors;
+using AcadLib.RTree.SpatialIndex;
 using Autodesk.AutoCAD.DatabaseServices;
 using KR_MN_Acad.Scheme.Elements;
 
@@ -16,7 +17,9 @@ namespace KR_MN_Acad.Scheme
         /// </summary>
         string BlName { get; set; }        
         ObjectId IdBlref { get; set; }
-        Error Error { get; set; }        
+        Error Error { get; set; }
+        Extents3d Extents { get; set; }
+        Rectangle Rectangle { get; set; }
         /// <summary>
         /// Все свойства блока - дин и атрибуты
         /// </summary>

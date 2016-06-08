@@ -11,9 +11,10 @@ namespace KR_MN_Acad.Scheme
     /// </summary>    
     public class SchemeOptions
     {
+        public Rules.Rule Rule { get; set; }
         public Dictionary<string, Type> TypesBlock { get; set; }
         public FilterBlocks Filter { get; set; }
-        public TableOptions Table { get; set; }        
+        public TableOptions Table { get; set; }      
     }
 
     public class FilterBlocks

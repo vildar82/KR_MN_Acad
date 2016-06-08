@@ -57,7 +57,7 @@ namespace KR_MN_Acad.Scheme.Spec
                 table.LayerId = AcadLib.Layers.LayerExt.GetLayerOrCreateNew(new AcadLib.Layers.LayerInfo(options.Layer));
             }
 
-            table.SetSize(3, 2);            
+            table.SetSize(3, 1);            
             table.SetRowHeight(8);
             table.SetColumnWidth(15);                        
 
@@ -159,7 +159,7 @@ namespace KR_MN_Acad.Scheme.Spec
             /// </summary>
             public static void AddColumns(Table table)
             {
-                table.InsertColumns(1, 15, cols.Count-1);                
+                table.InsertColumns(1, 15, cols.Count);                
                 int colIndex = 1;                
 
                 foreach (var item in cols)

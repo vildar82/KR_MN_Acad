@@ -24,7 +24,7 @@ namespace KR_MN_Acad.Scheme
 
         public SchemeOptions Options { get; set; }
         public List<ObjectId> IdBlRefs { get; set; }
-        public List<SchemeBlock> Blocks { get; set; }
+        public List<ISchemeBlock> Blocks { get; set; }
         public List<SpecGroup> Groups { get; set; }
 
         public SchemeService(SchemeOptions options)
@@ -43,12 +43,14 @@ namespace KR_MN_Acad.Scheme
             // Выбор блоков
             IdBlRefs = SelectBlocks();
             // Определение блоков схемы армирования
-            Blocks = FilterBlocks();            
+            Blocks = FilterBlocks();
+            // Проверка правил расположение блоков
+            //CheckRules();               
             // Калькуляция всех элементов
             Groups = Calculate(true);
             // Заполнение позиций в блоках
             NumberingBlocks();            
-        }
+        }       
 
         /// <summary>
         /// Спецификация материалов 
@@ -59,15 +61,15 @@ namespace KR_MN_Acad.Scheme
             IdBlRefs = SelectBlocks();
             // Определение блоков схемы армирования
             Blocks = FilterBlocks();
+            // Проверка правил расположение блоков
+            //CheckRules();
             // Калькуляция всех элементов
             Groups = Calculate(false);
             // Проверка позиций
             CheckPositions();
-
             // Создание спецификации.
             SpecTable table = new SpecTable(this);
             table.CreateTable();
-
             // Создание ведомости расхода стали
             BillService bill = new BillService(this);
             bill.CreateTable();
@@ -86,6 +88,12 @@ namespace KR_MN_Acad.Scheme
             }
         }
 
+        private void CheckRules()
+        {
+            // Проверка правил расположения блоков и т.п.
+            Options.Rule.Check(Blocks);
+        }
+
         /// <summary>
         /// Выбор блоков и получение списка IdBlRefs 
         /// </summary>
@@ -97,9 +105,9 @@ namespace KR_MN_Acad.Scheme
         /// <summary>
         /// Фильтр выбранных блоков и определение блоков схемы армирования в соотв с настройками
         /// </summary>
-        private List<SchemeBlock> FilterBlocks()
+        private List<ISchemeBlock> FilterBlocks()
         {
-            var blocks = new List<SchemeBlock>();
+            var blocks = new List<ISchemeBlock>();
             var ids = IdBlRefs;
             if (ids == null || ids.Count == 0) return blocks;
             var db = Db;
@@ -112,7 +120,7 @@ namespace KR_MN_Acad.Scheme
 
                     string blName = blRef.GetEffectiveName();
 
-                    SchemeBlock block = SchemeBlockFactory.CreateBlock(blRef, blName, this);
+                    ISchemeBlock block = SchemeBlockFactory.CreateBlock(blRef, blName, this);
                     if (block == null)
                     {
                         Ed.WriteMessage($"\nПропущен блок '{blName}'");

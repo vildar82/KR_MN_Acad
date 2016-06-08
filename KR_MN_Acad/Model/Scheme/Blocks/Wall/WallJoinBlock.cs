@@ -15,8 +15,7 @@ namespace KR_MN_Acad.Scheme.Wall
     /// Торец стены - прямой
     /// </summary>
     public class WallJoinBlock : SchemeBlock
-    {
-        private SchemeService service;
+    {        
         public const string WallJoinBlockName = "КР_Арм_Стена_Торец";
 
         const string PropNameConcrete = "Бетон";
@@ -121,23 +120,35 @@ namespace KR_MN_Acad.Scheme.Wall
         }
 
         public override void Numbering()
-        {
-            // ПозГорАрм
-            FillProp(GetProperty(PropNamePosHorArm), ArmHor?.SpecRow.PositionColumn);
-            // ПозВертикАрм
-            FillProp(GetProperty(PropNamePosVerticArm), ArmVertic?.SpecRow.PositionColumn);
-            // ПозХомута
-            FillProp(GetProperty(PropNamePosShackle), Shackle?.SpecRow.PositionColumn);
-            // ПозСкобы
-            FillProp(GetProperty(PropNamePosBracket), Bracket?.SpecRow.PositionColumn);
-            // ОписГорАрм
-            FillProp(GetProperty(PropNameDescHorArm), ArmHor?.GetDesc());
-            // ОписВертикАрм
-            FillProp(GetProperty(PropNameDescVerticArm), ArmVertic?.GetDesc());
-            // ОписХомута
-            FillProp(GetProperty(PropNameDescShackle), Shackle?.GetDesc());
-            // ОписСкобы
-            FillProp(GetProperty(PropNameDescBracket), Bracket?.GetDesc());
+        {            
+            if (ArmHor != null)
+            {
+                // ПозГорАрм
+                FillProp(GetProperty(PropNamePosHorArm), ArmHor.SpecRow.PositionColumn);
+                // ОписГорАрм            
+                FillProp(GetProperty(PropNameDescHorArm), ArmHor.GetDesc());
+            }
+            if (ArmVertic != null)
+            {
+                // ПозВертикАрм
+                FillProp(GetProperty(PropNamePosVerticArm), ArmVertic.SpecRow.PositionColumn);
+                // ОписВертикАрм            
+                FillProp(GetProperty(PropNameDescVerticArm), ArmVertic.GetDesc());
+            }
+            if (Shackle != null)
+            {
+                // ПозХомута
+                FillProp(GetProperty(PropNamePosShackle), Shackle.SpecRow.PositionColumn);
+                // ОписХомута            
+                FillProp(GetProperty(PropNameDescShackle), Shackle.GetDesc());
+            }
+            if (Bracket != null)
+            {
+                // ПозСкобы
+                FillProp(GetProperty(PropNamePosBracket), Bracket.SpecRow.PositionColumn);
+                // ОписСкобы            
+                FillProp(GetProperty(PropNameDescBracket), Bracket.GetDesc());
+            }            
         }
 
         private void defineFields()
@@ -146,7 +157,7 @@ namespace KR_MN_Acad.Scheme.Wall
             Height = GetPropValue<int>(PropNameHeight);
             Thickness = GetPropValue<int>(PropNameThickness);
             Outline = GetPropValue<int>(PropNameOutline);
-            BracketLength = GetPropValue<int>(PropNameBracketLen);
+            BracketLength = GetPropValue<int>(PropNameBracketLen, false);
             ArmVerticCount = GetPropValue<int>(PropNameArmVerticCount);
             var concrete = GetPropValue<string>(PropNameConcrete);
             Concrete = new ConcreteH(concrete, Length, Thickness, Height, this);
@@ -165,8 +176,9 @@ namespace KR_MN_Acad.Scheme.Wall
         {
             if (ArmVerticCount == 0)
                 return null;
-            string pos = GetPropValue<string>(PropNamePosVerticArm);
-            int diam = GetPropValue<int>(PropNameArmVerticDiam);                        
+            int diam = GetPropValue<int>(PropNameArmVerticDiam);
+            if (diam == 0) return null;
+            string pos = GetPropValue<string>(PropNamePosVerticArm);            
             int len = Height + Outline;
             var arm = new Bar(diam, len, pos, this, "Вертикальная арматура");
             arm.Count = ArmVerticCount;
@@ -176,8 +188,9 @@ namespace KR_MN_Acad.Scheme.Wall
 
         private BarRunningStep defineArmHor()
         {
-            string pos = GetPropValue<string>(PropNamePosHorArm);
             int diam = GetPropValue<int>(PropNameArmHorDiam);
+            if (diam == 0) return null;
+            string pos = GetPropValue<string>(PropNamePosHorArm);            
             int step = GetPropValue<int>(PropNameArmHorStep);
             int width = Height - 100;
             double len = getLengthHorArm(diam, Concrete.ClassB);
@@ -188,9 +201,9 @@ namespace KR_MN_Acad.Scheme.Wall
 
         private Shackle defineShackle()
         {
-            string pos = GetPropValue<string>(PropNamePosShackle);
-            int diam = GetPropValue<int>(PropNameShackleDiam);
+            int diam = GetPropValue<int>(PropNameShackleDiam, false);
             if (diam == 0) return null;
+            string pos = GetPropValue<string>(PropNamePosShackle, false);            
             int step = GetPropValue<int>(PropNameShackleStep);
             // длина хомута
             int len = Shackle.GetLenShackle((Length-(2*a)+ArmVertic.Diameter), (Thickness-(2*a)+ArmVertic.Diameter));
@@ -205,9 +218,9 @@ namespace KR_MN_Acad.Scheme.Wall
 
         private Bracket defineBracket()
         {
-            string pos = GetPropValue<string>(PropNamePosBracket);
-            int diam = GetPropValue<int>(PropNameBracketDiam);
+            int diam = GetPropValue<int>(PropNameBracketDiam, false);
             if (diam == 0) return null;
+            string pos = GetPropValue<string>(PropNamePosBracket, false);            
             int step = GetPropValue<int>(PropNameBracketStep);
             // длина скобы
             int len = RoundHelper.RoundWhole(BracketLength * 2 + (Thickness - (2 * a) + ArmVertic.Diameter) + (Length - a + ArmVertic.Diameter * 0.5) * 2);
