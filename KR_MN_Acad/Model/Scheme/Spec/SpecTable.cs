@@ -18,6 +18,7 @@ namespace KR_MN_Acad.Scheme.Spec
         SchemeService service;
         TableOptions options;
         List<SpecGroup> data;
+        double scale;
         public SpecTable (SchemeService service)
         {
             this.service = service;
@@ -29,6 +30,7 @@ namespace KR_MN_Acad.Scheme.Spec
         {
             using (var t =service.Db.TransactionManager.StartTransaction())
             {
+                scale = AcadLib.Scale.ScaleHelper.GetCurrentAnnoScale(service.Db);
                 // Создание таблицы
                 Table table = getTable();
                 // Вставка таблицы
@@ -60,22 +62,19 @@ namespace KR_MN_Acad.Scheme.Spec
             // столбец ПОЗ
             var col = table.Columns[0];
             col.Alignment = CellAlignment.MiddleCenter;
-            col.Width = 15;            
+            col.Width = 15;
             // столбец Обозн.
             col = table.Columns[1];
             col.Alignment = CellAlignment.MiddleCenter;
-            col.Width = 60;
-            col.Borders.Left.Margin = 150;
+            col.Width = 60;            
             // столбец Наимен
             col = table.Columns[2];
             col.Alignment = CellAlignment.MiddleCenter;
-            col.Width = 65;
-            col.Borders.Left.Margin = 150;
+            col.Width = 65;            
             // столбец Кол
             col = table.Columns[3];
             col.Alignment = CellAlignment.MiddleCenter;
-            col.Width = 10;
-            col.Borders.Horizontal.Margin = 0;
+            col.Width = 10;            
             // столбец Масса
             col = table.Columns[4];
             col.Alignment = CellAlignment.MiddleCenter;
@@ -83,7 +82,7 @@ namespace KR_MN_Acad.Scheme.Spec
             // столбец Примечание
             col = table.Columns[5];
             col.Alignment = CellAlignment.MiddleCenter;
-            col.Width = 20;            
+            col.Width = 20;
 
             // Заголовок ПОЗ
             var cellColName = table.Cells[1, 0];
@@ -133,18 +132,22 @@ namespace KR_MN_Acad.Scheme.Spec
                     cell = table.Cells[row, 0];
                     cell.TextString = item.PositionColumn;
                     cell.Alignment = CellAlignment.MiddleCenter;
+                    cell.Borders.Horizontal.Margin = 0;
 
                     cell = table.Cells[row, 1];
                     cell.TextString = item.DocumentColumn;
                     cell.Alignment = CellAlignment.MiddleLeft;
+                    cell.Borders.Horizontal.Margin = 1.5;
 
                     cell = table.Cells[row, 2];
                     cell.TextString = item.NameColumn;
                     cell.Alignment = CellAlignment.MiddleLeft;
+                    cell.Borders.Horizontal.Margin = 1.5;
 
                     cell = table.Cells[row, 3];
                     cell.TextString = item.CountColumn;
                     cell.Alignment = CellAlignment.MiddleCenter;
+                    cell.Borders.Horizontal.Margin = 0;
 
                     cell = table.Cells[row, 4];
                     cell.TextString = item.WeightColumn;
@@ -156,7 +159,8 @@ namespace KR_MN_Acad.Scheme.Spec
 
                     row++;
                 }                
-            }
+            }           
+
             var lastRow = table.Rows.Last();
             lastRow.Borders.Bottom.LineWeight = lwBold;
 
@@ -166,7 +170,7 @@ namespace KR_MN_Acad.Scheme.Spec
 
         private void insertTable(Table table)
         {
-            TableJig jigTable = new TableJig(table, AcadLib.Scale.ScaleHelper.GetCurrentAnnoScale(service.Db), "\nВставка спецификации:");
+            TableJig jigTable = new TableJig(table, scale, "\nВставка спецификации:");
             if (service.Ed.Drag(jigTable).Status == PromptStatus.OK)
             {
                 var cs = service.Db.CurrentSpaceId.GetObject(OpenMode.ForWrite) as BlockTableRecord;
