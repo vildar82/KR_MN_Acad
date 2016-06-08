@@ -96,9 +96,19 @@ namespace KR_MN_Acad.Scheme.Spec
                 // Без нумерации - сортировка по позициям
                 someElems = Elements.GroupBy(g => g).OrderBy(o => o.Key.PositionInBlock);
             }
-            int posIndex = 1;
+            int posIndex = 0;
+            string prefix = someElems.First().Key.Prefix;
             foreach (var item in someElems)
             {
+                if (string.Equals(prefix, item.Key.Prefix))
+                {
+                    posIndex++;
+                }
+                else
+                {
+                    prefix = item.Key.Prefix;
+                    posIndex = 1;
+                }
                 // Составить строчку таблицы
                 string pos = string.Empty;
                 if (HasPosition)
@@ -114,8 +124,7 @@ namespace KR_MN_Acad.Scheme.Spec
                 }                
                 ISpecRow row = new SpecRow(pos , item.ToList());
                 row.Calculate();
-                Rows.Add(row);
-                posIndex++;
+                Rows.Add(row);                
             }
         }
     }
