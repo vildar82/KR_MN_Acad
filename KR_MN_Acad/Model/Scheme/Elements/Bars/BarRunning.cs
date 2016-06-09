@@ -114,7 +114,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
             weightTotal = RoundHelper.Round2( metersTotal * Weight);
 
             SpecRow.CountColumn = metersTotal.ToString();
-            SpecRow.WeightColumn = Weight.ToString();
+            SpecRow.WeightColumn = Weight.ToString("0.000");
             SpecRow.DescriptionColumn = weightTotal.ToString();
             SpecRow.Amount = weightTotal;
         }

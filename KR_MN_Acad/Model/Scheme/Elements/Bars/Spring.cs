@@ -46,8 +46,8 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// <returns></returns>
         private int CalcCount()
         {
-            int countVert = BarDivision.CalcCountByStep(WidthVertic, StepVertic);
-            int countHor = BarDivision.CalcCountByStep(WidthHor, StepHor);
+            int countVert = (int)Math.Ceiling((double)WidthVertic / StepVertic);
+            int countHor = (int)Math.Ceiling((double)WidthHor / StepHor);
             return countVert * countHor;
         }
 

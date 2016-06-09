@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KR_MN_Acad.ConstructionServices;
 
 namespace KR_MN_Acad.Scheme.Elements.Bars
 {
@@ -19,7 +20,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// Ширина распределения
         /// </summary>
         public int Width { get; set; }        
-
+        
         public Bracket(int diam, int len, int step, int width, string pos, ISchemeBlock block) 
             : base(diam, len, 1, "Ск-", pos, block, "Скоба")
         {            
@@ -40,6 +41,17 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public override string GetDesc()
         {
             return base.GetDesc() + $", ш.{Step}";
+        }
+        
+        /// <summary>
+        /// Опрределение длины скобы
+        /// </summary>
+        /// <param name="h">Длина нахлеста скобы - вылет (от внутренней грани стержня)</param>
+        /// <param name="t">Ширина скобы (по внутренней грани стержня)</param>
+        /// <param name="d">Диаметр скобы</param>        
+        public static int CalcLength(int h, int t, int d)
+        {
+            return RoundHelper.RoundWhole(2 * h + t + 0.58 * d);            
         }
     }
 }

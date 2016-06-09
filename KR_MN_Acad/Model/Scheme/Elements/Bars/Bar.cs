@@ -31,10 +31,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public string Prefix { get; set; } = "";
         public string PositionInBlock { get; set; }
 
-        /// <summary>
-        /// Длина стержня
-        /// </summary>
-        public int Length { get; set; }
+        
         /// <summary>
         /// Кол стержней
         /// </summary>
@@ -53,13 +50,12 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public ISchemeBlock Block { get; set; }
         public string FriendlyName { get; set; }
 
-        public Bar(int diam, int len, string pos, ISchemeBlock block, string friendlyName) : base(diam)
+        public Bar(int diam, int len, string pos, ISchemeBlock block, string friendlyName) : base(diam, len)
         {
             FriendlyName = friendlyName;
             Block = block;
             PositionInBlock = pos;
-            Type = GroupType.Armatures;
-            Length = len;
+            Type = GroupType.Armatures;            
             Count = 1;
         }
 
@@ -182,7 +178,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
             weightTotal = RoundHelper.Round2(Weight * countTotal);
 
             SpecRow.CountColumn = countTotal.ToString();
-            SpecRow.WeightColumn = Weight.ToString();
+            SpecRow.WeightColumn = Weight.ToString("0.000");
             SpecRow.DescriptionColumn = weightTotal.ToString();
             SpecRow.Amount = weightTotal;
         }

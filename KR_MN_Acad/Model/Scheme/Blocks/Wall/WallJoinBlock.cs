@@ -223,7 +223,7 @@ namespace KR_MN_Acad.Scheme.Wall
             string pos = GetPropValue<string>(PropNamePosBracket, false);            
             int step = GetPropValue<int>(PropNameBracketStep);
             // длина скобы
-            int len = RoundHelper.RoundWhole(BracketLength * 2 + (Thickness - (2 * a) + ArmVertic.Diameter) + (Length - a + ArmVertic.Diameter * 0.5) * 2);
+            int len = Bracket.CalcLength(BracketLength, Thickness - 2 * a + ArmVertic.Diameter, diam);
             // ширина распределения
             int width = Height;
 

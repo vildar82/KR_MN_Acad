@@ -42,7 +42,11 @@ namespace KR_MN_Acad.Scheme.Materials
         /// <summary>
         /// Диаметр
         /// </summary>
-        public int Diameter { get; set; }      
+        public int Diameter { get; set; }
+        /// <summary>
+        /// Длина
+        /// </summary>
+        public int Length { get; set; }
         /// <summary>
         /// Масса 1 п.м.,кг
         /// </summary>
@@ -69,17 +73,18 @@ namespace KR_MN_Acad.Scheme.Materials
         /// Дефолтный конструктор по диаметру, остальные дефолтные значения
         /// </summary>
         /// <param name="diameter"></param>
-        public Armature(int diameter)
-        {            
+        public Armature(int diameter, int len)
+        {
+            Length = AcadLib.MathExt.RoundTo5(len);
             Diameter = diameter;
             defineBaseParams();            
         }
 
-        public Armature(int diameter, string classArm, Gost gost) : this(diameter)
-        {
-            Class = classArm;
-            Gost = gost;
-        }
+        //public Armature(int diameter, string classArm, Gost gost) : this(diameter)
+        //{
+        //    Class = classArm;
+        //    Gost = gost;
+        //}
 
         ///// <summary>
         ///// Диаметры арматуры
