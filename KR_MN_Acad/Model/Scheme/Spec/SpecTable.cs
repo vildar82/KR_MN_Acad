@@ -26,17 +26,17 @@ namespace KR_MN_Acad.Scheme.Spec
             data = service.Groups;
         }
 
-        public void CreateTable()
+        public Table CreateTable ()
         {
-            using (var t =service.Db.TransactionManager.StartTransaction())
-            {
+            //using (var t =service.Db.TransactionManager.StartTransaction())
+            //{
                 scale = AcadLib.Scale.ScaleHelper.GetCurrentAnnoScale(service.Db);
                 // Создание таблицы
-                Table table = getTable();
-                // Вставка таблицы
-                insertTable(table);
-                t.Commit();
-            }
+                return getTable();
+                //// Вставка таблицы
+                //insertTable(table);
+                //t.Commit();
+            //}
         }
 
         private Table getTable()
@@ -48,14 +48,14 @@ namespace KR_MN_Acad.Scheme.Spec
             {
                 table.LayerId = AcadLib.Layers.LayerExt.GetLayerOrCreateNew(new AcadLib.Layers.LayerInfo(options.Layer));
             }
-            
+            								  
             table.SetSize(3, 6);
             table.SetBorders(LineWeight.LineWeight050);
             table.SetRowHeight(8);
 
             // Название таблицы
             var rowTitle = table.Cells[0, 0];
-            rowTitle.Alignment = CellAlignment.MiddleCenter;
+			rowTitle.Alignment = CellAlignment.MiddleCenter;
             rowTitle.TextHeight = 5;
             rowTitle.TextString = options.Title;
 

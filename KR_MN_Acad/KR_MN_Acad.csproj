@@ -40,15 +40,15 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="AcCoreMgd">
-      <HintPath>..\..\..\ObjectARX\ObjectARX2015\inc\AcCoreMgd.dll</HintPath>
+      <HintPath>..\..\..\ObjectARX\ObjectARX2015\AcCoreMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="AcDbMgd">
-      <HintPath>..\..\..\ObjectARX\ObjectARX2015\inc\AcDbMgd.dll</HintPath>
+      <HintPath>..\..\..\ObjectARX\ObjectARX2015\AcDbMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="AcMgd">
-      <HintPath>..\..\..\ObjectARX\ObjectARX2015\inc\AcMgd.dll</HintPath>
+      <HintPath>..\..\..\ObjectARX\ObjectARX2015\AcMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="AutoCAD_PIK_Manager">

@@ -35,16 +35,16 @@ namespace KR_MN_Acad.Scheme.Spec
             data = bill.Rows;
         }        
 
-        public void CreateTable()
+        public Table CreateTable()
         {
-            using (var t = service.Db.TransactionManager.StartTransaction())
-            {
+            //using (var t = service.Db.TransactionManager.StartTransaction())
+            //{
                 // Создание таблицы
-                Table table = getTable();
+                return getTable();
                 // Вставка таблицы
-                insertTable(table);
-                t.Commit();
-            }
+                //insertTable(table);
+                //t.Commit();
+            //}
         }
 
         private Table getTable()

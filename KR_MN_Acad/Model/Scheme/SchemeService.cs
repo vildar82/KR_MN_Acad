@@ -5,9 +5,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AcadLib.Errors;
+using AcadLib.Jigs;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
+using Autodesk.AutoCAD.Geometry;
 using KR_MN_Acad.Scheme.Elements;
 using KR_MN_Acad.Scheme.Spec;
 
@@ -67,12 +69,40 @@ namespace KR_MN_Acad.Scheme
             Groups = Calculate(false);
             // Проверка позиций
             CheckPositions();
-            // Создание спецификации.
-            SpecTable table = new SpecTable(this);
-            table.CreateTable();
+            // Создание спецификаций.
+            SpecTable spec = new SpecTable(this);
+            var tableSpec = spec.CreateTable();
             // Создание ведомости расхода стали
             BillService bill = new BillService(this);
-            bill.CreateTable();
+            var tableBill = bill.CreateTable();
+
+			using (var t = Db.TransactionManager.StartTransaction())
+			{
+				var cs = Db.CurrentSpaceId.GetObject( OpenMode.ForWrite) as BlockTableRecord;
+				List<ObjectId> idsTable = new List<ObjectId> ();
+				var scale = AcadLib.Scale.ScaleHelper.GetCurrentAnnoScale(Db);
+
+				tableSpec.TransformBy(Matrix3d.Scaling(scale, tableSpec.Position));
+				cs.AppendEntity(tableSpec);
+				t.AddNewlyCreatedDBObject(tableSpec, true);
+				idsTable.Add(tableSpec.Id);
+
+				tableBill.TransformBy(Matrix3d.Scaling(scale, tableBill.Position));
+				cs.AppendEntity(tableBill);
+				t.AddNewlyCreatedDBObject(tableBill, true);
+				idsTable.Add(tableBill.Id);
+				tableBill.Position = new Point3d(tableSpec.Position.X, tableSpec.Position.Y - tableSpec.Height - 10 * scale, 0);
+
+				if (!DragSel.Drag(Ed, idsTable.ToArray(), Point3d.Origin))
+				{
+					foreach (var id in idsTable)
+					{
+						var ent = id.GetObject( OpenMode.ForWrite);
+						ent.Erase();
+					}
+				}					
+				t.Commit();
+			}
         }
 
         private void NumberingBlocks()

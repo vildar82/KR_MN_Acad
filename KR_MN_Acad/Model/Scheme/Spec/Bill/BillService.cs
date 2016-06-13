@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Autodesk.AutoCAD.DatabaseServices;
 
 namespace KR_MN_Acad.Scheme.Spec
 {
@@ -20,11 +21,11 @@ namespace KR_MN_Acad.Scheme.Spec
             Rows = new List<BillRow>();
         }
 
-        public void CreateTable()
+        public Table CreateTable()
         {
             Calc();
             BillSpec billSpec = new BillSpec(this);
-            billSpec.CreateTable();
+            return billSpec.CreateTable();
         }
 
         /// <summary>
