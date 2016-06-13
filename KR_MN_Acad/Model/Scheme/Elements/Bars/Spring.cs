@@ -55,5 +55,17 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         {
             return base.GetDesc() + $", ш.{StepHor}х{StepVertic}";
         }
+
+		/// <summary>
+		/// Определение длины шпильки
+		/// </summary>
+		/// <param name="thickness">Толщина стены</param>
+		/// <param name="diam">Диаметр рабочей арм</param>
+		/// <param name="a">45, Расстояние от центра рабочего стержня до края стены.</param>
+		/// <returns></returns>
+		public static int GetLength (int thickness, int diam, int a)
+		{
+			return (thickness - (2 * a)) + 2 * 75 + diam;
+		}
     }
 }

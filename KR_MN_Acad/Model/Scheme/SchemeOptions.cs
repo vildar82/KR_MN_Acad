@@ -12,23 +12,9 @@ namespace KR_MN_Acad.Scheme
     public class SchemeOptions
     {
         public Rules.Rule Rule { get; set; }
-        public Dictionary<string, Type> TypesBlock { get; set; }
-        public FilterBlocks Filter { get; set; }
+        public Dictionary<string, Type> TypesBlock { get; set; }        
         public TableOptions Table { get; set; }      
-    }
-
-    public class FilterBlocks
-    {
-        /// <summary>
-        /// Имя блока должно соответствовать этому регулярному выражения Regex.IsMatch(blockName, thisPattern, ignoreCase);
-        /// </summary>
-        public string BlockNameMatch { get; set; }
-
-        public FilterBlocks(string blNameMatch)
-        {
-            BlockNameMatch = blNameMatch;
-        }
-    }
+    }    
 
     public class TableOptions
     {

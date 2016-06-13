@@ -16,18 +16,18 @@ namespace KR_MN_Acad.Scheme.Wall
     {
         public static SchemeOptions GetSchemeOptions()
         {
-            SchemeOptions options = new SchemeOptions();
-            // Фильтр блоков
-            options.Filter = new FilterBlocks(WallBlock.WallBlockName);
+            SchemeOptions options = new SchemeOptions();            
             // Спецификация
             options.Table = new TableOptions("Спецификация материалов на вертикальные конструкции");
+            options.Table.Layer = "КР_Таблицы";
 
             // Типы блоков для схемы
             options.TypesBlock = new Dictionary<string, Type>
             {
                 { WallBlock.WallBlockName , typeof(WallBlock) },
-                { WallJoinBlock.WallJoinBlockName , typeof(WallJoinBlock) }
-            };
+                { WallEndBlock.WallJoinBlockName , typeof(WallEndBlock) },
+				{ WallEndCornerBlock.WallJoinBlockName , typeof(WallEndCornerBlock) },
+			};
 
             // Правила блоков
             options.Rule = new WallRule();

@@ -84,6 +84,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands.cs" />
+    <Compile Include="Model\Scheme\Blocks\Wall\WallBase.cs" />
+    <Compile Include="Model\Scheme\Blocks\Wall\WallEndCornerBlock.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallRule.cs" />
     <Compile Include="Model\Scheme\Elements\Bars\BarDetail.cs" />
     <Compile Include="Model\Scheme\Elements\Bars\Bracket.cs" />
@@ -140,7 +142,7 @@
     <Compile Include="Model\Scheme\Spec\SpecGroup.cs" />
     <Compile Include="Model\Scheme\Spec\SpecRow.cs" />
     <Compile Include="Model\Scheme\Spec\SpecTable.cs" />
-    <Compile Include="Model\Scheme\Blocks\Wall\WallJoinBlock.cs" />
+    <Compile Include="Model\Scheme\Blocks\Wall\WallEndBlock.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallSchemeOptions.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallBlock.cs" />
     <Compile Include="Model\Spec\SpecSlabOpenings.cs" />

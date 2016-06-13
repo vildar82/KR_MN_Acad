@@ -22,12 +22,17 @@ namespace KR_MN_Acad.Scheme.Elements.Concretes
         public GroupType Type { get; set; } = GroupType.Materials;
         public ISchemeBlock Block { get; set; }
 
-        public ConcreteH(string concrete, double len, double width, double height, ISchemeBlock block)
+        public ConcreteH (string concrete, double volume, ISchemeBlock block)
             : base(concrete)
         {
             FriendlyName = Name;
             Block = block;
-            Volume = Round2(len * width * height * 0.000000001);            
+            Volume = volume;
+        }
+
+        public ConcreteH(string concrete, double len, double width, double height, ISchemeBlock block)
+            : this(concrete, Round2(len * width * height * 0.000000001), block)
+        {            
         }
         
         public virtual void Calc()

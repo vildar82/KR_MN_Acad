@@ -131,6 +131,17 @@ namespace KR_MN_Acad.Scheme
             }
         }
 
+        protected void FillElemProp (IElement elem, string posPropertyName, string descPropertyName)
+        {
+            if (elem != null)
+            {
+                // Поз
+                FillProp(GetProperty(posPropertyName), elem.SpecRow.PositionColumn);
+                // Опис            
+                FillProp(GetProperty(descPropertyName), elem.GetDesc());
+            }
+        }
+
         protected static Rectangle GetRtreeRectangle(Extents3d extents)
         {
             return new Rectangle(extents.MinPoint.X, extents.MinPoint.Y,
