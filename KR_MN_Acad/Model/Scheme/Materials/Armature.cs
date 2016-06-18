@@ -18,7 +18,7 @@ namespace KR_MN_Acad.Scheme.Materials
         public const string ClassA500C = "А500С";
         public const string ClassA240C = "А240С";
         public const string GostNewNumber = "ГОСТ Р 52544-2006";//http://docs.cntd.ru/document/gost-r-52544-2006
-        public const string GostNewName = "Прокат арматурный свариваемый периодического профиля классов А500С и В500С для армирования железобетонных конструкций. Технические условия";
+        public const string GostNewName = "Прокат арматурный свариваемый периодического профиля классов А500С и В500С для армирования железобетонных конструкций.";
         public const string GostOldNumber = "ГОСТ 5781-82";//http://docs.cntd.ru/document/gost-5781-82
         public const string GostOldName = "Сталь горячекатаная для армирования железобетонных конструкций.";
         public static Gost GostNew = Gost.GetGost(GostNewNumber);
@@ -57,7 +57,7 @@ namespace KR_MN_Acad.Scheme.Materials
         /// </summary>
         public string Class { get; set; } = DefaultClass;
 
-        public string BillTitle { get; set; } = "Изделия арматурные";
+        public string BillTitle { get; set; } = "Изделия арматурные, кг";
         public string BillGroup { get; set; } = "Арматура класса";
         public string BillMark { get { return Class; } }
         public string BillName { get { return Symbols.Diam + Diameter; } }

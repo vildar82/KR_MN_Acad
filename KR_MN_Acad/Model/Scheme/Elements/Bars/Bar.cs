@@ -182,5 +182,18 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
             SpecRow.DescriptionColumn = weightTotal.ToString();
             SpecRow.Amount = weightTotal;
         }
+        
+        public virtual string GetPosition (int posIndex, IEnumerable<IElement> items, bool isNumbering)
+        {
+            if (isNumbering)
+                return Prefix + posIndex;
+            else
+                return PositionInBlock;
+        }
+
+        public void SortRowsSpec (List<ISpecRow> rows)
+        {
+            // Сортировка не нужна
+        }
     }
 }

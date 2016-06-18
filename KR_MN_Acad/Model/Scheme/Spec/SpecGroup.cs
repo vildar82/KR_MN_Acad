@@ -33,6 +33,9 @@ namespace KR_MN_Acad.Scheme.Spec
     /// </summary>
     public class SpecGroup
     {
+        /// <summary>
+        /// Нужна ли в группе спецификации простановка позиций
+        /// </summary>
         public bool HasPosition { get; set; } = true;
         /// <summary>
         /// Имя группы
@@ -94,7 +97,7 @@ namespace KR_MN_Acad.Scheme.Spec
             else
             {
                 // Без нумерации - сортировка по позициям
-                someElems = Elements.GroupBy(g => g).OrderBy(o => o.Key.PositionInBlock);
+                someElems = Elements.GroupBy(g => g).OrderBy(o => o.Key.PositionInBlock, AcadLib.Comparers.AlphanumComparator.New);
             }
             int posIndex = 0;
             string prefix = someElems.First().Key.Prefix;
@@ -113,19 +116,24 @@ namespace KR_MN_Acad.Scheme.Spec
                 string pos = string.Empty;
                 if (HasPosition)
                 {
-                    if (isNumbering)
-                    {
-                        pos = item.Key.Prefix + posIndex;
-                    }
-                    else
-                    {
-                        pos = item.Key.PositionInBlock;
-                    }
+                    pos = item.Key.GetPosition(posIndex, item, isNumbering);
+                    //if (isNumbering)
+                    //{
+                    //    pos = item.Key.GetPosition(posIndex, item, isNumbering);
+                    //    //pos = item.Key.Prefix + posIndex;
+                    //}
+                    //else
+                    //{
+                    //    pos = item.Key.PositionInBlock;
+                    //}
                 }                
                 ISpecRow row = new SpecRow(pos , item.ToList());
                 row.Calculate();
                 Rows.Add(row);                
             }
+            // При необходимости - сортировка строк в группе
+            var elem = someElems.First().Key;
+            elem.SortRowsSpec(Rows);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KR_MN_Acad.Scheme.Elements;
 using KR_MN_Acad.Scheme.Materials;
 
 namespace KR_MN_Acad.ConstructionServices
@@ -54,7 +55,8 @@ namespace KR_MN_Acad.ConstructionServices
             {                
                 {Armature.GostNewNumber,  new Gost(Armature.GostNewNumber,Armature.GostNewName ) },
                 {Armature.GostOldNumber,  new Gost(Armature.GostOldNumber, Armature.GostOldName) },
-                {Concrete.GostNumber, new Gost(Concrete.GostNumber, Concrete.GostName) }
+                {Concrete.GostNumber, new Gost(Concrete.GostNumber, Concrete.GostName) },
+                {Tube.GostNumber, new Gost(Tube.GostNumber, Tube.GostName) }
             };
         }
     }

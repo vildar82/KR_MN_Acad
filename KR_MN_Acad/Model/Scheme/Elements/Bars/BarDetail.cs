@@ -60,6 +60,6 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
             var atrPos = atrs.FirstOrDefault(a => a.Tag.Equals(paramName, StringComparison.OrdinalIgnoreCase));
             var atrRef=  atrPos.IdAtr.GetObject(OpenMode.ForWrite) as AttributeReference;
             atrRef.TextString = value;
-        }
+        }        
     }
 }

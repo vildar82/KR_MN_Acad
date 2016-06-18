@@ -14,7 +14,7 @@ namespace KR_MN_Acad.Scheme.Materials
     public abstract class Concrete : IMaterial
     {
         public const string GostNumber = "ГОСТ 26633-2012";
-        public const string GostName = "Бетоны тяжелые и мелкозернистые. Технические условия";
+        public const string GostName = "Бетоны тяжелые и мелкозернистые.";
         public const string ClassB25 = "B25";
         public const string ClassB30 = "B30";
 

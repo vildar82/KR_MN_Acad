@@ -85,6 +85,7 @@
   <ItemGroup>
     <Compile Include="Commands.cs" />
     <Compile Include="Model\KRHelper.cs" />
+    <Compile Include="Model\Scheme\Blocks\Wall\Sleeve.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallBase.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallEndCornerBlock.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallRule.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Model\Scheme\Elements\Concretes\ConcreteH.cs" />
     <Compile Include="Model\Scheme\Elements\IDetail.cs" />
     <Compile Include="Model\Scheme\Elements\IElement.cs" />
+    <Compile Include="Model\Scheme\Elements\Tube.cs" />
     <Compile Include="Model\Scheme\Materials\Armature.cs" />
     <Compile Include="Model\Scheme\Elements\Bars\BarDivision.cs" />
     <Compile Include="Model\Scheme\Elements\Bars\BarRunning.cs" />
@@ -129,7 +131,7 @@
     <Compile Include="Model\Scheme\Elements\Bars\Bar.cs" />
     <Compile Include="Model\Scheme\Blocks\ISchemeBlock.cs" />
     <Compile Include="Model\Scheme\Blocks\SchemeBlockFactory.cs" />
-    <Compile Include="Model\Scheme\Materials\Tube.cs" />
+    <Compile Include="Model\Scheme\Materials\RollSteel.cs" />
     <Compile Include="Model\Scheme\Rules\IRule.cs" />
     <Compile Include="Model\Scheme\Rules\Rule.cs" />
     <Compile Include="Model\Scheme\SchemeOptions.cs" />

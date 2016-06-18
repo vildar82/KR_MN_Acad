@@ -27,7 +27,8 @@ namespace KR_MN_Acad.Scheme.Wall
                 { WallBlock.WallBlockName , typeof(WallBlock) },
                 { WallEndBlock.WallJoinBlockName , typeof(WallEndBlock) },
 				{ WallEndCornerBlock.WallJoinBlockName , typeof(WallEndCornerBlock) },
-			};
+                { Sleeve.BlockName , typeof(Sleeve) }
+            };
 
             // Правила блоков
             options.Rule = new WallRule();

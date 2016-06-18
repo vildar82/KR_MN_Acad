@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KR_MN_Acad.Scheme.Materials;
 
 namespace KR_MN_Acad.Scheme.Spec
 {
     /// <summary>
     /// Материал для ведомости расхода стали
     /// </summary>
-    public interface IBillMaterial
+    public interface IBillMaterial : IMaterial
     {
         /// <summary>
         /// Заголовок выборки расхода стали (ВРС)
@@ -29,6 +30,6 @@ namespace KR_MN_Acad.Scheme.Spec
         /// Имя ячейки в ВРС.
         /// Например: ∅12, ∅14, -6х40, L63x6
         /// </summary>
-        string BillName { get; }
+        string BillName { get; }        
     }
 }

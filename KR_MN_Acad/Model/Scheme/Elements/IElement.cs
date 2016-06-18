@@ -41,6 +41,18 @@ namespace KR_MN_Acad.Scheme.Elements
         /// Строка элемента для заполнения в выноску в блоке
         /// </summary>
         /// <returns></returns>
-        string GetDesc();        
+        string GetDesc();
+        /// <summary>
+        /// Присвоение позиции элементов (после группировки)
+        /// </summary>
+        /// <param name="posIndex">Индекс позиции по порядку</param>
+        /// <param name="items">Элементы в строке спецификации</param>
+        /// <param name="isNumbering">True - при нуменрации, False - при спецификации</param>
+        string GetPosition (int posIndex, IEnumerable<IElement> items, bool isNumbering);
+        /// <summary>
+        /// При необходимости - сортировка строк в спецификации
+        /// </summary>
+        /// <param name="rows">Строки спецификации - одной группы элементов</param>
+        void SortRowsSpec (List<ISpecRow> rows);
     }        
 }

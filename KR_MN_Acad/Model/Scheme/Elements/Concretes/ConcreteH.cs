@@ -75,5 +75,15 @@ namespace KR_MN_Acad.Scheme.Elements.Concretes
         {
             return ClassB.GetHashCode();
         }
+
+        public string GetPosition (int posIndex, IEnumerable<IElement> items, bool isNumbering)
+        {
+            return "";
+        }
+
+        public void SortRowsSpec (List<ISpecRow> rows)
+        {
+            // Сортировка нужна
+        }
     }
 }
