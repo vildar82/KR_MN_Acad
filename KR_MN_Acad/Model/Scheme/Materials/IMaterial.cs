@@ -17,7 +17,6 @@ namespace KR_MN_Acad.Scheme.Materials
         /// <summary>
         /// ГОСТ
         /// </summary>
-        Gost Gost { get; }     
-        
+        Gost Gost { get; }             
     }
 }

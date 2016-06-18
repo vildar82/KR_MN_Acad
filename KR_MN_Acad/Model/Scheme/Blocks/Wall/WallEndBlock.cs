@@ -142,12 +142,13 @@ namespace KR_MN_Acad.Scheme.Wall
             int diam = GetPropValue<int>(PropNameShackleDiam, false);
             if (diam == 0) return null;
             string pos = GetPropValue<string>(PropNamePosShackle, false);            
-            int step = GetPropValue<int>(PropNameShackleStep);
-            // длина хомута
-            int len = Shackle.GetLenShackle((Length-(2*a)+ArmVertic.Diameter), (Thickness-(2*a)+ArmVertic.Diameter));
+            int step = GetPropValue<int>(PropNameShackleStep);            
             // ширина распределения шпилек
-            int width = Height;            
-            Shackle s = new Shackle(diam, len, step, width, pos, this);
+            int range = Height;
+            // длина хомута
+            int lShackle =  Length-(2*a)+ArmVertic.Diameter;
+            int hShackle = Thickness-(2*a)+ArmVertic.Diameter;
+            Shackle s = new Shackle(diam, lShackle, hShackle, step, range, pos, this);
             s.Calc();
             return s;
         }

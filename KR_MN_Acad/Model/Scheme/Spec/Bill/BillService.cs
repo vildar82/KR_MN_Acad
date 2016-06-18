@@ -12,13 +12,12 @@ namespace KR_MN_Acad.Scheme.Spec
     /// </summary>
     public class BillService
     {
-        public List<BillRow> Rows { get; set; }
+        public BillRow Row { get; set; }
         public SchemeService Service { get; set; }
 
         public BillService(SchemeService service)
         {
-            Service = service;
-            Rows = new List<BillRow>();
+            Service = service;            
         }
 
         public Table CreateTable()
@@ -34,9 +33,8 @@ namespace KR_MN_Acad.Scheme.Spec
         private void Calc()
         {
             // строка врс
-            BillRow row = new BillRow(this);
-            row.Calc();            
-            Rows.Add(row);
+            Row = new BillRow(this);
+            Row.Calc();
         }       
     }
 }

@@ -7,6 +7,7 @@ using AcadLib;
 using AcadLib.Jigs;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
+using KR_MN_Acad.Scheme.Materials;
 
 namespace KR_MN_Acad.Scheme.Spec
 {
@@ -18,7 +19,7 @@ namespace KR_MN_Acad.Scheme.Spec
         SchemeService service;
         BillService bill;
         TableOptions options;
-        List<BillRow> data;
+        BillRow data;
 
         //readonly int rowTitleIndex = 1;
         //readonly int rowGroupIndex = 2;
@@ -32,7 +33,7 @@ namespace KR_MN_Acad.Scheme.Spec
             bill = billService;
             service = bill.Service;
             options = billService.Service.Options.Table;
-            data = bill.Rows;
+            data = bill.Row;
         }        
 
         public Table CreateTable()
@@ -47,7 +48,7 @@ namespace KR_MN_Acad.Scheme.Spec
             //}
         }
 
-        private Table getTable()
+        private Table getTable ()
         {
             Table table = new Table();
             table.SetDatabaseDefaults(service.Db);
@@ -57,28 +58,23 @@ namespace KR_MN_Acad.Scheme.Spec
                 table.LayerId = AcadLib.Layers.LayerExt.GetLayerOrCreateNew(new AcadLib.Layers.LayerInfo(options.Layer));
             }
 
-            table.SetSize(3, 1);            
+            table.SetSize(4, 1);
             table.SetRowHeight(8);
-            table.SetColumnWidth(15);                        
+            table.SetColumnWidth(15);
 
-            // все столбцы таблицы
-            BillColumn.CalcColumns(data, this);
             // Добавление столбцов в таблицу
-            BillColumn.AddColumns(table);
+            BillColumn.AddColumns(table, data, this);
             // Заполнение расходов
-            int row = rowNameIndex;
-            foreach (var bilRow in data)
+            int row = rowNameIndex+1;
+            // Строка в ведомости расхода стали                
+            table.Cells[row, 0].TextString = data.Name;
+            foreach (var item in data.Cells)
             {
-                // Строка в ведомости расхода стали
-                table.InsertRows(++row, 8, 1);                
-                table.Cells[row, 0].TextString = bilRow.Name;
-                foreach (var item in bilRow.Cells)
-                {
-                    var colBil = BillColumn.GetColumn(item);
-                    table.Cells[row, colBil.Index].TextString = item.Amount.ToString();
-                }
-                row++;
+                var colBil = BillColumn.GetColumn(item);
+                table.Cells[row, colBil.Index].TextString = item.Amount.ToString();
             }
+
+            row++;
 
             foreach (var col in table.Columns)
             {
@@ -95,7 +91,7 @@ namespace KR_MN_Acad.Scheme.Spec
             var rowHeaders = table.Rows[1];
             //rowHeaders.Height = 15;
             lwBold = rowHeaders.Borders.Top.LineWeight.Value;
-            rowHeaders.Borders.Bottom.LineWeight = lwBold;            
+            rowHeaders.Borders.Bottom.LineWeight = lwBold;
 
             table.SetBorders(lwBold);
 
@@ -124,51 +120,55 @@ namespace KR_MN_Acad.Scheme.Spec
 
         class BillColumn
         {
-            static Dictionary<BillCell, BillColumn> cols;
-            static BillSpec spec;
+            static Dictionary<BillCell, BillColumn> cols;            
             BillCell cell;
             IBillMaterial mater;
-            public int Index;
+            public int Index;            
 
             public BillColumn(BillCell item)
             {
                 cell = item;
                 mater = item.BillMaterial;            
-            }
-
-            /// <summary>
-            /// Определение столбцов по данным
-            /// </summary>            
-            public static void CalcColumns (List<BillRow> rows, BillSpec spec)
-            {
-                BillColumn.spec = spec;
-                cols = new Dictionary<BillCell, BillColumn>();
-
-                // группировка по ячейкам
-                var cells = rows.SelectMany(s => s.Cells).GroupBy(g => g).OrderBy(o=>o.Key);
-
-                foreach (var item in cells)
-                {                    
-                    BillColumn col = new BillColumn(item.Key);
-                    cols.Add(item.Key, col);
-                }                
-            }
+            }            
 
             /// <summary>
             /// Добавление столбцов в ьаблицу
             /// </summary>
-            public static void AddColumns(Table table)
+            public static void AddColumns(Table table,BillRow row, BillSpec spec)
             {
-                table.InsertColumns(1, 15, cols.Count);                
-                int colIndex = 1;                
+                // группировка по ячейкам
+                var cells = row.Cells.GroupBy(g => g).OrderBy(o=>o.Key);
 
-                foreach (var item in cols)
+                var concretes = spec.service.Groups.FirstOrDefault(g => g.Type == GroupType.Materials)?.Rows.Where(r=>r.SomeElement is Concrete).GroupBy(g=>((Concrete)g.SomeElement).ClassB);
+
+                table.InsertColumns(1, 15, cells.Count()+ concretes.Count() + 1); // +1 - столбец Всего стали
+                int colIndex = 1;
+
+                cols = new Dictionary<BillCell, BillColumn>();                
+
+                foreach (var item in cells)
                 {
-                    item.Value.Index = colIndex;                   
-
-                    table.Cells[spec.rowNameIndex, colIndex].TextString = item.Value.mater.BillName;                    
-                    table.Cells[spec.rowMarkIndex, colIndex].TextString = item.Value.mater.BillMark;
+                    BillColumn col = new BillColumn(item.Key);
+                    cols.Add(item.Key, col);
+                    col.Index = colIndex;                    
+                    table.Cells[spec.rowMarkIndex, colIndex].TextString = col.mater.BillMark;
+                    table.Cells[spec.rowNameIndex, colIndex].TextString = col.mater.BillName;
                     colIndex++;
+                }
+                var mCells = CellRange.Create(table, 1, colIndex, spec.rowNameIndex, colIndex);
+                table.MergeCells(mCells);
+                table.Cells[1, colIndex].TextString = "Всего";
+                table.Cells[spec.rowNameIndex + 1, colIndex].TextString = row.Cells.Sum(s=>s.Amount).ToString();
+
+                // всего бетона
+                foreach (var concrete in concretes)
+                {
+                    colIndex++;                    
+                    mCells = CellRange.Create(table, 1, colIndex, spec.rowNameIndex, colIndex);
+                    table.MergeCells(mCells);
+                    string unitsConcrete = ((Concrete)concrete.First().SomeElement).Units;
+                    table.Cells[1, colIndex].TextString = $"Расход бетона класса {concrete.Key}, {unitsConcrete}";
+                    table.Cells[spec.rowNameIndex + 1, colIndex].TextString = concrete.Sum(c=>c.Amount).ToString();
                 }
             }
 

@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AcadLib.Blocks;
 
 namespace KR_MN_Acad.Scheme.Elements.Bars
 {
     /// <summary>
     /// Хомут
     /// </summary>
-    public class Shackle : BarDetail
+    public class Shackle : BarDetail, IDetail
     {
+        /// <summary>
+        /// Хвостик
+        /// </summary>
+        private const int tail = 75;
+
         /// <summary>
         /// Шаг
         /// </summary>
@@ -18,15 +24,27 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// <summary>
         /// Ширина распределения
         /// </summary>
-        public int Width { get; set; }        
+        public int Width { get; set; }
+        /// <summary>
+        /// Длина хомута
+        /// </summary>
+        public int L { get; set; }
+        /// <summary>
+        /// Высота хомута
+        /// </summary>
+        public int H { get; set; }
 
-        public Shackle(int diam, int len, int step, int width, string pos, ISchemeBlock block) 
-            : base(diam, len, 1, "Х-", pos, block, "Хомут")
+        public string BlockNameDetail { get { return "КР_Деталь_Х1"; } }
+
+        public Shackle(int diam, int width, int height, int step, int range, string pos, ISchemeBlock block) 
+            : base(diam, GetLenShackle(width, height), 1, "Х-", pos, block, "Хомут")
         {
+            L = width;
+            H = height;
             Class = ClassA240C;
             Gost = GostOld;
             Step = step;            
-            Width = width;            
+            Width = range;            
             Count = CalcCount();
         }
 
@@ -47,9 +65,21 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// <summary>
         /// Длина хомута - периметр + 75*2
         /// </summary>        
-        public static int GetLenShackle(int len, int width)
+        private static int GetLenShackle(int width, int height )
         {
-            return len * 2 + width * 2 + 75 * 2;
+            return width * 2 + height * 2 + tail * 2;
+        }
+
+        /// <summary>
+        /// Заполнение параметров деталей - в блоке детали
+        /// </summary>     
+        public void SetDetailsParam (List<AttributeInfo> atrs)
+        {
+            SetDetailParameter("ПОЗИЦИЯ", SpecRow.PositionColumn, atrs);
+            SetDetailParameter("ВЫСОТА", H.ToString(), atrs);
+            SetDetailParameter("ШИРИНА", L.ToString(), atrs);
+            SetDetailParameter("ХВОСТ1", tail.ToString(), atrs);
+            SetDetailParameter("ХВОСТ2", tail.ToString(), atrs);
         }
     }
 }

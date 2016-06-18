@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KR_MN_Acad.ConstructionServices;
+using KR_MN_Acad.Scheme.Spec;
 
 namespace KR_MN_Acad.Scheme.Materials
 {
@@ -19,13 +20,7 @@ namespace KR_MN_Acad.Scheme.Materials
 
         public Gost Gost { get; set; }
 
-        public string Name
-        {
-            get
-            {
-                return $"Бетон {ClassB}";
-            }
-        }
+        public string Name { get { return $"Бетон {ClassB}"; } }
 
         /// <summary>
         /// Расход бетона, м3

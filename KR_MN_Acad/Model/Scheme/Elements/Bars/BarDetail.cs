@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AcadLib.Blocks;
+using Autodesk.AutoCAD.DatabaseServices;
 using static AcadLib.General;
 
 namespace KR_MN_Acad.Scheme.Elements.Bars
@@ -45,6 +47,19 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public override string GetDesc()
         {
             return $"{SpecRow?.PositionColumn}, {Symbols.Diam}{Diameter}";
+        }
+
+        /// <summary>
+        /// Установка значения в атрибут блока детали
+        /// </summary>
+        /// <param name="paramName">Тег атрибута</param>
+        /// <param name="value">Значение</param>
+        /// <param name="atrs">Список всех атрибутов</param>
+        protected void SetDetailParameter(string paramName, string value, List<AttributeInfo> atrs)
+        {
+            var atrPos = atrs.FirstOrDefault(a => a.Tag.Equals(paramName, StringComparison.OrdinalIgnoreCase));
+            var atrRef=  atrPos.IdAtr.GetObject(OpenMode.ForWrite) as AttributeReference;
+            atrRef.TextString = value;
         }
     }
 }

@@ -15,6 +15,7 @@ namespace KR_MN_Acad.Scheme.Spec
     /// </summary>
     public class SpecTable
     {
+        public ObjectId LayerId { get; private set; }
         SchemeService service;
         TableOptions options;
         List<SpecGroup> data;
@@ -46,7 +47,12 @@ namespace KR_MN_Acad.Scheme.Spec
             table.TableStyle = service.Db.GetTableStylePIK(); // если нет стиля ПИк в этом чертеже, то он скопируетс из шаблона, если он найдется
             if (!string.IsNullOrEmpty(options.Layer))
             {
-                table.LayerId = AcadLib.Layers.LayerExt.GetLayerOrCreateNew(new AcadLib.Layers.LayerInfo(options.Layer));
+                LayerId = AcadLib.Layers.LayerExt.GetLayerOrCreateNew(new AcadLib.Layers.LayerInfo(options.Layer));
+                table.LayerId = LayerId;
+            }
+            else
+            {
+                LayerId = service.Db.Clayer;
             }
             								  
             table.SetSize(3, 6);

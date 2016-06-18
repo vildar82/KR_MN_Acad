@@ -92,13 +92,12 @@ namespace KR_MN_Acad.Scheme.Wall
             int diam = GetPropValue<int>(propNameBracketDiam, false);
             if (diam == 0) return null;
             string pos = GetPropValue<string>(propNamePosBracket, false);
-            int step = GetPropValue<int>(propNameBracketStep);
-            // длина скобы
-            int len = Bracket.CalcLength(bracketLen, thickness - 2 * a + diamVerticArm, diam);
+            int step = GetPropValue<int>(propNameBracketStep);            
             // ширина распределения
-            int width = Height;
-
-            Bracket b = new Bracket(diam, len, step, width, pos, this);
+            int wBracket = Height;
+            // ширина скобы
+            int tBracket = thickness - 2 * a + diamVerticArm;
+            Bracket b = new Bracket(diam, bracketLen, tBracket , step, wBracket, pos, this);
             b.Calc();
             return b;
         }

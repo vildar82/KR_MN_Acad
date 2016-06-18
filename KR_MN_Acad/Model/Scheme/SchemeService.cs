@@ -76,26 +76,36 @@ namespace KR_MN_Acad.Scheme
 			BillService bill = new BillService(this);
 			var tableBill = bill.CreateTable();
 
-			using (var t = Db.TransactionManager.StartTransaction())
-			{
-				var cs = Db.CurrentSpaceId.GetObject( OpenMode.ForWrite) as BlockTableRecord;
-				List<ObjectId> idsTable = new List<ObjectId> ();
-				var scale = AcadLib.Scale.ScaleHelper.GetCurrentAnnoScale(Db);
+            using (var t = Db.TransactionManager.StartTransaction())
+            {
+                var cs = Db.CurrentSpaceId.GetObject( OpenMode.ForWrite) as BlockTableRecord;
+                List<ObjectId> idsDrag = new List<ObjectId> ();
+                var scale = AcadLib.Scale.ScaleHelper.GetCurrentAnnoScale(Db);
 
-				tableSpec.TransformBy(Matrix3d.Scaling(scale, tableSpec.Position));
-				cs.AppendEntity(tableSpec);
-				t.AddNewlyCreatedDBObject(tableSpec, true);
-				idsTable.Add(tableSpec.Id);
+                tableSpec.TransformBy(Matrix3d.Scaling(scale, tableSpec.Position));
+                cs.AppendEntity(tableSpec);
+                t.AddNewlyCreatedDBObject(tableSpec, true);
+                idsDrag.Add(tableSpec.Id);
 
-				tableBill.TransformBy(Matrix3d.Scaling(scale, tableBill.Position));
-				cs.AppendEntity(tableBill);
-				t.AddNewlyCreatedDBObject(tableBill, true);
-				idsTable.Add(tableBill.Id);
-				tableBill.Position = new Point3d(tableSpec.Position.X, tableSpec.Position.Y - tableSpec.Height - 10 * scale, 0);
+                tableBill.TransformBy(Matrix3d.Scaling(scale, tableBill.Position));
+                cs.AppendEntity(tableBill);
+                t.AddNewlyCreatedDBObject(tableBill, true);
+                idsDrag.Add(tableBill.Id);
+                tableBill.Position = new Point3d(tableSpec.Position.X, tableSpec.Position.Y - tableSpec.Height - 10 * scale, 0);
 
-				if (!DragSel.Drag(Ed, idsTable.ToArray(), Point3d.Origin))
+                // Ведомость деталей
+                var groupDetails = Groups.FirstOrDefault(g=>g.Type == GroupType.Details);
+                if (groupDetails != null)
+                {
+                    var details = groupDetails.Rows.Where(w => w.SomeElement is IDetail).Select(s => s.SomeElement as IDetail).ToList();
+                    var ptDetail = new Point3d(tableSpec.Position.X + tableSpec.Width + 10 *scale, tableSpec.Position.Y, 0);
+                    Spec.Details.DetailService detailService = new Spec.Details.DetailService (details, Db);
+                    idsDrag.AddRange (detailService.CreateTable(ptDetail, spec.LayerId));
+                }                    
+
+				if (!DragSel.Drag(Ed, idsDrag.ToArray(), Point3d.Origin))
 				{
-					foreach (var id in idsTable)
+					foreach (var id in idsDrag)
 					{
 						var ent = id.GetObject( OpenMode.ForWrite);
 						ent.Erase();

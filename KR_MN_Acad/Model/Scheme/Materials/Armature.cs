@@ -31,14 +31,7 @@ namespace KR_MN_Acad.Scheme.Materials
         /// <summary>
         /// Наименование - "⌀12 A500C"
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return Symbols.Diam + Diameter + " " + Class;
-            }
-        }
-                
+        public string Name { get { return Symbols.Diam + Diameter + " " + Class; } }
         /// <summary>
         /// Диаметр
         /// </summary>

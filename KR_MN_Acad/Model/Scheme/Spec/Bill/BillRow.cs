@@ -31,7 +31,7 @@ namespace KR_MN_Acad.Scheme.Spec
         public void Calc()
         {
             Dictionary<BillCell, BillCell> dictCells = new Dictionary<BillCell, BillCell>();
-            // Все строки матариалы которых входят в ведомость расхода стали
+            // все материалы IBillMaterial
             var specRows = bilService.Service.Groups.SelectMany(s => s.Rows).Where(t => t.SomeElement is IBillMaterial);
             foreach (var row in specRows)
             {
@@ -42,6 +42,7 @@ namespace KR_MN_Acad.Scheme.Spec
                 else
                     dictCells.Add(cel, cel);
             }
+            // Добавление итоговых ячеек в кажд
             Cells = dictCells.Values.ToList();
             Cells.Sort();            
         }

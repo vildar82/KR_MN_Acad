@@ -111,14 +111,13 @@ namespace KR_MN_Acad.Scheme.Wall
             if (diam == 0) return null;
             string pos = GetPropValue<string>(PropNamePosSpring);            
             int stepHor = GetPropValue<int>(PropNameSpringStepHor);
-            int stepVert = GetPropValue<int>(PropNameSpringStepVertic);
-            int len = Spring.GetLength(Thickness,ArmVertic.Diameter, a);
+            int stepVert = GetPropValue<int>(PropNameSpringStepVertic);            
 
             // ширина распределения шпилек по горизонтале
             int widthHor = Length;
             int widthVertic = Height;
-
-            Spring sp = new Spring(diam, len, stepHor, stepVert, widthHor, widthVertic, pos, this);
+            var lRabSpring =  Thickness + ArmVertic.Diameter - 2 * a;
+            Spring sp = new Spring(diam, lRabSpring, stepHor, stepVert, widthHor, widthVertic, pos, this);
             sp.Calc();
             return sp;
         } 
