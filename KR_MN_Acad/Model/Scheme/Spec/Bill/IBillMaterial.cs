@@ -27,6 +27,10 @@ namespace KR_MN_Acad.Scheme.Spec
         /// </summary>
         string BillMark { get; }
         /// <summary>
+        /// ГОСТ
+        /// </summary>
+        string BillGOST { get; }
+        /// <summary>
         /// Имя ячейки в ВРС.
         /// Например: ∅12, ∅14, -6х40, L63x6
         /// </summary>

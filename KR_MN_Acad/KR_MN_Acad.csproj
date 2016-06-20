@@ -139,7 +139,7 @@
     <Compile Include="Model\Scheme\SelectService.cs" />
     <Compile Include="Model\Scheme\Blocks\SchemeBlock.cs" />
     <Compile Include="Model\Scheme\Spec\Bill\BillService.cs" />
-    <Compile Include="Model\Scheme\Spec\Bill\BillSpec.cs" />
+    <Compile Include="Model\Scheme\Spec\Bill\BillTable.cs" />
     <Compile Include="Model\Scheme\Spec\Bill\BillCell.cs" />
     <Compile Include="Model\Scheme\Spec\Bill\IBillMaterial.cs" />
     <Compile Include="Model\Scheme\Spec\Bill\BillRow.cs" />

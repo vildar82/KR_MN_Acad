@@ -98,7 +98,7 @@ namespace KR_MN_Acad.Scheme
                 if (groupDetails != null)
                 {
                     var details = groupDetails.Rows.Where(w => w.SomeElement is IDetail).Select(s => s.SomeElement as IDetail).ToList();
-                    var ptDetail = new Point3d(tableSpec.Position.X + tableSpec.Width + 10 *scale, tableSpec.Position.Y, 0);
+                    var ptDetail = new Point3d(tableBill.Position.X, tableBill.Position.Y -tableBill.Height-10*scale, 0);
                     Spec.Details.DetailService detailService = new Spec.Details.DetailService (details, Db);
                     idsDrag.AddRange (detailService.CreateTable(ptDetail, spec.LayerId));
                 }                    

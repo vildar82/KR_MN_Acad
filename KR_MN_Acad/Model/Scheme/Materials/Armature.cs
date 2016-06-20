@@ -60,7 +60,8 @@ namespace KR_MN_Acad.Scheme.Materials
         public string BillTitle { get; set; } = "Изделия арматурные, кг";
         public string BillGroup { get; set; } = "Арматура класса";
         public string BillMark { get { return Class; } }
-        public string BillName { get { return Symbols.Diam + Diameter; } }
+        public string BillGOST { get { return Gost.Number; } }
+        public string BillName { get { return Symbols.Diam + Diameter; } }        
 
         /// <summary>
         /// Дефолтный конструктор по диаметру, остальные дефолтные значения

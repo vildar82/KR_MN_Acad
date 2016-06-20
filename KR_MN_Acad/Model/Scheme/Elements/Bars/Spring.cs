@@ -44,7 +44,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// </summary>
         /// <param name="diam">Диаметр шпильки</param>
         /// <param name="diamWork">Диам раб арм</param>
-        /// <param name="lRab">Раст между раб стержнями (от внешних граней стержней)</param>        
+        /// <param name="lRab">Раст между раб стержнями (от центров рсб стержней)</param>        
         /// <param name="stepHor">Шаг шпилек по горизонтали</param>
         /// <param name="stepVert">Шаг шпилек по вертикали</param>
         /// <param name="widthHor">Ширина распределения по гориз</param>
@@ -97,8 +97,8 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         {
             SetDetailParameter("ПОЗИЦИЯ", SpecRow.PositionColumn, atrs);
             SetDetailParameter("ДЛИНА", LRab.ToString(), atrs);            
-            SetDetailParameter("ХВОСТ1", tail.ToString(), atrs);
-            SetDetailParameter("ХВОСТ2", tail.ToString(), atrs);
+            SetDetailParameter("ХВОСТ1", "50", atrs);
+            SetDetailParameter("ХВОСТ2", "50", atrs);
         }
     }
 }

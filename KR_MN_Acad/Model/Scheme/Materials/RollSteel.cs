@@ -19,6 +19,7 @@ namespace KR_MN_Acad.Scheme.Materials
         public string BillTitle { get; } = "Изделия закладные, кг";
         public string BillGroup { get; } = "Прокат марки";
         public string BillMark { get;  } = "ВСт3кп";
+        public string BillGOST { get { return Gost.Number; } }
         public string BillName { get { return Name; }  }
 
         /// <summary>

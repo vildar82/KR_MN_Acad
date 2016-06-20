@@ -116,7 +116,7 @@ namespace KR_MN_Acad.Scheme.Wall
             // ширина распределения шпилек по горизонтале
             int widthHor = Length;
             int widthVertic = Height;
-            var lRabSpring =  Thickness + ArmVertic.Diameter - 2 * a;
+            var lRabSpring =  Thickness - 2 * a;
             Spring sp = new Spring(diam, lRabSpring, stepHor, stepVert, widthHor, widthVertic, pos, this);
             sp.Calc();
             return sp;

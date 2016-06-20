@@ -23,7 +23,7 @@ namespace KR_MN_Acad.Scheme.Spec
         public Table CreateTable()
         {
             Calc();
-            BillSpec billSpec = new BillSpec(this);
+            BillTable billSpec = new BillTable(this);
             return billSpec.CreateTable();
         }
 
