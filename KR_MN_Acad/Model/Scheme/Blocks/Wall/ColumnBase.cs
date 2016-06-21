@@ -24,18 +24,18 @@ namespace KR_MN_Acad.Scheme.Wall
         /// </summary>
         protected const int a = 50;
 
-        const string PropNameConcrete = "Бетон";
-        const string PropNameOutline = "Выпуск";
-        const string PropNameHeight = "Высота колонны";        
-        const string PropNameArmVerticCount = "КолВертикАрм";
-        const string PropNameArmVerticDiam = "ДиамВертикАрм";
-        const string PropNameArmVerticStep = "ШагВертикАрм";        
-        const string PropNameShackleDiam = "ДиамХомута";
-        const string PropNameShackleStep = "ШагХомута";        
-        const string PropNameArmVerticPos = "ПОЗВЕРТИКАРМ";        
-        const string PropNameArmVerticDesc = "ОПИСАНИЕВЕРТИКАРМ";
-        const string PropNameShacklePos = "ПОЗХОМУТА";
-        const string PropNameShackleDesc = "ОПИСАНИЕХОМУТА";
+        protected const string PropNameConcrete = "Бетон";
+        protected const string PropNameOutline = "Выпуск";
+        protected const string PropNameHeight = "Высота колонны";
+        protected const string PropNameArmVerticCount = "КолВертикАрм";
+        protected const string PropNameArmVerticDiam = "ДиамВертикАрм";
+        protected const string PropNameArmVerticStep = "ШагВертикАрм";
+        protected const string PropNameShackleDiam = "ДиамХомута";
+        protected const string PropNameShackleStep = "ШагХомута";
+        protected const string PropNameArmVerticPos = "ПОЗВЕРТИКАРМ";
+        protected const string PropNameArmVerticDesc = "ОПИСАНИЕВЕРТИКАРМ";
+        protected const string PropNameShacklePos = "ПОЗХОМУТА";
+        protected const string PropNameShackleDesc = "ОПИСАНИЕХОМУТА";
 
         /// <summary>
         /// Высота колонны
