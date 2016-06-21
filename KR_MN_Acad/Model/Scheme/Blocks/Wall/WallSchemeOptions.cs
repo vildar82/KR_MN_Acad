@@ -24,9 +24,10 @@ namespace KR_MN_Acad.Scheme.Wall
             // Типы блоков для схемы
             options.TypesBlock = new Dictionary<string, Type>
             {
-                { WallBlock.WallBlockName , typeof(WallBlock) },
-                { WallEndBlock.WallJoinBlockName , typeof(WallEndBlock) },
-				{ WallEndCornerBlock.WallJoinBlockName , typeof(WallEndCornerBlock) },
+                { WallBlock.BlockName , typeof(WallBlock) },
+                { WallEndBlock.BlockName , typeof(WallEndBlock) },
+				{ WallEndCornerBlock.BlockName , typeof(WallEndCornerBlock) },
+                { WallEndTBlock.BlockName , typeof(WallEndTBlock) },
                 { Sleeve.BlockName , typeof(Sleeve) }
             };
 

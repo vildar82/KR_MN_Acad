@@ -87,6 +87,7 @@
     <Compile Include="Model\KRHelper.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\Sleeve.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallBase.cs" />
+    <Compile Include="Model\Scheme\Blocks\Wall\WallEndTBlock.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallEndCornerBlock.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallRule.cs" />
     <Compile Include="Model\Scheme\Elements\Bars\BarDetail.cs" />

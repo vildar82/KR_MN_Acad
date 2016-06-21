@@ -19,7 +19,7 @@ namespace KR_MN_Acad.Scheme.Wall
     /// </summary>
     public class WallBlock : WallBase
     {        
-        public const string WallBlockName = "КР_Арм_Стена";                          
+        public const string BlockName = "КР_Арм_Стена";                          
         
         const string PropNameLength = "Длина стены";
         const string PropNameThickness = "Толщина стены";        
@@ -87,7 +87,7 @@ namespace KR_MN_Acad.Scheme.Wall
             // Определние вертикальной арматуры
             ArmVertic = defineArmVertic();
             // Определние горизонтальной арматуры
-            ArmHor = defineArmHor(Length);
+            ArmHor = defineArmHor(Length, PropNameArmHorDiam, PropNamePosHorArm, PropNameArmHorStep);
             // Шпильки
             Spring = defineSpring();
         }        

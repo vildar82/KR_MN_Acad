@@ -16,7 +16,7 @@ namespace KR_MN_Acad.Scheme.Wall
     /// </summary>
     public class WallEndCornerBlock : WallBase
 	{        
-        public const string WallJoinBlockName = "КР_Арм_Стена_Торец_Угловой";
+        public const string BlockName = "КР_Арм_Стена_Торец_Угловой";
         
 		const string PropNameThickness1 = "Толщина1";
 		const string PropNameThickness2 = "Толщина2";		
@@ -120,7 +120,7 @@ namespace KR_MN_Acad.Scheme.Wall
             // Определние вертикальной арматуры
             ArmVertic = defineArmVertic();
             // Определние горизонтальной арматуры
-            ArmHor = defineArmHor(Thickness1+Thickness2);
+            ArmHor = defineArmHor(Thickness1+Thickness2, PropNameArmHorDiam, PropNamePosHorArm, PropNameArmHorStep);
             // Скоба 1
             Bracket1Length = GetPropValue<int>(PropNameBracket1Len, false);            
             Bracket1 = defineBracket(PropNameBracket1Diam, PropNamePosBracket1, PropNameBracket1Step,

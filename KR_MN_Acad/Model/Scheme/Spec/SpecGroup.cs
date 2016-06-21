@@ -19,6 +19,10 @@ namespace KR_MN_Acad.Scheme.Spec
         /// </summary>
         Details,
         /// <summary>
+        /// Гильзы
+        /// </summary>
+        Sleeves,
+        /// <summary>
         /// Закладные детали
         /// </summary>
         EmbeddedDetails,
@@ -67,6 +71,9 @@ namespace KR_MN_Acad.Scheme.Spec
                     break;
                 case GroupType.Details:
                     Name = "Детали";
+                    break;
+                case GroupType.Sleeves:
+                    Name = "Гильзы";
                     break;
                 case GroupType.EmbeddedDetails:
                     Name = "Закладные детали";

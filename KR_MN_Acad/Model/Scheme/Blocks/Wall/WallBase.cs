@@ -73,12 +73,12 @@ namespace KR_MN_Acad.Scheme.Wall
             return length - indentVerticArm * 2;
         }
 
-        protected BarRunningStep defineArmHor (int length)
+        protected BarRunningStep defineArmHor (int length, string propDiam, string propPos,string propStep )
         {
-            int diam = GetPropValue<int>(PropNameArmHorDiam);
+            int diam = GetPropValue<int>(propDiam);
             if (diam == 0) return null;
-            string pos = GetPropValue<string>(PropNamePosHorArm);            
-            int step = GetPropValue<int>(PropNameArmHorStep);
+            string pos = GetPropValue<string>(propPos);            
+            int step = GetPropValue<int>(propStep);
             int width = Height - 100;
             double len = getLengthHorArm(length, diam, Concrete.ClassB);
             var armHor = new BarRunningStep (diam, len, width, step, 2, pos, this, "Горизонтальная арматура");
@@ -101,6 +101,5 @@ namespace KR_MN_Acad.Scheme.Wall
             b.Calc();
             return b;
         }
-
     }
 }

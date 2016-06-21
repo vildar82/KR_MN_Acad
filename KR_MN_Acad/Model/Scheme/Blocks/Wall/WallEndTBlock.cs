@@ -12,26 +12,33 @@ using KR_MN_Acad.Scheme.Elements.Concretes;
 namespace KR_MN_Acad.Scheme.Wall
 {
     /// <summary>
-    /// Торец стены - прямой
+    /// Торец стены - Т-образный
     /// </summary>
-    public class WallEndBlock : WallBase
+    public class WallEndTBlock : WallBase
 	{        
-        public const string BlockName = "КР_Арм_Стена_Торец";
+        public const string BlockName = "КР_Арм_Стена_Торец_Т-образный";
                 
         const string PropNameLength = "Длина торца";
         const string PropNameThickness = "Толщина стены";        
         const string PropNameArmVerticDiam = "ДиамВертикАрм";
-        const string PropNameArmVerticCount = "КолВертикАрм";        
-        const string PropNameShackleDiam = "ДиамХомута";
-        const string PropNameShackleStep = "ШагХомута";
+        const string PropNameArmVerticCount = "КолВертикАрм";                
         const string PropNameBracketDiam = "ДиамСкобы";
         const string PropNameBracketStep = "ШагСкобы";
         const string PropNameBracketLen = "ДлинаСкобы";        
         const string PropNamePosShackle = "ПОЗХОМУТА";
         const string PropNamePosBracket = "ПОЗСКОБЫ";        
         const string PropNameDescShackle = "ОПИСАНИЕХОМУТА";
-        const string PropNameDescBracket = "ОПИСАНИЕСКОБЫ";	          
-        
+        const string PropNameDescBracket = "ОПИСАНИЕСКОБЫ";
+
+        protected new const string PropNameArmHorDiam = "ДиамГорАрм1";
+        protected new const string PropNameArmHorStep = "ШагГорАрм1";        
+        protected new const string PropNamePosHorArm = "ПОЗГОРАРМ1";
+        protected new const string PropNameDescHorArm = "ОПИСАНИЕГОРАРМ1";
+        protected const string PropNameArmHorDiam2 = "ДиамГорАрм2";
+        protected const string PropNameArmHorStep2 = "ШагГорАрм2";
+        protected const string PropNamePosHorArm2 = "ПОЗГОРАРМ2";
+        protected const string PropNameDescHorArm2 = "ОПИСАНИЕГОРАРМ2";
+
         /// <summary>
         /// Длина стены
         /// </summary>
@@ -51,17 +58,17 @@ namespace KR_MN_Acad.Scheme.Wall
         /// <summary>
         /// Распределенные вертикальные арматурные стержни
         /// </summary>
-        public Bar ArmVertic { get; set; }        
+        public Bar ArmVertic { get; set; }
         /// <summary>
-        /// Хомут
+        /// Горизонтальные арматурные стержни - погоннаж
         /// </summary>
-        public Shackle Shackle { get; set; }
+        public BarRunningStep ArmHor2 { get; set; }
         /// <summary>
         /// Скоба
         /// </summary>
         public Bracket Bracket { get; set; }        
 
-        public WallEndBlock(BlockReference blRef, string blName, SchemeService service) : base(blRef, blName, service)
+        public WallEndTBlock (BlockReference blRef, string blName, SchemeService service) : base(blRef, blName, service)
         {            
         }
 
@@ -84,7 +91,7 @@ namespace KR_MN_Acad.Scheme.Wall
         {            
             AddElement(ArmVertic);
             AddElement(ArmHor);
-            AddElement(Shackle);
+            AddElement(ArmHor2);
             AddElement(Bracket);
             AddElement(Concrete);
         }
@@ -93,10 +100,10 @@ namespace KR_MN_Acad.Scheme.Wall
         {
             // ГорАрм
             FillElemProp(ArmHor, PropNamePosHorArm, PropNameDescHorArm);
+            // ГорАрм2
+            FillElemProp(ArmHor2, PropNamePosHorArm2, PropNameDescHorArm2);
             // ВертикАрм
-            FillElemProp(ArmVertic, PropNamePosVerticArm, PropNameDescVerticArm);
-            // Хомут
-            FillElemProp(Shackle, PropNamePosShackle, PropNameDescShackle);
+            FillElemProp(ArmVertic, PropNamePosVerticArm, PropNameDescVerticArm);            
             // Скобы
             FillElemProp(Bracket, PropNamePosBracket, PropNameDescBracket);            
         }
@@ -113,10 +120,10 @@ namespace KR_MN_Acad.Scheme.Wall
             Concrete.Calc();
             // Определние вертикальной арматуры
             ArmVertic = defineArmVertic();
-            // Определние горизонтальной арматуры
+            // Определние горизонтальной арматуры1
             ArmHor = defineArmHor(Length, PropNameArmHorDiam, PropNamePosHorArm, PropNameArmHorStep);
-            // Хомут
-            Shackle = defineShackle();
+            // Определние горизонтальной арматуры2
+            ArmHor2 = defineArmHor(Thickness, PropNameArmHorDiam2, PropNamePosHorArm2, PropNameArmHorStep2);
             // Скоба
             BracketLength = GetPropValue<int>(PropNameBracketLen, false);
             Bracket = defineBracket(PropNameBracketDiam, PropNamePosBracket, PropNameBracketStep,
@@ -135,22 +142,6 @@ namespace KR_MN_Acad.Scheme.Wall
             arm.Count = ArmVerticCount;
             arm.Calc();
             return arm;
-        }        
-
-        private Shackle defineShackle()
-        {
-            int diam = GetPropValue<int>(PropNameShackleDiam, false);
-            if (diam == 0) return null;
-            string pos = GetPropValue<string>(PropNamePosShackle, false);            
-            int step = GetPropValue<int>(PropNameShackleStep);            
-            // ширина распределения шпилек
-            int range = Height;
-            // длина хомута
-            int lShackle =  Length-(2*a)+ArmVertic.Diameter;
-            int hShackle = Thickness-(2*a)+ArmVertic.Diameter;
-            Shackle s = new Shackle(diam, lShackle, hShackle, step, range, pos, this);
-            s.Calc();
-            return s;
-        }
+        }                
     }
 }

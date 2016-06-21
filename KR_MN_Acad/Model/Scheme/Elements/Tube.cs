@@ -25,7 +25,7 @@ namespace KR_MN_Acad.Scheme.Elements
         public string PositionInBlock { get; set; }
         public string Prefix { get; set; } = "";
         public ISpecRow SpecRow { get; set; }
-        public GroupType Type { get; set; } = GroupType.EmbeddedDetails;
+        public GroupType Type { get; set; } = GroupType.Sleeves;
 
         /// <summary>
         /// Марка  (Г1, Г1.1 и т.п.)
@@ -129,16 +129,17 @@ namespace KR_MN_Acad.Scheme.Elements
 
         public string GetPosition (int posIndex, IEnumerable<IElement> items, bool isNumbering)
         {
-            // группировка труб по марке            
-            var marks = items.OfType<Tube>().GroupBy(g=>g.Mark).Select(s=>s.First().Mark).OrderBy(o=>o, AcadLib.Comparers.AlphanumComparator.New);
-            string pos = string.Join(";", marks);
-            return pos;
+            //// группировка труб по марке            
+            //var marks = items.OfType<Tube>().GroupBy(g=>g.Mark).Select(s=>s.First().Mark).OrderBy(o=>o, AcadLib.Comparers.AlphanumComparator.New);
+            //string pos = string.Join(";", marks);
+            //return pos;
+            return "";
         }
 
         public void SortRowsSpec (List<ISpecRow> rows)
         {
             // rows - строки спецификации одой группы - закладнве детали
-            rows.Sort((r1, r2) => AcadLib.Comparers.AlphanumComparator.New.Compare(r1.PositionColumn, r2.PositionColumn));
+            //rows.Sort((r1, r2) => AcadLib.Comparers.AlphanumComparator.New.Compare(r1.PositionColumn, r2.PositionColumn));
         }
     }
 }
