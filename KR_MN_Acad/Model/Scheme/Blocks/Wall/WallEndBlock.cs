@@ -49,7 +49,7 @@ namespace KR_MN_Acad.Scheme.Wall
         /// </summary>
         public int BracketLength { get; set; }
         /// <summary>
-        /// Распределенные вертикальные арматурные стержни
+        /// вертикальные арматурные стержни
         /// </summary>
         public Bar ArmVertic { get; set; }        
         /// <summary>
@@ -112,45 +112,46 @@ namespace KR_MN_Acad.Scheme.Wall
             Concrete = new ConcreteH(concrete, Length, Thickness, Height, this);
             Concrete.Calc();
             // Определние вертикальной арматуры
-            ArmVertic = defineArmVertic();
+            ArmVertic = defineVerticArm(ArmVerticCount, PropNameArmVerticDiam, PropNamePosVerticArm);
             // Определние горизонтальной арматуры
             ArmHor = defineArmHor(Length, PropNameArmHorDiam, PropNamePosHorArm, PropNameArmHorStep);
             // Хомут
-            Shackle = defineShackle();
+            Shackle = defineShackle(Length, Thickness, Height, ArmVertic.Diameter, a, PropNameShackleDiam, PropNamePosShackle,
+               PropNameShackleStep);
             // Скоба
             BracketLength = GetPropValue<int>(PropNameBracketLen, false);
-            Bracket = defineBracket(PropNameBracketDiam, PropNamePosBracket, PropNameBracketStep,
+            Bracket = defineEndBracket(PropNameBracketDiam, PropNamePosBracket, PropNameBracketStep,
                BracketLength, Thickness, ArmVertic.Diameter);
         }
 
-        private Bar defineArmVertic()
-        {
-            if (ArmVerticCount == 0)
-                return null;
-            int diam = GetPropValue<int>(PropNameArmVerticDiam);
-            if (diam == 0) return null;
-            string pos = GetPropValue<string>(PropNamePosVerticArm);            
-            int len = Height + Outline;
-            var arm = new Bar(diam, len, pos, this, "Вертикальная арматура");
-            arm.Count = ArmVerticCount;
-            arm.Calc();
-            return arm;
-        }        
+        //private Bar defineArmVertic()
+        //{
+        //    if (ArmVerticCount == 0)
+        //        return null;
+        //    int diam = GetPropValue<int>(PropNameArmVerticDiam);
+        //    if (diam == 0) return null;
+        //    string pos = GetPropValue<string>(PropNamePosVerticArm);            
+        //    int len = Height + Outline;
+        //    var arm = new Bar(diam, len, pos, this, "Вертикальная арматура");
+        //    arm.Count = ArmVerticCount;
+        //    arm.Calc();
+        //    return arm;
+        //}        
 
-        private Shackle defineShackle()
-        {
-            int diam = GetPropValue<int>(PropNameShackleDiam, false);
-            if (diam == 0) return null;
-            string pos = GetPropValue<string>(PropNamePosShackle, false);            
-            int step = GetPropValue<int>(PropNameShackleStep);            
-            // ширина распределения шпилек
-            int range = Height;
-            // длина хомута
-            int lShackle =  Length-(2*a)+ArmVertic.Diameter;
-            int hShackle = Thickness-(2*a)+ArmVertic.Diameter;
-            Shackle s = new Shackle(diam, lShackle, hShackle, step, range, pos, this);
-            s.Calc();
-            return s;
-        }
+        //private Shackle defineEndShackle ()
+        //{
+        //    int diam = GetPropValue<int>(PropNameShackleDiam, false);
+        //    if (diam == 0) return null;
+        //    string pos = GetPropValue<string>(PropNamePosShackle, false);
+        //    int step = GetPropValue<int>(PropNameShackleStep);
+        //    // ширина распределения шпилек
+        //    int range = Height;
+        //    // длина хомута
+        //    int lShackle =  Length-(2*a)+ArmVertic.Diameter;
+        //    int hShackle = Thickness-(2*a)+ArmVertic.Diameter;
+        //    Shackle s = new Shackle(diam, lShackle, hShackle, step, range, pos, this);
+        //    s.Calc();
+        //    return s;            
+        //}
     }
 }

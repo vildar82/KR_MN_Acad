@@ -7,6 +7,7 @@ using KR_MN_Acad.ConstructionServices;
 using KR_MN_Acad.Scheme.Spec;
 using static AcadLib.Units.UnitsConvertHelper;
 using static AcadLib.General;
+using KR_MN_Acad.Scheme.Materials;
 
 namespace KR_MN_Acad.Scheme.Elements.Bars
 {
@@ -124,14 +125,14 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// </summary>
         /// <param name="classB">Класс бетона</param>
         /// <returns></returns>
-        public static double GetKLap(int diam, string classB)
+        public static double GetKLap(int diam, Concrete concrete)
         {
             if (KLapDict == null) KLapDict = LoadKLap();
             double res = 1;
             Dictionary<string, double> dict;
             if (KLapDict.TryGetValue(diam, out dict))
             {
-                dict.TryGetValue(classB, out res);
+                dict.TryGetValue(concrete.ClassB, out res);
             }
             return res;
         }

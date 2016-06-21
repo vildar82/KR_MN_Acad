@@ -15,7 +15,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// <summary>
         /// Хвостик
         /// </summary>
-        private const int tail = 75;
+        private int tail; // при диам 10-12 = 100
 
         /// <summary>
         /// Шаг
@@ -37,8 +37,9 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public string BlockNameDetail { get { return "КР_Деталь_Х1"; } }
 
         public Shackle(int diam, int width, int height, int step, int range, string pos, ISchemeBlock block) 
-            : base(diam, GetLenShackle(width, height), 1, "Х-", pos, block, "Хомут")
+            : base(diam, GetLenShackle(width, height, diam), 1, "Х-", pos, block, "Хомут")
         {
+            tail = getTail(diam);
             L = width;
             H = height;
             Class = ClassA240C;
@@ -46,6 +47,11 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
             Step = step;            
             Width = range;            
             Count = CalcCount();
+        }
+
+        private static int getTail (int diam)
+        {
+            return diam >= 10 ? 100 : 75;
         }
 
         /// <summary>
@@ -65,9 +71,9 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// <summary>
         /// Длина хомута - периметр + 75*2
         /// </summary>        
-        private static int GetLenShackle(int width, int height )
+        private static int GetLenShackle(int width, int height, int diam)
         {
-            return width * 2 + height * 2 + tail * 2;
+            return width * 2 + height * 2 + getTail(diam) * 2;
         }
 
         /// <summary>

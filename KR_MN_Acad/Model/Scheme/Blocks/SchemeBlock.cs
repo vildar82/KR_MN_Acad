@@ -8,6 +8,8 @@ using AcadLib.Errors;
 using AcadLib.RTree.SpatialIndex;
 using Autodesk.AutoCAD.DatabaseServices;
 using KR_MN_Acad.Scheme.Elements;
+using KR_MN_Acad.Scheme.Elements.Bars;
+using KR_MN_Acad.Scheme.Materials;
 using KR_MN_Acad.Scheme.Spec;
 
 namespace KR_MN_Acad.Scheme
@@ -146,6 +148,162 @@ namespace KR_MN_Acad.Scheme
         {
             return new Rectangle(extents.MinPoint.X, extents.MinPoint.Y,
                 extents.MaxPoint.X, extents.MaxPoint.Y, 0, 0);
+        }
+
+        /// <summary>
+        /// Определение отдельных стержней
+        /// </summary>
+        /// <param name="countArm">Кол-во стержней</param>
+        /// <param name="length">Длина стержня</param>
+        /// <param name="propDiam">Параметр диаметра стержня</param>
+        /// <param name="propPos">Параметр позиции стержня</param>
+        /// <param name="friendName">Человеческое имя стержня для описания ошибок - Горизонтальные стержни, Хомут, и т.п.</param>
+        /// <returns></returns>
+        protected Bar defineBar (int countArm, int length, string propDiam, string propPos, string friendName)
+        {
+            if (countArm == 0)
+                return null;
+            int diam = GetPropValue<int>(propDiam);
+            if (diam == 0) return null;
+            string pos = GetPropValue<string>(propPos);            
+            var arm = new Bar(diam, length, pos, this, friendName);
+            arm.Count = countArm;
+            arm.Calc();
+            return arm;
+        }
+
+        /// <summary>
+        /// Определение распределенной арматуры
+        /// </summary>
+        /// <param name="length">Длина стержня</param>
+        /// <param name="widthRun">Ширина распределения</param>
+        /// <param name="step">Шаг</param>
+        /// <param name="propDiam">Парам диаметра</param>        
+        /// <param name="propPos">Параметр аозиции</param>
+        /// <param name="rows">Рядов стержней</param>
+        /// <param name="friendlyName">Пользовательское имя</param>        
+        protected BarDivision defineDiv (int length, int widthRun, int step, string propDiam, string propPos,
+            int rows, string friendlyName)
+        {
+            int diam = GetPropValue<int>(propDiam);
+            if (diam == 0) return null;
+            string pos = GetPropValue<string>(propPos);            
+            var armDiv = new BarDivision(diam, length, widthRun, step, rows, pos, this, friendlyName);
+            armDiv.Calc();
+            return armDiv;
+        }
+
+        /// <summary>
+        /// Определение погонной арм с шириной и шагом распределения
+        /// </summary>
+        /// <param name="length"></param>
+        /// <param name="widthRun"></param>
+        /// <param name="propDiam"></param>
+        /// <param name="propPos"></param>
+        /// <param name="propStep"></param>
+        /// <param name="concrete"></param>
+        /// <param name="friendlyName"></param>
+        /// <returns></returns>
+        protected BarRunningStep defineBarRunStep (int length, int widthRun, int rows, string propDiam, string propPos, string propStep,
+            Concrete concrete, string friendlyName)
+        {
+            int diam = GetPropValue<int>(propDiam);
+            if (diam == 0) return null;
+            string pos = GetPropValue<string>(propPos);
+            int step = GetPropValue<int>(propStep);            
+            double len = getLengthRunArm(length, diam, concrete);
+            var arm = new BarRunningStep (diam, len, widthRun, step, rows, pos, this, friendlyName);
+            arm.Calc();
+            return arm;
+        }
+
+        /// <summary>
+        /// Определение длины горизонтальных стержней
+        /// </summary>
+        /// <returns></returns>
+        protected double getLengthRunArm (int length, int diam, Concrete concrete)
+        {
+            double kLap = BarRunning.GetKLap(diam, concrete);
+            return length * kLap;
+        }
+
+        /// <summary>
+        /// Определение скобы
+        /// </summary>
+        /// <param name="propDiam">Парам диам скобы</param>
+        /// <param name="propPos">Парам поз скобы</param>
+        /// <param name="propStep">Парам шаг скобы</param>
+        /// <param name="bracketLen">Длина вылета скобы</param>
+        /// <param name="thicknessWall">Толщина стены</param>
+        /// <param name="a">Защитный слой до центра раб арм</param>
+        /// <param name="widthRun">Ширина распределения скобы (высота стены)</param>
+        /// <param name="diamWorkArm">Диам раб арм</param>
+        /// <returns></returns>
+        protected Bracket defineBracket (string propDiam, string propPos,
+            string propStep, int bracketLen, int thicknessWall, int a, int widthRun, int diamWorkArm)
+        {
+            int diam = GetPropValue<int>(propDiam, false);
+            if (diam == 0) return null;
+            string pos = GetPropValue<string>(propPos, false);
+            int step = GetPropValue<int>(propStep);            
+            // ширина скобы
+            int tBracket = thicknessWall - 2 * a + diamWorkArm;
+            Bracket b = new Bracket(diam, bracketLen, tBracket , step, widthRun, pos, this);
+            b.Calc();
+            return b;
+        }
+
+        /// <summary>
+        /// Определение хомута
+        /// </summary>
+        /// <param name="width">Ширина бетона</param>
+        /// <param name="thickness">Толщина бетона</param>
+        /// <param name="range">Ширина распределения хомутов (по бетону, отступ 100 отнимается тут)</param>
+        /// <param name="diamWorkArm">Раб диам</param>
+        /// <param name="a">Защ слой до центра раб арм</param>
+        /// <param name="propDiam">Парам диам</param>
+        /// <param name="propPos">Парам позиции</param>
+        /// <param name="propStep">Парам шага</param>        
+        protected Shackle defineShackle (int width, int thickness, int range,int diamWorkArm, int a,
+            string propDiam, string propPos, string propStep)
+        {
+            int diam = GetPropValue<int>(propDiam, false);
+            if (diam == 0) return null;
+            string pos = GetPropValue<string>(propPos, false);
+            int step = GetPropValue<int>(propStep);            
+            // длина хомута
+            int lShackle =  width-(2*a)+diamWorkArm;
+            int hShackle = thickness-(2*a)+diamWorkArm;
+            Shackle s = new Shackle(diam, lShackle, hShackle, step, range-100, pos, this);
+            s.Calc();
+            return s;
+        }
+
+        /// <summary>
+        /// определение шпильки
+        /// </summary>
+        /// <param name="propDiam">Парам диам</param>
+        /// <param name="propPos">Парам поз</param>
+        /// <param name="propStepHor">Параметр шага по гор</param>
+        /// <param name="propStepVert">Параметр шага по вертикали</param>
+        /// <param name="thickness">Толщина бетона</param>
+        /// <param name="a">Защ слой до центра раб арм</param>
+        /// <param name="widthHor">Ширина распределения по гор</param>
+        /// <param name="widthVert">Ширина распределения по верт</param>
+        /// <returns></returns>
+        protected Spring defineSpring (string propDiam, string propPos, string propStepHor, string propStepVert,
+           int thickness, int a,  int widthHor, int widthVert)
+        {
+            int diam = GetPropValue<int>(propDiam);
+            if (diam == 0) return null;
+            string pos = GetPropValue<string>(propPos);
+            int stepHor = GetPropValue<int>(propStepHor);
+            int stepVert = GetPropValue<int>(propStepVert);
+            // ширина распределения шпилек по горизонтале            
+            var lRabSpring =  thickness - 2 * a;
+            Spring sp = new Spring(diam, lRabSpring, stepHor, stepVert, widthHor, widthVert, pos, this);
+            sp.Calc();
+            return sp;
         }
     }
 }

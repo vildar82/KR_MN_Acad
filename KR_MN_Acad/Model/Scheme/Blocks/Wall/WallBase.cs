@@ -14,11 +14,7 @@ using KR_MN_Acad.Scheme.Elements.Concretes;
 namespace KR_MN_Acad.Scheme.Wall
 {
     public abstract class WallBase : SchemeBlock
-    {
-        /// <summary>
-        /// Отступ вертикальной арматуры от торца стены
-        /// </summary>
-        private int indentVerticArm;
+    {        
         /// <summary>
         /// Защитный слой бетона до центра арматуры
         /// </summary>
@@ -51,55 +47,52 @@ namespace KR_MN_Acad.Scheme.Wall
 
         public WallBase (BlockReference blRef, string blName, SchemeService service) : base(blRef, blName, service)
         {
-        }
-
-        /// <summary>
-        /// Определение длины горизонтальных стержней
-        /// </summary>
-        /// <returns></returns>
-        protected double getLengthHorArm (int length, int diam, string classB)
-        {
-            double kLap = BarRunning.GetKLap(diam, classB);
-            return length * kLap;
-        }
+        }       
 
         /// <summary>
         /// Определение ширины распределения вертикальных стержней в стене
         /// </summary>        
         protected int getWidthVerticArm (int step, int length)
         {
-            // Вычесть отступ у торцов стены = шаг вертик стержней - а.
-            indentVerticArm = step - a;
-            return length - indentVerticArm * 2;
+            // Вычесть отступ у торцов стены = шаг вертик стержней - а.            
+            return length - (step - a) * 2;
         }
 
-        protected BarRunningStep defineArmHor (int length, string propDiam, string propPos,string propStep )
+        /// <summary>
+        /// Вертикальные отдельные стержени
+        /// </summary>
+        /// <param name="count">Кол</param>
+        /// <param name="propDiam">Парам диам</param>
+        /// <param name="propPos">Парам поз</param>        
+        protected Bar defineVerticArm (int count, string propDiam, string propPos)
         {
-            int diam = GetPropValue<int>(propDiam);
-            if (diam == 0) return null;
-            string pos = GetPropValue<string>(propPos);            
+            return defineBar(count, Height + Outline, propDiam, propPos, "Вертикальная арматура");
+        }
+
+        /// <summary>
+        /// Вертикальная распределенная арматура
+        /// </summary>
+        /// <param name="length">Длина по бетону (отступ вычисляется тут)</param>
+        /// <param name="propDiam">Парам диам</param>
+        /// <param name="propStep">Парам шаг</param>
+        /// <param name="propPos">Парам поз</param>        
+        protected BarDivision defineVerticArm (int length, string propDiam, string propStep, string propPos)
+        {
             int step = GetPropValue<int>(propStep);
-            int width = Height - 100;
-            double len = getLengthHorArm(length, diam, Concrete.ClassB);
-            var armHor = new BarRunningStep (diam, len, width, step, 2, pos, this, "Горизонтальная арматура");
-            armHor.Calc();
-            return armHor;
+            return defineDiv(Height + Outline, getWidthVerticArm(step, length), step, propDiam, propPos, 2, "Вертикальная арматура");
         }
 
-        protected Bracket defineBracket (string propNameBracketDiam, string propNamePosBracket,
-            string propNameBracketStep, int bracketLen, int thickness, int diamVerticArm)
+        protected BarRunningStep defineArmHor (int length, string propDiam, string propPos, string propStep)
         {
-            int diam = GetPropValue<int>(propNameBracketDiam, false);
-            if (diam == 0) return null;
-            string pos = GetPropValue<string>(propNamePosBracket, false);
-            int step = GetPropValue<int>(propNameBracketStep);            
-            // ширина распределения
+            int widthRun = Height - 100;
+            return defineBarRunStep(length, widthRun, 2, propDiam, propPos, propStep, Concrete, "Горизонтальная арматура");
+        }
+
+        protected Bracket defineEndBracket (string propDiam, string propPos,
+            string propStep, int bracketLen, int thickness, int diamVerticArm)
+        {            
             int wBracket = Height;
-            // ширина скобы
-            int tBracket = thickness - 2 * a + diamVerticArm;
-            Bracket b = new Bracket(diam, bracketLen, tBracket , step, wBracket, pos, this);
-            b.Calc();
-            return b;
+            return defineBracket(propDiam, propPos, propStep, bracketLen, thickness, a, wBracket, diamVerticArm);
         }
     }
 }

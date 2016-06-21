@@ -28,6 +28,7 @@ namespace KR_MN_Acad.Scheme.Wall
                 { WallEndBlock.BlockName , typeof(WallEndBlock) },
 				{ WallEndCornerBlock.BlockName , typeof(WallEndCornerBlock) },
                 { WallEndTBlock.BlockName , typeof(WallEndTBlock) },
+                { ColumnSquareSmall.BlockName , typeof(ColumnSquareSmall) },
                 { Sleeve.BlockName , typeof(Sleeve) }
             };
 

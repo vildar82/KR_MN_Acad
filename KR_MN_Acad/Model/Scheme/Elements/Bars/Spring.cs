@@ -15,7 +15,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// <summary>
         /// Хвостик
         /// </summary>
-        private const int tail = 75;
+        private int tail;
 
         /// <summary>
         /// Шаг шпилек по гориз
@@ -52,8 +52,9 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// <param name="pos">Позиция (из атр блока)</param>
         /// <param name="block">Блок</param>
         public Spring (int diam, int lRab, int stepHor, int stepVert, int widthHor,int widthVertic, string pos, ISchemeBlock block) 
-            : base(diam, GetLength(lRab), 1, "Ш-", pos, block, "Шпилька")
+            : base(diam, GetLength(lRab, diam), 1, "Ш-", pos, block, "Шпилька")
         {
+            tail = getTail(diam);
             LRab = lRab;
             Class = ClassA240C;
             Gost = GostOld;
@@ -62,6 +63,11 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
             WidthHor = widthHor;
             WidthVertic = widthVertic;
             Count = CalcCount();
+        }
+
+        private static int getTail (int diam)
+        {
+            return diam >= 10 ? 100 : 75;
         }
 
         /// <summary>
@@ -85,9 +91,9 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// </summary>
         /// <param name="lRab">Раст между раб стержнями (от внешних граней стержней)</param>        
         /// <returns></returns>
-        private static int GetLength (int lRab)
+        private static int GetLength (int lRab, int diam)
 		{
-			return lRab + 2 * tail;
+			return lRab + 2 * getTail(diam);
 		}
 
         /// <summary>

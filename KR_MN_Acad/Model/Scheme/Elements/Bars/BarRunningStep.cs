@@ -24,12 +24,23 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// </summary>
         public int Rows { get; set; } = 1;
 
-        public BarRunningStep(int diam, double length, int width, int step, int rows, string pos, 
+        /// <summary>
+        /// Погонные стержни с шагом и диапазоном распределения
+        /// </summary>
+        /// <param name="diam">Диам</param>
+        /// <param name="length">Длина стержня</param>
+        /// <param name="widthRun">Щирина распределения</param>
+        /// <param name="step">Шаг распределенич</param>
+        /// <param name="rows">Рядов стержней</param>
+        /// <param name="pos">Позиция (из атр блока)</param>
+        /// <param name="block">Блок</param>
+        /// <param name="friendlyName"></param>
+        public BarRunningStep(int diam, double length, int widthRun, int step, int rows, string pos, 
             ISchemeBlock block, string friendlyName)
             : base(diam, pos, block, friendlyName)
         {
             Rows = rows;
-            Width = width;
+            Width = widthRun;
             Step = step;            
             Meters = CalcMeters(length);            
         }

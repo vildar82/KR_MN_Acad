@@ -16,7 +16,7 @@ namespace KR_MN_Acad.Scheme.Wall
     /// </summary>
     public class WallEndCornerBlock : WallBase
 	{        
-        public const string BlockName = "КР_Арм_Стена_Торец_Угловой";
+        public const string BlockName = "КР_Арм_Стена_Г-стык";
         
 		const string PropNameThickness1 = "Толщина1";
 		const string PropNameThickness2 = "Толщина2";		
@@ -54,7 +54,7 @@ namespace KR_MN_Acad.Scheme.Wall
 		/// </summary>
 		public int Bracket2Length { get; set; }
 		/// <summary>
-		/// Распределенные вертикальные арматурные стержни
+		/// вертикальные арматурные стержни
 		/// </summary>
 		public Bar ArmVertic { get; set; }        
         /// <summary>
@@ -123,11 +123,11 @@ namespace KR_MN_Acad.Scheme.Wall
             ArmHor = defineArmHor(Thickness1+Thickness2, PropNameArmHorDiam, PropNamePosHorArm, PropNameArmHorStep);
             // Скоба 1
             Bracket1Length = GetPropValue<int>(PropNameBracket1Len, false);            
-            Bracket1 = defineBracket(PropNameBracket1Diam, PropNamePosBracket1, PropNameBracket1Step,
+            Bracket1 = defineEndBracket(PropNameBracket1Diam, PropNamePosBracket1, PropNameBracket1Step,
                 Bracket1Length,Thickness1, ArmVertic.Diameter);
             // Скоба 2
             Bracket2Length = GetPropValue<int>(PropNameBracket2Len, false);
-            Bracket2 = defineBracket(PropNameBracket2Diam, PropNamePosBracket2, PropNameBracket2Step,
+            Bracket2 = defineEndBracket(PropNameBracket2Diam, PropNamePosBracket2, PropNameBracket2Step,
                 Bracket2Length, Thickness2, ArmVertic.Diameter);
         }        
 
