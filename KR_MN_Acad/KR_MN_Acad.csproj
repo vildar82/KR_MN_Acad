@@ -9,8 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>KR_MN_Acad</RootNamespace>
     <AssemblyName>KR_MN_Acad</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -60,12 +62,16 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
+    <Reference Include="MicroMvvm">
+      <HintPath>..\..\..\Package\MVVM\MicroMvvm.dll</HintPath>
+    </Reference>
     <Reference Include="NetTopologySuite, Version=1.14.0.0, Culture=neutral, PublicKeyToken=f580a05016ebada1, processorArchitecture=MSIL">
       <HintPath>..\packages\NetTopologySuite.1.14\lib\net45\NetTopologySuite.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="SpecBlocks">
       <HintPath>..\..\..\ОБЩЕЕ\SpecBlocks\SpecBlocks\bin\Release\SpecBlocks.dll</HintPath>
       <Private>False</Private>
@@ -74,6 +80,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -85,6 +92,13 @@
   <ItemGroup>
     <Compile Include="Commands.cs" />
     <Compile Include="Model\KRHelper.cs" />
+    <Compile Include="Model\Scheme\ArmTypes\ArmTypesService.cs" />
+    <Compile Include="Model\Scheme\ArmTypes\ArmTypeWall.cs" />
+    <Compile Include="Model\Scheme\ArmTypes\UI\ViewArmTypes.cs" />
+    <Compile Include="Model\Scheme\ArmTypes\UI\ViewArmTypeWall.cs" />
+    <Compile Include="Model\Scheme\ArmTypes\UI\WindowArmTypes.xaml.cs">
+      <DependentUpon>WindowArmTypes.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Model\Scheme\Blocks\Wall\ColumnSquareBig.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\ColumnSquareSmall.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\Sleeve.cs" />
@@ -176,6 +190,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Page Include="Model\Scheme\ArmTypes\UI\WindowArmTypes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
