@@ -45,7 +45,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public Bracket (int d, int h, int t, int step, int width, string pos, ISchemeBlock block) 
             : base(d, CalcLength(h, t, d), 1, "Ск-", pos, block, "Скоба")
         {
-            T = t;
+            T = RoundHelper.Round5(t);
             L = h;
             Step = step;            
             Width = width;            
@@ -74,7 +74,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// <param name="d">Диаметр скобы</param>        
         private static int CalcLength(int h, int t, int d)
         {
-            return RoundHelper.RoundWhole(2 * h + t + 0.58 * d);            
+            return RoundHelper.RoundWhole(2 * h + RoundHelper.Round5(t) + 0.58 * d);            
         }
 
         /// <summary>

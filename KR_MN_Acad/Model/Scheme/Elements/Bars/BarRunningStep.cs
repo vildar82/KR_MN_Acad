@@ -49,7 +49,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         {
             // Кол стержней в распределении
             int count = BarDivision.CalcCountByStep(Width, Step)*Rows;
-            return RoundHelper.Round2(ConvertMmToMLength(length)* count);
+            return RoundHelper.Round2Digits(ConvertMmToMLength(length)* count);
         }
 
         public override string GetDesc()

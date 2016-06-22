@@ -73,7 +73,7 @@ namespace KR_MN_Acad.Scheme.Elements
         public void Calc ()
         {
             // Масса ед. кг.
-            Weight = RoundHelper.Round3(WeightUnit * ConvertMmToMLength(Length));
+            Weight = RoundHelper.Round3Digits(WeightUnit * ConvertMmToMLength(Length));
         }        
 
         public string GetDesc ()
@@ -88,7 +88,7 @@ namespace KR_MN_Acad.Scheme.Elements
             SpecRow.NameColumn = $"Труба {Name}, L={Length}";
 
             int countTotal = elems.Count;
-            double weightTotal = RoundHelper.Round2(Weight * countTotal);
+            double weightTotal = RoundHelper.Round2Digits(Weight * countTotal);
 
             SpecRow.CountColumn = countTotal.ToString();
             SpecRow.WeightColumn = Weight.ToString("0.000");

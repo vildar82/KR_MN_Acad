@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AcadLib.Blocks;
+using KR_MN_Acad.ConstructionServices;
 
 namespace KR_MN_Acad.Scheme.Elements.Bars
 {
@@ -40,8 +41,8 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
             : base(diam, GetLenShackle(width, height, diam), 1, "Х-", pos, block, "Хомут")
         {
             tail = getTail(diam);
-            L = width;
-            H = height;
+            L = RoundHelper.Round5(width);
+            H = RoundHelper.Round5(height);
             Class = ClassA240C;
             Gost = GostOld;
             Step = step;            
@@ -73,7 +74,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// </summary>        
         private static int GetLenShackle(int width, int height, int diam)
         {
-            return width * 2 + height * 2 + getTail(diam) * 2;
+            return RoundHelper.Round5(width) * 2 + RoundHelper.Round5(height) * 2 + getTail(diam) * 2;
         }
 
         /// <summary>

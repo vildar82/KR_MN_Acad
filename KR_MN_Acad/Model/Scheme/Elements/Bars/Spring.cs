@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AcadLib.Blocks;
+using KR_MN_Acad.ConstructionServices;
 
 namespace KR_MN_Acad.Scheme.Elements.Bars
 {
@@ -44,7 +45,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// </summary>
         /// <param name="diam">Диаметр шпильки</param>
         /// <param name="diamWork">Диам раб арм</param>
-        /// <param name="lRab">Раст между раб стержнями (от центров рсб стержней)</param>        
+        /// <param name="lRab">Раст между раб стержнями (от центров раб стержней)</param>        
         /// <param name="stepHor">Шаг шпилек по горизонтали</param>
         /// <param name="stepVert">Шаг шпилек по вертикали</param>
         /// <param name="widthHor">Ширина распределения по гориз</param>
@@ -55,7 +56,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
             : base(diam, GetLength(lRab, diam), 1, "Ш-", pos, block, "Шпилька")
         {
             tail = getTail(diam);
-            LRab = lRab;
+            LRab = RoundHelper.Round5(lRab);
             Class = ClassA240C;
             Gost = GostOld;
             StepHor = stepHor;
@@ -93,7 +94,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// <returns></returns>
         private static int GetLength (int lRab, int diam)
 		{
-			return lRab + 2 * getTail(diam);
+			return RoundHelper.Round5(lRab) + 2 * getTail(diam);
 		}
 
         /// <summary>

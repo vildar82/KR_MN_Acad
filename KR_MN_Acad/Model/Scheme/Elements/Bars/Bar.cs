@@ -62,9 +62,9 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public virtual void Calc()
         {
             // Масса ед. кг.
-            Weight = RoundHelper.Round3(WeightUnit * ConvertMmToMLength(Length));
+            Weight = RoundHelper.Round3Digits(WeightUnit * ConvertMmToMLength(Length));
             // Масса всех стержней
-            WeightTotal =RoundHelper.Round2(Weight * Count);
+            WeightTotal =RoundHelper.Round2Digits(Weight * Count);
         }
 
         public virtual int CompareTo(IElement other)
@@ -175,7 +175,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
                 countTotal += bar.Count;
                 //weightTotal += bar.WeightTotal;
             }
-            weightTotal = RoundHelper.Round2(Weight * countTotal);
+            weightTotal = RoundHelper.Round2Digits(Weight * countTotal);
 
             SpecRow.CountColumn = countTotal.ToString();
             SpecRow.WeightColumn = Weight.ToString("0.000");

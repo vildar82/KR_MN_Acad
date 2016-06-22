@@ -30,7 +30,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public BarRunning(int diam, double meters, string pos, ISchemeBlock block, string friendlyName) 
             : this(diam, pos, block, friendlyName)
         {
-            Meters = RoundHelper.Round2(meters);            
+            Meters = RoundHelper.Round2Digits(meters);            
         }
 
         /// <summary>
@@ -39,9 +39,9 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public override void Calc()
         {
             // Масса ед
-            Weight = RoundHelper.Round3(WeightUnit);
+            Weight = RoundHelper.Round3Digits(WeightUnit);
             // Масса общая
-            WeightTotal = RoundHelper.Round2(Weight * Meters);
+            WeightTotal = RoundHelper.Round2Digits(Weight * Meters);
         }
 
         public override int CompareTo(IElement other)
@@ -112,7 +112,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
                 //weightTotal += bar.WeightTotal;
             }
             metersTotal = RoundHelper.RoundWhole(metersTotal);
-            weightTotal = RoundHelper.Round2( metersTotal * Weight);
+            weightTotal = RoundHelper.Round2Digits( metersTotal * Weight);
 
             SpecRow.CountColumn = metersTotal.ToString();
             SpecRow.WeightColumn = Weight.ToString("0.000");

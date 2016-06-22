@@ -31,7 +31,7 @@ namespace KR_MN_Acad.Scheme.Elements.Concretes
         }
 
         public ConcreteH(string concrete, double len, double width, double height, ISchemeBlock block)
-            : this(concrete, Round2(len * width * height * 0.000000001), block)
+            : this(concrete, Round2Digits(len * width * height * 0.000000001), block)
         {            
         }
         

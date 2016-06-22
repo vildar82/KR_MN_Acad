@@ -69,7 +69,7 @@ namespace KR_MN_Acad.Scheme.Materials
         /// <param name="diameter"></param>
         public Armature(int diameter, int len)
         {
-            Length = AcadLib.MathExt.RoundTo5(len);
+            Length = RoundHelper.Round5(len);
             Diameter = diameter;
             defineBaseParams();            
         }
