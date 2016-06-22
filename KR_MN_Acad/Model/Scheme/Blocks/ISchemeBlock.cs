@@ -26,8 +26,9 @@ namespace KR_MN_Acad.Scheme
         Dictionary<string, Property> Properties { get; set; }
         /// <summary>
         /// Определение материалов блока по свойствам.
+        /// Исключения нужно обрабатывать и заносить в Error
         /// </summary>
-        void Calculate();
+        void Calculate ();
         /// <summary>
         /// Получение всех материалов блока
         /// </summary>

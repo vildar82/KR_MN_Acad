@@ -85,6 +85,8 @@
   <ItemGroup>
     <Compile Include="Commands.cs" />
     <Compile Include="Model\KRHelper.cs" />
+    <Compile Include="Model\Scheme\Blocks\Wall\AddVerticLShapedArmBlock.cs" />
+    <Compile Include="Model\Scheme\Blocks\Wall\AddHorArmBlock.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\ColumnSquareBig.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\ColumnSquareSmall.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\Sleeve.cs" />
@@ -94,6 +96,7 @@
     <Compile Include="Model\Scheme\Blocks\Wall\WallEndCornerBlock.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallRule.cs" />
     <Compile Include="Model\Scheme\Elements\Bars\BarDetail.cs" />
+    <Compile Include="Model\Scheme\Elements\Bars\BentBar.cs" />
     <Compile Include="Model\Scheme\Elements\Bars\Bracket.cs" />
     <Compile Include="Model\Scheme\Elements\Bars\Shackle.cs" />
     <Compile Include="Model\Scheme\Elements\Bars\Spring.cs" />

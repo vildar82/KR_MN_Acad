@@ -49,17 +49,8 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
             L = h;
             Step = step;            
             Width = width;            
-            Count = CalcCount();
-        }
-
-        /// <summary>
-        /// Определение кол шпилек
-        /// </summary>
-        /// <returns></returns>
-        private int CalcCount()
-        {
-            return BarDivision.CalcCountByStep(Width, Step);                        
-        }
+            Count = BarDivision.CalcCountByStep(Width, Step);
+        }        
 
         public override string GetDesc()
         {
