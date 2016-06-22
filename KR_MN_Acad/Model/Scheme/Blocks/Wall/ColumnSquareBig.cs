@@ -45,7 +45,7 @@ namespace KR_MN_Acad.Scheme.Wall
             try
             {
                 Side = Convert.ToInt32(GetPropValue<double>(PropNameSide));
-                DefineBaseFields(Side, Side);
+                DefineBaseFields(Side, Side, true);
                 defineFields();
             }
             catch (Exception ex)
@@ -58,7 +58,7 @@ namespace KR_MN_Acad.Scheme.Wall
         {
             // Хомут2
             int widthShackle2 = getSideShackle2();
-            Shackle2 = defineShackle(widthShackle2, widthShackle2, Height, ArmVertic.Diameter, a, PropNameShackleDiam,
+            Shackle2 = defineShackleByGab(widthShackle2, widthShackle2, Height, ArmVertic.Diameter, a, PropNameShackleDiam,
                 PropNameShacklePos2, PropNameShackleStep);
             Shackle2.Calc();
             AddElement(Shackle2);            

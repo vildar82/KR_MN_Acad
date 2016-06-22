@@ -26,10 +26,9 @@ namespace KR_MN_Acad.Scheme.Wall
 
         protected const string PropNameConcrete = "Бетон";
         protected const string PropNameOutline = "Выпуск";
-        protected const string PropNameHeight = "Высота колонны";
+        protected const string PropNameHeight = "Высота";
         protected const string PropNameArmVerticCount = "КолВертикАрм";
-        protected const string PropNameArmVerticDiam = "ДиамВертикАрм";
-        protected const string PropNameArmVerticStep = "ШагВертикАрм";
+        protected const string PropNameArmVerticDiam = "ДиамВертикАрм";        
         protected const string PropNameShackleDiam = "ДиамХомута";
         protected const string PropNameShackleStep = "ШагХомута";
         protected const string PropNameArmVerticPos = "ПОЗВЕРТИКАРМ";
@@ -79,7 +78,7 @@ namespace KR_MN_Acad.Scheme.Wall
         /// </summary>
         /// <param name="width">Ширина колонны</param>
         /// <param name="thickness">Толщина колонны</param>
-        protected void DefineBaseFields(int width, int thickness)
+        protected void DefineBaseFields(int width, int thickness, bool defaultShackle)
         {
             Width = width;
             Thickness = thickness;
@@ -88,21 +87,18 @@ namespace KR_MN_Acad.Scheme.Wall
             var classB = GetPropValue<string>(PropNameConcrete);
             Concrete = new ConcreteH(classB, Width, Thickness, Height, this);
             Concrete.Calc();
+            AddElement(Concrete);
             // Определние вертикальной арматуры            
             ArmVertic = defineVerticArm();
-            // Хомут
-            Shackle = defineShackle(width, thickness, Height, ArmVertic.Diameter, a, PropNameShackleDiam, 
-                PropNameShacklePos, PropNameShackleStep);
-
-            AddElements();
-        }
-
-        private void AddElements ()
-        {
-            AddElement(Concrete);
             AddElement(ArmVertic);
-            AddElement(Shackle);            
-        }
+            // Хомут
+            if (defaultShackle)
+            {
+                Shackle = defineShackleByGab(width, thickness, Height, ArmVertic.Diameter, a, PropNameShackleDiam,
+                    PropNameShacklePos, PropNameShackleStep);
+                AddElement(Shackle);
+            }            
+        }        
 
         /// <summary>
         /// Вертикальные отдельные стержени

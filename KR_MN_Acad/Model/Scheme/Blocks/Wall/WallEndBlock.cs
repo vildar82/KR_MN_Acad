@@ -116,7 +116,7 @@ namespace KR_MN_Acad.Scheme.Wall
             // Определние горизонтальной арматуры
             ArmHor = defineArmHor(Length, PropNameArmHorDiam, PropNamePosHorArm, PropNameArmHorStep);
             // Хомут
-            Shackle = defineShackle(Length, Thickness, Height, ArmVertic.Diameter, a, PropNameShackleDiam, PropNamePosShackle,
+            Shackle = defineShackleByGab(Length, Thickness, Height, ArmVertic.Diameter, a, PropNameShackleDiam, PropNamePosShackle,
                PropNameShackleStep);
             // Скоба
             BracketLength = GetPropValue<int>(PropNameBracketLen, false);

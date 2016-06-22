@@ -31,7 +31,8 @@ namespace KR_MN_Acad.Scheme.Wall
                 { ColumnSquareSmall.BlockName , typeof(ColumnSquareSmall) },
                 { ColumnSquareBig.BlockName , typeof(ColumnSquareBig) },
                 { AddHorArmBlock.BlockName , typeof(AddHorArmBlock) },
-                { AddVerticLShapedArmBlock.BlockName , typeof(AddVerticLShapedArmBlock) },                
+                { AddVerticLShapedArmBlock.BlockName , typeof(AddVerticLShapedArmBlock) },
+                { PylonBlock.BlockName , typeof(PylonBlock) },                
                 { Sleeve.BlockName , typeof(Sleeve) }
             };
 

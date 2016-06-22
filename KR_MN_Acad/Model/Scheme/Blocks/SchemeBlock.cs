@@ -254,7 +254,7 @@ namespace KR_MN_Acad.Scheme
         }
 
         /// <summary>
-        /// Определение хомута
+        /// Определение хомута - по габаритам бетона
         /// </summary>
         /// <param name="width">Ширина бетона</param>
         /// <param name="thickness">Толщина бетона</param>
@@ -264,7 +264,7 @@ namespace KR_MN_Acad.Scheme
         /// <param name="propDiam">Парам диам</param>
         /// <param name="propPos">Парам позиции</param>
         /// <param name="propStep">Парам шага</param>        
-        protected Shackle defineShackle (int width, int thickness, int range,int diamWorkArm, int a,
+        protected Shackle defineShackleByGab (int width, int thickness, int range, int diamWorkArm, int a,
             string propDiam, string propPos, string propStep)
         {
             int diam = GetPropValue<int>(propDiam, false);
@@ -275,6 +275,30 @@ namespace KR_MN_Acad.Scheme
             int lShackle =  width-(2*a)+diamWorkArm;
             int hShackle = thickness-(2*a)+diamWorkArm;
             Shackle s = new Shackle(diam, lShackle, hShackle, step, range-100, pos, this);
+            s.Calc();
+            return s;
+        }
+
+        /// <summary>
+        /// Хомут по длине хомута
+        /// </summary>
+        /// <param name="propShLen">Параметр Длины хомута по внутр граням стержней</param>
+        /// <param name="thickness">Толщина бетона</param>
+        /// <param name="a">Защ слой до центра раб арм</param>
+        /// <param name="range">Ширина распределения хомутов (по бетону, отступ 100 отнимается тут)</param>
+        /// <param name="diamWorkArm">Диам раб арм</param>
+        /// <param name="propDiam">Парам диаметра</param>
+        /// <param name="propPos">Значение атр позиции</param>
+        /// <param name="propStep">Параметр шага</param>                
+        protected Shackle defineShackleByLen (string propShLen, int thickness, int a, int range, int diamWorkArm,
+            string propDiam, string propPos, string propStep)
+        {
+            var shackleLen = GetPropValue<int>(propShLen);
+            int diam = GetPropValue<int>(propDiam);
+            string pos = GetPropValue<string>(propPos);
+            int step = GetPropValue<int>(propStep);
+            int shackleH = thickness-(2*a)+diamWorkArm;
+            var s = new Shackle(diam, shackleLen, shackleH, step, range-100, pos, this);
             s.Calc();
             return s;
         }
@@ -305,6 +329,32 @@ namespace KR_MN_Acad.Scheme
             sp.Calc();
             return sp;
         }
+
+        /// <summary>
+        /// Шпилька с шагом по ширине распределения и кол рядов
+        /// </summary>
+        /// <param name="propDiam">Диаметр</param>
+        /// <param name="propPos">Значение атр позиции</param>
+        /// <param name="propStep">Параметр шага</param>
+        /// <param name="thickness">Толщина бетона</param>
+        /// <param name="a">Защ слой до центра раб арм</param>
+        /// <param name="width">Ширина распределения (по бетону)</param>
+        /// <param name="propCount">Параметр рядов шпилек</param>        
+        protected Spring defineSpring (string propDiam, string propPos, string propStep,
+           int thickness, int a, int width, string propCount)
+        {
+            int diam = GetPropValue<int>(propDiam);
+            if (diam == 0) return null;
+            string pos = GetPropValue<string>(propPos);
+            int step = GetPropValue<int>(propStep);            
+            var rows = GetPropValue<int>(propCount);
+            // ширина распределения шпилек по горизонтале            
+            var lRabSpring =  thickness - 2 * a;
+            Spring sp = new Spring(diam, lRabSpring, step, width-100, rows, pos, this);
+            sp.Calc();
+            return sp;
+        }
+
 
         /// <summary>
         /// определение гнутого стерженя

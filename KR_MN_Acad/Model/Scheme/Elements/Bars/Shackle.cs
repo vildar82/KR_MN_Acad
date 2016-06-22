@@ -37,6 +37,16 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
 
         public string BlockNameDetail { get { return "КР_Деталь_Х1"; } }
 
+        /// <summary>
+        /// Хомут
+        /// </summary>
+        /// <param name="diam">Диаметр</param>
+        /// <param name="width">Ширина хомута (по внутр гряням)</param>
+        /// <param name="height">Высота хомута</param>
+        /// <param name="step">Шаг</param>
+        /// <param name="range">Ширина распределения</param>
+        /// <param name="pos">Значение атр позиции из блока</param>
+        /// <param name="block">Блок</param>
         public Shackle(int diam, int width, int height, int step, int range, string pos, ISchemeBlock block) 
             : base(diam, GetLenShackle(width, height, diam), 1, "Х-", pos, block, "Хомут")
         {

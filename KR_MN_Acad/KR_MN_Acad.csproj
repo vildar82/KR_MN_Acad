@@ -89,6 +89,7 @@
     <Compile Include="Model\Scheme\Blocks\Wall\AddHorArmBlock.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\ColumnSquareBig.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\ColumnSquareSmall.cs" />
+    <Compile Include="Model\Scheme\Blocks\Wall\PylonBlock.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\Sleeve.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallBase.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\ColumnBase.cs" />

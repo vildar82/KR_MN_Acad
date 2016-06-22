@@ -16,24 +16,8 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// <summary>
         /// Хвостик
         /// </summary>
-        private int tail;
-
-        /// <summary>
-        /// Шаг шпилек по гориз
-        /// </summary>
-        public int StepHor { get; set; }
-        /// <summary>
-        /// Шаг шпилек по вертик
-        /// </summary>
-        public int StepVertic { get; set; }
-        /// <summary>
-        /// Ширина распределения шпилек по горизонтали
-        /// </summary>
-        public int WidthHor { get; set; }
-        /// <summary>
-        /// Ширина распределения шпилек по вертикали
-        /// </summary>
-        public int WidthVertic { get; set; }
+        private int tail;                
+        private string descEnd;      
         /// <summary>
         /// Длина раб шпильки (без хвостов)
         /// </summary>
@@ -41,7 +25,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public string BlockNameDetail { get { return "КР_Деталь_Ш1"; } }
 
         /// <summary>
-        /// 
+        /// Шпилька распределенная по площади стены
         /// </summary>
         /// <param name="diam">Диаметр шпильки</param>
         /// <param name="diamWork">Диам раб арм</param>
@@ -55,15 +39,33 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public Spring (int diam, int lRab, int stepHor, int stepVert, int widthHor,int widthVertic, string pos, ISchemeBlock block) 
             : base(diam, GetLength(lRab, diam), 1, "Ш-", pos, block, "Шпилька")
         {
+            descEnd = $", ш.{stepHor}х{stepVert}";            
+            tail = getTail(diam);
+            LRab = RoundHelper.Round5(lRab);
+            Class = ClassA240C;
+            Gost = GostOld;            
+            Count = CalcCountByArea(widthHor, widthVertic, stepHor, stepVert);
+        }
+
+        /// <summary>
+        /// Шпилька - с шагом по ширине распределения и кол рядов
+        /// </summary>
+        /// <param name="diam">Диам</param>
+        /// <param name="lRab">Раст между раб стержнями (от центров раб стержней)</param>
+        /// <param name="step">Шаг</param>
+        /// <param name="width">Ширина распределения</param>
+        /// <param name="rows">Рядов шпилек</param>
+        /// <param name="pos">значение атр позиции</param>
+        /// <param name="block">Блок</param>
+        public Spring (int diam, int lRab, int step, int width, int rows, string pos, ISchemeBlock block)
+            : base(diam, GetLength(lRab, diam), 1, "Ш-", pos, block, "Шпилька")
+        {
+            descEnd = $", ш.{step}";
             tail = getTail(diam);
             LRab = RoundHelper.Round5(lRab);
             Class = ClassA240C;
             Gost = GostOld;
-            StepHor = stepHor;
-            StepVertic = stepVert;
-            WidthHor = widthHor;
-            WidthVertic = widthVertic;
-            Count = CalcCount();
+            Count = BarDivision.CalcCountByStep(width, step)*rows;
         }
 
         private static int getTail (int diam)
@@ -75,16 +77,16 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// Определение кол шпилек
         /// </summary>
         /// <returns></returns>
-        private int CalcCount()
+        private int CalcCountByArea(int widthHor, int widthVertic,int stepHor, int stepVertic)
         {
-            int countVert = (int)Math.Ceiling((double)WidthVertic / StepVertic);
-            int countHor = (int)Math.Ceiling((double)WidthHor / StepHor);
+            int countVert = (int)Math.Ceiling((double)widthVertic / stepVertic);
+            int countHor = (int)Math.Ceiling((double)widthHor / stepHor);
             return countVert * countHor;
         }
 
-        public override string GetDesc()
+        public override string GetDesc ()
         {
-            return base.GetDesc() + $", ш.{StepHor}х{StepVertic}";
+            return base.GetDesc() + descEnd;
         }
 
         /// <summary>

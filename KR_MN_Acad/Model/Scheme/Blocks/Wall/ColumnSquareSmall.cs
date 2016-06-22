@@ -39,7 +39,7 @@ namespace KR_MN_Acad.Scheme.Wall
             try
             {
                 Side = Convert.ToInt32(GetPropValue<double>(PropNameSide));
-                DefineBaseFields(Side, Side);                
+                DefineBaseFields(Side, Side, true);                
             }
             catch (Exception ex)
             {
