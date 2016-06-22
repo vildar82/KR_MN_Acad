@@ -138,8 +138,7 @@ namespace KR_MN_Acad.Scheme.Spec
             public static void AddColumns(Table table,BillRow row, BillTable spec)
             {
                 // группировка по ячейкам
-                var cells = row.Cells.GroupBy(g => g).OrderBy(o=>o.Key);
-                var concretes = spec.service.Groups.FirstOrDefault(g => g.Type == GroupType.Materials)?.Rows.Where(r=>r.SomeElement is Concrete).GroupBy(g=>((Concrete)g.SomeElement).ClassB);                
+                var cells = row.Cells.GroupBy(g => g).OrderBy(o=>o.Key);                
                 cols = new Dictionary<BillCell, BillColumn>();
 
                 // Марка конструкции
@@ -218,15 +217,19 @@ namespace KR_MN_Acad.Scheme.Spec
                 table.Cells[spec.rowNameIndex + 1, colIndex].TextString = row.Cells.Sum(s=>s.Amount).ToString();
 
                 // всего бетона
-                foreach (var concrete in concretes)
+                var concretes = spec.service.Groups.FirstOrDefault(g => g.Type == GroupType.Materials)?.Rows.Where(r=>r.SomeElement is Concrete)?.GroupBy(g=>((Concrete)g.SomeElement).ClassB);
+                if (concretes != null)
                 {
-                    colIndex++;
-                    table.InsertColumns(colIndex, 15, 1);
-                    mCells = CellRange.Create(table, 1, colIndex, spec.rowNameIndex, colIndex);
-                    table.MergeCells(mCells);
-                    string unitsConcrete = ((Concrete)concrete.First().SomeElement).Units;
-                    table.Cells[1, colIndex].TextString = $"Расход бетона класса {concrete.Key}, {unitsConcrete}";
-                    table.Cells[spec.rowNameIndex + 1, colIndex].TextString = concrete.Sum(c=>c.Amount).ToString();
+                    foreach (var concrete in concretes)
+                    {
+                        colIndex++;
+                        table.InsertColumns(colIndex, 15, 1);
+                        mCells = CellRange.Create(table, 1, colIndex, spec.rowNameIndex, colIndex);
+                        table.MergeCells(mCells);
+                        string unitsConcrete = ((Concrete)concrete.First().SomeElement).Units;
+                        table.Cells[1, colIndex].TextString = $"Расход бетона класса {concrete.Key}, {unitsConcrete}";
+                        table.Cells[spec.rowNameIndex + 1, colIndex].TextString = concrete.Sum(c => c.Amount).ToString();
+                    }
                 }
             }            
 

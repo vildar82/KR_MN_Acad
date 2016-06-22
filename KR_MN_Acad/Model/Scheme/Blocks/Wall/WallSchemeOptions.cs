@@ -30,6 +30,8 @@ namespace KR_MN_Acad.Scheme.Wall
                 { WallEndTBlock.BlockName , typeof(WallEndTBlock) },
                 { ColumnSquareSmall.BlockName , typeof(ColumnSquareSmall) },
                 { ColumnSquareBig.BlockName , typeof(ColumnSquareBig) },
+                { AddHorArmBlock.BlockName , typeof(AddHorArmBlock) },
+                { AddVerticLShapedArmBlock.BlockName , typeof(AddVerticLShapedArmBlock) },                
                 { Sleeve.BlockName , typeof(Sleeve) }
             };
 

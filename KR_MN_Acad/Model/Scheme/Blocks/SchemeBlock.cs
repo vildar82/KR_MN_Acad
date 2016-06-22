@@ -305,5 +305,26 @@ namespace KR_MN_Acad.Scheme
             sp.Calc();
             return sp;
         }
+
+        /// <summary>
+        /// определение гнутого стерженя
+        /// </summary>
+        /// <param name="propDiam">Парам диам</param>
+        /// <param name="bentL">Длина Гс</param>
+        /// <param name="bentH">высота Гс</param>
+        /// <param name="width">Ширина распределения</param>
+        /// <param name="propStep">Парам шаг</param>
+        /// <param name="propPos">Парам позиции (атр)</param>        
+        protected BentBar defineBent (string propDiam, int bentL, int bentH, int width, string propStep, string propPos)
+        {
+            int diam = GetPropValue<int>(propDiam);
+            if (diam == 0) return null;
+            int step = GetPropValue<int>(propStep);
+            string pos = GetPropValue<string>(propPos);
+            var count = BarDivision.CalcCountByStep(width, step);
+            BentBar bent = new BentBar (diam, bentL, bentH, count, pos, this);
+            bent.Calc();
+            return bent;
+        }
     }
 }

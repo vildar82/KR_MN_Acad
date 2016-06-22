@@ -91,37 +91,7 @@ namespace KR_MN_Acad.Scheme.Wall
             // Шпильки
             Spring = defineSpring(PropNameSpringDiam, PropNamePosSpring, PropNameSpringStepHor, PropNameSpringStepVertic,
                 Thickness, a, Length, Height);
-        }        
-
-        //private BarDivision defineArmVertic ()
-        //{
-        //    int diam = GetPropValue<int>(PropNameArmVerticDiam);
-        //    if (diam == 0) return null;
-        //    string pos = GetPropValue<string>(PropNamePosVerticArm);            
-        //    int step = GetPropValue<int>(PropNameArmVerticStep);
-        //    int width = getWidthVerticArm(step, Length);
-        //    int len = Height + Outline;            
-        //    var armDiv = new BarDivision(diam, len, width, step, 2, pos, this, "Вертикальная арматура");
-        //    armDiv.Calc();            
-        //    return armDiv;
-        //}        
-
-        //private Spring defineSpring()
-        //{
-        //    int diam = GetPropValue<int>(PropNameSpringDiam);
-        //    if (diam == 0) return null;
-        //    string pos = GetPropValue<string>(PropNamePosSpring);            
-        //    int stepHor = GetPropValue<int>(PropNameSpringStepHor);
-        //    int stepVert = GetPropValue<int>(PropNameSpringStepVertic);            
-
-        //    // ширина распределения шпилек по горизонтале
-        //    int widthHor = Length;
-        //    int widthVertic = Height;
-        //    var lRabSpring =  Thickness - 2 * a;
-        //    Spring sp = new Spring(diam, lRabSpring, stepHor, stepVert, widthHor, widthVertic, pos, this);
-        //    sp.Calc();
-        //    return sp;
-        //} 
+        }                
 
         /// <summary>
         /// Заполнение позиций
