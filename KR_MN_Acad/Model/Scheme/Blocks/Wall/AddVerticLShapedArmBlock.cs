@@ -16,8 +16,8 @@ namespace KR_MN_Acad.Scheme.Wall
         public const string BlockName = "КР_Арм_Стен_ДопВертикГс";
         
         const string PropNameLength = "Длина";
-        const string PropNameBentLength = "ВылетГс";
-        const string PropNameBentHeight = "ВысотаГс";
+        const string PropNameBentLength = "Длина загиба";
+        const string PropNameBentHeight = "Высота загиба";
         const string PropNameDiam = "Диаметр";
         const string PropNameStep = "Шаг";
         const string PropNamePos = "ПОЗГС";
