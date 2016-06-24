@@ -10,12 +10,12 @@ namespace KR_MN_Acad.Scheme.Elements
     /// <summary>
     /// Деталь для ведомости деталей
     /// </summary>
-    public interface IDetail
+    public interface IDetail : IEquatable<IDetail>, IComparable<IDetail>
     {        
         /// <summary>
         /// Блок ведомости детали
         /// </summary>
-        string BlockNameDetail { get; }
+        string BlockNameDetail { get; set; }
         /// <summary>
         /// Заполнение параметров детали
         /// </summary>

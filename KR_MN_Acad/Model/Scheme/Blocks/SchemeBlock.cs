@@ -19,7 +19,7 @@ namespace KR_MN_Acad.Scheme
     /// </summary>
     public abstract class SchemeBlock : ISchemeBlock
     {
-        private List<IElement> elements = new List<IElement>();
+        private HashSet<IElement> elements = new HashSet<IElement>();
 
         public SchemeService Service { get; set; }
         public ObjectId IdBlref { get; set; }
@@ -50,7 +50,7 @@ namespace KR_MN_Acad.Scheme
         /// <returns></returns>
         public List<IElement> GetElements()
         {
-            return elements;
+            return elements.ToList();
         }
         /// <summary>
         /// Заполнение нумерации материалов блока
@@ -166,8 +166,7 @@ namespace KR_MN_Acad.Scheme
             int diam = GetPropValue<int>(propDiam);
             if (diam == 0) return null;
             string pos = GetPropValue<string>(propPos);            
-            var arm = new Bar(diam, length, pos, this, friendName);
-            arm.Count = countArm;
+            var arm = new Bar(diam, length, countArm, pos, this, friendName);            
             arm.Calc();
             return arm;
         }
@@ -182,13 +181,13 @@ namespace KR_MN_Acad.Scheme
         /// <param name="propPos">Параметр аозиции</param>
         /// <param name="rows">Рядов стержней</param>
         /// <param name="friendlyName">Пользовательское имя</param>        
-        protected BarDivision defineDiv (int length, int widthRun, int step, string propDiam, string propPos,
+        protected Bar defineBarDiv (int length, int widthRun, int step, string propDiam, string propPos,
             int rows, string friendlyName)
         {
             int diam = GetPropValue<int>(propDiam);
             if (diam == 0) return null;
             string pos = GetPropValue<string>(propPos);            
-            var armDiv = new BarDivision(diam, length, widthRun, step, rows, pos, this, friendlyName);
+            var armDiv = new Bar(diam, length, widthRun, step, rows, pos, this, friendlyName);
             armDiv.Calc();
             return armDiv;
         }
@@ -204,7 +203,7 @@ namespace KR_MN_Acad.Scheme
         /// <param name="concrete"></param>
         /// <param name="friendlyName"></param>
         /// <returns></returns>
-        protected BarRunningStep defineBarRunStep (int length, int widthRun, int rows, string propDiam, string propPos, string propStep,
+        protected BarRunning defineBarRunStep (int length, int widthRun, int rows, string propDiam, string propPos, string propStep,
             Concrete concrete, string friendlyName)
         {
             int diam = GetPropValue<int>(propDiam);
@@ -212,7 +211,7 @@ namespace KR_MN_Acad.Scheme
             string pos = GetPropValue<string>(propPos);
             int step = GetPropValue<int>(propStep);            
             double len = getLengthRunArm(length, diam, concrete);
-            var arm = new BarRunningStep (diam, len, widthRun, step, rows, pos, this, friendlyName);
+            var arm = new BarRunning (diam, len, widthRun, step, rows, pos, this, friendlyName);
             arm.Calc();
             return arm;
         }
@@ -240,7 +239,7 @@ namespace KR_MN_Acad.Scheme
         /// <param name="diamWorkArm">Диам раб арм</param>
         /// <returns></returns>
         protected Bracket defineBracket (string propDiam, string propPos,
-            string propStep, int bracketLen, int thicknessWall, int a, int widthRun, int diamWorkArm)
+            string propStep, int bracketLen, int thicknessWall, int a, int widthRun, int diamWorkArm, int rows =1)
         {
             int diam = GetPropValue<int>(propDiam, false);
             if (diam == 0) return null;
@@ -248,7 +247,7 @@ namespace KR_MN_Acad.Scheme
             int step = GetPropValue<int>(propStep);            
             // ширина скобы
             int tBracket = thicknessWall - 2 * a + diamWorkArm;
-            Bracket b = new Bracket(diam, bracketLen, tBracket , step, widthRun, pos, this);
+            Bracket b = new Bracket(diam, bracketLen, tBracket , step, widthRun,rows, pos, this);
             b.Calc();
             return b;
         }
@@ -265,7 +264,7 @@ namespace KR_MN_Acad.Scheme
         /// <param name="propPos">Парам позиции</param>
         /// <param name="propStep">Парам шага</param>        
         protected Shackle defineShackleByGab (int width, int thickness, int range, int diamWorkArm, int a,
-            string propDiam, string propPos, string propStep)
+            string propDiam, string propPos, string propStep,int rows=1)
         {
             int diam = GetPropValue<int>(propDiam, false);
             if (diam == 0) return null;
@@ -274,7 +273,7 @@ namespace KR_MN_Acad.Scheme
             // длина хомута
             int lShackle =  width-(2*a)+diamWorkArm;
             int hShackle = thickness-(2*a)+diamWorkArm;
-            Shackle s = new Shackle(diam, lShackle, hShackle, step, range-100, pos, this);
+            Shackle s = new Shackle(diam, lShackle, hShackle, step, range-100, rows, pos, this);
             s.Calc();
             return s;
         }
@@ -291,14 +290,14 @@ namespace KR_MN_Acad.Scheme
         /// <param name="propPos">Значение атр позиции</param>
         /// <param name="propStep">Параметр шага</param>                
         protected Shackle defineShackleByLen (string propShLen, int thickness, int a, int range, int diamWorkArm,
-            string propDiam, string propPos, string propStep)
+            string propDiam, string propPos, string propStep, int rows =1)
         {
             var shackleLen = GetPropValue<int>(propShLen);
             int diam = GetPropValue<int>(propDiam);
             string pos = GetPropValue<string>(propPos);
             int step = GetPropValue<int>(propStep);
             int shackleH = thickness-(2*a)+diamWorkArm;
-            var s = new Shackle(diam, shackleLen, shackleH, step, range-100, pos, this);
+            var s = new Shackle(diam, shackleLen, shackleH, step, range-100,rows,  pos, this);
             s.Calc();
             return s;
         }
@@ -365,14 +364,33 @@ namespace KR_MN_Acad.Scheme
         /// <param name="width">Ширина распределения</param>
         /// <param name="propStep">Парам шаг</param>
         /// <param name="propPos">Парам позиции (атр)</param>        
-        protected BentBar defineBent (string propDiam, int bentL, int bentH, int width, string propStep, string propPos)
+        protected BentBarLshaped defineBent (string propDiam, int bentL, int bentH, int width, string propStep, 
+            string propPos, int rows = 1)
         {
             int diam = GetPropValue<int>(propDiam);
             if (diam == 0) return null;
             int step = GetPropValue<int>(propStep);
-            string pos = GetPropValue<string>(propPos);
-            var count = BarDivision.CalcCountByStep(width, step);
-            BentBar bent = new BentBar (diam, bentL, bentH, count, pos, this);
+            string pos = GetPropValue<string>(propPos);            
+            BentBarLshaped bent = new BentBarLshaped (diam, bentL, bentH, width, step, rows, pos, this);
+            bent.Calc();
+            return bent;
+        }
+
+        /// <summary>
+        /// Вертикальные гнутые стержни на величину диаметра стержня
+        /// </summary>
+        /// <param name="diam">Диаметр</param>
+        /// <param name="count">Кол шт.</param>
+        /// <param name="height">Высота конструкции по бетоны</param>
+        /// <param name="outline">Выпуск</param>
+        /// <param name="propPos">Значение параметра позиции</param>        
+        protected BentBarDirect defineBentDirect (int diam, int count, int height, int outline, string propPos)
+        {            
+            int lstart = height;
+            int lDif = 150;
+            int lEnd = outline-lDif;
+            int hDif = diam;
+            var bent = new BentBarDirect(diam, lstart, lEnd, lDif, hDif, count, propPos, this);
             bent.Calc();
             return bent;
         }

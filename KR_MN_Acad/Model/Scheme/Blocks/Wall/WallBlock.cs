@@ -39,10 +39,7 @@ namespace KR_MN_Acad.Scheme.Wall
         /// Толщина стены
         /// </summary>
         public int Thickness { get; set; }        
-        /// <summary>
-        /// Распределенные вертикальные арматурные стержни
-        /// </summary>
-        public BarDivision ArmVertic { get; set; }        
+         
         /// <summary>
         /// Шпильки
         /// </summary>
@@ -67,12 +64,10 @@ namespace KR_MN_Acad.Scheme.Wall
             }
         }
 
-        private void AddElements()
-        {           
-            AddElement(ArmHor);
-            AddElement(ArmVertic);
+        protected override void AddElements()
+        {
+            base.AddElements();
             AddElement(Spring);
-            AddElement(Concrete);
         }
 
         private void defineFields()
@@ -98,10 +93,7 @@ namespace KR_MN_Acad.Scheme.Wall
         /// </summary>
         public override void Numbering()
         {
-            // ГорАрм         
-            FillElemProp(ArmHor, PropNamePosHorArm, PropNameDescHorArm);
-            // ВертикАрм         
-            FillElemProp(ArmVertic, PropNamePosVerticArm, PropNameDescVerticArm);
+            base.Numbering();
             // Шпилька         
             FillElemProp(Spring, PropNamePosSpring, PropNameDescSpring);           
         }        

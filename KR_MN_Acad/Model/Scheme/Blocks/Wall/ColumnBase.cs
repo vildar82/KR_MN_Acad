@@ -86,19 +86,23 @@ namespace KR_MN_Acad.Scheme.Wall
             Outline = Convert.ToInt32(GetPropValue<double>(PropNameOutline));
             var classB = GetPropValue<string>(PropNameConcrete);
             Concrete = new ConcreteH(classB, Width, Thickness, Height, this);
-            Concrete.Calc();
-            AddElement(Concrete);
+            Concrete.Calc();            
             // Определние вертикальной арматуры            
-            ArmVertic = defineVerticArm();
-            AddElement(ArmVertic);
+            ArmVertic = defineVerticArm();            
             // Хомут
             if (defaultShackle)
             {
                 Shackle = defineShackleByGab(width, thickness, Height, ArmVertic.Diameter, a, PropNameShackleDiam,
-                    PropNameShacklePos, PropNameShackleStep);
-                AddElement(Shackle);
+                    PropNameShacklePos, PropNameShackleStep);                
             }            
-        }        
+        }
+
+        protected virtual void AddElements ()
+        {
+            AddElement(ArmVertic);
+            AddElement(Shackle);            
+            AddElement(Concrete);
+        }
 
         /// <summary>
         /// Вертикальные отдельные стержени

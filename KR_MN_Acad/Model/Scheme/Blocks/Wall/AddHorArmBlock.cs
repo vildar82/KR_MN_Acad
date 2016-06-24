@@ -20,7 +20,7 @@ namespace KR_MN_Acad.Scheme.Wall
         const string PropNamePos = "ПОЗГОРАРМ";
         const string PropNameDesc = "ОПИСАНИЕГОРАРМ";       
         
-        public BarDivision ArmHor { get; set; }
+        public Bar ArmHor { get; set; }
 
         public AddHorArmBlock (BlockReference blRef, string blName, SchemeService service) : base(blRef, blName, service)
         {
@@ -34,7 +34,7 @@ namespace KR_MN_Acad.Scheme.Wall
                 var height = GetPropValue<int>(PropNameHeight);
                 var step = GetPropValue<int>(PropNameStep);
                 var rows = GetPropValue<int>(PropNameRows);
-                ArmHor = defineDiv(len, height, step, PropNameDiam, PropNamePos, rows, "Горизонтальные стержни усиления");
+                ArmHor = defineBarDiv(len, height, step, PropNameDiam, PropNamePos, rows, "Горизонтальные стержни усиления");
                 AddElement(ArmHor);
             }
             catch (Exception ex)

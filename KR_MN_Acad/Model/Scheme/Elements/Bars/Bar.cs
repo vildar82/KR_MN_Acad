@@ -22,16 +22,24 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// </summary>
         protected static Dictionary<Type, int> barTypes = new Dictionary<Type, int>
         {
-            { typeof(BarRunning), 1 },
-            { typeof(BarRunningStep), 1},
-            { typeof(BarDivision), 2},
+            { typeof(BarRunning), 1 },            
             { typeof(Bar) ,2}
         };
 
+        /// <summary>
+        /// Ширина распределения
+        /// </summary>
+        public int Width { get; set; }
+        /// <summary>
+        /// Шаг распределения
+        /// </summary>
+        public int Step { get; set; }
+        /// <summary>
+        /// Кол. рядов арматуры
+        /// </summary>
+        public int Rows { get; set; } = 1;
         public string Prefix { get; set; } = "";
-        public string PositionInBlock { get; set; }
-
-        
+        public string PositionInBlock { get; set; }        
         /// <summary>
         /// Кол стержней
         /// </summary>
@@ -50,21 +58,50 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public ISchemeBlock Block { get; set; }
         public string FriendlyName { get; set; }
 
-        public Bar(int diam, int len, string pos, ISchemeBlock block, string friendlyName) : base(diam, len)
+        /// <summary>
+        /// Стержень по количеству штук
+        /// </summary>        
+        public Bar(int diam, int len, int count, string pos, ISchemeBlock block, string friendlyName) : base(diam, len)
         {
             FriendlyName = friendlyName;
             Block = block;
             PositionInBlock = pos;
             Type = GroupType.Armatures;            
-            Count = 1;
+            Count = count;
+        }
+        /// <summary>
+        /// стержни распределенные по ширина с шагом и рядами
+        /// </summary>        
+        public Bar (int diam, int len, int width, int step, int rows, string pos, ISchemeBlock block, string friendlyName) 
+            : this(diam, len, 1, pos, block, friendlyName)
+        {
+            Rows = rows;
+            Width = width;
+            Step = step;
         }
 
         public virtual void Calc()
         {
+            // Кол стержней
+            if (Width != 0 && Step!=0)
+                Count = CalcCountByStep(Width, Step) * Rows;
             // Масса ед. кг.
             Weight = RoundHelper.Round3Digits(WeightUnit * ConvertMmToMLength(Length));
             // Масса всех стержней
             WeightTotal =RoundHelper.Round2Digits(Weight * Count);
+        }
+
+        /// <summary>
+        /// Определение кол-ва стержней по ширине и шагу
+        /// Округление вверх + 1
+        /// </summary>
+        /// <param name="width">Ширина распределения</param>
+        /// <param name="step">Шаг</param>
+        /// <returns>Кол стержней в распределении</returns>
+        public static int CalcCountByStep (double width, double step)
+        {
+            if (width == 0 || step == 0) return 1;
+            return (int)Math.Ceiling(width / step) + 1;
         }
 
         public virtual int CompareTo(IElement other)
@@ -119,7 +156,10 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public virtual string GetDesc()
         {
             // 3, ⌀12, L=3050
-            return $"{SpecRow?.PositionColumn}, {Symbols.Diam}{Diameter}, L={Length}";
+            string desc = $"{SpecRow?.PositionColumn}, {Symbols.Diam}{Diameter}, L={Length}";            
+            if (Step != 0)
+                desc += ", ш." + Step;
+            return desc;
         }
 
         /// <summary>

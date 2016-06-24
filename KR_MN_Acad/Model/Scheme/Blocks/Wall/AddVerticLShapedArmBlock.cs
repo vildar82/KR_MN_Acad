@@ -26,7 +26,7 @@ namespace KR_MN_Acad.Scheme.Wall
         /// <summary>
         /// Гнутый стержень
         /// </summary>
-        public BentBar BentBar { get; set; }
+        public BentBarLshaped BentBar { get; set; }
 
         public AddVerticLShapedArmBlock (BlockReference blRef, string blName, SchemeService service) : base(blRef, blName, service)
         {

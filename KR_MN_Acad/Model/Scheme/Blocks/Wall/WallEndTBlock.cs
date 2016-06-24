@@ -54,15 +54,11 @@ namespace KR_MN_Acad.Scheme.Wall
 		/// <summary>
 		/// Длина скобы
 		/// </summary>
-		public int BracketLength { get; set; }
-		/// <summary>
-		/// вертикальные арматурные стержни
-		/// </summary>
-		public Bar ArmVertic { get; set; }
+		public int BracketLength { get; set; }		
 		/// <summary>
 		/// Горизонтальные арматурные стержни - погоннаж
 		/// </summary>
-		public BarRunningStep ArmHor2 { get; set; }
+		public BarRunning ArmHor2 { get; set; }
 		/// <summary>
 		/// Скоба
 		/// </summary>
@@ -87,23 +83,18 @@ namespace KR_MN_Acad.Scheme.Wall
 			}
 		}        
 
-		private void AddElements()
-		{            
-			AddElement(ArmVertic);
-			AddElement(ArmHor);
+		protected override void AddElements()
+		{
+            base.AddElements();				
 			AddElement(ArmHor2);
-			AddElement(Bracket);
-			AddElement(Concrete);
+			AddElement(Bracket);			
 		}
 
 		public override void Numbering()
 		{
-			// ГорАрм
-			FillElemProp(ArmHor, PropNamePosHorArm, PropNameDescHorArm);
+            base.Numbering();			
 			// ГорАрм2
-			FillElemProp(ArmHor2, PropNamePosHorArm2, PropNameDescHorArm2);
-			// ВертикАрм
-			FillElemProp(ArmVertic, PropNamePosVerticArm, PropNameDescVerticArm);            
+			FillElemProp(ArmHor2, PropNamePosHorArm2, PropNameDescHorArm2);			      
 			// Скобы
 			FillElemProp(Bracket, PropNamePosBracket, PropNameDescBracket);            
 		}

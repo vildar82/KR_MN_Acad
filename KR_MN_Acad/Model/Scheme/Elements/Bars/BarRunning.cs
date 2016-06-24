@@ -20,17 +20,28 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// <summary>
         /// Количество погонных метров
         /// </summary>
-        public double Meters { get; set; }        
+        public double Meters { get; set; } 
 
-        public BarRunning(int diam, string pos, ISchemeBlock block, string friendlyName)
-            : base(diam, 0, pos, block, friendlyName)
-        {            
-        }
-
+        /// <summary>
+        /// Погонные стержни по длине (м.)
+        /// </summary>        
         public BarRunning(int diam, double meters, string pos, ISchemeBlock block, string friendlyName) 
-            : this(diam, pos, block, friendlyName)
+            : base(diam, 0, 1, pos, block, friendlyName)
         {
             Meters = RoundHelper.Round2Digits(meters);            
+        }
+
+        /// <summary>
+        /// Погонные стержни с шагом и диапазоном распределения
+        /// </summary>        
+        public BarRunning (int diam, double length, int widthRun, int step, int rows, string pos,
+            ISchemeBlock block, string friendlyName)
+            : base(diam,0,1, pos, block, friendlyName)
+        {
+            Rows = rows;
+            Width = widthRun;
+            Step = step;
+            Meters = CalcMeters(length);
         }
 
         /// <summary>
@@ -89,7 +100,10 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         public override string GetDesc()
         {
             // 3, ⌀12
-            return $"{SpecRow?.PositionColumn}, {Symbols.Diam}{Diameter}";
+            string desc = $"{SpecRow?.PositionColumn}, {Symbols.Diam}{Diameter}";
+            if (Step != 0)
+                desc += ", ш." + Step; ;
+            return desc;
         }        
 
         public override string GetName()
@@ -142,42 +156,48 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
             return new Dictionary<int, Dictionary<string, double>>()
             {
                 { 6, new Dictionary<string, double>() {
-                        { Materials.Concrete.ClassB25, 1.025 },
-                        { Materials.Concrete.ClassB30, 1.023 }} },
+                        { Concrete.ClassB25, 1.025 },
+                        { Concrete.ClassB30, 1.023 }} },
                 { 8, new Dictionary<string, double>() {
-                        { Materials.Concrete.ClassB25, 1.034 },
-                        { Materials.Concrete.ClassB30, 1.031 }} },
+                        { Concrete.ClassB25, 1.034 },
+                        { Concrete.ClassB30, 1.031 }} },
                 { 10, new Dictionary<string, double>() {
-                        { Materials.Concrete.ClassB25, 1.042 },
-                        { Materials.Concrete.ClassB30, 1.039 }} },
+                        { Concrete.ClassB25, 1.042 },
+                        { Concrete.ClassB30, 1.039 }} },
                 { 12, new Dictionary<string, double>() {
-                        { Materials.Concrete.ClassB25, 1.051 },
-                        { Materials.Concrete.ClassB30, 1.047 }} },
+                        { Concrete.ClassB25, 1.051 },
+                        { Concrete.ClassB30, 1.047 }} },
                 { 14, new Dictionary<string, double>() {
-                        { Materials.Concrete.ClassB25, 1.059 },
-                        { Materials.Concrete.ClassB30, 1.054 }} },
+                        { Concrete.ClassB25, 1.059 },
+                        { Concrete.ClassB30, 1.054 }} },
                 { 16, new Dictionary<string, double>() {
-                        { Materials.Concrete.ClassB25, 1.068 },
-                        { Materials.Concrete.ClassB30, 1.062 }} },
+                        { Concrete.ClassB25, 1.068 },
+                        { Concrete.ClassB30, 1.062 }} },
                 { 18, new Dictionary<string, double>() {
-                        { Materials.Concrete.ClassB25, 1.076 },
-                        { Materials.Concrete.ClassB30, 1.070 }} },
+                        { Concrete.ClassB25, 1.076 },
+                        { Concrete.ClassB30, 1.070 }} },
                 { 20, new Dictionary<string, double>() {
-                        { Materials.Concrete.ClassB25, 1.085 },
-                        { Materials.Concrete.ClassB30, 1.078 }} },
+                        { Concrete.ClassB25, 1.085 },
+                        { Concrete.ClassB30, 1.078 }} },
                 { 22, new Dictionary<string, double>() {
-                        { Materials.Concrete.ClassB25, 1.093 },
-                        { Materials.Concrete.ClassB30, 1.085 }} },
+                        { Concrete.ClassB25, 1.093 },
+                        { Concrete.ClassB30, 1.085 }} },
                 { 25, new Dictionary<string, double>() {
-                        { Materials.Concrete.ClassB25, 1.106 },
-                        { Materials.Concrete.ClassB30, 1.097 }} },
+                        { Concrete.ClassB25, 1.106 },
+                        { Concrete.ClassB30, 1.097 }} },
                 { 28, new Dictionary<string, double>() {
-                        { Materials.Concrete.ClassB25, 1.119 },
-                        { Materials.Concrete.ClassB30, 1.109 }} },
+                        { Concrete.ClassB25, 1.119 },
+                        { Concrete.ClassB30, 1.109 }} },
                 { 32, new Dictionary<string, double>() {
-                        { Materials.Concrete.ClassB25, 1.136 },
-                        { Materials.Concrete.ClassB30, 1.124 }} },
+                        { Concrete.ClassB25, 1.136 },
+                        { Concrete.ClassB30, 1.124 }} },
             };
+        }
+        private double CalcMeters (double length)
+        {
+            // Кол стержней в распределении
+            Count = CalcCountByStep(Width, Step) * Rows;
+            return RoundHelper.Round2Digits(ConvertMmToMLength(length) * Count);
         }
     }
 }

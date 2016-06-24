@@ -12,16 +12,35 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
     /// <summary>
     /// Арматурная деталь - шпилька, скашка, пешка и т.п.
     /// </summary>
-    public class BarDetail : Bar
+    public abstract class BarDetail : Bar, IDetail
     {
+        public string BlockNameDetail { get; set; }        
+
+        /// <summary>
+        /// Деталь по штукам
+        /// </summary>        
         public BarDetail(int diam, int len, int count, string prefix, string pos,
             ISchemeBlock block, string friendlyName) 
-            : base(diam, len, pos, block, friendlyName)
+            : base(diam, len,count, pos, block, friendlyName)
+        {
+            Init(prefix);
+        }
+
+        /// <summary>
+        /// Деталь по распределению
+        /// </summary>        
+        public BarDetail (int diam, int len, int width, int step, int rows, string prefix, string pos,
+            ISchemeBlock block, string friendlyName)
+            : base(diam, len, width, step, rows, pos, block, friendlyName)
+        {
+            Init(prefix);
+        }
+
+        private void Init (string prefix)
         {
             Prefix = prefix;
             Type = Spec.GroupType.Details;
-            Count = count;            
-        }        
+        }
 
         public override int CompareTo(IElement other)
         {
@@ -31,7 +50,13 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
             var res = Prefix.CompareTo(other.Prefix);
             if (res != 0)
                 return res;
-            return base.CompareTo(other);
+            res = BlockNameDetail.CompareTo(det.BlockNameDetail);
+            if (res != 0)
+                return res;
+            res = base.CompareTo(other);
+            if (res != 0)
+                return res;
+            return this.CompareTo(det);
         }
 
         public override bool Equals(IElement other)
@@ -41,13 +66,24 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
                 return false;
             if (Prefix != other.Prefix)
                 return false;
-            return base.Equals(other);
+            if (BlockNameDetail != det.BlockNameDetail)
+                return false;
+            if (!base.Equals(other))
+                return false;
+            return this.Equals(det);
+        }
+
+        public override int GetHashCode ()
+        {
+            return BlockNameDetail.GetHashCode();
         }
 
         public override string GetDesc()
         {
             return $"{SpecRow?.PositionColumn}, {Symbols.Diam}{Diameter}";
         }
+
+        public abstract void SetDetailsParam (List<AttributeInfo> atrs);        
 
         /// <summary>
         /// Установка значения в атрибут блока детали
@@ -60,6 +96,10 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
             var atrPos = atrs.FirstOrDefault(a => a.Tag.Equals(paramName, StringComparison.OrdinalIgnoreCase));
             var atrRef=  atrPos.IdAtr.GetObject(OpenMode.ForWrite) as AttributeReference;
             atrRef.TextString = value;
-        }        
+        }
+
+        public abstract bool Equals (IDetail other);
+
+        public abstract int CompareTo (IDetail other);        
     }
 }

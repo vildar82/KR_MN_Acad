@@ -16,16 +16,7 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// <summary>
         /// Хвостик
         /// </summary>
-        private int tail; // при диам 10-12 = 100
-
-        /// <summary>
-        /// Шаг
-        /// </summary>
-        public int Step { get; set; }        
-        /// <summary>
-        /// Ширина распределения
-        /// </summary>
-        public int Width { get; set; }
+        private int tail; // при диам 10-12 = 100        
         /// <summary>
         /// Длина хомута
         /// </summary>
@@ -33,50 +24,32 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// <summary>
         /// Высота хомута
         /// </summary>
-        public int H { get; set; }
-
-        public string BlockNameDetail { get { return "КР_Деталь_Х1"; } }
+        public int H { get; set; }        
 
         /// <summary>
         /// Хомут
         /// </summary>
         /// <param name="diam">Диаметр</param>
-        /// <param name="width">Ширина хомута (по внутр гряням)</param>
-        /// <param name="height">Высота хомута</param>
+        /// <param name="wShackle">Ширина хомута (по внутр гряням)</param>
+        /// <param name="hShackle">Высота хомута</param>
         /// <param name="step">Шаг</param>
         /// <param name="range">Ширина распределения</param>
         /// <param name="pos">Значение атр позиции из блока</param>
         /// <param name="block">Блок</param>
-        public Shackle(int diam, int width, int height, int step, int range, string pos, ISchemeBlock block) 
-            : base(diam, GetLenShackle(width, height, diam), 1, "Х-", pos, block, "Хомут")
+        public Shackle(int diam, int wShackle, int hShackle, int step, int range, int rows, string pos, ISchemeBlock block) 
+            : base(diam, GetLenShackle(wShackle, hShackle, diam),range, step, rows, "Х-", pos, block, "Хомут")
         {
+            BlockNameDetail = "КР_Деталь_Х1";
             tail = getTail(diam);
-            L = RoundHelper.Round5(width);
-            H = RoundHelper.Round5(height);
+            L = RoundHelper.Round5(wShackle);
+            H = RoundHelper.Round5(hShackle);
             Class = ClassA240C;
-            Gost = GostOld;
-            Step = step;            
-            Width = range;            
-            Count = CalcCount();
+            Gost = GostOld;            
         }
 
         private static int getTail (int diam)
         {
             return diam >= 10 ? 100 : 75;
-        }
-
-        /// <summary>
-        /// Определение кол шпилек
-        /// </summary>
-        /// <returns></returns>
-        private int CalcCount()
-        {
-            return BarDivision.CalcCountByStep(Width, Step);                        
-        }
-
-        public override string GetDesc()
-        {
-            return base.GetDesc() + $", ш.{Step}";
         }
 
         /// <summary>
@@ -90,13 +63,31 @@ namespace KR_MN_Acad.Scheme.Elements.Bars
         /// <summary>
         /// Заполнение параметров деталей - в блоке детали
         /// </summary>     
-        public void SetDetailsParam (List<AttributeInfo> atrs)
+        public override void SetDetailsParam (List<AttributeInfo> atrs)
         {
             SetDetailParameter("ПОЗИЦИЯ", SpecRow.PositionColumn, atrs);
             SetDetailParameter("ВЫСОТА", H.ToString(), atrs);
             SetDetailParameter("ШИРИНА", L.ToString(), atrs);
             SetDetailParameter("ХВОСТ1", tail.ToString(), atrs);
             SetDetailParameter("ХВОСТ2", tail.ToString(), atrs);
+        }
+
+        public override bool Equals (IDetail other)
+        {
+            var s = other as Shackle;
+            if (s == null) return false;
+            return L == s.L && H == s.H && tail == s.tail;
+        }
+
+        public override int CompareTo (IDetail other)
+        {
+            var s = other as Shackle;
+            if (s == null) return -1;
+            var res = L.CompareTo(s.L);
+            if (res != 0) return res;
+            res = H.CompareTo(s.H);
+            if (res != 0) return res;
+            return tail.CompareTo(s.tail);
         }
     }
 }
