@@ -172,11 +172,23 @@
     <Compile Include="Model\Scheme\Blocks\Wall\WallEndBlock.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallSchemeOptions.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallBlock.cs" />
-    <Compile Include="Model\Spec\SpecSlabOpenings.cs" />
+    <Compile Include="Model\Spec\ISpecBlock.cs" />
+    <Compile Include="Model\Spec\ISpecElement.cs" />
+    <Compile Include="Model\Spec\ISpecOptions.cs" />
+    <Compile Include="Model\Spec\ISpecRow.cs" />
+    <Compile Include="Model\Spec\ITableService.cs" />
+    <Compile Include="Model\Spec\Old\SpecSlabOpenings.cs" />
+    <Compile Include="Model\Spec\Slab\Blocks\SlabOpening.cs" />
+    <Compile Include="Model\Spec\Slab\SlabRow.cs" />
+    <Compile Include="Model\Spec\Slab\SlabService.cs" />
+    <Compile Include="Model\Spec\SpecBlockFactory.cs" />
+    <Compile Include="Model\Spec\Slab\SpecOptions.cs" />
+    <Compile Include="Model\Spec\SpecService.cs" />
+    <Compile Include="Model\Spec\TableService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Model\Spec\SpecOpenings.cs" />
-    <Compile Include="Model\Spec\SpecAperture.cs" />
-    <Compile Include="Model\Spec\SpecMonolith.cs" />
+    <Compile Include="Model\Spec\Old\SpecOpenings.cs" />
+    <Compile Include="Model\Spec\Old\SpecAperture.cs" />
+    <Compile Include="Model\Spec\Old\SpecMonolith.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AutoCADNetLoad.scr" />
@@ -198,9 +210,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\Spec\Slab\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

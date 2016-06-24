@@ -51,12 +51,12 @@ namespace KR_MN_Acad.Scheme.Wall
 		/// Гнутые вертикальные стержни
 		/// </summary>
 		public BentBarDirect BentBarDirect { get; set; }
-        /// <summary>
-        /// вертикальные арматурные стержни
-        /// </summary>
-        public Bar ArmVertic { get; set; }
+		/// <summary>
+		/// вертикальные арматурные стержни
+		/// </summary>
+		public Bar ArmVertic { get; set; }
 
-        public WallBase (BlockReference blRef, string blName, SchemeService service) : base(blRef, blName, service)
+		public WallBase (BlockReference blRef, string blName, SchemeService service) : base(blRef, blName, service)
 		{
 		}
 
@@ -64,17 +64,17 @@ namespace KR_MN_Acad.Scheme.Wall
 		{
 			// ГорАрм         
 			FillElemProp(ArmHor, PropNamePosHorArm, PropNameDescHorArm);
-            // ВертикАрм         
-            FillElemProp(ArmVertic, PropNamePosVerticArm, PropNameDescVerticArm);
-            // ВертикГс
-            FillElemProp(BentBarDirect, PropNamePosVerticBentDirect, PropNameDescVerticBentDirect);
+			// ВертикАрм         
+			FillElemProp(ArmVertic, PropNamePosVerticArm, PropNameDescVerticArm);
+			// ВертикГс
+			FillElemProp(BentBarDirect, PropNamePosVerticBentDirect, PropNameDescVerticBentDirect);
 		}
 
 		protected virtual void AddElements ()
 		{
 			AddElement(ArmHor);
-            AddElement(ArmVertic);
-            AddElement(BentBarDirect);
+			AddElement(ArmVertic);
+			AddElement(BentBarDirect);
 			AddElement(Concrete);
 		}
 
