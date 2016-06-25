@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AcadLib.Blocks;
 using AcadLib.Errors;
 
 namespace KR_MN_Acad.Spec
@@ -12,6 +13,12 @@ namespace KR_MN_Acad.Spec
     /// </summary>
     public interface ISpecBlock
     {
+        IBlock Block { get; set; }
+        /// <summary>
+        /// Получение элементов спецификации из блока
+        /// </summary>
+        /// <returns></returns>
+        List<ISpecElement> Elements { get; }
         /// <summary>
         /// Описание ошибок в блоке
         /// </summary>
@@ -19,12 +26,7 @@ namespace KR_MN_Acad.Spec
         /// <summary>
         /// Определение блока - элементов спецификации
         /// </summary>
-        void Calculate ();
-        /// <summary>
-        /// Получение элементов спецификации из блока
-        /// </summary>
-        /// <returns></returns>
-        List<ISpecElement> GetElements ();
+        void Calculate ();        
         /// <summary>
         /// Заполнение нумерации в блоке
         /// </summary>

@@ -11,5 +11,11 @@ namespace KR_MN_Acad.Spec
     /// </summary>
     public interface ISpecRow
     {
+        string Group { get; set; }        
+        /// <summary>
+        /// Нумерация элементов.
+        /// </summary>
+        /// <param name="index">Порядеовый номер строки в группе</param>
+        void Numbering (string index);
     }
 }

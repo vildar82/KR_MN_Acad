@@ -35,8 +35,8 @@ namespace KR_MN_Acad
             AcadLib.CommandStart.Start(doc =>
             {                               
                 // Спецификация монолитных блоков                         
-                SpecService specService = new SpecService(new SpecMonolith());
-                specService.CreateSpec();                
+                //SpecService specService = new SpecService(new SpecMonolith());
+                //specService.CreateSpec();                
             });            
         }
 
@@ -49,8 +49,8 @@ namespace KR_MN_Acad
             AcadLib.CommandStart.Start(doc =>
             {                
                 // Спецификация проекмов
-                SpecService specService = new SpecService(new SpecAperture());
-                specService.CreateSpec();             
+                //SpecService specService = new SpecService(new SpecAperture());
+                //specService.CreateSpec();             
             });                
         }
 
@@ -63,22 +63,39 @@ namespace KR_MN_Acad
             AcadLib.CommandStart.Start(doc =>
             {                
                 // Спецификация отверстий
-                SpecService specService = new SpecService(new SpecOpenings());
-                specService.CreateSpec();                
+                //SpecService specService = new SpecService(new SpecOpenings());
+                //specService.CreateSpec();                
             });            
         }
 
         /// <summary>
         /// Спецификация отверстий в плите
         /// </summary>
-        [CommandMethod(groupPik, nameof(KR_SpecSlabOpenings), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void KR_SpecSlabOpenings()
+        [CommandMethod(groupPik, nameof(KR_SlabOpeningsSpec), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void KR_SlabOpeningsSpec ()
         {
             AcadLib.CommandStart.Start(doc =>
-            {                
+            {
                 // Спецификация отверстий
-                SpecService specService = new SpecService(new SpecSlabOpenings());
-                specService.CreateSpec();                
+                //SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecSlabOpenings());
+                //specService.CreateSpec();   
+                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Slab.SlabOptions(doc.Database));
+                spec.Spec();
+            });
+        }
+
+        /// <summary>
+        /// Нумерация блоков отверстий в плите
+        /// </summary>
+        [CommandMethod(groupPik, nameof(KR_SlabOpeningsNumbering), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void KR_SlabOpeningsNumbering ()
+        {
+            AcadLib.CommandStart.Start(doc =>
+            {
+                //SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecSlabOpenings());
+                //specService.Numbering();    
+                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Slab.SlabOptions(doc.Database));
+                spec.Numbering();
             });
         }
 
@@ -90,8 +107,8 @@ namespace KR_MN_Acad
         {
             AcadLib.CommandStart.Start(doc =>
             {                
-                SpecService specService = new SpecService(new SpecMonolith());
-                specService.Numbering();                
+                //SpecService specService = new SpecService(new SpecMonolith());
+                //specService.Numbering();                
             });
         }
 
@@ -103,8 +120,8 @@ namespace KR_MN_Acad
         {
             AcadLib.CommandStart.Start(doc =>
             {                
-                SpecService specService = new SpecService(new SpecAperture());
-                specService.Numbering();                
+                //SpecService specService = new SpecService(new SpecAperture());
+                //specService.Numbering();                
             });
         }
 
@@ -115,24 +132,14 @@ namespace KR_MN_Acad
         public void KR_OpeningsNumbering()
         {
             AcadLib.CommandStart.Start(doc =>
-            {                
-                SpecService specService = new SpecService(new SpecOpenings());
-                specService.Numbering();                
+            {
+                //SpecService specService = new SpecService(new SpecOpenings());
+                //specService.Numbering();                   
+                
             });
         }
 
-        /// <summary>
-        /// Нумерация блоков отверстий в плите
-        /// </summary>
-        [CommandMethod(groupPik, nameof(KR_SlabOpeningsNumbering), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void KR_SlabOpeningsNumbering()
-        {
-            AcadLib.CommandStart.Start(doc =>
-            {                
-                SpecService specService = new SpecService(new SpecSlabOpenings());
-                specService.Numbering();                
-            });
-        }        
+        
 
         /// <summary>
         /// Нумерация свай

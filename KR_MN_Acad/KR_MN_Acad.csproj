@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>KR_MN_Acad</RootNamespace>
     <AssemblyName>KR_MN_Acad</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -178,11 +179,15 @@
     <Compile Include="Model\Spec\ISpecRow.cs" />
     <Compile Include="Model\Spec\ITableService.cs" />
     <Compile Include="Model\Spec\Old\SpecSlabOpenings.cs" />
-    <Compile Include="Model\Spec\Slab\Blocks\SlabOpening.cs" />
+    <Compile Include="Model\Spec\Slab\Elements\ISlabElement.cs" />
+    <Compile Include="Model\Spec\Slab\Elements\SlabSleeve.cs" />
+    <Compile Include="Model\Spec\Slab\Blocks\SlabSleeveBlock.cs" />
+    <Compile Include="Model\Spec\Slab\Blocks\SlabOpeningBlock.cs" />
     <Compile Include="Model\Spec\Slab\SlabRow.cs" />
+    <Compile Include="Model\Spec\Slab\Elements\SlabOpening.cs" />
     <Compile Include="Model\Spec\Slab\SlabService.cs" />
     <Compile Include="Model\Spec\SpecBlockFactory.cs" />
-    <Compile Include="Model\Spec\Slab\SpecOptions.cs" />
+    <Compile Include="Model\Spec\Slab\SlabOptions.cs" />
     <Compile Include="Model\Spec\SpecService.cs" />
     <Compile Include="Model\Spec\TableService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

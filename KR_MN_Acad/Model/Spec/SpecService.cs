@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AcadLib.Errors;
+using AcadLib.Jigs;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
+using Autodesk.AutoCAD.Geometry;
 
 namespace KR_MN_Acad.Spec
 {
@@ -39,9 +41,8 @@ namespace KR_MN_Acad.Spec
             var blocks = FilterBlocks(sel);
             // Проверка правил расположение блоков
             //CheckRules();               
-            // Калькуляция всех элементов
-            var elems = blocks.SelectMany(s=>s.GetElements()).ToList();
-            options.TableService.Numbering(elems);
+            // Калькуляция всех элементов            
+            options.TableService.Numbering(blocks);
             NumberingBlocks(blocks);
         }       
 
@@ -56,14 +57,14 @@ namespace KR_MN_Acad.Spec
             var blocks = FilterBlocks(sel);
             // Проверка правил расположение блоков
             //CheckRules();
-            // Калькуляция всех элементов
-            var elems = blocks.SelectMany(s=>s.GetElements()).ToList();
-            var rows = options.TableService.GetSpecRows(elems);
+            // Калькуляция всех элементов            
+            options.TableService.CalcRows(blocks);
             // Проверка позиций
             //CheckPositions();
             // Создание спецификаций.
-            var table = options.TableService.CreateTable(rows);            
-        }
+            var table = options.TableService.CreateTable();
+            InsertTable(table);        
+        }        
 
         /// <summary>
         /// Выбор блоков
@@ -120,6 +121,31 @@ namespace KR_MN_Acad.Spec
                 }
                 t.Commit();
             }
+        }
+
+        private void InsertTable (Table table)
+        {
+            using (var t = db.TransactionManager.StartTransaction())
+            {
+                var cs = db.CurrentSpaceId.GetObject( OpenMode.ForWrite) as BlockTableRecord;
+                List<ObjectId> idsDrag = new List<ObjectId> ();
+                var scale = AcadLib.Scale.ScaleHelper.GetCurrentAnnoScale(db);
+
+                table.TransformBy(Matrix3d.Scaling(scale, table.Position));
+                cs.AppendEntity(table);
+                t.AddNewlyCreatedDBObject(table, true);
+                idsDrag.Add(table.Id);
+
+                if (!DragSel.Drag(ed, idsDrag.ToArray(), Point3d.Origin))
+                {
+                    foreach (var id in idsDrag)
+                    {
+                        var ent = id.GetObject( OpenMode.ForWrite);
+                        ent.Erase();
+                    }
+                }
+                t.Commit();
+            }                
         }
     }
 }

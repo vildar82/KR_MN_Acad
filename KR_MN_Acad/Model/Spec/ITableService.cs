@@ -11,19 +11,20 @@ namespace KR_MN_Acad.Spec
     /// Сервис формирования таблицы
     /// </summary>
     public interface ITableService
-    {
+    {   
         /// <summary>
         /// Нумерация элементов.
         /// Группировка элементов, сортировка, простановка позиций.
         /// </summary>        
-        void Numbering (List<ISpecElement> elements);
+        void Numbering (List<ISpecBlock> blocks);
         /// <summary>
-        /// Группировка элементов спецификации - формирование строк для таблицы
+        /// Группировка элементов спецификации - формирование строк для таблицы.
+        /// Нумерация берется из блоков.
         /// </summary>        
-        List<ISpecRow> GetSpecRows (List<ISpecElement> elements);
+        void CalcRows (List<ISpecBlock> blocks);
         /// <summary>
         /// Создание спецификации
         /// </summary>        
-        Table CreateTable (List<ISpecRow> rows);
+        Table CreateTable ();
     }
 }
