@@ -29,43 +29,79 @@ namespace KR_MN_Acad
         /// <summary>
         /// Спецификация монолитных блоков
         /// </summary>
-        [CommandMethod(groupPik, nameof(KR_SpecMonolith), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void KR_SpecMonolith()
+        [CommandMethod(groupPik, nameof(KR_MonolithSpec), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void KR_MonolithSpec()
         {
             AcadLib.CommandStart.Start(doc =>
-            {                               
+            {
                 // Спецификация монолитных блоков                         
-                //SpecService specService = new SpecService(new SpecMonolith());
-                //specService.CreateSpec();                
+                SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecMonolith());
+                specService.CreateSpec();                
             });            
+        }
+        /// <summary>
+        /// Нумерация блоков монолита
+        /// </summary>
+        [CommandMethod(groupPik, nameof(KR_MonolithNumbering), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void KR_MonolithNumbering ()
+        {
+            AcadLib.CommandStart.Start(doc =>
+            {
+                SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecMonolith());
+                specService.Numbering();
+            });
         }
 
         /// <summary>
         /// Спецификация проемов - Дверных и Оконных
         /// </summary>
-        [CommandMethod(groupPik, nameof(KR_SpecApertures), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void KR_SpecApertures()
+        [CommandMethod(groupPik, nameof(KR_AperturesSpec), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void KR_AperturesSpec ()
         {
             AcadLib.CommandStart.Start(doc =>
-            {                
+            {
                 // Спецификация проекмов
-                //SpecService specService = new SpecService(new SpecAperture());
-                //specService.CreateSpec();             
+                SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecAperture());
+                specService.CreateSpec();             
             });                
+        }
+        /// <summary>
+        /// Нумерация блоков проемов
+        /// </summary>
+        [CommandMethod(groupPik, nameof(KR_AperturesNumbering), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void KR_AperturesNumbering ()
+        {
+            AcadLib.CommandStart.Start(doc =>
+            {
+                SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecAperture());
+                specService.Numbering();
+            });
         }
 
         /// <summary>
         /// Спецификация отверстий в стене
         /// </summary>
-        [CommandMethod(groupPik, nameof(KR_SpecOpenings), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void KR_SpecOpenings()
+        [CommandMethod(groupPik, nameof(KR_OpeningsSpec), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void KR_OpeningsSpec ()
         {
             AcadLib.CommandStart.Start(doc =>
-            {                
+            {
                 // Спецификация отверстий
-                //SpecService specService = new SpecService(new SpecOpenings());
-                //specService.CreateSpec();                
+                SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecOpenings());
+                specService.CreateSpec();                
             });            
+        }
+        /// <summary>
+        /// Нумерация блоков отверстий в стене
+        /// </summary>
+        [CommandMethod(groupPik, nameof(KR_OpeningsNumbering), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
+        public void KR_OpeningsNumbering ()
+        {
+            AcadLib.CommandStart.Start(doc =>
+            {
+                SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecOpenings());
+                specService.Numbering();
+            });
         }
 
         /// <summary>
@@ -83,7 +119,6 @@ namespace KR_MN_Acad
                 spec.Spec();
             });
         }
-
         /// <summary>
         /// Нумерация блоков отверстий в плите
         /// </summary>
@@ -98,48 +133,6 @@ namespace KR_MN_Acad
                 spec.Numbering();
             });
         }
-
-        /// <summary>
-        /// Нумерация блоков монолита
-        /// </summary>
-        [CommandMethod(groupPik, nameof(KR_MonolithNumbering), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void KR_MonolithNumbering()
-        {
-            AcadLib.CommandStart.Start(doc =>
-            {                
-                //SpecService specService = new SpecService(new SpecMonolith());
-                //specService.Numbering();                
-            });
-        }
-
-        /// <summary>
-        /// Нумерация блоков проемов
-        /// </summary>
-        [CommandMethod(groupPik, nameof(KR_AperturesNumbering), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void KR_AperturesNumbering()
-        {
-            AcadLib.CommandStart.Start(doc =>
-            {                
-                //SpecService specService = new SpecService(new SpecAperture());
-                //specService.Numbering();                
-            });
-        }
-
-        /// <summary>
-        /// Нумерация блоков отверстий в стене
-        /// </summary>
-        [CommandMethod(groupPik,nameof(KR_OpeningsNumbering), CommandFlags.Modal | CommandFlags.NoPaperSpace | CommandFlags.NoBlockEditor)]
-        public void KR_OpeningsNumbering()
-        {
-            AcadLib.CommandStart.Start(doc =>
-            {
-                //SpecService specService = new SpecService(new SpecOpenings());
-                //specService.Numbering();                   
-                
-            });
-        }
-
-        
 
         /// <summary>
         /// Нумерация свай

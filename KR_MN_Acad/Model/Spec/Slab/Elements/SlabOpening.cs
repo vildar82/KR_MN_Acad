@@ -22,7 +22,8 @@ namespace KR_MN_Acad.Spec.Slab.Elements
         /// <summary>
         /// Проемы в стенах - в первых строках
         /// </summary>
-        public int Index { get; } = 0;
+        public int Index { get; set; } = 0;
+        public string Group { get; set; } = "";
 
         public ISpecBlock SpecBlock { get; set; }
 
@@ -59,18 +60,22 @@ namespace KR_MN_Acad.Spec.Slab.Elements
             Mark = num;
         }
 
-        public bool Equals (ISlabElement other)
+        public bool Equals (ISpecElement other)
         {            
             var s = other as SlabOpening;
             if (s == null) return false;
-            return length == s.length && width == s.width && Role == s.Role;
+            return Mark == s.Mark && length == s.length && width == s.width && Role == s.Role;
         }
 
-        public int CompareTo (ISlabElement other)
+        public int CompareTo (ISpecElement other)
         {
             var s = other as SlabOpening;
             if (s == null) return -1;
-            var res = length.CompareTo(s.length);            
+            int res =0;
+            if(!string.IsNullOrEmpty(Mark))
+                res = TableService.alpha.Compare(Mark, s.Mark);
+            if (res != 0) return res;
+            res = length.CompareTo(s.length);            
             if (res != 0) return res;
             res = width.CompareTo(s.width);
             if (res != 0) return res;
@@ -81,6 +86,11 @@ namespace KR_MN_Acad.Spec.Slab.Elements
         public override int GetHashCode ()
         {
             return Dimension.GetHashCode();
-        }        
+        }
+
+        public string GetParamInfo ()
+        {
+            return $"{Dimension} {Role}";
+        }
     }
 }

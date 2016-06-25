@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AcadLib;
+using AcadLib.Errors;
 using Autodesk.AutoCAD.DatabaseServices;
 
 namespace KR_MN_Acad.Spec
@@ -13,19 +14,134 @@ namespace KR_MN_Acad.Spec
     /// </summary>
     public abstract class TableService : ITableService
     {
-        protected AcadLib.Comparers.AlphanumComparator alpha = AcadLib.Comparers.AlphanumComparator.New;
+        public static AcadLib.Comparers.AlphanumComparator alpha = AcadLib.Comparers.AlphanumComparator.New;
+        protected List<KeyValuePair<string, List<ISpecRow>>> groupRows;
         protected abstract Database Db { get; set; }
         protected virtual string Layer { get; set; } = "КР_Таблицы";
         protected abstract int NumColumns { get; set; }
         protected abstract int NumRows { get; set; }
         protected abstract string Title { get; set; }
-
-        public abstract void CalcRows (List<ISpecBlock> blocks);
-        public abstract Table CreateTable ();
-        public abstract void Numbering (List<ISpecBlock> blocks);
-
         protected abstract void SetColumnsAndCap (ColumnsCollection columns);
         protected abstract void FillCells (Table table);
+        protected abstract ISpecRow GetNewRow (string group, List<ISpecElement> list);
+        protected abstract List<IGrouping<string, ISpecElement>> GroupsFirst (IGrouping<int, ISpecElement> indexGroup);
+        protected abstract List<IGrouping<string, ISpecElement>> GroupsSecond (IGrouping<string, ISpecElement> firstGroup);        
+
+        /// <summary>
+        /// Группировка элементов спецификации.
+        /// Нумерация берется из объектов
+        /// </summary>        
+        public void CalcRows (List<ISpecBlock> blocks)
+        {
+            int numrows = 0;
+            groupRows = new List<KeyValuePair<string, List<ISpecRow>>>();
+            var rows = new List<ISpecRow>();            
+            // Все элементы спецификации
+            var elements = blocks.SelectMany(b=>b.Elements);
+            // группировка уникальности элементов
+            var openingsGroup = elements.OrderBy(o=>o.Index).GroupBy(g=>g).OrderBy(g=>g.Key.Mark, alpha);
+            // Проверка уникальности марок элеметнов
+            CheckUniqueMarks(openingsGroup);
+            string group = elements.First().Group;
+            foreach (var item in openingsGroup)
+            {
+                var row = GetNewRow(group, item.ToList());
+                // Проверка одинаковости марки
+                CheckSomeMark(row.Elements);
+                rows.Add(row);
+                numrows++;
+            }
+            groupRows.Add(new KeyValuePair<string, List<ISpecRow>>(group, rows.ToList()));
+            NumRows = numrows + 2;
+        }
+
+        /// <summary>
+        /// Нумерация элементов
+        /// </summary>
+        /// <param name="blocks"></param>
+        public void Numbering (List<ISpecBlock> blocks)
+        {
+            // Все элементы спецификации
+            var elements = blocks.SelectMany(b=>b.Elements);
+            // Проемы в плите
+            var indexGroups = elements.GroupBy(g=>g.Index).OrderBy(o=>o.Key);
+            foreach (var indexGroup in indexGroups)
+            {
+                var firstGroups = GroupsFirst(indexGroup);
+                int index = 1;
+                string group = indexGroup.First().Group;
+                foreach (var firstGroup in firstGroups)
+                {
+                    // группировка по назначению
+                    var secGroups = GroupsSecond(firstGroup);
+                    if (secGroups.Skip(1).Any())
+                    {
+                        // Есть подгруппы вида - одинаковые размеры у отв но разное назначение - нумерация вида 1.1
+                        int indexRole = 1;
+                        foreach (var secGroup in secGroups)
+                        {
+                            string indexSubgroup = index + "." + indexRole;                            
+                            var row = GetNewRow(group, secGroup.ToList());
+                            NumberingRow(row, indexSubgroup);
+                            indexRole++;
+                        }
+                    }
+                    else
+                    {
+                        var row = GetNewRow(group, firstGroup.ToList());
+                        NumberingRow(row, index.ToString());                        
+                    }
+                    index++;
+                }
+            }
+        }
+
+        private void NumberingRow (ISpecRow row, string index)
+        {
+            string num =row.Elements.First().GetNumber(index);
+            foreach (var item in row.Elements)
+            {
+                item.SetNumber(num);
+            }
+        }    
+
+        /// <summary>
+        /// Создание и заполнение тапбицы
+        /// </summary>        
+        public Table CreateTable ()
+        {
+            var table = GetTable();
+            return table;
+        }
+
+        private void CheckUniqueMarks (IOrderedEnumerable<IGrouping<ISpecElement, ISpecElement>> groups)
+        {
+            var markGroups = groups.GroupBy(g => g.Key.Mark, (k, g) =>
+                new { Key = k, Error = g.Skip(1).Any(), Elements = g.SelectMany(s => s.Select(i => i)) }).Where(w=>w.Error);
+            foreach (var item in markGroups)
+            {
+                foreach (var elem in item.Elements)
+                {
+                    Inspector.AddError($"Одинаковая марка у разных элементов - {elem.Mark}",
+                        elem.SpecBlock.Block.IdBlRef, System.Drawing.SystemIcons.Error);
+                }
+            }
+        }
+
+        private void CheckSomeMark (List<ISpecElement> elements)
+        {
+            // Марка элементов должна быть одинаковой
+            var groups = elements.GroupBy(g => g.Mark);
+            if (groups.Skip(1).Any())
+            {
+                // Ошибка - разные марки
+                foreach (var item in elements)
+                {
+                    Inspector.AddError($"Разная марка у одинаковых элементов: {item.GetParamInfo()}",
+                        item.SpecBlock.Block.IdBlRef, System.Drawing.SystemIcons.Error);
+                }
+            }
+        }
 
         /// <summary>
         /// перед вызовом необходимо заполнить свойства - Title, NumRows, NumColumns

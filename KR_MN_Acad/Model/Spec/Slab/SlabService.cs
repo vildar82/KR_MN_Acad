@@ -11,109 +11,16 @@ using KR_MN_Acad.Spec.Slab.Elements;
 namespace KR_MN_Acad.Spec.Slab
 {
     public class SlabService : TableService
-    {
-        private List<KeyValuePair<string, List<SlabRow>>> groupRows;
+    {        
         protected override Database Db { get; set; }
         protected override int NumColumns { get; set; }
         protected override int NumRows { get; set; }
         protected override string Title { get; set; }
         public SlabService(Database db)
-        {
+        {            
             Db = db;
             Title = "Ведомость инженерных отверстий плиты";
             NumColumns = 5;
-        }
-
-        /// <summary>
-        /// Группировка элементов спецификации.
-        /// Нумерация берется из объектов
-        /// </summary>        
-        public override void CalcRows (List<ISpecBlock> blocks)
-        {
-            int numrows = 0;
-            groupRows = new List<KeyValuePair<string, List<SlabRow>>> ();
-            var rows = new List<SlabRow> ();
-            // Все элементы спецификации
-            var elements = blocks.SelectMany(b=>b.Elements.Cast<ISlabElement>());
-            // группировка уникальности элементов
-            var openingsGroup = elements.OrderBy(o=>o.Index).GroupBy(g=>g).OrderBy(g=>g.Key.Mark, alpha);
-            // Проверка уникальности марок элеметнов
-            CheckUniqueMarks(openingsGroup);
-            string group = "";
-            foreach (var item in openingsGroup)
-            {
-                var row = new SlabRow(group, item.ToList());
-                // Проверка одинаковости марки
-                row.CheckSomeMark();
-                rows.Add(row);
-                numrows++;
-            }
-            groupRows.Add(new KeyValuePair<string, List<SlabRow>>(group, rows.ToList()));
-            NumRows = numrows+2;
-        }        
-
-        private void CheckUniqueMarks (IOrderedEnumerable<IGrouping<ISlabElement, ISlabElement>> groups)
-        {
-            var markGroups = groups.GroupBy(g => g.Key.Mark, (k, g) =>
-                new { Key = k, Error = g.Skip(1).Any(), Elements = g.SelectMany(s => s.Select(i => i)) }).Where(w=>w.Error);
-            foreach (var item in markGroups)
-            {
-                foreach (var elem in item.Elements)
-                {
-                    Inspector.AddError($"Одинаковая марка у разных элементов. Марка = {elem.Mark}", 
-                        elem.SpecBlock.Block.IdBlRef, System.Drawing.SystemIcons.Error);
-                }                
-            }
-        }
-
-        /// <summary>
-        /// Создание и заполнение тапбицы
-        /// </summary>        
-        public override Table CreateTable ()
-        {   
-            var table = GetTable();
-            return table;
-        }        
-
-        /// <summary>
-        /// Нумерация элементов
-        /// </summary>
-        /// <param name="blocks"></param>
-        public override void Numbering (List<ISpecBlock> blocks)
-        {   
-            // Все элементы спецификации
-            var elements = blocks.SelectMany(b=>b.Elements.Cast<ISlabElement>());
-            // Проемы в плите
-            var indexGroups = elements.GroupBy(g=>g.Index).OrderBy(o=>o.Key);
-            foreach (var indexGroup in indexGroups)
-            {
-                var dimGroups = indexGroup.GroupBy(g=>g.Dimension).OrderByDescending(o=>o.Key, alpha);
-                int index = 1;
-                string group = "";
-                foreach (var dimGroup in dimGroups)
-                {
-                    // группировка по назначению
-                    var roleGroups = dimGroup.GroupBy(g=>g.Role).OrderBy(o=>o.Key);
-                    if (roleGroups.Skip(1).Any())
-                    {
-                        // Есть подгруппы вида - одинаковые размеры у отв но разное назначение - нумерация вида 1.1
-                        int indexRole = 1;
-                        foreach (var item in roleGroups)
-                        {
-                            string indexSubgroup = index + "." + indexRole;
-                            var row = new SlabRow(group, item.ToList());
-                            row.Numbering(indexSubgroup);
-                            indexRole++;
-                        }
-                    }
-                    else
-                    {
-                        var row = new SlabRow(group, dimGroup.ToList());
-                        row.Numbering(index.ToString());
-                    }
-                    index++;
-                }
-            }
         }
 
         /// <summary>
@@ -196,7 +103,7 @@ namespace KR_MN_Acad.Spec.Slab
             Cell cell;
             foreach (var group in groupRows)
             {   
-                foreach (var item in group.Value)
+                foreach (var item in group.Value.Cast<SlabRow>())
                 {
                     cell = table.Cells[row, 0];
                     cell.TextString = item.Mark;                    
@@ -216,6 +123,24 @@ namespace KR_MN_Acad.Spec.Slab
                     row++;
                 }
             }
+        }
+
+        protected override ISpecRow GetNewRow (string group, List<ISpecElement> items)
+        {
+            var res = new SlabRow(group, items);
+            return res;
+        }
+
+        protected override List<IGrouping<string, ISpecElement>> GroupsFirst (IGrouping<int, ISpecElement> indexGroup)
+        {            
+            var dimGroups = indexGroup.GroupBy(g=>((ISlabElement)g).Dimension).OrderByDescending(o=>o.Key, alpha);
+            return dimGroups.ToList();
+        }
+
+        protected override List<IGrouping<string, ISpecElement>> GroupsSecond (IGrouping<string, ISpecElement> firstGroup)
+        {
+            var roleGroups = firstGroup.GroupBy(g=>((ISlabElement)g).Role).OrderBy(o=>o.Key);
+            return roleGroups.ToList();
         }
     }
 }

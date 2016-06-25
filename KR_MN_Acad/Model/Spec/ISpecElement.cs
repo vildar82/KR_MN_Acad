@@ -10,8 +10,11 @@ namespace KR_MN_Acad.Spec
     /// <summary>
     /// элемент спецификации
     /// </summary>
-    public interface ISpecElement
+    public interface ISpecElement : IEquatable<ISpecElement>, IComparable<ISpecElement>
     {
+        string Group { get; set; }
+        int Index { get; set; }
+        string Mark { get; set; }
         ISpecBlock SpecBlock { get; set; }
         /// <summary>
         /// Определение номера по индексу номера строки группы
@@ -24,5 +27,6 @@ namespace KR_MN_Acad.Spec
         /// </summary>
         /// <param name="num">Номер - марка для присвоения</param>
         void SetNumber (string num);
+        string GetParamInfo ();
     }
 }
