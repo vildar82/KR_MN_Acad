@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 using AcadLib.Blocks;
 using AcadLib.Errors;
 using Autodesk.AutoCAD.DatabaseServices;
-using KR_MN_Acad.Spec.Slab.Elements;
+using KR_MN_Acad.Spec.Openings.Blocks;
+using KR_MN_Acad.Spec.SlabOpenings.Elements;
 
-namespace KR_MN_Acad.Spec.Slab.Blocks
+namespace KR_MN_Acad.Spec.SlabOpenings.Blocks
 {
-    public class SlabOpeningBlock : ISpecBlock
+    public class SlabOpeningBlock : SpecBlock
     {
         public const string BlockName = "КР_Отв в плите";
         private const string propMark = "МАРКА";
@@ -18,20 +19,13 @@ namespace KR_MN_Acad.Spec.Slab.Blocks
         private const string propSide2 = "Сторона2";
         private const string propDesc = "ПРИМЕЧАНИЕ";        
 
-        SlabOpening opening;
+        SlabOpening opening;        
 
-        public List<ISpecElement> Elements { get; set; } = new List<ISpecElement>();      
-
-        public Error Error { get { return Block.Error; } }
-
-        public IBlock Block { get; set; }
-
-        public SlabOpeningBlock(BlockReference blRef, string blName)
-        {
-            Block = new BlockBase(blRef, blName);                        
+        public SlabOpeningBlock(BlockReference blRef, string blName) : base(blRef, blName)
+        {            
         }
 
-        public void Calculate ()
+        public override void Calculate ()
         {
             string mark = Block.GetPropValue<string>(propMark);
             int side1 = Block.GetPropValue<int>(propSide1);
@@ -42,7 +36,7 @@ namespace KR_MN_Acad.Spec.Slab.Blocks
             Elements.Add(opening);
         }        
 
-        public void Numbering ()
+        public override void Numbering ()
         {
             // Запись марки в блок
             Block.FillPropValue(propMark, opening.Mark);

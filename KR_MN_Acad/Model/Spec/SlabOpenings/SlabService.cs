@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using AcadLib.Blocks;
 using AcadLib.Errors;
 using Autodesk.AutoCAD.DatabaseServices;
-using KR_MN_Acad.Spec.Slab.Elements;
+using KR_MN_Acad.Spec.SlabOpenings.Elements;
 
-namespace KR_MN_Acad.Spec.Slab
+namespace KR_MN_Acad.Spec.SlabOpenings
 {
     public class SlabService : TableService
     {        
@@ -131,16 +131,16 @@ namespace KR_MN_Acad.Spec.Slab
             return res;
         }
 
-        protected override List<IGrouping<string, ISpecElement>> GroupsFirst (IGrouping<int, ISpecElement> indexGroup)
+        protected override Dictionary<string, List<ISpecElement>> GroupsFirst (IGrouping<int, ISpecElement> indexGroup)
         {            
             var dimGroups = indexGroup.GroupBy(g=>((ISlabElement)g).Dimension).OrderByDescending(o=>o.Key, alpha);
-            return dimGroups.ToList();
+            return dimGroups.ToDictionary(k => k.Key, i => i.ToList());
         }
 
-        protected override List<IGrouping<string, ISpecElement>> GroupsSecond (IGrouping<string, ISpecElement> firstGroup)
+        protected override Dictionary<string, List<ISpecElement>> GroupsSecond (KeyValuePair<string, List<ISpecElement>> firstGroup)
         {
-            var roleGroups = firstGroup.GroupBy(g=>((ISlabElement)g).Role).OrderBy(o=>o.Key);
-            return roleGroups.ToList();
+            var roleGroups = firstGroup.Value.GroupBy(g=>((ISlabElement)g).Role).OrderBy(o=>o.Key);            
+            return roleGroups.ToDictionary(k => k.Key, i => i.ToList());
         }
     }
 }

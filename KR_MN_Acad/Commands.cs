@@ -35,8 +35,10 @@ namespace KR_MN_Acad
             AcadLib.CommandStart.Start(doc =>
             {
                 // Спецификация монолитных блоков                         
-                SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecMonolith());
-                specService.CreateSpec();                
+                //SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecMonolith());
+                //specService.CreateSpec();
+                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Monolith.MonolithOptions(doc.Database));
+                spec.Spec();
             });            
         }
         /// <summary>
@@ -47,8 +49,10 @@ namespace KR_MN_Acad
         {
             AcadLib.CommandStart.Start(doc =>
             {
-                SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecMonolith());
-                specService.Numbering();
+                //SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecMonolith());
+                //specService.Numbering();
+                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Monolith.MonolithOptions(doc.Database));
+                spec.Numbering();
             });
         }
 
@@ -61,8 +65,10 @@ namespace KR_MN_Acad
             AcadLib.CommandStart.Start(doc =>
             {
                 // Спецификация проекмов
-                SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecAperture());
-                specService.CreateSpec();             
+                //SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecAperture());
+                //specService.CreateSpec();
+                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Openings.ApertureOptions(doc.Database));
+                spec.Spec();
             });                
         }
         /// <summary>
@@ -73,8 +79,10 @@ namespace KR_MN_Acad
         {
             AcadLib.CommandStart.Start(doc =>
             {
-                SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecAperture());
-                specService.Numbering();
+                //SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecAperture());
+                //specService.Numbering();
+                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Openings.ApertureOptions(doc.Database));
+                spec.Numbering();
             });
         }
 
@@ -87,8 +95,10 @@ namespace KR_MN_Acad
             AcadLib.CommandStart.Start(doc =>
             {
                 // Спецификация отверстий
-                SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecOpenings());
-                specService.CreateSpec();                
+                //SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecOpenings());
+                //specService.CreateSpec();
+                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Openings.WallOptions(doc.Database));
+                spec.Spec();
             });            
         }
         /// <summary>
@@ -99,8 +109,10 @@ namespace KR_MN_Acad
         {
             AcadLib.CommandStart.Start(doc =>
             {
-                SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecOpenings());
-                specService.Numbering();
+                //SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecOpenings());
+                //specService.Numbering();
+                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Openings.WallOptions(doc.Database));
+                spec.Numbering();
             });
         }
 
@@ -115,7 +127,7 @@ namespace KR_MN_Acad
                 // Спецификация отверстий
                 //SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecSlabOpenings());
                 //specService.CreateSpec();   
-                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Slab.SlabOptions(doc.Database));
+                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.SlabOpenings.SlabOptions(doc.Database));
                 spec.Spec();
             });
         }
@@ -129,7 +141,7 @@ namespace KR_MN_Acad
             {
                 //SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecSlabOpenings());
                 //specService.Numbering();    
-                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Slab.SlabOptions(doc.Database));
+                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.SlabOpenings.SlabOptions(doc.Database));
                 spec.Numbering();
             });
         }

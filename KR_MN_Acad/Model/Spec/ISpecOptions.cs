@@ -13,5 +13,6 @@ namespace KR_MN_Acad.Spec
         /// Сервис расчета спецификации
         /// </summary>
         ITableService TableService { get; set; }
+        bool CheckDublicates { get; set; }
     }
 }

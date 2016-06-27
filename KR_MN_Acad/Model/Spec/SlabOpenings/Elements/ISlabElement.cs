@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KR_MN_Acad.Spec.Slab.Elements
+namespace KR_MN_Acad.Spec.SlabOpenings.Elements
 {
     public interface ISlabElement : ISpecElement
     {        

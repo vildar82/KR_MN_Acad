@@ -6,45 +6,41 @@ using System.Threading.Tasks;
 using AcadLib.Blocks;
 using AcadLib.Errors;
 using Autodesk.AutoCAD.DatabaseServices;
-using KR_MN_Acad.Spec.Slab.Elements;
+using KR_MN_Acad.Spec.Openings.Elements;
 
-namespace KR_MN_Acad.Spec.Slab.Blocks
+namespace KR_MN_Acad.Spec.Openings.Blocks
 {
     /// <summary>
     /// Блок гильзы в плите
     /// </summary>
-    public class SlabSleeveBlock : ISpecBlock
+    public class WallSleeveBlock : SpecBlock
     {
-        public const string BlockName = "КР_Гильза в плите";
+        public const string BlockName = "КР_Гильза";
         private const string propMark = "МАРКА";
         private const string propDiam = "Диаметр";
-        private const string propDepth = "ТОЛЩИНАГИЛЬЗЫ";        
+        private const string propDepth = "ТОЛЩИНАГИЛЬЗЫ";
+        private const string propElevation = "ОТМЕТКА";
         private const string propDesc = "ПОЯСНЕНИЕ";        
 
-        SlabSleeve sleeve;
+        WallSleeve sleeve;       
 
-        public List<ISpecElement> Elements { get; set; } = new List<ISpecElement>();
-        public IBlock Block { get; set; }
-
-        public Error Error { get { return Block.Error; } }
-
-        public SlabSleeveBlock (BlockReference blRef, string blName)
-        {
-            Block = new BlockBase(blRef, blName);                        
+        public WallSleeveBlock (BlockReference blRef, string blName) : base(blRef, blName)
+        {            
         }
 
-        public void Calculate ()
+        public override void Calculate ()
         {
             string mark = Block.GetPropValue<string>(propMark);
             int diam = Block.GetPropValue<int>(propDiam);
             int depth = Block.GetPropValue<int>(propDepth);
-            string role = SlabService.GetRole(Block);            
+            double elev = Block.GetPropValue<double>(propElevation);
+            string role = SlabOpenings.SlabService.GetRole(Block);            
             string desc = Block.GetPropValue<string>(propDesc, false);
-            sleeve = new SlabSleeve (mark, diam, depth, role, desc, this);
+            sleeve = new WallSleeve (mark, diam, depth, elev, role, desc, this);
             Elements.Add(sleeve);
         }        
 
-        public void Numbering ()
+        public override void Numbering ()
         {
             // Запись марки в блок
             Block.FillPropValue(propMark, sleeve.Mark);

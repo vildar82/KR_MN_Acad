@@ -24,8 +24,8 @@ namespace KR_MN_Acad.Spec
         protected abstract void SetColumnsAndCap (ColumnsCollection columns);
         protected abstract void FillCells (Table table);
         protected abstract ISpecRow GetNewRow (string group, List<ISpecElement> list);
-        protected abstract List<IGrouping<string, ISpecElement>> GroupsFirst (IGrouping<int, ISpecElement> indexGroup);
-        protected abstract List<IGrouping<string, ISpecElement>> GroupsSecond (IGrouping<string, ISpecElement> firstGroup);        
+        protected abstract Dictionary<string, List<ISpecElement>> GroupsFirst (IGrouping<int, ISpecElement> indexGroup);
+        protected abstract Dictionary<string, List<ISpecElement>> GroupsSecond (KeyValuePair<string, List<ISpecElement>> firstGroup);        
 
         /// <summary>
         /// Группировка элементов спецификации.
@@ -34,24 +34,31 @@ namespace KR_MN_Acad.Spec
         public void CalcRows (List<ISpecBlock> blocks)
         {
             int numrows = 0;
-            groupRows = new List<KeyValuePair<string, List<ISpecRow>>>();
-            var rows = new List<ISpecRow>();            
+            groupRows = new List<KeyValuePair<string, List<ISpecRow>>>();            
             // Все элементы спецификации
             var elements = blocks.SelectMany(b=>b.Elements);
-            // группировка уникальности элементов
-            var openingsGroup = elements.OrderBy(o=>o.Index).GroupBy(g=>g).OrderBy(g=>g.Key.Mark, alpha);
-            // Проверка уникальности марок элеметнов
-            CheckUniqueMarks(openingsGroup);
-            string group = elements.First().Group;
-            foreach (var item in openingsGroup)
+            // группировка по именам групп
+            var groupsGroup = elements.OrderBy(o=>o.Index).GroupBy(g=>g.Group);
+            foreach (var group in groupsGroup)
             {
-                var row = GetNewRow(group, item.ToList());
-                // Проверка одинаковости марки
-                CheckSomeMark(row.Elements);
-                rows.Add(row);
-                numrows++;
+                var rows = new List<ISpecRow>();
+                // группировка по униеальности элементов
+                var uniqelemGroup = group.GroupBy(g=>g).OrderBy(g=>g.Key.Mark, alpha);
+                // Проверка уникальности марок элеметнов
+                CheckUniqueMarks(uniqelemGroup);
+                string groupName = group.First().Group;
+                if (!string.IsNullOrEmpty(groupName))
+                    numrows++;
+                foreach (var item in uniqelemGroup)
+                {
+                    var row = GetNewRow(groupName, item.ToList());
+                    // Проверка одинаковости марки
+                    CheckSomeMark(row.Elements);
+                    rows.Add(row);
+                    numrows++;
+                }
+                groupRows.Add(new KeyValuePair<string, List<ISpecRow>>(groupName, rows.ToList()));
             }
-            groupRows.Add(new KeyValuePair<string, List<ISpecRow>>(group, rows.ToList()));
             NumRows = numrows + 2;
         }
 
@@ -81,14 +88,14 @@ namespace KR_MN_Acad.Spec
                         foreach (var secGroup in secGroups)
                         {
                             string indexSubgroup = index + "." + indexRole;                            
-                            var row = GetNewRow(group, secGroup.ToList());
+                            var row = GetNewRow(group, secGroup.Value);
                             NumberingRow(row, indexSubgroup);
                             indexRole++;
                         }
                     }
                     else
                     {
-                        var row = GetNewRow(group, firstGroup.ToList());
+                        var row = GetNewRow(group, firstGroup.Value);
                         NumberingRow(row, index.ToString());                        
                     }
                     index++;

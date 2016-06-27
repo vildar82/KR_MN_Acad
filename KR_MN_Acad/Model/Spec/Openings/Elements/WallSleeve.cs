@@ -1,33 +1,35 @@
 ﻿using System;
 
-namespace KR_MN_Acad.Spec.Slab.Elements
+namespace KR_MN_Acad.Spec.Openings.Elements
 {
     /// <summary>
     /// Гильза в плите
     /// </summary>
-    public class SlabSleeve:ISpecElement, ISlabElement
+    public class WallSleeve: ISpecElement, IOpeningElement
     {
         private int diam;
         private int depth;
+        private double elev;
+
         public string Dimension { get; set; }
+        public string Elevation { get; set; }
         public string Mark { get; set; }
         public string Role { get; set; }
         public int Count { get; set; }
-        public string Description { get; set; }
-        /// <summary>
-        /// Гильзы - в конце
-        /// </summary>
+        public string Description { get; set; }        
         public int Index { get; set; } = 1;
         public string Group { get; set; } = "";
         public ISpecBlock SpecBlock { get; set; }
 
-        public SlabSleeve (string mark, int diam, int depth, string role, string desc, ISpecBlock specBlock)
+        public WallSleeve (string mark, int diam, int depth, double elev, string role, string desc, ISpecBlock specBlock)
         {
             SpecBlock = specBlock;
             this.diam = diam;
             this.depth = depth;
+            this.elev = elev;
+            Elevation = "Ось отв. " + elev;
             Mark = mark;            
-            Role = role;
+            Role = role;            
             Description = desc;
             Count = 1;
             Dimension = "Гильза " + AcadLib.General.Symbols.Diam + diam + "х" + depth;
@@ -45,14 +47,14 @@ namespace KR_MN_Acad.Spec.Slab.Elements
 
         public bool Equals (ISpecElement other)
         {
-            var s = other as SlabSleeve;
+            var s = other as WallSleeve;
             if (s == null) return false;
-            return Mark == s.Mark && diam == s.diam && depth == s.depth && Role == s.Role;
+            return Mark == s.Mark && diam == s.diam && depth == s.depth && Role == s.Role && elev == s.elev;
         }
 
         public int CompareTo (ISpecElement other)
         {
-            var s = other as SlabSleeve;
+            var s = other as WallSleeve;
             if (s == null) return -1;
             int res=0;
             if (!string.IsNullOrEmpty(Mark))
@@ -62,7 +64,10 @@ namespace KR_MN_Acad.Spec.Slab.Elements
             if (res != 0) return res;
             res = depth.CompareTo(s.depth);
             if (res != 0) return res;
-            return Role.CompareTo(s.Role);
+            res = Role.CompareTo(s.Role);
+            if (res != 0) return res;
+            res = elev.CompareTo(s.elev);
+            return res;
         }
 
         public override int GetHashCode ()
@@ -72,7 +77,7 @@ namespace KR_MN_Acad.Spec.Slab.Elements
 
         public string GetParamInfo ()
         {
-            return $"{Dimension} {Role}";
+            return $"{Dimension} {elev} {Role}";
         }
     }
 }

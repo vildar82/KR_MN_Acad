@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Autodesk.AutoCAD.DatabaseServices;
 
-namespace KR_MN_Acad.Spec.Slab
+namespace KR_MN_Acad.Spec.SlabOpenings
 {
     /// <summary>
     /// Настройка спецификации блоков отверстий в плитах
@@ -14,6 +14,7 @@ namespace KR_MN_Acad.Spec.Slab
     {        
         public Dictionary<string, Type> TypesBlock { get; set; }
         public ITableService TableService { get; set; }
+        public bool CheckDublicates { get; set; }
 
         public SlabOptions(Database db)
         {
@@ -23,6 +24,7 @@ namespace KR_MN_Acad.Spec.Slab
             };
 
             TableService = new SlabService(db);
+            CheckDublicates = true;
         }
     }
 }

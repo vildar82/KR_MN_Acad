@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KR_MN_Acad.Spec.Slab.Elements
+namespace KR_MN_Acad.Spec.SlabOpenings.Elements
 {
     /// <summary>
     /// Проем в плите

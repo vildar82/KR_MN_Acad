@@ -107,6 +107,13 @@ namespace KR_MN_Acad.Spec
             {
                 throw new Exception($"\nБлоки для спецификации не определены.");
             }
+
+            // Проверка дубликатов
+            if (options.CheckDublicates)
+            {
+                AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check(blocks.Select(s=>s.Block.IdBlRef));
+            }
+
             return blocks;
         }
 
