@@ -37,7 +37,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
             Role = role;
             Count = 1;
             Description = desc;
-            Elevation = elevation.ToString();
+            Elevation = elevation.ToString("N3");
             this.length = lenght;
             this.height = height;
             this.elev = elevation;

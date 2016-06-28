@@ -89,17 +89,25 @@ namespace KR_MN_Acad.Spec
                     var blRef = idEnt.GetObject(OpenMode.ForRead, false, true) as BlockReference;
                     if (blRef == null) continue;
                     string blName = blRef.GetEffectiveName();
-                    ISpecBlock block = SpecBlockFactory.CreateBlock(blRef, blName, options);
-                    if (block == null)
+                    try
                     {
-                        ed.WriteMessage($"\nПропущен блок '{blName}'");
-                        continue;
+                        ISpecBlock block = SpecBlockFactory.CreateBlock(blRef, blName, options);
+                        if (block == null)
+                        {
+                            ed.WriteMessage($"\nПропущен блок '{blName}'");
+                            continue;
+                        }
+                        block.Calculate();
+                        if (block.Error == null)
+                            blocks.Add(block);
+                        else
+                            Inspector.Errors.Add(block.Error);
                     }
-                    block.Calculate();
-                    if (block.Error == null)
-                        blocks.Add(block);
-                    else
-                        Inspector.Errors.Add(block.Error);
+                    catch (Exception ex)
+                    {
+                        Inspector.AddError($"Ошибка при обработке блока {blName} - {ex.Message}", 
+                            blRef, System.Drawing.SystemIcons.Error);
+                    }
                 }
                 t.Commit();
             }

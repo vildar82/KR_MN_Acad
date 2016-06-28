@@ -27,7 +27,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
             this.diam = diam;
             this.depth = depth;
             this.elev = elev;
-            Elevation = "Ось отв. " + elev;
+            Elevation = "Ось отв. " + elev.ToString("N3");
             Mark = mark;            
             Role = role;            
             Description = desc;
