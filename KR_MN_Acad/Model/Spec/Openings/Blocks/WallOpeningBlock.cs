@@ -34,7 +34,7 @@ namespace KR_MN_Acad.Spec.Openings.Blocks
             string role = SlabOpenings.SlabService.GetRole(Block);            
             string desc = Block.GetPropValue<string>(propDesc, false);
             opening = new Opening (mark, length, height, elev, role, desc, this);
-            Elements.Add(opening);
+            AddElement(opening);
         }        
 
         public override void Numbering ()

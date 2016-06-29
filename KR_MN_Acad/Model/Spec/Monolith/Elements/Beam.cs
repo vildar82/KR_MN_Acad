@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 namespace KR_MN_Acad.Spec.Monolith.Elements
 {
     public class Beam : Construction
-    {
-        public const string GROUP = "Балки монолоитные";
+    {        
         private int length;
         private int width;
         private int height;
-        public override string Group { get; set; } = GROUP;
+        public override string Group { get; set; } = GroupType.MonolithBeam.Name;
         public override int Index { get; set; } = 0;
         public override string Name { get; set; }
+        public override string FriendlyName { get; set; } = "Балка монолитная";
 
         public Beam (string mark, int length, int width, int height, ISpecBlock block) : 
             base("Б-", mark, block, 0)

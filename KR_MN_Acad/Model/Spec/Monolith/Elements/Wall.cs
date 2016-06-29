@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 namespace KR_MN_Acad.Spec.Monolith.Elements
 {
     public class Wall : Construction
-    {
-        public const string GROUP = "Стены монолоитные";
+    {        
         private int length;
         private int width;
         private int height;
-        public override string Group { get; set; } = GROUP;
+        public override string Group { get; set; } = GroupType.MonolithWall.Name;
         public override int Index { get; set; } = 3;
         public override string Name { get; set; }
+        public override string FriendlyName { get; set; } = "Стена монолитная";
 
         public Wall (string mark, int length, int width, int height, ISpecBlock block) : 
             base("См-", mark, block, 0)

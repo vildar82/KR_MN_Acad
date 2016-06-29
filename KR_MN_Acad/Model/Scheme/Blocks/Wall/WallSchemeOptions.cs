@@ -28,12 +28,12 @@ namespace KR_MN_Acad.Scheme.Wall
                 { WallEndBlock.BlockName , typeof(WallEndBlock) },
 				{ WallEndCornerBlock.BlockName , typeof(WallEndCornerBlock) },
                 { WallEndTBlock.BlockName , typeof(WallEndTBlock) },
-                { ColumnSquareSmall.BlockName , typeof(ColumnSquareSmall) },
-                { ColumnSquareBig.BlockName , typeof(ColumnSquareBig) },
+                { ColumnSquareSmallBlock.BlockName , typeof(ColumnSquareSmallBlock) },
+                { ColumnSquareBigBlock.BlockName , typeof(ColumnSquareBigBlock) },
                 { AddHorArmBlock.BlockName , typeof(AddHorArmBlock) },
                 { AddVerticLShapedArmBlock.BlockName , typeof(AddVerticLShapedArmBlock) },
                 { PylonBlock.BlockName , typeof(PylonBlock) },                
-                { Sleeve.BlockName , typeof(Sleeve) }
+                { SleeveBlock.BlockName , typeof(SleeveBlock) }
             };
 
             // Правила блоков

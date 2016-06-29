@@ -131,13 +131,13 @@ namespace KR_MN_Acad.Spec.SlabOpenings
             return res;
         }
 
-        protected override Dictionary<string, List<ISpecElement>> GroupsFirst (IGrouping<int, ISpecElement> indexGroup)
+        protected override Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<int, ISpecElement> indexGroup)
         {            
             var dimGroups = indexGroup.GroupBy(g=>((ISlabElement)g).Dimension).OrderByDescending(o=>o.Key, alpha);
             return dimGroups.ToDictionary(k => k.Key, i => i.ToList());
         }
 
-        protected override Dictionary<string, List<ISpecElement>> GroupsSecond (KeyValuePair<string, List<ISpecElement>> firstGroup)
+        protected override Dictionary<string, List<ISpecElement>> GroupsSecondForNumbering (KeyValuePair<string, List<ISpecElement>> firstGroup)
         {
             var roleGroups = firstGroup.Value.GroupBy(g=>((ISlabElement)g).Role).OrderBy(o=>o.Key);            
             return roleGroups.ToDictionary(k => k.Key, i => i.ToList());

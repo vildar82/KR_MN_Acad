@@ -36,7 +36,7 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Blocks
             string role = SlabService.GetRole(Block);            
             string desc = Block.GetPropValue<string>(propDesc, false);
             sleeve = new SlabSleeve (mark, diam, depth, role, desc, this);
-            Elements.Add(sleeve);
+            AddElement(sleeve);
         }        
 
         public override void Numbering ()

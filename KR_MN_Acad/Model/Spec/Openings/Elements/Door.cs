@@ -8,6 +8,8 @@ namespace KR_MN_Acad.Spec.Openings.Elements
 {
     public class Door : Aperture
     {
+        public override string FriendlyName { get; set; } = "Дверь";
+
         public Door (string mark, int lenght, int height, double elevation, string role, string desc, ISpecBlock specBlock)
             : base(0, "ДП-", mark, lenght, height, elevation, role, desc, specBlock)
         {

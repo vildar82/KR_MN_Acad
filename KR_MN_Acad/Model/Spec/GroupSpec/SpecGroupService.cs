@@ -3,23 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AcadLib.Blocks;
-using AcadLib.Errors;
 using Autodesk.AutoCAD.DatabaseServices;
-using KR_MN_Acad.Spec.Openings.Elements;
 
-namespace KR_MN_Acad.Spec.Openings
+namespace KR_MN_Acad.Spec.SpecGroup
 {
-    public class OpeningService : TableService
+    public class SpecGroupService : TableService
     {        
         protected override Database Db { get; set; }
         protected override int NumColumns { get; set; }
         protected override int NumRows { get; set; }
         protected override string Title { get; set; }
-        public OpeningService (Database db)
+        public SpecGroupService (Database db)
         {            
             Db = db;
-            Title = "Ведомость инженерных отверстий";
+            Title = "Спецификация к схеме расположения элементов замаркированных на данном листе";
             NumColumns = 6;
         }        
 
@@ -28,32 +25,32 @@ namespace KR_MN_Acad.Spec.Openings
             // столбец Марка
             var col = columns[0];
             col.Alignment = CellAlignment.MiddleCenter;
-            col.Width = 10;
-            col[1, 0].TextString = "Марка отв.";
-            // столбец Размеры
+            col.Width = 15;
+            col[1, 0].TextString = "Марка";
+            // столбец Обозначение
             col = columns[1];
             col.Alignment = CellAlignment.MiddleCenter;
-            col.Width = 20;
-            col[1, 1].TextString = "Размеры, мм";
-            // столбец Отметка
+            col.Width = 60;
+            col[1, 1].TextString = "Обозначение";
+            // столбец Наименование
             col = columns[2];
             col.Alignment = CellAlignment.MiddleCenter;
-            col.Width = 20;
-            col[1, 2].TextString = "Отм. низа проема, м";
-            // столбец Назначение
+            col.Width = 65;
+            col[1, 2].TextString = "Наименование";
+            // столбец Кол
             col = columns[3];
             col.Alignment = CellAlignment.MiddleCenter;
-            col.Width = 20;
-            col[1, 3].TextString = "Назначение";
-            // столбец Кол
+            col.Width = 10;
+            col[1, 3].TextString = "Кол.";
+            // столбец Масса, ед. кг
             col = columns[4];
             col.Alignment = CellAlignment.MiddleCenter;
             col.Width = 15;
-            col[1, 4].TextString = "Кол-во, шт.";
+            col[1, 4].TextString = "Масса, ед. кг";
             // столбец примечаение
             col = columns[5];
             col.Alignment = CellAlignment.MiddleCenter;
-            col.Width = 30;
+            col.Width = 20;
             col[1, 5].TextString = "Примечание";            
         }
 
@@ -62,23 +59,31 @@ namespace KR_MN_Acad.Spec.Openings
             int row = 2;
             Cell cell;
             foreach (var group in groupRows)
-            {   
-                foreach (var item in group.Value.Cast<OpeningRow>())
+            {
+                var groupName = group.Value.First().Group;
+                if (!string.IsNullOrEmpty(groupName))
+                {
+                    table.Cells[row, 2].TextString = $"{{\\L{groupName}}}";
+                    row++;
+                }
+                foreach (var item in group.Value.Cast<SpecGroupRow>())
                 {
                     cell = table.Cells[row, 0];
                     cell.TextString = item.Mark;                    
 
                     cell = table.Cells[row, 1];
-                    cell.TextString = item.Dimension;
+                    cell.TextString = item.Designation;
+                    cell.Alignment = CellAlignment.MiddleLeft;
 
                     cell = table.Cells[row, 2];
-                    cell.TextString = item.Elevation;
+                    cell.TextString = item.Name;
+                    cell.Alignment = CellAlignment.MiddleLeft;
 
                     cell = table.Cells[row, 3];
-                    cell.TextString = item.Role;
+                    cell.TextString = item.Count.ToString();
 
                     cell = table.Cells[row, 4];
-                    cell.TextString = item.Count.ToString();
+                    cell.TextString = item.Weight;
 
                     cell = table.Cells[row, 5];
                     cell.TextString = item.Description;                    
@@ -88,22 +93,29 @@ namespace KR_MN_Acad.Spec.Openings
             }
         }
 
+        protected override IEnumerable<ISpecElement> FilterElements (IEnumerable<ISpecBlock> blocks)
+        {
+            var specGroupElements = blocks.SelectMany(s=>s.Elements.OfType<IGroupSpecElement>());
+            return specGroupElements;
+        }
+
         protected override ISpecRow GetNewRow (string group, List<ISpecElement> items)
         {
-            var res = new OpeningRow(group, items);
+            var res = new SpecGroupRow(group, items);
             return res;
-        }        
+        }       
 
         protected override Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<int, ISpecElement> indexGroup)
         {
-            var dimRoleGroups = indexGroup.GroupBy(g=>((IOpeningElement)g).Dimension+((IOpeningElement)g).Role).OrderByDescending(o=>o.Key, alpha);
-            return dimRoleGroups.ToDictionary(k => k.Key, i => i.ToList());
+            var uniqElems = indexGroup.GroupBy(g=>g).OrderByDescending(o=>o.Key);
+            return uniqElems.ToDictionary(k => ((IGroupSpecElement)k.Key).Key, i => i.ToList());
         }
 
         protected override Dictionary<string, List<ISpecElement>> GroupsSecondForNumbering (KeyValuePair<string, List<ISpecElement>> firstGroup)
         {
-            var elevGroups = firstGroup.Value.GroupBy(g=>((IOpeningElement)g).Elevation).OrderBy(o=>o.Key);
-            return elevGroups.ToDictionary(k => k.Key, i => i.ToList());
+            return new Dictionary<string, List<ISpecElement>>() {
+                { firstGroup.Key, firstGroup.Value }
+            };
         }
     }
 }

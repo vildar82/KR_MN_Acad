@@ -5,7 +5,7 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
     /// <summary>
     /// Гильза в плите
     /// </summary>
-    public class SlabSleeve:ISpecElement, ISlabElement
+    public class SlabSleeve: ISpecElement, ISlabElement
     {
         private int diam;
         private int depth;
@@ -14,11 +14,12 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
         public string Role { get; set; }
         public int Count { get; set; }
         public string Description { get; set; }
+        public string FriendlyName { get; set; } = "Гильза в плите";
         /// <summary>
         /// Гильзы - в конце
         /// </summary>
         public int Index { get; set; } = 1;
-        public string Group { get; set; } = "";
+        public string Group { get; set; } = string.Empty;
         public ISpecBlock SpecBlock { get; set; }
 
         public SlabSleeve (string mark, int diam, int depth, string role, string desc, ISpecBlock specBlock)
@@ -73,6 +74,16 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
         public string GetParamInfo ()
         {
             return $"{Dimension} {Role}";
+        }
+
+        public string GetDesc ()
+        {
+            return "";
+        }
+
+        public void Calc ()
+        {
+            
         }
     }
 }

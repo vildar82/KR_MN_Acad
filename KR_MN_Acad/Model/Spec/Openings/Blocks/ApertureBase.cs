@@ -43,7 +43,7 @@ namespace KR_MN_Acad.Openings.Blocks
             elev = Block.GetPropValue<double>(propElevation);            
             desc = Block.GetPropValue<string>(propDesc, false);
             opening = GetAperture();
-            Elements.Add(opening);
+            AddElement(opening);
         }        
 
         public override void Numbering ()

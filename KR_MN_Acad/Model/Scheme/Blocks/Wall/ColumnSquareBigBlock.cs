@@ -17,7 +17,7 @@ namespace KR_MN_Acad.Scheme.Wall
     /// <summary>
     /// Описание блока колонны квадратной до 400мм
     /// </summary>
-    public class ColumnSquareBig : ColumnBase
+    public class ColumnSquareBigBlock : ColumnBase
     {        
         public const string BlockName = "КР_Арм_Колонна_Квадратная_больше400";
 
@@ -34,7 +34,7 @@ namespace KR_MN_Acad.Scheme.Wall
         /// </summary>
         public Shackle Shackle2 { get; set; }
 
-        public ColumnSquareBig (BlockReference blRef, string blName, SchemeService service) : base (blRef, blName, service)
+        public ColumnSquareBigBlock (BlockReference blRef, string blName, SchemeService service) : base (blRef, blName, service)
         {            
         }
 

@@ -34,8 +34,8 @@ namespace KR_MN_Acad.Spec.Monolith.Blocks
             length = Block.GetPropValue<int>(propLength);
             width = Block.GetPropValue<int>(propWidth);
             desc = Block.GetPropValue<string>(propDesc);
-            construction = GetConstruction();            
-            Elements.Add(construction);
+            construction = GetConstruction();
+            AddElement(construction);
         }
 
         public override void Numbering ()

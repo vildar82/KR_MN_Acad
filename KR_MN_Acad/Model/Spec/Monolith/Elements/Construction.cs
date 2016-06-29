@@ -18,6 +18,7 @@ namespace KR_MN_Acad.Spec.Monolith.Elements
         public ISpecBlock SpecBlock { get; set; }
         public double WeightTotal { get; set; }
         public double WeightUnit { get; set; }
+        public abstract string FriendlyName { get; set; }
 
         public Construction (string prefix, string mark, ISpecBlock block, double weightUnit)
         {            
@@ -56,6 +57,15 @@ namespace KR_MN_Acad.Spec.Monolith.Elements
         public override int GetHashCode ()
         {
             return Name.GetHashCode();
+        }
+
+        public string GetDesc ()
+        {
+            return "";
+        }
+
+        public void Calc ()
+        {            
         }
     }
 }

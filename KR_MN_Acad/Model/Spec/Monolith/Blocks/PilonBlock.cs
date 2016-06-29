@@ -20,7 +20,7 @@ namespace KR_MN_Acad.Spec.Monolith.Blocks
         protected override Construction GetConstruction ()
         {
             int height = Block.GetPropValue<int>(propHeight);
-            return new Pilon(mark, length, width, height, this);
+            return new Pylon(mark, length, width, height, this);
         }
     }
 }

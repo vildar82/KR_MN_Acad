@@ -102,10 +102,10 @@
     </Compile>
     <Compile Include="Model\Scheme\Blocks\Wall\AddVerticLShapedArmBlock.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\AddHorArmBlock.cs" />
-    <Compile Include="Model\Scheme\Blocks\Wall\ColumnSquareBig.cs" />
-    <Compile Include="Model\Scheme\Blocks\Wall\ColumnSquareSmall.cs" />
+    <Compile Include="Model\Scheme\Blocks\Wall\ColumnSquareBigBlock.cs" />
+    <Compile Include="Model\Scheme\Blocks\Wall\ColumnSquareSmallBlock.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\PylonBlock.cs" />
-    <Compile Include="Model\Scheme\Blocks\Wall\Sleeve.cs" />
+    <Compile Include="Model\Scheme\Blocks\Wall\SleeveBlock.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallBase.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\ColumnBase.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallEndTBlock.cs" />
@@ -173,12 +173,32 @@
     <Compile Include="Model\Scheme\Blocks\Wall\WallEndBlock.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallSchemeOptions.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallBlock.cs" />
+    <Compile Include="Model\Spec\ArmWall\Blocks\ColumnBase.cs" />
+    <Compile Include="Model\Spec\Elements\Bars\Bar.cs" />
+    <Compile Include="Model\Spec\Elements\Bars\BarDetail.cs" />
+    <Compile Include="Model\Spec\Elements\Bars\BarRunning.cs" />
+    <Compile Include="Model\Spec\Elements\Bars\BentBarDirect.cs" />
+    <Compile Include="Model\Spec\Elements\Bars\BentBarLshaped.cs" />
+    <Compile Include="Model\Spec\Elements\Bars\Bracket.cs" />
+    <Compile Include="Model\Spec\Elements\Bars\Shackle.cs" />
+    <Compile Include="Model\Spec\Elements\Bars\Spring.cs" />
+    <Compile Include="Model\Spec\Elements\Concretes\ConcreteH.cs" />
+    <Compile Include="Model\Spec\Elements\IDetail.cs" />
+    <Compile Include="Model\Spec\Elements\Tube.cs" />
+    <Compile Include="Model\Spec\GroupSpec\IGroupSpecElement.cs" />
+    <Compile Include="Model\Spec\GroupSpec\SpecGroupRow.cs" />
+    <Compile Include="Model\Spec\GroupSpec\SpecGroupService.cs" />
+    <Compile Include="Model\Spec\GroupType.cs" />
+    <Compile Include="Model\Spec\Materials\Armature.cs" />
+    <Compile Include="Model\Spec\Materials\Concrete.cs" />
+    <Compile Include="Model\Spec\Materials\IMaterial.cs" />
+    <Compile Include="Model\Spec\Materials\RollSteel.cs" />
     <Compile Include="Model\Spec\Monolith\Blocks\BeamBlock.cs" />
     <Compile Include="Model\Spec\Monolith\Blocks\PilonBlock.cs" />
     <Compile Include="Model\Spec\Monolith\Blocks\WallBlock.cs" />
     <Compile Include="Model\Spec\Monolith\Blocks\ColumnBlock.cs" />
     <Compile Include="Model\Spec\Monolith\Blocks\MonolithBase.cs" />
-    <Compile Include="Model\Spec\Monolith\Elements\Pilon.cs" />
+    <Compile Include="Model\Spec\Monolith\Elements\Pylon.cs" />
     <Compile Include="Model\Spec\Monolith\Elements\Column.cs" />
     <Compile Include="Model\Spec\Monolith\Elements\Wall.cs" />
     <Compile Include="Model\Spec\Monolith\Elements\Beam.cs" />
@@ -227,8 +247,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="AutoCADNetLoad.scr" />
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -245,7 +263,9 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Model\Spec\Constructions\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

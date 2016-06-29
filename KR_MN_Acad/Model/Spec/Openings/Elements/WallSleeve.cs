@@ -1,10 +1,7 @@
 ﻿using System;
 
 namespace KR_MN_Acad.Spec.Openings.Elements
-{
-    /// <summary>
-    /// Гильза в плите
-    /// </summary>
+{    
     public class WallSleeve: ISpecElement, IOpeningElement
     {
         private int diam;
@@ -16,9 +13,10 @@ namespace KR_MN_Acad.Spec.Openings.Elements
         public string Mark { get; set; }
         public string Role { get; set; }
         public int Count { get; set; }
-        public string Description { get; set; }        
+        public string Description { get; set; }
+        public string FriendlyName { get; set; } = "Гильза";
         public int Index { get; set; } = 1;
-        public string Group { get; set; } = "";
+        public string Group { get; set; } = string.Empty;
         public ISpecBlock SpecBlock { get; set; }
 
         public WallSleeve (string mark, int diam, int depth, double elev, string role, string desc, ISpecBlock specBlock)
@@ -78,6 +76,15 @@ namespace KR_MN_Acad.Spec.Openings.Elements
         public string GetParamInfo ()
         {
             return $"{Dimension} {elev} {Role}";
+        }
+
+        public string GetDesc ()
+        {
+            return "";
+        }
+
+        public void Calc ()
+        {            
         }
     }
 }

@@ -11,7 +11,7 @@ namespace KR_MN_Acad.Scheme.Wall
     /// <summary>
     /// Гильза
     /// </summary>
-    public class Sleeve : SchemeBlock
+    public class SleeveBlock : SchemeBlock
     {
         public const string BlockName = "КР_Гильза";
 
@@ -26,7 +26,7 @@ namespace KR_MN_Acad.Scheme.Wall
         /// </summary>
         public Tube Tube { get; set; }
 
-        public Sleeve (BlockReference blRef, string blName, SchemeService service) : base(blRef, blName, service)
+        public SleeveBlock (BlockReference blRef, string blName, SchemeService service) : base(blRef, blName, service)
         {
         }
 

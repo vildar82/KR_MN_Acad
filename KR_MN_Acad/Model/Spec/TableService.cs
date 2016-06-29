@@ -24,8 +24,8 @@ namespace KR_MN_Acad.Spec
         protected abstract void SetColumnsAndCap (ColumnsCollection columns);
         protected abstract void FillCells (Table table);
         protected abstract ISpecRow GetNewRow (string group, List<ISpecElement> list);
-        protected abstract Dictionary<string, List<ISpecElement>> GroupsFirst (IGrouping<int, ISpecElement> indexGroup);
-        protected abstract Dictionary<string, List<ISpecElement>> GroupsSecond (KeyValuePair<string, List<ISpecElement>> firstGroup);        
+        protected abstract Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<int, ISpecElement> indexGroup);
+        protected abstract Dictionary<string, List<ISpecElement>> GroupsSecondForNumbering (KeyValuePair<string, List<ISpecElement>> firstGroup);        
 
         /// <summary>
         /// Группировка элементов спецификации.
@@ -34,11 +34,11 @@ namespace KR_MN_Acad.Spec
         public void CalcRows (List<ISpecBlock> blocks)
         {
             int numrows = 0;
-            groupRows = new List<KeyValuePair<string, List<ISpecRow>>>();            
+            groupRows = new List<KeyValuePair<string, List<ISpecRow>>>();
             // Все элементы спецификации
-            var elements = blocks.SelectMany(b=>b.Elements);
+            var elements = FilterElements(blocks);
             // группировка по именам групп
-            var groupsGroup = elements.OrderBy(o=>o.Index).GroupBy(g=>g.Group);
+            IEnumerable<IGrouping<string, ISpecElement>> groupsGroup = elements.OrderBy(o => o.Index).GroupBy(g => g.Group);
             foreach (var group in groupsGroup)
             {
                 var rows = new List<ISpecRow>();
@@ -60,7 +60,7 @@ namespace KR_MN_Acad.Spec
                 groupRows.Add(new KeyValuePair<string, List<ISpecRow>>(groupName, rows.ToList()));
             }
             NumRows = numrows + 2;
-        }
+        }        
 
         /// <summary>
         /// Нумерация элементов
@@ -69,36 +69,41 @@ namespace KR_MN_Acad.Spec
         public void Numbering (List<ISpecBlock> blocks)
         {
             // Все элементы спецификации
-            var elements = blocks.SelectMany(b=>b.Elements);
-            // Проемы в плите
-            var indexGroups = elements.GroupBy(g=>g.Index).OrderBy(o=>o.Key);
-            foreach (var indexGroup in indexGroups)
+            var elements = FilterElements(blocks);
+            // Группировыка по именам групп
+            var groupGroups = elements.GroupBy(g=>g.Group).OrderBy(o=>o.Key);
+            foreach (var group in groupGroups)
             {
-                var firstGroups = GroupsFirst(indexGroup);
-                int index = 1;
-                string group = indexGroup.First().Group;
-                foreach (var firstGroup in firstGroups)
+                // Группировка по индексам - как располагать строки элементов в спецификации
+                var indexGroups = elements.GroupBy(g=>g.Index).OrderBy(o=>o.Key);
+                foreach (var indexGroup in indexGroups)
                 {
-                    // группировка по назначению
-                    var secGroups = GroupsSecond(firstGroup);
-                    if (secGroups.Skip(1).Any())
+                    var firstGroups = GroupsFirstForNumbering(indexGroup);
+                    int index = 1;
+                    string groupName = indexGroup.First().Group;
+                    foreach (var firstGroup in firstGroups)
                     {
-                        // Есть подгруппы вида - одинаковые размеры у отв но разное назначение - нумерация вида 1.1
-                        int indexRole = 1;
-                        foreach (var secGroup in secGroups)
+                        // группировка по назначению
+                        var secGroups = GroupsSecondForNumbering(firstGroup);
+                        if (secGroups.Skip(1).Any())
                         {
-                            string indexSubgroup = index + "." + indexRole;                            
-                            var row = GetNewRow(group, secGroup.Value);
-                            NumberingRow(row, indexSubgroup);
-                            indexRole++;
+                            // Есть подгруппы вида - одинаковые размеры у отв но разное назначение - нумерация вида 1.1
+                            int indexSecond = 1;
+                            foreach (var secGroup in secGroups)
+                            {
+                                string indexSubgroup = index + "." + indexSecond;
+                                var row = GetNewRow(groupName, secGroup.Value);
+                                NumberingRow(row, indexSubgroup);
+                                indexSecond++;
+                            }
                         }
+                        else
+                        {
+                            var row = GetNewRow(groupName, firstGroup.Value);
+                            NumberingRow(row, index.ToString());
+                        }
+                        index++;
                     }
-                    else
-                    {
-                        var row = GetNewRow(group, firstGroup.Value);
-                        NumberingRow(row, index.ToString());                        
-                    }
-                    index++;
                 }
             }
         }
@@ -148,6 +153,14 @@ namespace KR_MN_Acad.Spec
                         item.SpecBlock.Block.IdBlRef, System.Drawing.SystemIcons.Error);
                 }
             }
+        }
+
+        /// <summary>
+        /// Фильтрация всех элементов из блоков для спецификации
+        /// </summary>        
+        protected virtual IEnumerable<ISpecElement> FilterElements (IEnumerable<ISpecBlock> blocks)
+        {
+            return blocks.SelectMany(b => b.Elements);
         }
 
         /// <summary>

@@ -18,12 +18,13 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
         public string Role { get; set; }
         public int Count { get; set; }
         public string Description { get; set; }
+        public string FriendlyName { get; set; } = "Проем в плите";
 
         /// <summary>
         /// Проемы в стенах - в первых строках
         /// </summary>
         public int Index { get; set; } = 0;
-        public string Group { get; set; } = "";
+        public string Group { get; set; } = string.Empty;
 
         public ISpecBlock SpecBlock { get; set; }
 
@@ -91,6 +92,16 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
         public string GetParamInfo ()
         {
             return $"{Dimension} {Role}";
+        }
+
+        public string GetDesc ()
+        {
+            return "";
+        }
+
+        public void Calc ()
+        {
+            
         }
     }
 }

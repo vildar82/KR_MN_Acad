@@ -17,7 +17,7 @@ namespace KR_MN_Acad.Scheme.Wall
     /// <summary>
     /// Описание блока колонны квадратной до 400мм
     /// </summary>
-    public class ColumnSquareSmall : ColumnBase
+    public class ColumnSquareSmallBlock : ColumnBase
     {        
         public const string BlockName = "КР_Арм_Колонна_Квадратная_до400";
 
@@ -28,7 +28,7 @@ namespace KR_MN_Acad.Scheme.Wall
         /// </summary>
         public int Side { get; set; }
 
-        public ColumnSquareSmall (BlockReference blRef, string blName, SchemeService service) : base (blRef, blName, service)
+        public ColumnSquareSmallBlock (BlockReference blRef, string blName, SchemeService service) : base (blRef, blName, service)
         {            
         }
 
