@@ -26,9 +26,11 @@ namespace KR_MN_Acad.Spec.Openings.Elements
         /// Проемы в стенах - в первых строках
         /// </summary>
         public int Index { get; set; } = 0;
-        public string Group { get; set; } = string.Empty;
+        public GroupType Group { get; set; } = GroupType.None;
 
         public ISpecBlock SpecBlock { get; set; }
+
+        public double Mass { get; set; } = 0;
 
         public Opening (string mark, int lenght, int height, double elevation, string role, string desc,
             ISpecBlock specBlock)

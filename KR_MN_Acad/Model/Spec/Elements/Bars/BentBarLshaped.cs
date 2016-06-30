@@ -17,7 +17,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         private const string PREFIX = "Гс-";
         private const string friendlyName = "Гнутый стержень";
 
-        private string descEnd;
+        //private string descEnd;
 
         public override string BlockNameDetail { get; set; } = blockNameDetail;
         /// <summary>
@@ -43,7 +43,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         {            
             H = hGs;
             L = lGs;
-            descEnd = ", шт." + count;
+            //descEnd = ", шт." + count;
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         {            
             H = hGs;
             L = lGs;
-            descEnd = ", ш." + step;
+            //descEnd = ", ш." + step;
         }
 
         /// <summary>
@@ -69,10 +69,10 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             return RoundHelper.RoundWhole(l + h - 1.15*diam);
         }
 
-        public override string GetDesc ()
-        {
-            return base.GetDesc() + descEnd;
-        }
+        //public override string GetDesc ()
+        //{
+        //    return base.GetDesc() + descEnd;
+        //}
 
         public override void SetDetailsParam (List<AttributeInfo> atrs)
         {

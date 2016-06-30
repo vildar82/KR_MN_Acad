@@ -16,8 +16,10 @@ namespace KR_MN_Acad.Spec.Openings.Elements
         public string Description { get; set; }
         public string FriendlyName { get; set; } = "Гильза";
         public int Index { get; set; } = 1;
-        public string Group { get; set; } = string.Empty;
+        public GroupType Group { get; set; } = GroupType.None;
         public ISpecBlock SpecBlock { get; set; }
+
+        public double Mass { get; set; } = 0;
 
         public WallSleeve (string mark, int diam, int depth, double elev, string role, string desc, ISpecBlock specBlock)
         {

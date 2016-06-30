@@ -9,22 +9,22 @@ namespace KR_MN_Acad.Spec.SpecGroup
     public class SpecGroupRow : ISpecRow
     {
         public List<ISpecElement> Elements { get; set; }
-        public string Group { get; set; }
+        public string Group { get; set; } = "";
         /// <summary>
         /// Марка - позиция
         /// </summary>
-        public string Mark { get; set; }
+        public string Mark { get; set; } = "";
         /// <summary>
         /// Обозначение
         /// </summary>
-        public string Designation { get; set; }
+        public string Designation { get; set; } = "";
         /// <summary>
         /// Наименование
         /// </summary>
-        public string Name { get; set; }
-        public string Count { get; set; }
-        public string Weight { get; set; }
-        public string Description { get; set; }
+        public string Name { get; set; } = "";
+        public string Count { get; set; } = "";
+        public string Weight { get; set; } = "";
+        public string Description { get; set; } = "";
 
         public SpecGroupRow (string group, List<ISpecElement> items)
         {
@@ -32,7 +32,7 @@ namespace KR_MN_Acad.Spec.SpecGroup
             Elements = items;
             //var slabElems = items.Cast<IConstruction>();
             var first = items.First() as IGroupSpecElement;// slabElems.First();
-            first.SumAndSetRowth(this, items);
+            first.SumAndSetRow(this, items);
         }
     }
 }

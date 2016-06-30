@@ -11,7 +11,7 @@ namespace KR_MN_Acad.Spec.Monolith.Elements
         private int length;
         private int width;
         private int height;
-        public override string Group { get; set; } = GroupType.MonolithPylon.Name;
+        public override GroupType Group { get; set; } = GroupType.MonolithPylon;
         public override int Index { get; set; } = 2;
         public override string Name { get; set; }
         public override string FriendlyName { get; set; } = "Пилон монолитный";

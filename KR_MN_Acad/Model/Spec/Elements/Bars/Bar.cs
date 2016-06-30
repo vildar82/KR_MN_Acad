@@ -23,7 +23,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         public string Key { get; set; }
         public virtual int Index { get; set; } = indexBar;
         public string Mark { get; set; }
-        public virtual string Group { get; set; } = GroupType.Bars.Name;
+        public virtual GroupType Group { get; set; } = GroupType.Bars;
         /// <summary>
         /// Ширина распределения
         /// </summary>
@@ -51,6 +51,8 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         public double WeightTotal { get; set; }        
         public ISpecBlock SpecBlock { get; set; }
         public string FriendlyName { get; set; }
+
+        public double Mass { get; set; }
 
         /// <summary>
         /// Стержень по количеству штук
@@ -83,6 +85,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             Weight = RoundHelper.Round3Digits(WeightUnit * ConvertMmToMLength(Length));
             // Масса всех стержней
             WeightTotal =RoundHelper.Round2Digits(Weight * Count);
+            Mass = WeightTotal;
         }
 
         /// <summary>
@@ -146,6 +149,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             string desc = $"{Mark}, {Symbols.Diam}{Diameter}, L={Length}";            
             if (Step != 0)
                 desc += ", ш." + Step;
+            desc += ", шт." + Count;
             return desc;
         }
 
@@ -165,11 +169,12 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         /// <summary>
         /// Суммирование элементов и запись результата в SpecRow
         /// </summary>        
-        public virtual void SumAndSetRowth (SpecGroupRow specGroupRow, List<ISpecElement> elems)
+        public virtual void SumAndSetRow (SpecGroupRow row, List<ISpecElement> elems)
         {
             // Обозначения, Наименования, Кол, Массы ед, примечания
-            specGroupRow.Designation = Gost.Number;
-            specGroupRow.Name = GetName();
+            row.Mark = Mark;
+            row.Designation = Gost.Number;
+            row.Name = GetName();
 
             int countTotal = 0;
             double weightTotal = 0;
@@ -181,9 +186,9 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             }
             weightTotal = RoundHelper.Round2Digits(Weight * countTotal);
 
-            specGroupRow.Count = countTotal.ToString();
-            specGroupRow.Weight = Weight.ToString("N3");
-            specGroupRow.Description = weightTotal.ToString();            
+            row.Count = countTotal.ToString();
+            row.Weight = Weight.ToString("N3");
+            row.Description = weightTotal.ToString();            
         }
         
         public virtual string GetNumber (string index)

@@ -7,6 +7,9 @@ using Autodesk.AutoCAD.DatabaseServices;
 
 namespace KR_MN_Acad.Spec.SpecGroup
 {
+    /// <summary>
+    /// Групповая спецификация схемы
+    /// </summary>
     public class SpecGroupService : TableService
     {        
         protected override Database Db { get; set; }
@@ -26,21 +29,25 @@ namespace KR_MN_Acad.Spec.SpecGroup
             var col = columns[0];
             col.Alignment = CellAlignment.MiddleCenter;
             col.Width = 15;
-            col[1, 0].TextString = "Марка";
+            col.Borders.Horizontal.Margin = 0;
+            col[1, 0].TextString = "Поз.";
             // столбец Обозначение
             col = columns[1];
             col.Alignment = CellAlignment.MiddleCenter;
             col.Width = 60;
+            col.Borders.Horizontal.Margin = 1.5;
             col[1, 1].TextString = "Обозначение";
             // столбец Наименование
             col = columns[2];
             col.Alignment = CellAlignment.MiddleCenter;
             col.Width = 65;
+            col.Borders.Horizontal.Margin = 1.5;
             col[1, 2].TextString = "Наименование";
             // столбец Кол
             col = columns[3];
             col.Alignment = CellAlignment.MiddleCenter;
             col.Width = 10;
+            col.Borders.Horizontal.Margin = 0;
             col[1, 3].TextString = "Кол.";
             // столбец Масса, ед. кг
             col = columns[4];

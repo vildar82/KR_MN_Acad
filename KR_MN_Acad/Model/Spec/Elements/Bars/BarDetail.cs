@@ -16,7 +16,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
     {
         public abstract string BlockNameDetail { get; set; }
         public override int Index { get; set; } = 0;
-        public override string Group { get; set; }= GroupType.Details.Name;
+        public override GroupType Group { get; set; }= GroupType.Details;
 
         /// <summary>
         /// Деталь по штукам
@@ -73,10 +73,11 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             return BlockNameDetail.GetHashCode();
         }
 
-        public override string GetDesc()
-        {
-            return $"{Mark}, {Symbols.Diam}{Diameter}";
-        }
+        //public override string GetDesc ()
+        //{
+        //    //return $"{Mark}, {Symbols.Diam}{Diameter}";
+        //    return base.GetDesc() + $", шт.{Count}";
+        //}
 
         public abstract void SetDetailsParam (List<AttributeInfo> atrs);        
 

@@ -58,10 +58,10 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             return RoundHelper.RoundWhole(lStart+lEnd + dif);
         }
 
-        public override string GetDesc ()
-        {
-            return base.GetDesc() + $", шт.{Count}";
-        }
+        //public override string GetDesc ()
+        //{
+        //    return base.GetDesc() + $", шт.{Count}";
+        //}
 
         public override void SetDetailsParam (List<AttributeInfo> atrs)
         {

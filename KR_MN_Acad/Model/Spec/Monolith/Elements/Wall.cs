@@ -11,7 +11,7 @@ namespace KR_MN_Acad.Spec.Monolith.Elements
         private int length;
         private int width;
         private int height;
-        public override string Group { get; set; } = GroupType.MonolithWall.Name;
+        public override GroupType Group { get; set; } = GroupType.MonolithWall;
         public override int Index { get; set; } = 3;
         public override string Name { get; set; }
         public override string FriendlyName { get; set; } = "Стена монолитная";

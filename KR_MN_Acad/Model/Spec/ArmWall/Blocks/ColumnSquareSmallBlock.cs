@@ -7,12 +7,8 @@ using System.Threading.Tasks;
 using AcadLib.Blocks;
 using Autodesk.AutoCAD.DatabaseServices;
 using KR_MN_Acad.ConstructionServices;
-using KR_MN_Acad.Scheme.Elements;
-using KR_MN_Acad.Scheme.Elements.Bars;
-using KR_MN_Acad.Scheme.Elements.Concretes;
-using KR_MN_Acad.Scheme.Spec;
 
-namespace KR_MN_Acad.Scheme.Wall
+namespace KR_MN_Acad.Spec.ArmWall.Blocks
 {
     /// <summary>
     /// Описание блока колонны квадратной до 400мм
@@ -28,24 +24,22 @@ namespace KR_MN_Acad.Scheme.Wall
         /// </summary>
         public int Side { get; set; }
 
-        public ColumnSquareSmallBlock (BlockReference blRef, string blName, SchemeService service) : base (blRef, blName, service)
+        public ColumnSquareSmallBlock (BlockReference blRef, string blName) : base (blRef, blName)
         {            
         }
 
-        public override void Calculate ()
+        protected override void AddElements ()
+        {
+            base.AddElements();
+        }
 
+        public override void Calculate ()
         {
             // Определение параметров.
-            // Расчет элементов схемы.
-            try
-            {
-                Side = Convert.ToInt32(GetPropValue<double>(PropNameSide));
-                DefineBaseFields(Side, Side, true);                
-            }
-            catch (Exception ex)
-            {
-                AddError(ex.Message);
-            }
-        }                
+            // Расчет элементов схемы.            
+            Side = Block.GetPropValue<int>(PropNameSide);
+            DefineBaseFields(Side, Side, true);
+            AddElements();
+        }
     }
 }

@@ -38,7 +38,7 @@ namespace KR_MN_Acad.Spec
             // Все элементы спецификации
             var elements = FilterElements(blocks);
             // группировка по именам групп
-            IEnumerable<IGrouping<string, ISpecElement>> groupsGroup = elements.OrderBy(o => o.Index).GroupBy(g => g.Group);
+            var groupsGroup = elements.OrderBy(o => o.Index).GroupBy(g => g.Group).OrderBy(o=>o.Key.Index);
             foreach (var group in groupsGroup)
             {
                 var rows = new List<ISpecRow>();
@@ -46,7 +46,7 @@ namespace KR_MN_Acad.Spec
                 var uniqelemGroup = group.GroupBy(g=>g).OrderBy(g=>g.Key.Mark, alpha);
                 // Проверка уникальности марок элеметнов
                 CheckUniqueMarks(uniqelemGroup);
-                string groupName = group.First().Group;
+                string groupName = group.First().Group.Name;
                 if (!string.IsNullOrEmpty(groupName))
                     numrows++;
                 foreach (var item in uniqelemGroup)
@@ -71,16 +71,17 @@ namespace KR_MN_Acad.Spec
             // Все элементы спецификации
             var elements = FilterElements(blocks);
             // Группировыка по именам групп
-            var groupGroups = elements.GroupBy(g=>g.Group).OrderBy(o=>o.Key);
+            var groupGroups = elements.GroupBy(g=>g.Group).OrderBy(o=>o.Key.Index);
             foreach (var group in groupGroups)
             {
+                int index = 1;
+                string groupName = group.First().Group.Name;
                 // Группировка по индексам - как располагать строки элементов в спецификации
-                var indexGroups = elements.GroupBy(g=>g.Index).OrderBy(o=>o.Key);
+                var indexGroups = group.GroupBy(g=>g.Index).OrderBy(o=>o.Key);
                 foreach (var indexGroup in indexGroups)
                 {
                     var firstGroups = GroupsFirstForNumbering(indexGroup);
-                    int index = 1;
-                    string groupName = indexGroup.First().Group;
+                    
                     foreach (var firstGroup in firstGroups)
                     {
                         // группировка по назначению
@@ -101,10 +102,10 @@ namespace KR_MN_Acad.Spec
                         {
                             var row = GetNewRow(groupName, firstGroup.Value);
                             NumberingRow(row, index.ToString());
-                        }
-                        index++;
+                        }                        
                     }
-                }
+                    index++;
+                }                
             }
         }
 

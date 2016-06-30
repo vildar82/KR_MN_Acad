@@ -22,7 +22,7 @@ namespace KR_MN_Acad.Spec.Elements
 
         public string Key { get; set; }
         public int Index { get; set; } = 0;
-        public string Group { get; set; } = GroupType.Sleeves.Name;
+        public GroupType Group { get; set; } = GroupType.Sleeves;
         public ISpecBlock SpecBlock { get; set; }
         public string FriendlyName { get; set; }
 
@@ -52,6 +52,8 @@ namespace KR_MN_Acad.Spec.Elements
         /// </summary>
         public double Weight { get; set; }
 
+        public double Mass { get; set; }
+
         /// <summary>
         /// Труба стальная электросварная прямошовная.
         /// </summary>
@@ -73,6 +75,7 @@ namespace KR_MN_Acad.Spec.Elements
         {
             // Масса ед. кг.
             Weight = RoundHelper.Round3Digits(WeightUnit * ConvertMmToMLength(Length));
+            Mass = Weight;
         }        
 
         public string GetDesc ()
@@ -111,7 +114,7 @@ namespace KR_MN_Acad.Spec.Elements
             return Name.GetHashCode();
         }
 
-        public void SumAndSetRowth (SpecGroupRow row, List<ISpecElement> elems)
+        public void SumAndSetRow (SpecGroupRow row, List<ISpecElement> elems)
         {
             // Обозначения, Наименования, Кол, Массы ед, примечания
             row.Description = Gost.Number;

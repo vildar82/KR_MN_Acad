@@ -11,7 +11,7 @@ namespace KR_MN_Acad.Spec.Monolith.Elements
         private string prefix;
         public int Count { get; set; }
         public string Designation { get; set; } = "";
-        public abstract string Group { get; set; }
+        public abstract GroupType Group { get; set; }
         public abstract int Index { get; set; }
         public string Mark { get; set; }
         public abstract string Name { get; set; }
@@ -19,6 +19,7 @@ namespace KR_MN_Acad.Spec.Monolith.Elements
         public double WeightTotal { get; set; }
         public double WeightUnit { get; set; }
         public abstract string FriendlyName { get; set; }
+        public double Mass { get; set; } = 0;
 
         public Construction (string prefix, string mark, ISpecBlock block, double weightUnit)
         {            

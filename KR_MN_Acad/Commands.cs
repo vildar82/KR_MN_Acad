@@ -204,8 +204,10 @@ namespace KR_MN_Acad
         {
             AcadLib.CommandStart.Start(doc =>
             {
-                var service = new Scheme.SchemeService(Scheme.Wall.WallSchemeOptions.GetSchemeOptions());
-                service.Numbering();
+                //var service = new Scheme.SchemeService(Scheme.Wall.WallSchemeOptions.GetSchemeOptions());
+                //service.Numbering();
+                var spec = new Spec.SpecService(doc, new Spec.ArmWall.ArmWallOptions(doc.Database));
+                spec.Numbering();
             });
         }
 
@@ -217,8 +219,10 @@ namespace KR_MN_Acad
         {
             AcadLib.CommandStart.Start(doc =>
             {
-                var service = new Scheme.SchemeService(Scheme.Wall.WallSchemeOptions.GetSchemeOptions());
-                service.Spec();
+                //var service = new Scheme.SchemeService(Scheme.Wall.WallSchemeOptions.GetSchemeOptions());
+                //service.Spec();
+                var spec = new Spec.SpecService(doc, new Spec.ArmWall.ArmWallOptions(doc.Database));
+                spec.Spec();
             });
         }
 

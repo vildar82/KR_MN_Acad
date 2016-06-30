@@ -19,11 +19,12 @@ namespace KR_MN_Acad.Spec.Elements.Bars
 
 		public override string BlockNameDetail { get; set; } = blockNameDetail;
 
+        private int stepVertic;
 		/// <summary>
 		/// Хвостик
 		/// </summary>
 		private int tail;                
-		private string descEnd;      
+		//private string descEnd;      
 		/// <summary>
 		/// Длина раб шпильки (без хвостов)
 		/// </summary>
@@ -43,8 +44,10 @@ namespace KR_MN_Acad.Spec.Elements.Bars
 		/// <param name="block">Блок</param>
 		public Spring (int diam, int lRab, int stepHor, int stepVert, int widthHor,int widthVertic, string pos, ISpecBlock block) 
 			: base(diam, GetLength(lRab, diam), 1, PREFIX, pos, block, friendlyName)
-		{			
-			descEnd = $", ш.{stepHor}х{stepVert}";            
+		{
+            Step = stepHor;
+            this.stepVertic = stepVert;
+			//descEnd = $", ш.{stepHor}х{stepVert}";            
 			tail = getTail(diam);
 			LRab = RoundHelper.Round5(lRab);
 			Class = ClassA240C;
@@ -65,7 +68,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
 		public Spring (int diam, int lRab, int step, int width, int rows, string pos, ISpecBlock block)
 			: base(diam, GetLength(lRab, diam), width, step, rows, PREFIX, pos, block, friendlyName)
 		{			
-			descEnd = $", ш.{step}";
+			//descEnd = $", ш.{step}";
 			tail = getTail(diam);
 			LRab = RoundHelper.Round5(lRab);
 			Class = ClassA240C;
@@ -88,17 +91,17 @@ namespace KR_MN_Acad.Spec.Elements.Bars
 			return countVert * countHor;
 		}
 
-		public override string GetDesc ()
-		{
-			return base.GetDesc() + descEnd;
-		}
+        public override string GetDesc ()
+        {
+            return base.GetDesc() + (stepVertic==0? "": "х" +stepVertic);
+        }
 
-		/// <summary>
-		/// Определение длины шпильки
-		/// </summary>
-		/// <param name="lRab">Раст между раб стержнями (от внешних граней стержней)</param>        
-		/// <returns></returns>
-		private static int GetLength (int lRab, int diam)
+        /// <summary>
+        /// Определение длины шпильки
+        /// </summary>
+        /// <param name="lRab">Раст между раб стержнями (от внешних граней стержней)</param>        
+        /// <returns></returns>
+        private static int GetLength (int lRab, int diam)
 		{
 			return RoundHelper.Round5(lRab) + 2 * getTail(diam);
 		}

@@ -19,8 +19,10 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
         /// Гильзы - в конце
         /// </summary>
         public int Index { get; set; } = 1;
-        public string Group { get; set; } = string.Empty;
+        public GroupType Group { get; set; } = GroupType.None;
         public ISpecBlock SpecBlock { get; set; }
+
+        public double Mass { get; set; } = 0;
 
         public SlabSleeve (string mark, int diam, int depth, string role, string desc, ISpecBlock specBlock)
         {

@@ -59,7 +59,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         public override string GetDesc()
         {
             // 3, ⌀12
-            string desc = $"{Mark}, {Symbols.Diam}{Diameter}";
+            string desc = $"{Mark}, {Symbols.Diam}{Diameter}, L={Count}м.п.";
             if (Step != 0)
                 desc += ", ш." + Step; ;
             return desc;
@@ -70,7 +70,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             return Name + " L=п.м.";
         }
 
-        public override void SumAndSetRowth (SpecGroupRow specGroupRow, List<ISpecElement> elems)
+        public override void SumAndSetRow (SpecGroupRow specGroupRow, List<ISpecElement> elems)
         {
             // Обозначения, Наименования, Кол, Массы ед, примечания
             specGroupRow.Description = Gost.Number;

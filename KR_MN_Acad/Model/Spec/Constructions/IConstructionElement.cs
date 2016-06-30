@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KR_MN_Acad.Spec.SpecGroup
+namespace KR_MN_Acad.Spec.Constructions
 {
     /// <summary>
     /// Элемент групповой спецификации
     /// </summary>
-    public interface IGroupSpecElement : ISpecElement
+    public interface IConstructionElement : ISpecElement
     {
+        IConstructionSize Size { get; set; }
+        List<ISpecElement> Elements { get; set; }
         /// <summary>
         /// Уникальное имя элемента (в переделах элементов IConstruction одного индекса). Нужно для ключа при группировки элементов по индексу
         /// </summary>
@@ -19,6 +21,6 @@ namespace KR_MN_Acad.Spec.SpecGroup
         /// Суммирование элементов и заполнение полей строки
         /// items - элементы в одной строке спецификации
         /// </summary>        
-        void SumAndSetRow (SpecGroupRow row, List<ISpecElement> elems);        
+        void SumAndSetRow (SpecGroup.SpecGroupRow row, List<ISpecElement> elems);        
     }
 }

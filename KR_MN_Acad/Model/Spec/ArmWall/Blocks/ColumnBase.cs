@@ -10,7 +10,7 @@ using KR_MN_Acad.ConstructionServices;
 using KR_MN_Acad.Spec.Elements.Bars;
 using KR_MN_Acad.Spec.Elements.Concretes;
 
-namespace KR_MN_Acad.Spec.ArmWall
+namespace KR_MN_Acad.Spec.ArmWall.Blocks
 {
     /// <summary>
     /// Описание блока колонны квадратной до 400мм

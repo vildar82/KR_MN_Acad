@@ -15,12 +15,15 @@ namespace KR_MN_Acad.Spec.Elements.Concretes
     /// </summary>
     public class ConcreteH : Concrete, IGroupSpecElement
     {
+        private const int density = 2500; // Плотность 2500кг/м3
         public string Key { get; set; }
         public string FriendlyName { get; set; }
-        public string Group { get; set; } = GroupType.Materials.Name;
+        public GroupType Group { get; set; } = GroupType.Materials;
         public int Index { get; set; } = 0;
         public string Mark { get; set; } = string.Empty;
         public ISpecBlock SpecBlock { get; set; }
+
+        public double Mass { get; set; }
 
         public ConcreteH (string concrete, double volume, ISpecBlock block)
             : base(concrete)
@@ -28,16 +31,17 @@ namespace KR_MN_Acad.Spec.Elements.Concretes
             Key = Name;
             FriendlyName = Name;
             SpecBlock = block;
-            Volume = volume;
+            Volume = volume;            
         }
 
         public ConcreteH(string concrete, double len, double width, double height, ISpecBlock block)
-            : this(concrete, Round2Digits(len * width * height * 0.000000001), block)
+            : this(concrete, CalcVolume(len , width, height), block)
         {            
         }
         
         public virtual void Calc()
-        {            
+        {
+            Mass = Volume * density;
         }
 
         public int CompareTo(ISpecElement other)
@@ -66,7 +70,7 @@ namespace KR_MN_Acad.Spec.Elements.Concretes
             return ClassB.GetHashCode();
         }         
 
-        public void SumAndSetRowth (SpecGroupRow row, List<ISpecElement> elems)
+        public void SumAndSetRow (SpecGroupRow row, List<ISpecElement> elems)
         {
             row.Description = Gost.Number;
             row.Name = Name;
@@ -88,6 +92,11 @@ namespace KR_MN_Acad.Spec.Elements.Concretes
         public string GetParamInfo ()
         {
             return Name;
+        }
+
+        private static double CalcVolume(double len, double width, double height)
+        {
+            return Round2Digits(0.000000001 * len * width * height);
         }
     }
 }

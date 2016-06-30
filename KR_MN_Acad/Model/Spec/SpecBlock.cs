@@ -14,7 +14,7 @@ namespace KR_MN_Acad.Spec
     public abstract class SpecBlock : ISpecBlock
     {
         public IBlock Block { get; set; }
-        public List<ISpecElement> Elements { get; } = new List<ISpecElement>();
+        public virtual List<ISpecElement> Elements { get; } = new List<ISpecElement>();
         public Error Error { get { return Block.Error; } }
 
         public SpecBlock(BlockReference blRef, string blName)
@@ -32,7 +32,7 @@ namespace KR_MN_Acad.Spec
                 // Поз
                 Block.FillPropValue(posPropertyName, elem.Mark);
                 // Опис            
-                Block.FillPropValue(descPropertyName, elem.Mark);                
+                Block.FillPropValue(descPropertyName, elem.GetDesc());                
             }
         }
 

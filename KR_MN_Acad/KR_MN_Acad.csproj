@@ -174,6 +174,15 @@
     <Compile Include="Model\Scheme\Blocks\Wall\WallSchemeOptions.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallBlock.cs" />
     <Compile Include="Model\Spec\ArmWall\Blocks\ColumnBase.cs" />
+    <Compile Include="Model\Spec\ArmWall\Blocks\ColumnSquareSmallBlock.cs" />
+    <Compile Include="Model\Spec\ArmWall\ArmWallOptions.cs" />
+    <Compile Include="Model\Spec\Constructions\ConstructionElement.cs" />
+    <Compile Include="Model\Spec\Constructions\ConstructionSize.cs" />
+    <Compile Include="Model\Spec\Constructions\Elements\Column.cs" />
+    <Compile Include="Model\Spec\Constructions\IConstructionElement.cs" />
+    <Compile Include="Model\Spec\Constructions\ConstructionRow.cs" />
+    <Compile Include="Model\Spec\Constructions\ConstructionService.cs" />
+    <Compile Include="Model\Spec\Constructions\IConstructionSize.cs" />
     <Compile Include="Model\Spec\Elements\Bars\Bar.cs" />
     <Compile Include="Model\Spec\Elements\Bars\BarDetail.cs" />
     <Compile Include="Model\Spec\Elements\Bars\BarRunning.cs" />
@@ -185,6 +194,7 @@
     <Compile Include="Model\Spec\Elements\Concretes\ConcreteH.cs" />
     <Compile Include="Model\Spec\Elements\IDetail.cs" />
     <Compile Include="Model\Spec\Elements\Tube.cs" />
+    <Compile Include="Model\Spec\Constructions\Blocks\ColumnSquareSmallConstr.cs" />
     <Compile Include="Model\Spec\GroupSpec\IGroupSpecElement.cs" />
     <Compile Include="Model\Spec\GroupSpec\SpecGroupRow.cs" />
     <Compile Include="Model\Spec\GroupSpec\SpecGroupService.cs" />
@@ -263,9 +273,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\Spec\Constructions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
