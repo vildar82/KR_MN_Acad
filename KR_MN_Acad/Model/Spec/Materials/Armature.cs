@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KR_MN_Acad.ConstructionServices;
-using KR_MN_Acad.Scheme.Spec;
 using static AcadLib.Units.UnitsConvertHelper;
 using static AcadLib.General;
+using KR_MN_Acad.Spec.Bill;
 
 namespace KR_MN_Acad.Spec.Materials
 {
@@ -58,10 +58,13 @@ namespace KR_MN_Acad.Spec.Materials
         public string Class { get; set; } = DefaultClass;
 
         public string BillTitle { get; set; } = "Изделия арматурные, кг";
+        public int BillTitleIndex { get; } = 0;
         public string BillGroup { get; set; } = "Арматура класса";
         public string BillMark { get { return Class; } }
         public string BillGOST { get { return Gost.Number; } }
-        public string BillName { get { return Symbols.Diam + Diameter; } }        
+        public string BillName { get { return Symbols.Diam + Diameter; } }
+
+        public double Amount { get; set; }
 
         /// <summary>
         /// Дефолтный конструктор по диаметру, остальные дефолтные значения

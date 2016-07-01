@@ -14,7 +14,7 @@ namespace KR_MN_Acad.Spec
     public abstract class SpecBlock : ISpecBlock
     {
         public IBlock Block { get; set; }
-        public virtual List<ISpecElement> Elements { get; } = new List<ISpecElement>();
+        public virtual List<ISpecElement> Elements { get; set; } = new List<ISpecElement>();
         public Error Error { get { return Block.Error; } }
 
         public SpecBlock(BlockReference blRef, string blName)

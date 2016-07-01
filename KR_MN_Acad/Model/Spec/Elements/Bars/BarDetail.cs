@@ -61,6 +61,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         {
             var det = other as BarDetail;
             if (det == null) return false;
+            if (ReferenceEquals(this, det)) return true;
 
             return prefix == det.prefix &&
                 BlockNameDetail == det.BlockNameDetail &&

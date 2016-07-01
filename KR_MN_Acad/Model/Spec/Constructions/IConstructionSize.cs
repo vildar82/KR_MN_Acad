@@ -7,5 +7,6 @@ namespace KR_MN_Acad.Spec.Constructions
         int Height { get; set; }
         int Length { get; set; }
         int Width { get; set; }
+        string Key { get; set; }
     }
 }

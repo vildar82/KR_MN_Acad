@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AcadLib.Blocks;
 using Autodesk.AutoCAD.DatabaseServices;
 using KR_MN_Acad.ConstructionServices;
+using KR_MN_Acad.Spec.Constructions.Elements;
 
 namespace KR_MN_Acad.Spec.ArmWall.Blocks
 {
@@ -26,12 +27,7 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 
         public ColumnSquareSmallBlock (BlockReference blRef, string blName) : base (blRef, blName)
         {            
-        }
-
-        protected override void AddElements ()
-        {
-            base.AddElements();
-        }
+        }        
 
         public override void Calculate ()
         {
@@ -39,7 +35,15 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
             // Расчет элементов схемы.            
             Side = Block.GetPropValue<int>(PropNameSide);
             DefineBaseFields(Side, Side, true);
-            AddElements();
+            AddElementarys();
+            base.Calculate();
+        }
+
+        protected override Constructions.Elements.Column GetColumn (string mark)
+        {
+            var col = new Constructions.Elements.Column(Side, Side, Height, mark, this, Elementary);
+            col.Calc();
+            return col;
         }
     }
 }

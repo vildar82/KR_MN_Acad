@@ -226,6 +226,21 @@ namespace KR_MN_Acad
             });
         }
 
+        /// <summary>
+        /// Спецификация конструкции
+        /// </summary>
+        [CommandMethod(groupPik, nameof(KR_ConstructionBlockSpec), CommandFlags.Modal)]
+        public void KR_ConstructionBlockSpec ()
+        {
+            AcadLib.CommandStart.Start(doc =>
+            {
+                //var service = new Scheme.SchemeService(Scheme.Wall.WallSchemeOptions.GetSchemeOptions());
+                //service.Spec();
+                Spec.Constructions.ConstructionService spec = new Spec.Constructions.ConstructionService(doc);
+                spec.Spec();
+            });
+        }       
+
         public void Terminate()
         {
         }

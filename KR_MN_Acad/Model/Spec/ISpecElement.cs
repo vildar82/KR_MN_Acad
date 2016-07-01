@@ -12,6 +12,7 @@ namespace KR_MN_Acad.Spec
     /// </summary>
     public interface ISpecElement : IEquatable<ISpecElement>, IComparable<ISpecElement>
     {
+        string Key { get; set; }
         GroupType Group { get; set; }
         int Index { get; set; }
         string Mark { get; set; }
@@ -20,7 +21,7 @@ namespace KR_MN_Acad.Spec
         /// <summary>
         /// Масса кг - элемента
         /// </summary>
-        double Mass { get; set; }
+        double Amount { get; set; }
 
         /// <summary>
         /// Определение номера по индексу номера строки группы

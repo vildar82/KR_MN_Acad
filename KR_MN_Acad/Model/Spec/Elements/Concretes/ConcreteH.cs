@@ -23,7 +23,9 @@ namespace KR_MN_Acad.Spec.Elements.Concretes
         public string Mark { get; set; } = string.Empty;
         public ISpecBlock SpecBlock { get; set; }
 
-        public double Mass { get; set; }
+        public double Amount { get; set; }
+
+        public bool IsDefaultGroupings { get; set; } = true;            
 
         public ConcreteH (string concrete, double volume, ISpecBlock block)
             : base(concrete)
@@ -41,7 +43,7 @@ namespace KR_MN_Acad.Spec.Elements.Concretes
         
         public virtual void Calc()
         {
-            Mass = Volume * density;
+            Amount = Volume * density;
         }
 
         public int CompareTo(ISpecElement other)
@@ -97,6 +99,16 @@ namespace KR_MN_Acad.Spec.Elements.Concretes
         private static double CalcVolume(double len, double width, double height)
         {
             return Round2Digits(0.000000001 * len * width * height);
+        }
+
+        public Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<Type, ISpecElement> indexTypeGroup)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<string, List<ISpecElement>> GroupsByArm (List<ISpecElement> value)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -4,26 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autodesk.AutoCAD.DatabaseServices;
+using KR_MN_Acad.Spec.ArmWall.Blocks;
 
-namespace KR_MN_Acad.Spec.ArmWall
+namespace KR_MN_Acad.Spec.Constructions
 {
     /// <summary>
     /// Настройка спецификации блоков схемы армирования стен
     /// </summary>
-    public class ArmWallOptions : ISpecOptions
+    public class ConstructionOptions : ISpecOptions
     {        
         public Dictionary<string, Type> TypesBlock { get; set; }
         public ITableService TableService { get; set; }
-        public bool CheckDublicates { get; set; }
+        public bool CheckDublicates { get; set; } = true;
 
-        public ArmWallOptions (Database db)
+        public ConstructionOptions (Database db)
         {
             TypesBlock = new Dictionary<string, Type>() {
-                { Blocks.ColumnSquareSmallBlock.BlockName, typeof(Blocks.ColumnSquareSmallBlock) }                
+                { ColumnSquareSmallBlock.BlockName, typeof(ColumnSquareSmallBlock) }
             };
-
-            TableService = new SpecGroup.SpecGroupService(db);
-            CheckDublicates = true;
+            TableService = new ConstructionTable(db);
         }
     }
 }

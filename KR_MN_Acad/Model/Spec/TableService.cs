@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AcadLib;
 using AcadLib.Errors;
 using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.Geometry;
 
 namespace KR_MN_Acad.Spec
 {
@@ -17,14 +18,14 @@ namespace KR_MN_Acad.Spec
         public static AcadLib.Comparers.AlphanumComparator alpha = AcadLib.Comparers.AlphanumComparator.New;
         protected List<KeyValuePair<string, List<ISpecRow>>> groupRows;
         protected abstract Database Db { get; set; }
-        protected virtual string Layer { get; set; } = "КР_Таблицы";
+        protected virtual string Layer { get; set; } = KRHelper.LayerTable;
         protected abstract int NumColumns { get; set; }
         protected abstract int NumRows { get; set; }
         protected abstract string Title { get; set; }
         protected abstract void SetColumnsAndCap (ColumnsCollection columns);
         protected abstract void FillCells (Table table);
         protected abstract ISpecRow GetNewRow (string group, List<ISpecElement> list);
-        protected abstract Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<int, ISpecElement> indexGroup);
+        protected abstract Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<Type, ISpecElement> indexTypeGroup);
         protected abstract Dictionary<string, List<ISpecElement>> GroupsSecondForNumbering (KeyValuePair<string, List<ISpecElement>> firstGroup);        
 
         /// <summary>
@@ -36,20 +37,20 @@ namespace KR_MN_Acad.Spec
             int numrows = 0;
             groupRows = new List<KeyValuePair<string, List<ISpecRow>>>();
             // Все элементы спецификации
-            var elements = FilterElements(blocks);
+            var elements = FilterElements(blocks, false);
             // группировка по именам групп
             var groupsGroup = elements.OrderBy(o => o.Index).GroupBy(g => g.Group).OrderBy(o=>o.Key.Index);
             foreach (var group in groupsGroup)
             {
                 var rows = new List<ISpecRow>();
                 // группировка по униеальности элементов
-                var uniqelemGroup = group.GroupBy(g=>g).OrderBy(g=>g.Key.Mark, alpha);
+                var uniqElemGroup = group.GroupBy(g=>g).OrderBy(g=>g.Key.Mark, alpha);
                 // Проверка уникальности марок элеметнов
-                CheckUniqueMarks(uniqelemGroup);
+                CheckUniqueMarks(uniqElemGroup);
                 string groupName = group.First().Group.Name;
                 if (!string.IsNullOrEmpty(groupName))
                     numrows++;
-                foreach (var item in uniqelemGroup)
+                foreach (var item in uniqElemGroup)
                 {
                     var row = GetNewRow(groupName, item.ToList());
                     // Проверка одинаковости марки
@@ -69,7 +70,7 @@ namespace KR_MN_Acad.Spec
         public void Numbering (List<ISpecBlock> blocks)
         {
             // Все элементы спецификации
-            var elements = FilterElements(blocks);
+            var elements = FilterElements(blocks, true);
             // Группировыка по именам групп
             var groupGroups = elements.GroupBy(g=>g.Group).OrderBy(o=>o.Key.Index);
             foreach (var group in groupGroups)
@@ -80,31 +81,36 @@ namespace KR_MN_Acad.Spec
                 var indexGroups = group.GroupBy(g=>g.Index).OrderBy(o=>o.Key);
                 foreach (var indexGroup in indexGroups)
                 {
-                    var firstGroups = GroupsFirstForNumbering(indexGroup);
-                    
-                    foreach (var firstGroup in firstGroups)
+                    // группировка по типам
+                    var typeGroups = indexGroup.GroupBy(g=>g.GetType());
+                    foreach (var type in typeGroups)
                     {
-                        // группировка по назначению
-                        var secGroups = GroupsSecondForNumbering(firstGroup);
-                        if (secGroups.Skip(1).Any())
+                        var firstGroups = GroupsFirstForNumbering(type);
+
+                        foreach (var firstGroup in firstGroups)
                         {
-                            // Есть подгруппы вида - одинаковые размеры у отв но разное назначение - нумерация вида 1.1
-                            int indexSecond = 1;
-                            foreach (var secGroup in secGroups)
+                            // группировка по назначению
+                            var secGroups = GroupsSecondForNumbering(firstGroup);
+                            if (secGroups.Skip(1).Any())
                             {
-                                string indexSubgroup = index + "." + indexSecond;
-                                var row = GetNewRow(groupName, secGroup.Value);
-                                NumberingRow(row, indexSubgroup);
-                                indexSecond++;
+                                // Есть подгруппы вида - одинаковые размеры у отв но разное назначение - нумерация вида 1.1
+                                int indexSecond = 1;
+                                foreach (var secGroup in secGroups)
+                                {
+                                    string indexSubgroup = index + "." + indexSecond;
+                                    var row = GetNewRow(groupName, secGroup.Value);
+                                    NumberingRow(row, indexSubgroup);
+                                    indexSecond++;
+                                }
                             }
-                        }
-                        else
-                        {
-                            var row = GetNewRow(groupName, firstGroup.Value);
-                            NumberingRow(row, index.ToString());
+                            else
+                            {
+                                var row = GetNewRow(groupName, firstGroup.Value);
+                                NumberingRow(row, index.ToString());
+                            }
+                            index++;
                         }                        
-                    }
-                    index++;
+                    }                    
                 }                
             }
         }
@@ -121,7 +127,7 @@ namespace KR_MN_Acad.Spec
         /// <summary>
         /// Создание и заполнение тапбицы
         /// </summary>        
-        public Table CreateTable ()
+        public virtual Table CreateTable ()
         {
             var table = GetTable();
             return table;
@@ -159,7 +165,7 @@ namespace KR_MN_Acad.Spec
         /// <summary>
         /// Фильтрация всех элементов из блоков для спецификации
         /// </summary>        
-        protected virtual IEnumerable<ISpecElement> FilterElements (IEnumerable<ISpecBlock> blocks)
+        protected virtual IEnumerable<ISpecElement> FilterElements (IEnumerable<ISpecBlock> blocks, bool isNumbering)
         {
             return blocks.SelectMany(b => b.Elements);
         }

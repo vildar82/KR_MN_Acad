@@ -19,13 +19,16 @@ namespace KR_MN_Acad.Spec.Monolith.Elements
         public double WeightTotal { get; set; }
         public double WeightUnit { get; set; }
         public abstract string FriendlyName { get; set; }
-        public double Mass { get; set; } = 0;
+        public double Amount { get; set; } = 0;
+
+        public string Key { get; set; }
 
         public Construction (string prefix, string mark, ISpecBlock block, double weightUnit)
         {            
             this.prefix = prefix;            
             Mark = mark;
             Count = 1;
+            Key = Name;
         }
 
         public virtual string GetNumber (string index)

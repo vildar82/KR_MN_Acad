@@ -13,24 +13,18 @@ namespace KR_MN_Acad.Spec.Constructions
     {
         protected string prefix;
         public abstract string FriendlyName { get; set; }
-
         public abstract GroupType Group { get; set; }
-
         public abstract int Index { get; set; }
-
         public abstract string Key { get; set; }
-
         public abstract string Designation { get; set; }
         public abstract string Name { get; set; }
         public abstract double Weight { get; set; }
-
         public string Mark { get; set; }
-
         public ISpecBlock SpecBlock { get; set; }
         public abstract IConstructionSize Size { get; set; }
         public List<ISpecElement> Elements { get; set; } = new List<ISpecElement>();
-
-        public double Mass { get; set; }
+        public double Amount { get; set; }
+        public bool IsDefaultGroupings { get; set; } = false;
 
         public ConstructionElement(string mark, string prefix, ISpecBlock block, List<ISpecElement> elements)
         {
@@ -38,31 +32,36 @@ namespace KR_MN_Acad.Spec.Constructions
             SpecBlock = block;
             this.prefix = prefix;
             Elements = elements.OrderBy(e=>e.Group).ThenBy(e=>e.Index).ThenBy(e=>e).ToList();
-            Mass = elements.Sum(e => e.Mass);
+            Amount = elements.Sum(e => e.Amount);
         }        
 
         public abstract void Calc ();
-
+        
         public virtual int CompareTo (ISpecElement other)
-        {
+        {            
             var c = other as ConstructionElement;
             if (c == null) return -1;
 
             var res = Size.CompareTo(c.Size);
             if (res != 0) return res;
 
-            res = Mass.CompareTo(c.Mass);
+            res = Amount.CompareTo(c.Amount);
             return res;
         }
-
+        
         public virtual bool Equals (ISpecElement other)
         {
+            if (other == null) return false;
+            if (Object.ReferenceEquals(this, other)) return true;
             var c = other as ConstructionElement;
             if (c == null) return false;
 
-            return prefix == c.prefix &&                
-                Size == c.Size &&
-                Elements.SequenceEqual(c.Elements);
+
+            var res = prefix == c.prefix &&
+                Size.Equals (c.Size) &&
+                Elements.SequenceEqual(c.Elements) &&
+                Amount == c.Amount;
+            return res;
         }
 
         public override int GetHashCode ()
@@ -97,5 +96,17 @@ namespace KR_MN_Acad.Spec.Constructions
             row.Weight = Weight.ToString("N3");
             row.Description = (Weight * count).ToString("N2");            
         }
-    }
+
+        public Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<Type, ISpecElement> indexTypeGroup)
+        {
+            var sizes = indexTypeGroup.GroupBy(g=>((ConstructionElement)g).Size).OrderByDescending(o=>o.Key);
+            return sizes.ToDictionary(k => k.Key.Key, i => i.ToList());
+        }
+
+        public Dictionary<string, List<ISpecElement>> GroupsByArm (List<ISpecElement> value)
+        {            
+            var uniqElems = value.GroupBy(g=>g).OrderByDescending(o=>o.Key);
+            return uniqElems.ToDictionary(k => k.Key.Key, i => i.Cast<ISpecElement>().ToList());
+        }
+    }        
 }

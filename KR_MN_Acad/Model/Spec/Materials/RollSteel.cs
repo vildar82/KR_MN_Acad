@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KR_MN_Acad.ConstructionServices;
-using KR_MN_Acad.Scheme.Spec;
+using KR_MN_Acad.Spec.Bill;
 
 namespace KR_MN_Acad.Spec.Materials
 {
@@ -17,10 +17,12 @@ namespace KR_MN_Acad.Spec.Materials
         public string Name { get; set; }        
 
         public string BillTitle { get; } = "Изделия закладные, кг";
+        public int BillTitleIndex { get; } = 1;
         public string BillGroup { get; } = "Прокат марки";
         public string BillMark { get;  } = "ВСт3кп";
         public string BillGOST { get { return Gost.Number; } }
         public string BillName { get { return Name; }  }
+        public double Amount { get; set; }
 
         /// <summary>
         /// Создание прокатной стали 

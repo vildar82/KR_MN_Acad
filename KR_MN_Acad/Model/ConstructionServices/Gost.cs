@@ -41,11 +41,13 @@ namespace KR_MN_Acad.ConstructionServices
 
         public int CompareTo(Gost other)
         {            
-            return Name.CompareTo(other?.Name);
+            return AcadLib.Comparers.AlphanumComparator.New.Compare(Name,other?.Name);
         }
 
         public bool Equals(Gost other)
         {
+            if (other == null) return false;
+            if (ReferenceEquals(this, other)) return true;
             return Name.Equals(other?.Name);
         }
 
@@ -58,6 +60,6 @@ namespace KR_MN_Acad.ConstructionServices
                 {Concrete.GostNumber, new Gost(Concrete.GostNumber, Concrete.GostName) },
                 {Tube.GostNumber, new Gost(Tube.GostNumber, Tube.GostName) }
             };
-        }
+        }        
     }
 }

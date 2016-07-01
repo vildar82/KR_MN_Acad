@@ -10,15 +10,15 @@ namespace KR_MN_Acad.Spec.SpecGroup
     /// Элемент групповой спецификации
     /// </summary>
     public interface IGroupSpecElement : ISpecElement
-    {
-        /// <summary>
-        /// Уникальное имя элемента (в переделах элементов IConstruction одного индекса). Нужно для ключа при группировки элементов по индексу
-        /// </summary>
-        string Key { get; set; }
+    {        
+        bool IsDefaultGroupings { get; set; }
+
         /// <summary>
         /// Суммирование элементов и заполнение полей строки
         /// items - элементы в одной строке спецификации
         /// </summary>        
-        void SumAndSetRow (SpecGroupRow row, List<ISpecElement> elems);        
+        void SumAndSetRow (SpecGroupRow row, List<ISpecElement> elems);
+        Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<Type, ISpecElement> indexTypeGroup);
+        Dictionary<string, List<ISpecElement>> GroupsByArm (List<ISpecElement> value);
     }
 }

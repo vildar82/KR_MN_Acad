@@ -52,7 +52,9 @@ namespace KR_MN_Acad.Spec.Elements
         /// </summary>
         public double Weight { get; set; }
 
-        public double Mass { get; set; }
+        public double Amount { get; set; }
+
+        public bool IsDefaultGroupings { get; set; } = true;
 
         /// <summary>
         /// Труба стальная электросварная прямошовная.
@@ -75,7 +77,7 @@ namespace KR_MN_Acad.Spec.Elements
         {
             // Масса ед. кг.
             Weight = RoundHelper.Round3Digits(WeightUnit * ConvertMmToMLength(Length));
-            Mass = Weight;
+            Amount = Weight;
         }        
 
         public string GetDesc ()
@@ -140,6 +142,16 @@ namespace KR_MN_Acad.Spec.Elements
         public string GetParamInfo ()
         {
             return Name;
+        }
+
+        public Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<Type, ISpecElement> indexTypeGroup)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<string, List<ISpecElement>> GroupsByArm (List<ISpecElement> value)
+        {
+            throw new NotImplementedException();
         }
     }
 }

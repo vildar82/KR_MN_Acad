@@ -64,6 +64,8 @@ namespace KR_MN_Acad.Spec
 
         public bool Equals (GroupType other)
         {
+            if (other == null) return false;
+            if (ReferenceEquals(this, other)) return true;
             return Index == other.Index && Name == other.Name;
         }
 
@@ -79,6 +81,6 @@ namespace KR_MN_Acad.Spec
         public override int GetHashCode ()
         {
             return Index.GetHashCode();
-        }
+        }        
     }
 }

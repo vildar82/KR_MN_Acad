@@ -52,7 +52,9 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         public ISpecBlock SpecBlock { get; set; }
         public string FriendlyName { get; set; }
 
-        public double Mass { get; set; }
+        public new double Amount { get; set; }
+
+        public bool IsDefaultGroupings { get; set; } = true;
 
         /// <summary>
         /// Стержень по количеству штук
@@ -85,7 +87,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             Weight = RoundHelper.Round3Digits(WeightUnit * ConvertMmToMLength(Length));
             // Масса всех стержней
             WeightTotal =RoundHelper.Round2Digits(Weight * Count);
-            Mass = WeightTotal;
+            Amount = WeightTotal;            
         }
 
         /// <summary>
@@ -132,8 +134,8 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         public virtual bool Equals (ISpecElement other)
         {
             var arm = other as Bar;
-            if (arm == null)
-                return false;
+            if (arm == null) return false;
+            if (ReferenceEquals(this, arm)) return true;
 
             return Index == arm.Index &&
                 prefix == arm.prefix &&
@@ -204,6 +206,16 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         public void SetNumber (string num)
         {
             Mark = num;
+        }
+
+        public Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<Type, ISpecElement> indexTypeGroup)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<string, List<ISpecElement>> GroupsByArm (List<ISpecElement> value)
+        {
+            throw new NotImplementedException();
         }
     }
 }

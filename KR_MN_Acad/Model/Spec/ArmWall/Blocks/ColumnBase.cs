@@ -5,8 +5,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AcadLib.Blocks;
-using Autodesk.AutoCAD.DatabaseServices;
 using KR_MN_Acad.ConstructionServices;
+using KR_MN_Acad.Spec.Constructions.Elements;
 using KR_MN_Acad.Spec.Elements.Bars;
 using KR_MN_Acad.Spec.Elements.Concretes;
 
@@ -15,8 +15,9 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
     /// <summary>
     /// Описание блока колонны квадратной до 400мм
     /// </summary>
-    public abstract class ColumnBase : SpecBlock
+    public abstract class ColumnBase : SpecBlock, Constructions.IConstructionBlock
     {
+        private const string propMark = "МАРКА";        
         /// <summary>
         /// Защитный слой бетона до центра арматуры
         /// </summary>
@@ -32,12 +33,9 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
         protected const string PropNameArmVerticPos = "ПОЗВЕРТИКАРМ";
         protected const string PropNameArmVerticDesc = "ОПИСАНИЕВЕРТИКАРМ";
         protected const string PropNameShacklePos = "ПОЗХОМУТА";
-        protected const string PropNameShackleDesc = "ОПИСАНИЕХОМУТА";
-
-        public ColumnBase (BlockReference blRef, string blName) : base(blRef, blName)
-        {
-        }
-
+        protected const string PropNameShackleDesc = "ОПИСАНИЕХОМУТА";      
+        
+        public virtual List<ISpecElement> Elementary { get; set; } = new List<ISpecElement>();
         /// <summary>
         /// Высота колонны
         /// </summary>
@@ -69,7 +67,16 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
         /// <summary>
         /// Хомут
         /// </summary>
-        public Shackle Shackle { get; set; }        
+        public Shackle Shackle { get; set; }
+        //public Column Column { get; set; }
+
+        public ISpecElement ConstructionElement { get; set; }
+
+        public ColumnBase (Autodesk.AutoCAD.DatabaseServices.BlockReference blRef, string blName) : base(blRef, blName)
+        {
+        }
+
+        protected abstract Column GetColumn (string mark);
 
         /// <summary>
         /// Определение базовых параметров колонны - выпуск, высота, бетон и т.д.
@@ -95,11 +102,38 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
             }            
         }
 
-        protected virtual void AddElements ()
+        public override void Calculate ()
         {
-            AddElement(ArmVertic);
-            AddElement(Shackle);            
-            AddElement(Concrete);
+            // Нумерация элементов в конструкции
+            Elements = Elementary.ToList();
+            SpecGroup.SpecGroupService service = new SpecGroup.SpecGroupService (Block.IdBlRef.Database);
+            service.Numbering(new List<ISpecBlock>() { this });
+            NumberingElementary();                        
+
+            string mark = Block.GetPropValue<string> (propMark);
+            ConstructionElement = GetColumn(mark);            
+            Elements.Clear();
+            AddElement(ConstructionElement);
+        }
+
+        public override void Numbering ()
+        {
+            Block.FillPropValue(propMark, ConstructionElement.Mark);
+        }
+
+        protected virtual void AddElementarys ()
+        {
+            AddElementary(ArmVertic);
+            AddElementary(Shackle);
+            AddElementary(Concrete);
+        }
+
+        private void AddElementary(ISpecElement elem)
+        {
+            if (elem != null)
+            {
+                Elementary.Add(elem);
+            }
         }
 
         /// <summary>
@@ -114,12 +148,12 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
             return defineBar(ArmVerticCount, Height + Outline, PropNameArmVerticDiam, PropNameArmVerticPos, "Вертикальная арматура");
         }
 
-        public override void Numbering ()
-        {            
+        protected virtual void NumberingElementary()
+        {
             // ВертикАрм         
             FillElemPropNameDesc(ArmVertic, PropNameArmVerticPos, PropNameArmVerticDesc);
             // Хомут
             FillElemPropNameDesc(Shackle, PropNameShacklePos, PropNameShackleDesc);
-        }
+        }        
     }
 }

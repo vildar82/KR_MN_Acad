@@ -17,10 +17,10 @@ namespace KR_MN_Acad.Spec
     /// </summary>
     public class SpecService
     {
-        Document doc;
-        Database db;
-        Editor ed;
-        ISpecOptions options;
+        protected Document doc;
+        protected Database db;
+        protected Editor ed;
+        ISpecOptions options;  
 
         public SpecService(Document doc, ISpecOptions options)
         {
@@ -62,15 +62,15 @@ namespace KR_MN_Acad.Spec
             // Проверка позиций
             //CheckPositions();
             // Создание спецификаций.
-            var table = options.TableService.CreateTable();
-            InsertTable(table);        
+            var table = options.TableService.CreateTable();            
+            InsertTables(table);        
         }        
 
         /// <summary>
         /// Выбор блоков
         /// </summary>
         /// <returns></returns>
-        private List<ObjectId> SelectBlocks ()
+        protected virtual List<ObjectId> SelectBlocks ()
         {
             return ed.SelectBlRefs("\nВыбор блоков спецификации:");
         }
@@ -138,22 +138,27 @@ namespace KR_MN_Acad.Spec
             }
         }
 
-        private void InsertTable (Table table)
+        private void InsertTables (Table table)
         {
             using (var t = db.TransactionManager.StartTransaction())
             {
-                var cs = db.CurrentSpaceId.GetObject( OpenMode.ForWrite) as BlockTableRecord;
-                List<ObjectId> idsDrag = new List<ObjectId> ();
                 var scale = AcadLib.Scale.ScaleHelper.GetCurrentAnnoScale(db);
+                var cs = db.CurrentSpaceId.GetObject( OpenMode.ForWrite) as BlockTableRecord;                
 
                 table.TransformBy(Matrix3d.Scaling(scale, table.Position));
+
                 cs.AppendEntity(table);
                 t.AddNewlyCreatedDBObject(table, true);
-                idsDrag.Add(table.Id);
 
-                if (!DragSel.Drag(ed, idsDrag.ToArray(), Point3d.Origin))
+                var ids = new List<ObjectId> ();
+                ids.Add(table.Id);
+
+                // Если нужны дополнительные таблицы - ВРС, Ведомость деталей
+
+
+                if (!DragSel.Drag(ed, ids.ToArray(), Point3d.Origin))
                 {
-                    foreach (var id in idsDrag)
+                    foreach (var id in ids)
                     {
                         var ent = id.GetObject( OpenMode.ForWrite);
                         ent.Erase();

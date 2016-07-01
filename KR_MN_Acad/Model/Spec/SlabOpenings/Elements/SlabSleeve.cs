@@ -21,8 +21,8 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
         public int Index { get; set; } = 1;
         public GroupType Group { get; set; } = GroupType.None;
         public ISpecBlock SpecBlock { get; set; }
-
-        public double Mass { get; set; } = 0;
+        public double Amount { get; set; } = 0;
+        public string Key { get; set; }
 
         public SlabSleeve (string mark, int diam, int depth, string role, string desc, ISpecBlock specBlock)
         {
@@ -34,6 +34,7 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
             Description = desc;
             Count = 1;
             Dimension = "Гильза " + AcadLib.General.Symbols.Diam + diam + "х" + depth;
+            Key = Dimension + Role;
         }                
 
         public string GetNumber (string index)

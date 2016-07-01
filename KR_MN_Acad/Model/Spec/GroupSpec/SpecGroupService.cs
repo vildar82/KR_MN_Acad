@@ -100,7 +100,7 @@ namespace KR_MN_Acad.Spec.SpecGroup
             }
         }
 
-        protected override IEnumerable<ISpecElement> FilterElements (IEnumerable<ISpecBlock> blocks)
+        protected override IEnumerable<ISpecElement> FilterElements (IEnumerable<ISpecBlock> blocks, bool isNumbering)
         {
             var specGroupElements = blocks.SelectMany(s=>s.Elements.OfType<IGroupSpecElement>());
             return specGroupElements;
@@ -112,17 +112,32 @@ namespace KR_MN_Acad.Spec.SpecGroup
             return res;
         }       
 
-        protected override Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<int, ISpecElement> indexGroup)
+        protected override Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<Type, ISpecElement> indexTypeGroup)
         {
-            var uniqElems = indexGroup.GroupBy(g=>g).OrderByDescending(o=>o.Key);
-            return uniqElems.ToDictionary(k => ((IGroupSpecElement)k.Key).Key, i => i.ToList());
+            var firstElement = indexTypeGroup.First() as IGroupSpecElement;
+            if (!firstElement.IsDefaultGroupings)
+            {
+                return firstElement.GroupsBySize(indexTypeGroup);
+            }
+            {
+                var uniqElems = indexTypeGroup.GroupBy(g=>g).OrderByDescending(o=>o.Key);
+                return uniqElems.ToDictionary(k => ((IGroupSpecElement)k.Key).Key, i => i.ToList());
+            }
         }
 
         protected override Dictionary<string, List<ISpecElement>> GroupsSecondForNumbering (KeyValuePair<string, List<ISpecElement>> firstGroup)
         {
-            return new Dictionary<string, List<ISpecElement>>() {
-                { firstGroup.Key, firstGroup.Value }
-            };
+            var firstElement = firstGroup.Value.First() as IGroupSpecElement;
+            if (!firstElement.IsDefaultGroupings)
+            {
+                return firstElement.GroupsByArm(firstGroup.Value);
+            }
+            else
+            {
+                return new Dictionary<string, List<ISpecElement>>() {
+                    { firstGroup.Key, firstGroup.Value }
+                };
+            }
         }
     }
 }

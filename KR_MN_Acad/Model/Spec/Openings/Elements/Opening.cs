@@ -27,10 +27,9 @@ namespace KR_MN_Acad.Spec.Openings.Elements
         /// </summary>
         public int Index { get; set; } = 0;
         public GroupType Group { get; set; } = GroupType.None;
-
         public ISpecBlock SpecBlock { get; set; }
-
-        public double Mass { get; set; } = 0;
+        public double Amount { get; set; } = 0;
+        public string Key { get; set; }
 
         public Opening (string mark, int lenght, int height, double elevation, string role, string desc,
             ISpecBlock specBlock)
@@ -45,6 +44,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
             this.height = height;
             this.elev = elevation;
             Dimension = length + "х" + height + "(h)";
+            Key = Dimension + Elevation + Role;
         }
 
         /// <summary>

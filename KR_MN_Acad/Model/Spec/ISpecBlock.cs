@@ -18,7 +18,7 @@ namespace KR_MN_Acad.Spec
         /// Получение элементов спецификации из блока
         /// </summary>
         /// <returns></returns>
-        List<ISpecElement> Elements { get; }
+        List<ISpecElement> Elements { get; set; }
         /// <summary>
         /// Описание ошибок в блоке
         /// </summary>

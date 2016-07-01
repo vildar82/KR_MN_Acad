@@ -28,7 +28,9 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
 
         public ISpecBlock SpecBlock { get; set; }
 
-        public double Mass { get; set; } = 0;
+        public double Amount { get; set; } = 0;
+
+        public string Key { get; set; }
 
         public SlabOpening(string mark, int side1, int side2, string role, string desc, ISpecBlock specBlock)
         {
@@ -48,6 +50,7 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
                 width = side1;
             }
             Dimension = length + "х" + width;
+            Key = Dimension + Role;
         }
 
         /// <summary>
