@@ -14,7 +14,9 @@ namespace KR_MN_Acad.Spec.Openings
     {        
         public Dictionary<string, Type> TypesBlock { get; set; }
         public ITableService TableService { get; set; }
-        public bool CheckDublicates { get; set; }
+        public bool CheckDublicates { get; set; } = true;
+        public bool HasBillTable { get; set; } = false;
+        public bool HasDetailTable { get; set; } = false;
 
         public ApertureOptions (Database db)
         {
@@ -22,8 +24,7 @@ namespace KR_MN_Acad.Spec.Openings
                 { Blocks.DoorBlock.BlockName, typeof(Blocks.DoorBlock) },
                 { Blocks.WindowBlock.BlockName, typeof(Blocks.WindowBlock) }
             };
-            TableService = new OpeningService(db);
-            CheckDublicates = true;
+            TableService = new OpeningService(db);            
         }
     }
 }

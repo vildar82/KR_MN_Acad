@@ -14,7 +14,9 @@ namespace KR_MN_Acad.Spec.SlabOpenings
     {        
         public Dictionary<string, Type> TypesBlock { get; set; }
         public ITableService TableService { get; set; }
-        public bool CheckDublicates { get; set; }
+        public bool CheckDublicates { get; set; } = true;
+        public bool HasBillTable { get; set; } = false;
+        public bool HasDetailTable { get; set; } = false;
 
         public SlabOptions(Database db)
         {
@@ -23,8 +25,7 @@ namespace KR_MN_Acad.Spec.SlabOpenings
                 { Blocks.SlabSleeveBlock.BlockName, typeof(Blocks.SlabSleeveBlock) }
             };
 
-            TableService = new SlabService(db);
-            CheckDublicates = true;
+            TableService = new SlabService(db);            
         }
     }
 }

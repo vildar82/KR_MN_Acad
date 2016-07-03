@@ -190,6 +190,7 @@
     <Compile Include="Model\Spec\Constructions\IConstructionElement.cs" />
     <Compile Include="Model\Spec\Constructions\ConstructionTable.cs" />
     <Compile Include="Model\Spec\Constructions\IConstructionSize.cs" />
+    <Compile Include="Model\Spec\Details\DetailService.cs" />
     <Compile Include="Model\Spec\Elements\Bars\Bar.cs" />
     <Compile Include="Model\Spec\Elements\Bars\BarDetail.cs" />
     <Compile Include="Model\Spec\Elements\Bars\BarRunning.cs" />

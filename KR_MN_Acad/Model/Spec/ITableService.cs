@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autodesk.AutoCAD.DatabaseServices;
+using KR_MN_Acad.Spec.Elements;
 
 namespace KR_MN_Acad.Spec
 {
@@ -26,5 +27,7 @@ namespace KR_MN_Acad.Spec
         /// Создание спецификации
         /// </summary>        
         Table CreateTable ();
+        List<ISpecElement> GetElementsForBill ();
+        List<IDetail> GetDetails ();
     }
 }

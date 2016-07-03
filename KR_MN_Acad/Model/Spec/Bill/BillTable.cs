@@ -18,6 +18,7 @@ namespace KR_MN_Acad.Spec.Bill
     {   
         BillRow data;
         Database db;
+        BillService service;
 
         readonly int rowTitleIndex = 1;
         readonly int rowGroupIndex = 2;
@@ -25,10 +26,11 @@ namespace KR_MN_Acad.Spec.Bill
         readonly int rowGostIndex = 4;
         readonly int rowNameIndex = 5;        
 
-        public BillTable(Database db, BillRow row)
+        public BillTable(BillService service)
         {
-            this.db = db;                     
-            data = row;
+            db = service.Db;                     
+            data = service.Row;
+            this.service = service;                       
         }
 
         public Table CreateTable ()
@@ -49,7 +51,7 @@ namespace KR_MN_Acad.Spec.Bill
             table.SetColumnWidth(15);
 
             // Добавление столбцов в таблицу
-            BillColumn.AddColumns(table, data, this);
+            BillColumn.AddColumns(table, data, this, service);
             // Заполнение расходов
             int row = rowNameIndex+1;
             // Строка в ведомости расхода стали                
@@ -117,7 +119,7 @@ namespace KR_MN_Acad.Spec.Bill
             /// <summary>
             /// Добавление столбцов в ьаблицу
             /// </summary>
-            public static void AddColumns(Table table,BillRow row, BillTable spec)
+            public static void AddColumns(Table table,BillRow row, BillTable spec, BillService service)
             {
                 // группировка по ячейкам
                 var cells = row.Cells.GroupBy(g => g).OrderBy(o=>o.Key);                
@@ -199,7 +201,8 @@ namespace KR_MN_Acad.Spec.Bill
                 table.Cells[spec.rowNameIndex + 1, colIndex].TextString = row.Cells.Sum(s=>s.Amount).ToString();
 
                 // всего бетона
-                var concretes = spec.service.Groups.FirstOrDefault(g => g.Type == GroupType.Materials)?.Rows.Where(r=>r.SomeElement is Concrete)?.GroupBy(g=>((Concrete)g.SomeElement).ClassB);
+                var concretes = service.Elements.OfType<Concrete>().GroupBy(g=>g.ClassB).OrderBy(o=>o.Key, AcadLib.Comparers.AlphanumComparator.New);
+                    //.FirstOrDefault(g => g.Type == GroupType.Materials)?.Rows.Where(r=>r.SomeElement is Concrete)?.GroupBy(g=>((Concrete)g.SomeElement).ClassB);
                 if (concretes != null)
                 {
                     foreach (var concrete in concretes)
@@ -208,9 +211,9 @@ namespace KR_MN_Acad.Spec.Bill
                         table.InsertColumns(colIndex, 15, 1);
                         mCells = CellRange.Create(table, 1, colIndex, spec.rowNameIndex, colIndex);
                         table.MergeCells(mCells);
-                        string unitsConcrete = ((Concrete)concrete.First().SomeElement).Units;
+                        string unitsConcrete = concrete.First().Units;// ((Concrete)concrete.First().SomeElement).Units;
                         table.Cells[1, colIndex].TextString = $"Расход бетона класса {concrete.Key}, {unitsConcrete}";
-                        table.Cells[spec.rowNameIndex + 1, colIndex].TextString = concrete.Sum(c => c.Amount).ToString();
+                        table.Cells[spec.rowNameIndex + 1, colIndex].TextString = concrete.Sum(c => c.Volume).ToString();
                     }
                 }
             }            

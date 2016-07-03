@@ -16,6 +16,8 @@ namespace KR_MN_Acad.Spec.Constructions
         public Dictionary<string, Type> TypesBlock { get; set; }
         public ITableService TableService { get; set; }
         public bool CheckDublicates { get; set; } = true;
+        public bool HasBillTable { get; set; } = true;
+        public bool HasDetailTable { get; set; } = true;
 
         public ConstructionOptions (Database db)
         {

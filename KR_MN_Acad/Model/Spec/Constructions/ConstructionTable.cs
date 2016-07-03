@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autodesk.AutoCAD.DatabaseServices;
+using KR_MN_Acad.Spec.Elements;
 
 namespace KR_MN_Acad.Spec.Constructions
 {
@@ -11,7 +12,8 @@ namespace KR_MN_Acad.Spec.Constructions
     /// Спецификация конструкции - элементов в одной сборочной конструкции - Колонне, Пилоне, Балке
     /// </summary>
     public class ConstructionTable : SpecGroup.SpecGroupService
-    {   
+    {
+        private IConstructionBlock constrBlock;
         public ConstructionTable (Database db) : base(db)
         {   
             Title = "Спецификация конструкции";            
@@ -22,15 +24,21 @@ namespace KR_MN_Acad.Spec.Constructions
             if (!isNumbering)
             {
                 // Заголовок таблицы по марке колонны в блоке (блок один, колонна одна).
-                var block = blocks.First() as IConstructionBlock;
-                var constrElem = block.ConstructionElement;
+                constrBlock = blocks.First() as IConstructionBlock;
+                var constrElem = constrBlock.ConstructionElement;
                 Title += $" {constrElem.FriendlyName} {constrElem.Mark}";                
-                return block.Elementary;                
+                return constrBlock.Elementary;                
             }
             else
             {
                 return base.FilterElements(blocks, isNumbering);
             }
         }
+
+        public override List<IDetail> GetDetails ()
+        {
+            var details = constrBlock.Elementary.OfType<IDetail>().ToList();
+            return details;
+        }       
     }
 }

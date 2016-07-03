@@ -51,9 +51,6 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         public double WeightTotal { get; set; }        
         public ISpecBlock SpecBlock { get; set; }
         public string FriendlyName { get; set; }
-
-        public new double Amount { get; set; }
-
         public bool IsDefaultGroupings { get; set; } = true;
 
         /// <summary>

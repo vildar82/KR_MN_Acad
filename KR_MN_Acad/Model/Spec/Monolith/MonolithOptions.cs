@@ -14,7 +14,9 @@ namespace KR_MN_Acad.Spec.Monolith
     {        
         public Dictionary<string, Type> TypesBlock { get; set; }
         public ITableService TableService { get; set; }
-        public bool CheckDublicates { get; set; }
+        public bool CheckDublicates { get; set; } = true;
+        public bool HasBillTable { get; set; } = false;
+        public bool HasDetailTable { get; set; } = false;
 
         public MonolithOptions (Database db)
         {
@@ -25,8 +27,7 @@ namespace KR_MN_Acad.Spec.Monolith
                 { Blocks.WallBlock.BlockName, typeof(Blocks.WallBlock) },
             };
 
-            TableService = new MonolithService(db);
-            CheckDublicates = true;
+            TableService = new MonolithService(db);            
         }
     }
 }

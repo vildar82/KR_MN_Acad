@@ -14,5 +14,7 @@ namespace KR_MN_Acad.Spec
         /// </summary>
         ITableService TableService { get; set; }
         bool CheckDublicates { get; set; }
+        bool HasBillTable { get; set; }
+        bool HasDetailTable { get; set; }
     }
 }

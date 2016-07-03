@@ -20,7 +20,7 @@ namespace KR_MN_Acad.Spec
         protected Document doc;
         protected Database db;
         protected Editor ed;
-        ISpecOptions options;  
+        ISpecOptions options;        
 
         public SpecService(Document doc, ISpecOptions options)
         {
@@ -154,7 +154,25 @@ namespace KR_MN_Acad.Spec
                 ids.Add(table.Id);
 
                 // Если нужны дополнительные таблицы - ВРС, Ведомость деталей
+                Point3d ptNextTable = new Point3d(table.Position.X, table.Position.Y - table.Height - 10*scale, 0);
+                if (options.HasBillTable)
+                {
+                    Bill.BillService billService = new Bill.BillService (db, options.TableService.GetElementsForBill());
+                    var billTable = billService.CreateTable();
+                    billTable.Position = ptNextTable;
+                    billTable.TransformBy(Matrix3d.Scaling(scale, billTable.Position));
+                    cs.AppendEntity(billTable);
+                    t.AddNewlyCreatedDBObject(billTable, true);
+                    ids.Add(billTable.Id);
 
+                    ptNextTable = new Point3d(billTable.Position.X, billTable.Position.Y- billTable.Height-10*scale,0);
+                }
+                if (options.HasDetailTable)
+                {
+                    Details.DetailService detailService = new Details.DetailService (options.TableService.GetDetails(), db);
+                    var idsDetails = detailService.CreateTable(ptNextTable);
+                    ids.AddRange(idsDetails);
+                }
 
                 if (!DragSel.Drag(ed, ids.ToArray(), Point3d.Origin))
                 {

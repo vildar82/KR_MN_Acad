@@ -7,6 +7,7 @@ using AcadLib;
 using AcadLib.Errors;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.Geometry;
+using KR_MN_Acad.Spec.Elements;
 
 namespace KR_MN_Acad.Spec
 {
@@ -16,6 +17,10 @@ namespace KR_MN_Acad.Spec
     public abstract class TableService : ITableService
     {
         public static AcadLib.Comparers.AlphanumComparator alpha = AcadLib.Comparers.AlphanumComparator.New;
+
+        private List<ISpecElement> elements;
+        protected List<ISpecBlock> blocks;
+        
         protected List<KeyValuePair<string, List<ISpecRow>>> groupRows;
         protected abstract Database Db { get; set; }
         protected virtual string Layer { get; set; } = KRHelper.LayerTable;
@@ -34,10 +39,11 @@ namespace KR_MN_Acad.Spec
         /// </summary>        
         public void CalcRows (List<ISpecBlock> blocks)
         {
+            this.blocks = blocks;
             int numrows = 0;
             groupRows = new List<KeyValuePair<string, List<ISpecRow>>>();
             // Все элементы спецификации
-            var elements = FilterElements(blocks, false);
+            elements = FilterElements(blocks, false).ToList();
             // группировка по именам групп
             var groupsGroup = elements.OrderBy(o => o.Index).GroupBy(g => g.Group).OrderBy(o=>o.Key.Index);
             foreach (var group in groupsGroup)
@@ -69,6 +75,7 @@ namespace KR_MN_Acad.Spec
         /// <param name="blocks"></param>
         public void Numbering (List<ISpecBlock> blocks)
         {
+            this.blocks = blocks;
             // Все элементы спецификации
             var elements = FilterElements(blocks, true);
             // Группировыка по именам групп
@@ -213,6 +220,17 @@ namespace KR_MN_Acad.Spec
 
             table.GenerateLayout();
             return table;
-        }        
+        }
+
+        public virtual List<ISpecElement> GetElementsForBill ()
+        {
+            return elements;
+        }
+
+        public virtual List<IDetail> GetDetails ()
+        {
+            var details = elements.OfType<IDetail>().OrderBy(o=>o.BlockNameDetail, AcadLib.Comparers.AlphanumComparator.New);
+            return details.ToList();
+        }
     }
 }

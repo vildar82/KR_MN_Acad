@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autodesk.AutoCAD.DatabaseServices;
+using KR_MN_Acad.Spec.Elements;
 
 namespace KR_MN_Acad.Spec.SpecGroup
 {
@@ -138,6 +139,29 @@ namespace KR_MN_Acad.Spec.SpecGroup
                     { firstGroup.Key, firstGroup.Value }
                 };
             }
+        }
+
+        public override List<IDetail> GetDetails ()
+        {            
+            var details = blocks.SelectMany(s=>s.Elements).OfType<IDetail>().ToList();
+            return details;
+        }
+
+        public override List<ISpecElement> GetElementsForBill ()
+        {
+            List < ISpecElement > res = new List<ISpecElement> ();
+            foreach (var block in blocks)
+            {
+                if (block is Constructions.IConstructionBlock)
+                {
+                    res.AddRange(((Constructions.IConstructionBlock)block).Elementary);
+                }
+                else
+                {
+                    res.AddRange(block.Elements);
+                }
+            }
+            return res;
         }
     }
 }

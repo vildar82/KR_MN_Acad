@@ -12,23 +12,23 @@ namespace KR_MN_Acad.Spec.Bill
     /// </summary>
     public class BillService
     {
-        Database db;
-        List<ISpecElement> elements;
+        public Database Db { get; }
+        public List<ISpecElement> Elements { get; set; }
         public List<IBillMaterial> Materials { get; set; }
         public BillRow Row { get; set; }        
 
         public BillService(Database db, List<ISpecElement> elements)
         {
-            this.elements = elements;
+            Elements = elements;
             Materials = elements.OfType<IBillMaterial>().ToList();
-            this.db = db;                 
+            Db = db;                 
         }
 
         public Table CreateTable()
         {
             if (Materials.Count == 0) return null;
             Row = Calc();
-            BillTable billSpec = new BillTable(db, Row);
+            BillTable billSpec = new BillTable(this);
             return billSpec.CreateTable();
         }
 
@@ -38,7 +38,7 @@ namespace KR_MN_Acad.Spec.Bill
         private BillRow Calc ()
         {
             // строка врс
-            var row = new BillRow(this);
+            var row = new BillRow(Materials);
             row.Calc();
             return row;
         }       

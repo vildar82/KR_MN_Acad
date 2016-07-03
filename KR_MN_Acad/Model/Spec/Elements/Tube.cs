@@ -51,8 +51,7 @@ namespace KR_MN_Acad.Spec.Elements
         /// Округлено до 2 знаков
         /// </summary>
         public double Weight { get; set; }
-
-        public double Amount { get; set; }
+        //public double Amount { get; set; }
 
         public bool IsDefaultGroupings { get; set; } = true;
 
@@ -146,12 +145,12 @@ namespace KR_MN_Acad.Spec.Elements
 
         public Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<Type, ISpecElement> indexTypeGroup)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public Dictionary<string, List<ISpecElement>> GroupsByArm (List<ISpecElement> value)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

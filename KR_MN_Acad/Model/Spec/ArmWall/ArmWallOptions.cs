@@ -14,7 +14,9 @@ namespace KR_MN_Acad.Spec.ArmWall
     {        
         public Dictionary<string, Type> TypesBlock { get; set; }
         public ITableService TableService { get; set; }
-        public bool CheckDublicates { get; set; }
+        public bool CheckDublicates { get; set; } = true;
+        public bool HasBillTable { get; set; } = true;
+        public bool HasDetailTable { get; set; } = true;
 
         public ArmWallOptions (Database db)
         {
@@ -22,8 +24,7 @@ namespace KR_MN_Acad.Spec.ArmWall
                 { Blocks.ColumnSquareSmallBlock.BlockName, typeof(Blocks.ColumnSquareSmallBlock) }                
             };
 
-            TableService = new SpecGroup.SpecGroupService(db);
-            CheckDublicates = true;
+            TableService = new SpecGroup.SpecGroupService(db);            
         }
     }
 }
