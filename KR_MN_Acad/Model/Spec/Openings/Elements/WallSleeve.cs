@@ -16,7 +16,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
         public string Description { get; set; }
         public string FriendlyName { get; set; } = "Гильза";
         public int Index { get; set; } = 1;
-        public GroupType Group { get; set; } = GroupType.None;
+        public GroupType Group { get; set; } = WallOptions.GroupSleeve;
         public ISpecBlock SpecBlock { get; set; }
         public double Amount { get; set; } = 0;
         public string Key { get; set; }
@@ -27,7 +27,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
             this.diam = diam;
             this.depth = depth;
             this.elev = elev;
-            Elevation = "Ось отв. " + elev.ToString("N3");
+            Elevation = "Ось отв. " + elev.ToString("0.000");
             Mark = mark;            
             Role = role;            
             Description = desc;

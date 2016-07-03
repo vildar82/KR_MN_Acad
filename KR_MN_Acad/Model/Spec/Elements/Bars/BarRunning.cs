@@ -73,7 +73,8 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         public override void SumAndSetRow (SpecGroupRow specGroupRow, List<ISpecElement> elems)
         {
             // Обозначения, Наименования, Кол, Массы ед, примечания
-            specGroupRow.Description = Gost.Number;
+            specGroupRow.Mark = Mark;
+            specGroupRow.Designation = Gost.Number;
             specGroupRow.Name = GetName();
 
             double metersTotal = 0;
@@ -88,7 +89,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             weightTotal = RoundHelper.Round2Digits( metersTotal * Weight);
 
             specGroupRow.Count = metersTotal.ToString();
-            specGroupRow.Weight = Weight.ToString("N3");
+            specGroupRow.Weight = Weight.ToString("0.000");
             specGroupRow.Description = weightTotal.ToString();            
         }
 

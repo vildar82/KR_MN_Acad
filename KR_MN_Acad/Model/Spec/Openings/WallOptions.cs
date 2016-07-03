@@ -11,7 +11,10 @@ namespace KR_MN_Acad.Spec.Openings
     /// Настройка спецификации блоков отверстий в плитах
     /// </summary>
     public class WallOptions : ISpecOptions
-    {        
+    {
+        public static readonly GroupType GroupOpening = new GroupType { Name="", Index=0 };
+        public static readonly GroupType GroupSleeve = new GroupType { Name="", Index=1 };
+
         public Dictionary<string, Type> TypesBlock { get; set; }
         public ITableService TableService { get; set; }
         public bool CheckDublicates { get; set; } = true;

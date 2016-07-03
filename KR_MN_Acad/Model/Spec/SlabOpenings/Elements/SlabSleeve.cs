@@ -19,7 +19,7 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
         /// Гильзы - в конце
         /// </summary>
         public int Index { get; set; } = 1;
-        public GroupType Group { get; set; } = GroupType.None;
+        public GroupType Group { get; set; } = SlabOptions.GroupSleeve;
         public ISpecBlock SpecBlock { get; set; }
         public double Amount { get; set; } = 0;
         public string Key { get; set; }

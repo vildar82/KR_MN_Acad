@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace KR_MN_Acad.Spec.Openings.Elements
 {
     /// <summary>
-    /// 
+    /// Проем
     /// </summary>
     public class Opening : ISpecElement, IOpeningElement
     {        
@@ -26,7 +26,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
         /// Проемы в стенах - в первых строках
         /// </summary>
         public int Index { get; set; } = 0;
-        public GroupType Group { get; set; } = GroupType.None;
+        public GroupType Group { get; set; } = WallOptions.GroupOpening;
         public ISpecBlock SpecBlock { get; set; }
         public double Amount { get; set; } = 0;
         public string Key { get; set; }
@@ -39,7 +39,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
             Role = role;
             Count = 1;
             Description = desc;
-            Elevation = elevation.ToString("N3");
+            Elevation = elevation.ToString("0.000");
             this.length = lenght;
             this.height = height;
             this.elev = elevation;

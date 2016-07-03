@@ -76,7 +76,14 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
         {
         }
 
-        protected abstract Column GetColumn (string mark);
+        //protected abstract ISpecElement GetColumn (string mark);
+
+        protected virtual ISpecElement GetConstruction (string mark)
+        {
+            var col = new Column(Width, Thickness, Height, mark, this, Elementary);
+            col.Calc();
+            return col;
+        }
 
         /// <summary>
         /// Определение базовых параметров колонны - выпуск, высота, бетон и т.д.
@@ -99,7 +106,8 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
             {
                 Shackle = defineShackleByGab(width, thickness, Height, ArmVertic.Diameter, a, PropNameShackleDiam,
                     PropNameShacklePos, PropNameShackleStep);                
-            }            
+            }
+            AddElementarys();
         }
 
         public override void Calculate ()
@@ -111,24 +119,29 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
             NumberingElementary();                        
 
             string mark = Block.GetPropValue<string> (propMark);
-            ConstructionElement = GetColumn(mark);            
+            ConstructionElement = GetConstruction(mark);            
             Elements.Clear();
-            AddElement(ConstructionElement);
+            base.AddElement(ConstructionElement);
         }
+
+        protected override void AddElement (ISpecElement elem)
+        {
+            throw new InvalidOperationException("Для конструкций нужно использовать AddElementary метод.");
+        }        
 
         public override void Numbering ()
         {
             Block.FillPropValue(propMark, ConstructionElement.Mark);
         }
 
-        protected virtual void AddElementarys ()
+        private void AddElementarys ()
         {
             AddElementary(ArmVertic);
             AddElementary(Shackle);
             AddElementary(Concrete);
         }
 
-        private void AddElementary(ISpecElement elem)
+        protected void AddElementary(ISpecElement elem)
         {
             if (elem != null)
             {

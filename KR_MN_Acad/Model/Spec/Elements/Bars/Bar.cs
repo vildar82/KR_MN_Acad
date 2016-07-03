@@ -186,7 +186,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             weightTotal = RoundHelper.Round2Digits(Weight * countTotal);
 
             row.Count = countTotal.ToString();
-            row.Weight = Weight.ToString("N3");
+            row.Weight = Weight.ToString("0.000");
             row.Description = weightTotal.ToString();            
         }
         

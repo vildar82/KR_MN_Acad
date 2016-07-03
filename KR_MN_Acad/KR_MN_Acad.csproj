@@ -111,6 +111,8 @@
     <Compile Include="Model\Scheme\Blocks\Wall\WallEndTBlock.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallEndCornerBlock.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallRule.cs" />
+    <Compile Include="Model\Scheme\Elements\Bars\AddHorArmBlock.cs" />
+    <Compile Include="Model\Scheme\Elements\Bars\AddVerticLShapedArmBlock.cs" />
     <Compile Include="Model\Scheme\Elements\Bars\BarDetail.cs" />
     <Compile Include="Model\Scheme\Elements\Bars\BentBarDirect.cs" />
     <Compile Include="Model\Scheme\Elements\Bars\BentBarLshaped.cs" />
@@ -174,8 +176,16 @@
     <Compile Include="Model\Scheme\Blocks\Wall\WallSchemeOptions.cs" />
     <Compile Include="Model\Scheme\Blocks\Wall\WallBlock.cs" />
     <Compile Include="Model\Spec\ArmWall\Blocks\ColumnBase.cs" />
+    <Compile Include="Model\Spec\ArmWall\Blocks\ColumnSquareBigBlock.cs" />
     <Compile Include="Model\Spec\ArmWall\Blocks\ColumnSquareSmallBlock.cs" />
     <Compile Include="Model\Spec\ArmWall\ArmWallOptions.cs" />
+    <Compile Include="Model\Spec\ArmWall\Blocks\PylonBlock.cs" />
+    <Compile Include="Model\Spec\ArmWall\Blocks\SleeveBlock.cs" />
+    <Compile Include="Model\Spec\ArmWall\Blocks\WallBase.cs" />
+    <Compile Include="Model\Spec\ArmWall\Blocks\WallBlock.cs" />
+    <Compile Include="Model\Spec\ArmWall\Blocks\WallEndBlock.cs" />
+    <Compile Include="Model\Spec\ArmWall\Blocks\WallEndCornerBlock.cs" />
+    <Compile Include="Model\Spec\ArmWall\Blocks\WallEndTBlock.cs" />
     <Compile Include="Model\Spec\Bill\BillCell.cs" />
     <Compile Include="Model\Spec\Bill\BillRow.cs" />
     <Compile Include="Model\Spec\Bill\BillService.cs" />
@@ -185,6 +195,7 @@
     <Compile Include="Model\Spec\Constructions\ConstructionElement.cs" />
     <Compile Include="Model\Spec\Constructions\ConstructionService.cs" />
     <Compile Include="Model\Spec\Constructions\ConstructionSize.cs" />
+    <Compile Include="Model\Spec\Constructions\Elements\Pylon.cs" />
     <Compile Include="Model\Spec\Constructions\Elements\Column.cs" />
     <Compile Include="Model\Spec\Constructions\IConstructionBlock.cs" />
     <Compile Include="Model\Spec\Constructions\IConstructionElement.cs" />

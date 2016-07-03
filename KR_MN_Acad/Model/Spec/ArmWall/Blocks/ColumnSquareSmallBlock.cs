@@ -34,16 +34,8 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
             // Определение параметров.
             // Расчет элементов схемы.            
             Side = Block.GetPropValue<int>(PropNameSide);
-            DefineBaseFields(Side, Side, true);
-            AddElementarys();
+            DefineBaseFields(Side, Side, true);            
             base.Calculate();
-        }
-
-        protected override Constructions.Elements.Column GetColumn (string mark)
-        {
-            var col = new Constructions.Elements.Column(Side, Side, Height, mark, this, Elementary);
-            col.Calc();
-            return col;
-        }
+        }        
     }
 }

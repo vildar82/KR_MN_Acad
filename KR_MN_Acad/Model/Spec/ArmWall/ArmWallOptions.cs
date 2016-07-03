@@ -21,7 +21,16 @@ namespace KR_MN_Acad.Spec.ArmWall
         public ArmWallOptions (Database db)
         {
             TypesBlock = new Dictionary<string, Type>() {
-                { Blocks.ColumnSquareSmallBlock.BlockName, typeof(Blocks.ColumnSquareSmallBlock) }                
+                { Blocks.WallBlock.BlockName, typeof(Blocks.WallBlock) },
+                { Blocks.WallEndBlock.BlockName, typeof(Blocks.WallEndBlock) },
+                { Blocks.WallEndCornerBlock.BlockName, typeof(Blocks.WallEndCornerBlock) },
+                { Blocks.WallEndTBlock.BlockName, typeof(Blocks.WallEndTBlock) },
+                { Blocks.ColumnSquareSmallBlock.BlockName, typeof(Blocks.ColumnSquareSmallBlock) },
+                { Blocks.ColumnSquareBigBlock.BlockName, typeof(Blocks.ColumnSquareBigBlock) },
+                { Blocks.PylonBlock.BlockName, typeof(Blocks.PylonBlock) },
+                { Blocks.SleeveBlock.BlockName, typeof(Blocks.SleeveBlock) },
+                { Blocks.AddHorArmBlock.BlockName, typeof(Blocks.AddHorArmBlock) },
+                { Blocks.AddVerticLShapedArmBlock.BlockName, typeof(Blocks.AddVerticLShapedArmBlock) }
             };
 
             TableService = new SpecGroup.SpecGroupService(db);            

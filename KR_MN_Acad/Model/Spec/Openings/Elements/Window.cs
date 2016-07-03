@@ -13,6 +13,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
         public Window (string mark, int lenght, int height, double elevation, string role, string desc, ISpecBlock specBlock)
             : base(1, "ОП-", mark, lenght, height, elevation, role, desc, specBlock)
         {
+            Group = ApertureOptions.GroupWindow;
         }
     }
 }

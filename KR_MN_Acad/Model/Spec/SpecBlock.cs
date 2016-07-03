@@ -12,7 +12,7 @@ using KR_MN_Acad.Spec.Materials;
 namespace KR_MN_Acad.Spec
 {
     public abstract class SpecBlock : ISpecBlock
-    {
+    {        
         public IBlock Block { get; set; }
         public virtual List<ISpecElement> Elements { get; set; } = new List<ISpecElement>();
         public Error Error { get { return Block.Error; } }
@@ -34,6 +34,11 @@ namespace KR_MN_Acad.Spec
                 // Опис            
                 Block.FillPropValue(descPropertyName, elem.GetDesc());                
             }
+        }
+
+        protected void AddError(string err)
+        {
+            Block.AddError(err);
         }
 
         /// <summary>
@@ -111,7 +116,7 @@ namespace KR_MN_Acad.Spec
             return length * kLap;
         }
 
-        protected void AddElement (ISpecElement elem)
+        protected virtual void AddElement (ISpecElement elem)
         {
             if (elem != null)
             {

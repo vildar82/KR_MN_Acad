@@ -8,6 +8,7 @@ using AcadLib.Jigs;
 using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using KR_MN_Acad.Scheme.Materials;
+using KR_MN_Acad.Spec.Elements.Concretes;
 
 namespace KR_MN_Acad.Spec.Bill
 {
@@ -201,7 +202,7 @@ namespace KR_MN_Acad.Spec.Bill
                 table.Cells[spec.rowNameIndex + 1, colIndex].TextString = row.Cells.Sum(s=>s.Amount).ToString();
 
                 // всего бетона
-                var concretes = service.Elements.OfType<Concrete>().GroupBy(g=>g.ClassB).OrderBy(o=>o.Key, AcadLib.Comparers.AlphanumComparator.New);
+                var concretes = service.Elements.OfType<ConcreteH>().GroupBy(g=>g.ClassB).OrderBy(o=>o.Key, AcadLib.Comparers.AlphanumComparator.New);
                     //.FirstOrDefault(g => g.Type == GroupType.Materials)?.Rows.Where(r=>r.SomeElement is Concrete)?.GroupBy(g=>((Concrete)g.SomeElement).ClassB);
                 if (concretes != null)
                 {

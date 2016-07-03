@@ -19,7 +19,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
 
 		public override string BlockNameDetail { get; set; } = blockNameDetail;
 
-        private int stepVertic;
+		private int stepVertic;
 		/// <summary>
 		/// Хвостик
 		/// </summary>
@@ -45,8 +45,8 @@ namespace KR_MN_Acad.Spec.Elements.Bars
 		public Spring (int diam, int lRab, int stepHor, int stepVert, int widthHor,int widthVertic, string pos, ISpecBlock block) 
 			: base(diam, GetLength(lRab, diam), 1, PREFIX, pos, block, friendlyName)
 		{
-            Step = stepHor;
-            this.stepVertic = stepVert;
+			Step = stepHor;
+			this.stepVertic = stepVert;
 			//descEnd = $", ш.{stepHor}х{stepVert}";            
 			tail = getTail(diam);
 			LRab = RoundHelper.Round5(lRab);
@@ -91,17 +91,17 @@ namespace KR_MN_Acad.Spec.Elements.Bars
 			return countVert * countHor;
 		}
 
-        public override string GetDesc ()
-        {
-            return base.GetDesc() + (stepVertic==0? "": "х" +stepVertic);
-        }
+		public override string GetDesc ()
+		{
+			return base.GetDesc() + (stepVertic==0? "": "х" +stepVertic);
+		}
 
-        /// <summary>
-        /// Определение длины шпильки
-        /// </summary>
-        /// <param name="lRab">Раст между раб стержнями (от внешних граней стержней)</param>        
-        /// <returns></returns>
-        private static int GetLength (int lRab, int diam)
+		/// <summary>
+		/// Определение длины шпильки
+		/// </summary>
+		/// <param name="lRab">Раст между раб стержнями (от внешних граней стержней)</param>        
+		/// <returns></returns>
+		private static int GetLength (int lRab, int diam)
 		{
 			return RoundHelper.Round5(lRab) + 2 * getTail(diam);
 		}

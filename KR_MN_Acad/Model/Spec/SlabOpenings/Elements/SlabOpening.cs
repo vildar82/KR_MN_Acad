@@ -10,7 +10,7 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
     /// Проем в плите
     /// </summary>
     public class SlabOpening : ISpecElement, ISlabElement
-    {        
+    {
         private int length;
         private int width;        
         public string Mark { get; set; }
@@ -24,7 +24,7 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
         /// Проемы в стенах - в первых строках
         /// </summary>
         public int Index { get; set; } = 0;
-        public GroupType Group { get; set; } = GroupType.None;
+        public GroupType Group { get; set; } = SlabOptions.GroupOpening;
 
         public ISpecBlock SpecBlock { get; set; }
 

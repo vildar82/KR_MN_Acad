@@ -93,8 +93,8 @@ namespace KR_MN_Acad.Spec.Constructions
             row.Name = Name;
             int count = elems.Count;
             row.Count = count.ToString();
-            row.Weight = Weight.ToString("N3");
-            row.Description = (Weight * count).ToString("N2");            
+            row.Weight = Weight.ToString("0.000");
+            row.Description = (Weight * count).ToString("0.00");            
         }
 
         public Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<Type, ISpecElement> indexTypeGroup)
