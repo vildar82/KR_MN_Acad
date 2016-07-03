@@ -1,9 +1,9 @@
-﻿<Window x:Class="KR_MN_Acad.Scheme.ArmTypes.UI.WindowArmTypes"
+﻿<Window x:Class="KR_MN_Acad.Spec.ArmTypes.UI.WindowArmTypes"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:KR_MN_Acad.Scheme.ArmTypes.UI"
+        xmlns:local="clr-namespace:KR_MN_Acad.Spec.ArmTypes.UI"
         mc:Ignorable="d"
         Title="Типы армирования">
     <Grid>

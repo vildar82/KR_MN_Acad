@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MicroMvvm;
 
-namespace KR_MN_Acad.Scheme.ArmTypes.UI
+namespace KR_MN_Acad.Spec.ArmTypes.UI
 {
     public class ViewArmTypes : ObservableObject
     {

@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace KR_MN_Acad.Scheme.ArmTypes.UI
+namespace KR_MN_Acad.Spec.ArmTypes.UI
 {
     /// <summary>
     /// Логика взаимодействия для WindowArmTypes.xaml

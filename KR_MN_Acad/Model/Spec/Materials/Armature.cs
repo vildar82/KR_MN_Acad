@@ -21,8 +21,8 @@ namespace KR_MN_Acad.Spec.Materials
         public const string GostNewName = "Прокат арматурный свариваемый периодического профиля классов А500С и В500С для армирования железобетонных конструкций.";
         public const string GostOldNumber = "ГОСТ 5781-82";//http://docs.cntd.ru/document/gost-5781-82
         public const string GostOldName = "Сталь горячекатаная для армирования железобетонных конструкций.";
-        public static Gost GostNew = Gost.GetGost(GostNewNumber);
-        public static Gost GostOld = Gost.GetGost(GostOldNumber);
+        public static Gost GostNew = new Gost (GostNewNumber, GostNewName);// Gost.GetGost(GostNewNumber);
+        public static Gost GostOld = new Gost (GostOldNumber, GostOldName);// Gost.GetGost(GostOldNumber);
 
         public const int DefaultDiameter = 10;
         public const string DefaultClass = ClassA500C;

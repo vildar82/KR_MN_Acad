@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using AcadLib.Blocks;
 using Autodesk.AutoCAD.DatabaseServices;
 using KR_MN_Acad.ConstructionServices;
-using KR_MN_Acad.Scheme.Spec;
 using KR_MN_Acad.Spec.Elements.Bars;
 using KR_MN_Acad.Spec.Elements.Concretes;
 

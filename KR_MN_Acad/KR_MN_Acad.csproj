@@ -93,41 +93,7 @@
     <Compile Include="Commands.cs" />
     <Compile Include="Model\ConstructionServices\Requirements.cs" />
     <Compile Include="Model\KRHelper.cs" />
-    <Compile Include="Model\Scheme\ArmTypes\ArmTypesService.cs" />
-    <Compile Include="Model\Scheme\ArmTypes\ArmTypeWall.cs" />
-    <Compile Include="Model\Scheme\ArmTypes\UI\ViewArmTypes.cs" />
-    <Compile Include="Model\Scheme\ArmTypes\UI\ViewArmTypeWall.cs" />
-    <Compile Include="Model\Scheme\ArmTypes\UI\WindowArmTypes.xaml.cs">
-      <DependentUpon>WindowArmTypes.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Model\Scheme\Blocks\Wall\AddVerticLShapedArmBlock.cs" />
-    <Compile Include="Model\Scheme\Blocks\Wall\AddHorArmBlock.cs" />
-    <Compile Include="Model\Scheme\Blocks\Wall\ColumnSquareBigBlock.cs" />
-    <Compile Include="Model\Scheme\Blocks\Wall\ColumnSquareSmallBlock.cs" />
-    <Compile Include="Model\Scheme\Blocks\Wall\PylonBlock.cs" />
-    <Compile Include="Model\Scheme\Blocks\Wall\SleeveBlock.cs" />
-    <Compile Include="Model\Scheme\Blocks\Wall\WallBase.cs" />
-    <Compile Include="Model\Scheme\Blocks\Wall\ColumnBase.cs" />
-    <Compile Include="Model\Scheme\Blocks\Wall\WallEndTBlock.cs" />
-    <Compile Include="Model\Scheme\Blocks\Wall\WallEndCornerBlock.cs" />
-    <Compile Include="Model\Scheme\Blocks\Wall\WallRule.cs" />
-    <Compile Include="Model\Scheme\Elements\Bars\AddHorArmBlock.cs" />
-    <Compile Include="Model\Scheme\Elements\Bars\AddVerticLShapedArmBlock.cs" />
-    <Compile Include="Model\Scheme\Elements\Bars\BarDetail.cs" />
-    <Compile Include="Model\Scheme\Elements\Bars\BentBarDirect.cs" />
-    <Compile Include="Model\Scheme\Elements\Bars\BentBarLshaped.cs" />
-    <Compile Include="Model\Scheme\Elements\Bars\Bracket.cs" />
-    <Compile Include="Model\Scheme\Elements\Bars\Shackle.cs" />
-    <Compile Include="Model\Scheme\Elements\Bars\Spring.cs" />
-    <Compile Include="Model\Scheme\Elements\Concretes\ConcreteH.cs" />
-    <Compile Include="Model\Scheme\Elements\IDetail.cs" />
-    <Compile Include="Model\Scheme\Elements\IElement.cs" />
-    <Compile Include="Model\Scheme\Elements\Tube.cs" />
-    <Compile Include="Model\Scheme\Materials\Armature.cs" />
-    <Compile Include="Model\Scheme\Elements\Bars\BarRunning.cs" />
     <Compile Include="Model\ConstructionServices\Gost.cs" />
-    <Compile Include="Model\Scheme\Materials\Concrete.cs" />
-    <Compile Include="Model\Scheme\Materials\IMaterial.cs" />
     <Compile Include="Model\ConstructionServices\RoundHelper.cs" />
     <Compile Include="Model\Pile\Calc\FormPiles.cs">
       <SubType>Form</SubType>
@@ -152,29 +118,15 @@
     <Compile Include="Model\Pile\PileFilter.cs" />
     <Compile Include="Model\Pile\Numbering\PileNumberingService.cs" />
     <Compile Include="Model\Pile\PileOptions.cs" />
-    <Compile Include="Model\Scheme\Elements\Bars\Bar.cs" />
-    <Compile Include="Model\Scheme\Blocks\ISchemeBlock.cs" />
-    <Compile Include="Model\Scheme\Blocks\SchemeBlockFactory.cs" />
-    <Compile Include="Model\Scheme\Materials\RollSteel.cs" />
-    <Compile Include="Model\Scheme\Rules\IRule.cs" />
-    <Compile Include="Model\Scheme\Rules\Rule.cs" />
-    <Compile Include="Model\Scheme\SchemeOptions.cs" />
-    <Compile Include="Model\Scheme\SchemeService.cs" />
-    <Compile Include="Model\Scheme\SelectService.cs" />
-    <Compile Include="Model\Scheme\Blocks\SchemeBlock.cs" />
-    <Compile Include="Model\Scheme\Spec\Bill\BillService.cs" />
-    <Compile Include="Model\Scheme\Spec\Bill\BillTable.cs" />
-    <Compile Include="Model\Scheme\Spec\Bill\BillCell.cs" />
-    <Compile Include="Model\Scheme\Spec\Bill\IBillMaterial.cs" />
-    <Compile Include="Model\Scheme\Spec\Bill\BillRow.cs" />
-    <Compile Include="Model\Scheme\Spec\Details\DetailService.cs" />
-    <Compile Include="Model\Scheme\Spec\ISpecRow.cs" />
-    <Compile Include="Model\Scheme\Spec\SpecGroup.cs" />
-    <Compile Include="Model\Scheme\Spec\SpecRow.cs" />
-    <Compile Include="Model\Scheme\Spec\SpecTable.cs" />
-    <Compile Include="Model\Scheme\Blocks\Wall\WallEndBlock.cs" />
-    <Compile Include="Model\Scheme\Blocks\Wall\WallSchemeOptions.cs" />
-    <Compile Include="Model\Scheme\Blocks\Wall\WallBlock.cs" />
+    <Compile Include="Model\Spec\ArmTypes\ArmTypesService.cs" />
+    <Compile Include="Model\Spec\ArmTypes\ArmTypeWall.cs" />
+    <Compile Include="Model\Spec\ArmTypes\UI\ViewArmTypes.cs" />
+    <Compile Include="Model\Spec\ArmTypes\UI\ViewArmTypeWall.cs" />
+    <Compile Include="Model\Spec\ArmTypes\UI\WindowArmTypes.xaml.cs">
+      <DependentUpon>WindowArmTypes.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Spec\ArmWall\Blocks\AddHorArmBlock.cs" />
+    <Compile Include="Model\Spec\ArmWall\Blocks\AddVerticLShapedArmBlock.cs" />
     <Compile Include="Model\Spec\ArmWall\Blocks\ColumnBase.cs" />
     <Compile Include="Model\Spec\ArmWall\Blocks\ColumnSquareBigBlock.cs" />
     <Compile Include="Model\Spec\ArmWall\Blocks\ColumnSquareSmallBlock.cs" />
@@ -286,7 +238,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Model\Scheme\ArmTypes\UI\WindowArmTypes.xaml">
+    <Page Include="Model\Spec\ArmTypes\UI\WindowArmTypes.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

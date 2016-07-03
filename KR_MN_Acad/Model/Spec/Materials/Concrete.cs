@@ -17,6 +17,8 @@ namespace KR_MN_Acad.Spec.Materials
         public const string ClassB25 = "B25";
         public const string ClassB30 = "B30";
 
+        private static Gost GostH = new Gost (GostNumber, GostName);
+
         public Gost Gost { get; set; }
 
         public string Name { get { return $"Бетон {ClassB}"; } }
@@ -57,7 +59,7 @@ namespace KR_MN_Acad.Spec.Materials
         /// <param name="concrete">B25</param>
         public Concrete(string concrete)
         {
-            Gost = Gost.GetGost(GostNumber);
+            Gost = GostH;
             D = 2500;
             // Парсинг строки
             parse(concrete);

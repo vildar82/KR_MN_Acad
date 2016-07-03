@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Autodesk.AutoCAD.ApplicationServices;
 
-namespace KR_MN_Acad.Scheme.ArmTypes
+namespace KR_MN_Acad.Spec.ArmTypes
 {
     /// <summary>
     /// Сервис управлением типами армирования
