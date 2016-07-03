@@ -143,14 +143,14 @@ namespace KR_MN_Acad.Spec.Elements
             return Name;
         }
 
-        public Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<Type, ISpecElement> indexTypeGroup)
+        public Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<int, ISpecElement> indexTypeGroup)
         {
-            return null;
+            throw new NotImplementedException();
         }
 
         public Dictionary<string, List<ISpecElement>> GroupsByArm (List<ISpecElement> value)
         {
-            return null;
+            throw new NotImplementedException();
         }
     }
 }

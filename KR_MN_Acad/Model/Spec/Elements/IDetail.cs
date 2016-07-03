@@ -11,7 +11,8 @@ namespace KR_MN_Acad.Spec.Elements
     /// Деталь для ведомости деталей
     /// </summary>
     public interface IDetail : IEquatable<IDetail>, IComparable<IDetail>
-    {        
+    {    
+        string Mark { get; }    
         /// <summary>
         /// Блок ведомости детали
         /// </summary>

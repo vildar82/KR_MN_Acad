@@ -97,7 +97,7 @@ namespace KR_MN_Acad.Spec.Constructions
             row.Description = (Weight * count).ToString("0.00");            
         }
 
-        public Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<Type, ISpecElement> indexTypeGroup)
+        public Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<int, ISpecElement> indexTypeGroup)
         {
             var sizes = indexTypeGroup.GroupBy(g=>((ConstructionElement)g).Size).OrderByDescending(o=>o.Key);
             return sizes.ToDictionary(k => k.Key.Key, i => i.ToList());

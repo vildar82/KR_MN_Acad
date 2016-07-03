@@ -13,9 +13,11 @@ namespace KR_MN_Acad.Spec.Elements.Bars
     /// </summary>
     public class BentBarDirect : BarDetail, IDetail
     {
-        private const string blockNameDetail = "КР_Деталь_Гс1";
+        private const string blockNameDetail = "КР_Деталь_Гс2";
         private const string PREFIX = "Гс-";
         private const string friendlyName = "Гнутый стержень";
+
+        public override int Index { get; set; } = 1;
 
         public override string BlockNameDetail { get; set; } = blockNameDetail;
         /// <summary>
@@ -49,7 +51,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             LStart = lStart;
             LEnd = lEnd;
             HDif = hDif;
-            LDif = LDif;                    
+            LDif = lDif;            
         }
         
         private static int getLength (int lStart, int lEnd, int lDif, int hDif, int diam)
@@ -76,20 +78,28 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         {
             var b = other as BentBarDirect;
             if (b == null) return false;
-            return LStart == b.LStart && LEnd == b.LEnd && HDif== b.HDif && LDif == b.HDif;
+            var res = Mark == b.Mark && LStart == b.LStart && LEnd == b.LEnd && HDif == b.HDif && LDif == b.LDif;
+            return res;
         }
 
         public override int CompareTo (IDetail other)
         {
             var b = other as BentBarDirect;
             if (b == null) return -1;
-            var res = LStart.CompareTo(b.LStart);
+            var res = AcadLib.Comparers.AlphanumComparator.New.Compare(Mark,b.Mark);
             if (res != 0) return res;
+
+            res = LStart.CompareTo(b.LStart);
+            if (res != 0) return res;
+
             res = LEnd.CompareTo(b.LEnd);
             if (res != 0) return res;
+
             res = HDif.CompareTo(b.HDif);
             if (res != 0) return res;
-            return LDif.CompareTo(b.LDif);
+
+            res = LDif.CompareTo(b.LDif);
+            return res;
         }
     }
 }

@@ -28,7 +28,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
         public int Index { get; set; } = 0;
         public GroupType Group { get; set; } = WallOptions.GroupOpening;
         public ISpecBlock SpecBlock { get; set; }
-        public double Amount { get; set; } = 0;
+        public double Amount { get; set; } = 1;
         public string Key { get; set; }
 
         public Opening (string mark, int lenght, int height, double elevation, string role, string desc,

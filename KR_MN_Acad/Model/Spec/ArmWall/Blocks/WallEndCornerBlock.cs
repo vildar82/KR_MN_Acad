@@ -119,7 +119,10 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 			Bracket2Length = Block.GetPropValue<int>(PropNameBracket2Len, false);
 			Bracket2 = defineEndBracket(PropNameBracket2Diam, PropNamePosBracket2, PropNameBracket2Step,
 				Bracket2Length, Thickness2, ArmVertic.Diameter);
-		}
+
+            // Если диам вертик арм >= 20, то 4 стержня гнутся.
+            checkBentBarDirect(ArmVertic, 4);
+        }
 
 		/// <summary>
 		/// Объем бетона - в м3

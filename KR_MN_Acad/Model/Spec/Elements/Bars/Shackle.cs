@@ -19,6 +19,8 @@ namespace KR_MN_Acad.Spec.Elements.Bars
 
         public override string BlockNameDetail { get; set; } = blockNameDetail;
 
+        public override int Index { get; set; } = 4;
+
         /// <summary>
         /// Хвостик
         /// </summary>
@@ -75,24 +77,31 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             SetDetailParameter("ШИРИНА", L.ToString(), atrs);
             SetDetailParameter("ХВОСТ1", tail.ToString(), atrs);
             SetDetailParameter("ХВОСТ2", tail.ToString(), atrs);
-        }
+        }        
 
         public override bool Equals (IDetail other)
         {
             var s = other as Shackle;
             if (s == null) return false;
-            return L == s.L && H == s.H && tail == s.tail;
+            var res = Mark == s.Mark && L == s.L && H == s.H && tail == s.tail;
+            return res;          
         }
 
         public override int CompareTo (IDetail other)
         {
             var s = other as Shackle;
             if (s == null) return -1;
-            var res = L.CompareTo(s.L);
+            var res = AcadLib.Comparers.AlphanumComparator.New.Compare(Mark,s.Mark);
             if (res != 0) return res;
+
+            res = L.CompareTo(s.L);
+            if (res != 0) return res;
+
             res = H.CompareTo(s.H);
             if (res != 0) return res;
-            return tail.CompareTo(s.tail);
+
+            res = tail.CompareTo(s.tail);
+            return res;
         }
     }
 }

@@ -92,17 +92,17 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 
 		public override void Numbering()
 		{
-            // Base Numbering - т.к. имена параметров горизонтальной арматуры переименованы.
-            // ГорАрм         
-            FillElemPropNameDesc(ArmHor, PropNamePosHorArm, PropNameDescHorArm);
-            // ВертикАрм         
-            FillElemPropNameDesc(ArmVertic, PropNamePosVerticArm, PropNameDescVerticArm);
-            // ВертикГс
-            FillElemPropNameDesc(BentBarDirect, PropNamePosVerticBentDirect, PropNameDescVerticBentDirect);
+			// Base Numbering - т.к. имена параметров горизонтальной арматуры переименованы.
+			// ГорАрм         
+			FillElemPropNameDesc(ArmHor, PropNamePosHorArm, PropNameDescHorArm);
+			// ВертикАрм         
+			FillElemPropNameDesc(ArmVertic, PropNamePosVerticArm, PropNameDescVerticArm);
+			// ВертикГс
+			FillElemPropNameDesc(BentBarDirect, PropNamePosVerticBentDirect, PropNameDescVerticBentDirect);
 
 
-            // ГорАрм2
-            FillElemPropNameDesc(ArmHor2, PropNamePosHorArm2, PropNameDescHorArm2);
+			// ГорАрм2
+			FillElemPropNameDesc(ArmHor2, PropNamePosHorArm2, PropNameDescHorArm2);
 			// Скобы
 			FillElemPropNameDesc(Bracket, PropNamePosBracket, PropNameDescBracket);            
 		}
@@ -127,6 +127,9 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 			BracketLength = Block.GetPropValue<int>(PropNameBracketLen, false);
 			Bracket = defineEndBracket(PropNameBracketDiam, PropNamePosBracket, PropNameBracketStep,
 			   BracketLength, Thickness, ArmVertic.Diameter);
+
+			// Если диам вертик арм >= 20, то 2 стержня гнутся.
+			checkBentBarDirect(ArmVertic, 2);
 		}		
 	}
 }

@@ -23,7 +23,6 @@ namespace KR_MN_Acad.Spec.Details
         double scale;
 
         /// <summary>
-        /// Список деталей должен быть подготовлен и отсортирован
         /// Должна быть запущена транзакция!
         /// </summary>        
         public DetailService(List<IDetail> details, Database db)

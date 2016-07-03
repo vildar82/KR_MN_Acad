@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AcadLib.Blocks;
+using AcadLib.Errors;
 using Autodesk.AutoCAD.DatabaseServices;
 using static AcadLib.General;
 
@@ -91,8 +92,15 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         public void SetDetailParameter(string paramName, string value, List<AttributeInfo> atrs)
         {
             var atrPos = atrs.FirstOrDefault(a => a.Tag.Equals(paramName, StringComparison.OrdinalIgnoreCase));
-            var atrRef=  atrPos.IdAtr.GetObject(OpenMode.ForWrite) as AttributeReference;
-            atrRef.TextString = value;
+            if (atrPos != null)
+            {
+                var atrRef=  atrPos.IdAtr.GetObject(OpenMode.ForWrite) as AttributeReference;
+                atrRef.TextString = value;
+            }
+            else
+            {
+                Inspector.AddError($"В блоке детали {BlockNameDetail} не определен парметр {paramName}.");
+            }
         }
 
         public abstract bool Equals (IDetail other);

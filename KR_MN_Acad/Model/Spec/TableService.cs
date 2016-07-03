@@ -30,7 +30,7 @@ namespace KR_MN_Acad.Spec
         protected abstract void SetColumnsAndCap (ColumnsCollection columns);
         protected abstract void FillCells (Table table);
         protected abstract ISpecRow GetNewRow (string group, List<ISpecElement> list);
-        protected abstract Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<Type, ISpecElement> indexTypeGroup);
+        protected abstract Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<int, ISpecElement> indexTypeGroup);
         protected abstract Dictionary<string, List<ISpecElement>> GroupsSecondForNumbering (KeyValuePair<string, List<ISpecElement>> firstGroup);        
 
         /// <summary>
@@ -81,21 +81,21 @@ namespace KR_MN_Acad.Spec
             // Группировыка по именам групп
             var groupGroups = elements.GroupBy(g=>g.Group).OrderBy(o=>o.Key.Index);
             foreach (var group in groupGroups)
-            {
-                int index = 1;
+            {                
                 string groupName = group.First().Group.Name;
                 // Группировка по индексам - как располагать строки элементов в спецификации
                 var indexGroups = group.GroupBy(g=>g.Index).OrderBy(o=>o.Key);
                 foreach (var indexGroup in indexGroups)
                 {
                     // группировка по типам
-                    var typeGroups = indexGroup.GroupBy(g=>g.GetType());
-                    foreach (var type in typeGroups)
-                    {
-                        var firstGroups = GroupsFirstForNumbering(type);
+                    //var typeGroups = indexGroup.GroupBy(g=>g.GetType());
+                    //foreach (var type in typeGroups)
+                    //{
+                        int index = 1;
+                        var firstGroups = GroupsFirstForNumbering(indexGroup);
 
                         foreach (var firstGroup in firstGroups)
-                        {
+                        {                            
                             // группировка по назначению
                             var secGroups = GroupsSecondForNumbering(firstGroup);
                             if (secGroups.Skip(1).Any())
@@ -117,7 +117,7 @@ namespace KR_MN_Acad.Spec
                             }
                             index++;
                         }                        
-                    }                    
+                    //}                    
                 }                
             }
         }
@@ -143,7 +143,8 @@ namespace KR_MN_Acad.Spec
         private void CheckUniqueMarks (IOrderedEnumerable<IGrouping<ISpecElement, ISpecElement>> groups)
         {
             var markGroups = groups.GroupBy(g => g.Key.Mark, (k, g) =>
-                new { Key = k, Error = g.Skip(1).Any(), Elements = g.SelectMany(s => s.Select(i => i)) }).Where(w=>w.Error);
+                new { Key = k, Error = g.Where(w=>!(w.Key.SpecBlock is Constructions.IConstructionBlock)).Skip(1).Any(), Elements = g.SelectMany(s => s.Select(i => i)) }).
+                Where(w=>w.Error);
             foreach (var item in markGroups)
             {
                 foreach (var elem in item.Elements)
@@ -229,8 +230,9 @@ namespace KR_MN_Acad.Spec
 
         public virtual List<IDetail> GetDetails ()
         {
-            var details = elements.OfType<IDetail>().OrderBy(o=>o.BlockNameDetail, AcadLib.Comparers.AlphanumComparator.New);
-            return details.ToList();
+            var details = elements.OfType<IDetail>().GroupBy(g=>g.Mark).
+                OrderBy(o=>o.Key, AcadLib.Comparers.AlphanumComparator.New).Select(s=>s.First()).ToList();
+            return details;
         }
     }
 }

@@ -113,7 +113,7 @@ namespace KR_MN_Acad.Spec.SpecGroup
             return res;
         }       
 
-        protected override Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<Type, ISpecElement> indexTypeGroup)
+        protected override Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<int, ISpecElement> indexTypeGroup)
         {
             var firstElement = indexTypeGroup.First() as IGroupSpecElement;
             if (!firstElement.IsDefaultGroupings)
@@ -122,7 +122,7 @@ namespace KR_MN_Acad.Spec.SpecGroup
             }
             {
                 var uniqElems = indexTypeGroup.GroupBy(g=>g).OrderByDescending(o=>o.Key);
-                return uniqElems.ToDictionary(k => ((IGroupSpecElement)k.Key).Key, i => i.ToList());
+                return uniqElems.ToDictionary(k => k.Key.Key, i => i.ToList());
             }
         }
 
@@ -143,7 +143,8 @@ namespace KR_MN_Acad.Spec.SpecGroup
 
         public override List<IDetail> GetDetails ()
         {            
-            var details = blocks.SelectMany(s=>s.Elements).OfType<IDetail>().ToList();
+            var details = blocks.SelectMany(s=>s.Elements).OfType<IDetail>().GroupBy(g=>g.Mark).
+                OrderBy(o => o.Key, AcadLib.Comparers.AlphanumComparator.New).Select(s=>s.First()).ToList();
             return details;
         }
 

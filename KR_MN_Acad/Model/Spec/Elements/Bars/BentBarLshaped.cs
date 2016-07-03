@@ -19,6 +19,8 @@ namespace KR_MN_Acad.Spec.Elements.Bars
 
         //private string descEnd;
 
+        public override int Index { get; set; } = 1;
+
         public override string BlockNameDetail { get; set; } = blockNameDetail;
         /// <summary>
         /// Длина 
@@ -43,7 +45,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         {            
             H = hGs;
             L = lGs;
-            //descEnd = ", шт." + count;
+            //descEnd = ", шт." + count;            
         }
 
         /// <summary>
@@ -85,16 +87,22 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         {
             var b = other as BentBarLshaped;
             if (b == null) return false;
-            return L == b.L && H == b.H;
+            var res = Mark == b.Mark && L == b.L && H == b.H;
+            return res;
         }
 
         public override int CompareTo (IDetail other)
         {
             var b = other as BentBarLshaped;
             if (b == null) return -1;
-            var res = L.CompareTo(b.L);
+            var res = AcadLib.Comparers.AlphanumComparator.New.Compare(Mark,b.Mark);
             if (res != 0) return res;
-            return H.CompareTo(b.H);
+
+            res = L.CompareTo(b.L);
+            if (res != 0) return res;
+
+            res = H.CompareTo(b.H);
+            return res;
         }
     }
 }

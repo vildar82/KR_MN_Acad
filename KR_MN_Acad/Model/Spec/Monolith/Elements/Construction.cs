@@ -19,7 +19,7 @@ namespace KR_MN_Acad.Spec.Monolith.Elements
         public double WeightTotal { get; set; }
         public double WeightUnit { get; set; }
         public abstract string FriendlyName { get; set; }
-        public double Amount { get; set; } = 0;
+        public double Amount { get; set; } = 1;
 
         public string Key { get; set; }
 

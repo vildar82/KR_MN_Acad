@@ -73,8 +73,7 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
             var shackleCount = Block.GetPropValue<int>(PropNameShackleCount);
             if (shackleCount > 1)
             {
-                Shackle.Count *= shackleCount;
-                Shackle.Calc();
+                Shackle.AddCount(Shackle.Count);                
             }            
             AddElementary(Shackle);
 

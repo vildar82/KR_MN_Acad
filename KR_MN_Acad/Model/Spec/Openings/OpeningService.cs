@@ -94,7 +94,7 @@ namespace KR_MN_Acad.Spec.Openings
             return res;
         }        
 
-        protected override Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<Type, ISpecElement> indexGroup)
+        protected override Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<int, ISpecElement> indexGroup)
         {
             var dimRoleGroups = indexGroup.GroupBy(g=>((IOpeningElement)g).Dimension+((IOpeningElement)g).Role).OrderByDescending(o=>o.Key, alpha);
             return dimRoleGroups.ToDictionary(k => k.Key, i => i.ToList());

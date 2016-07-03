@@ -87,6 +87,14 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             Amount = WeightTotal;            
         }
 
+        public void AddCount (int count)
+        {
+            Count += count;
+            // Масса всех стержней
+            WeightTotal = RoundHelper.Round2Digits(Weight * Count);
+            Amount = WeightTotal;
+        }
+
         /// <summary>
         /// Определение кол-ва стержней по ширине и шагу
         /// Округление вверх + 1
@@ -139,7 +147,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
                 Diameter == arm.Diameter &&
                 Length == arm.Length &&
                 Class == arm.Class &&
-                Gost == arm.Gost;
+                Gost.Equals(arm.Gost);
         }
 
         public virtual string GetDesc()
@@ -205,14 +213,14 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             Mark = num;
         }
 
-        public Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<Type, ISpecElement> indexTypeGroup)
+        public Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<int, ISpecElement> indexTypeGroup)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
 
         public Dictionary<string, List<ISpecElement>> GroupsByArm (List<ISpecElement> value)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
     }
 }

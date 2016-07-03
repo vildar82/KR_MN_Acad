@@ -22,7 +22,9 @@ namespace KR_MN_Acad.Spec.Constructions
         public ConstructionOptions (Database db)
         {
             TypesBlock = new Dictionary<string, Type>() {
-                { ColumnSquareSmallBlock.BlockName, typeof(ColumnSquareSmallBlock) }
+                { ColumnSquareSmallBlock.BlockName, typeof(ColumnSquareSmallBlock) },
+                { ColumnSquareBigBlock.BlockName, typeof(ColumnSquareBigBlock) },
+                { PylonBlock.BlockName, typeof(PylonBlock) }
             };
             TableService = new ConstructionTable(db);
         }

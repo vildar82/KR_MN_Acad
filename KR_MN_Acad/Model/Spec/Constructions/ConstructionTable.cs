@@ -37,7 +37,8 @@ namespace KR_MN_Acad.Spec.Constructions
 
         public override List<IDetail> GetDetails ()
         {
-            var details = constrBlock.Elementary.OfType<IDetail>().ToList();
+            var details = constrBlock.Elementary.OfType<IDetail>().GroupBy(g=>g.Mark).
+                OrderBy(o=>o.Key, AcadLib.Comparers.AlphanumComparator.New).Select(s=>s.First()).ToList();
             return details;
         }       
     }

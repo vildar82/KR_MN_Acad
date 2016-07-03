@@ -27,12 +27,20 @@ namespace KR_MN_Acad.Spec
 
         protected void FillElemPropNameDesc (ISpecElement elem, string posPropertyName, string descPropertyName)
         {
-            if (elem != null)
+            if (elem == null) return;
+            if (elem.Amount!=0)
             {
                 // Поз
                 Block.FillPropValue(posPropertyName, elem.Mark);
                 // Опис            
                 Block.FillPropValue(descPropertyName, elem.GetDesc());                
+            }
+            else
+            {
+                // Поз
+                Block.FillPropValue(posPropertyName, "");
+                // Опис            
+                Block.FillPropValue(descPropertyName, "");
             }
         }
 
@@ -118,7 +126,7 @@ namespace KR_MN_Acad.Spec
 
         protected virtual void AddElement (ISpecElement elem)
         {
-            if (elem != null)
+            if (elem != null && elem.Amount!=0)
             {
                 Elements.Add(elem);
             }
@@ -289,7 +297,8 @@ namespace KR_MN_Acad.Spec
             int lDif = 150;
             int lEnd = outline-lDif;
             int hDif = diam;
-            var bent = new BentBarDirect(diam, lstart, lEnd, lDif, hDif, count, propPos, this);
+            string pos = Block.GetPropValue<string>(propPos);
+            var bent = new BentBarDirect(diam, lstart, lEnd, lDif, hDif, count, pos, this);
             bent.Calc();
             return bent;
         }

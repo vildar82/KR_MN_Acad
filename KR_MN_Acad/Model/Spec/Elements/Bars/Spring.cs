@@ -19,6 +19,8 @@ namespace KR_MN_Acad.Spec.Elements.Bars
 
 		public override string BlockNameDetail { get; set; } = blockNameDetail;
 
+		public override int Index { get; set; } = 5;
+
 		private int stepVertic;
 		/// <summary>
 		/// Хвостик
@@ -121,16 +123,22 @@ namespace KR_MN_Acad.Spec.Elements.Bars
 		{
 			var s = other as Spring;
 			if (s == null) return false;
-			return LRab == s.LRab && tail == s.tail;
+			var res = Mark == s.Mark && LRab == s.LRab && tail == s.tail;
+			return res;
 		}
 
 		public override int CompareTo (IDetail other)
 		{
 			var s = other as Spring;
 			if (s == null) return -1;
-			var res = LRab.CompareTo(s.LRab);
+            var res = AcadLib.Comparers.AlphanumComparator.New.Compare(Mark,s.Mark);
+            if (res != 0) return res;
+
+			res = LRab.CompareTo(s.LRab);
 			if (res != 0) return res;
-			return tail.CompareTo(s.tail);
+
+			res = tail.CompareTo(s.tail);
+			return res;
 		}
 	}
 }

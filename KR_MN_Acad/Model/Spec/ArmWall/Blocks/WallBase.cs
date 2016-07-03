@@ -130,8 +130,9 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 		{
 			if (Requirements.IsNeedToBentVerticArm(armVertic.Diameter))
 			{
-				armVertic.Count -= countBent;
-				armVertic.Calc();
+				//armVertic.Count -= countBent;
+				armVertic.AddCount(-countBent);
+				//if (armVertic.Count == 0) Elements.Remove(armVertic);
 				BentBarDirect = defineBentDirect(armVertic.Diameter, countBent, Height, Outline, PropNamePosVerticBentDirect);
 			}
 		}

@@ -17,6 +17,8 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         private const string PREFIX = "Ск-";
         private const string friendlyName = "Скоба";
 
+        public override int Index { get; set; } = 3;
+
         public override string BlockNameDetail { get; set; } = blockNameDetail;
 
         /// <summary>
@@ -70,16 +72,22 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         {
             var b = other as Bracket;
             if (b == null) return false;
-            return L == b.L && T == b.T;
+            var res = Mark == b.Mark && L == b.L && T == b.T;
+            return res;
         }
 
         public override int CompareTo (IDetail other)
         {
             var b = other as Bracket;
             if (b == null) return -1;
-            var res = L.CompareTo(b.L);
+            var res = AcadLib.Comparers.AlphanumComparator.New.Compare(Mark,b.Mark);
             if (res != 0) return res;
-            return T.CompareTo(b.T);
+
+            res = L.CompareTo(b.L);
+            if (res != 0) return res;
+
+            res = T.CompareTo(b.T);
+            return res;
         }
     }
 }

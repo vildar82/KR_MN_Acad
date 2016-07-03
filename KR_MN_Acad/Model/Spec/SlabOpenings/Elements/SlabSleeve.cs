@@ -21,7 +21,7 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
         public int Index { get; set; } = 1;
         public GroupType Group { get; set; } = SlabOptions.GroupSleeve;
         public ISpecBlock SpecBlock { get; set; }
-        public double Amount { get; set; } = 0;
+        public double Amount { get; set; } = 1;
         public string Key { get; set; }
 
         public SlabSleeve (string mark, int diam, int depth, string role, string desc, ISpecBlock specBlock)

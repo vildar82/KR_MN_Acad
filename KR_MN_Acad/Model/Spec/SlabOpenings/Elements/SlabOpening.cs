@@ -28,7 +28,7 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
 
         public ISpecBlock SpecBlock { get; set; }
 
-        public double Amount { get; set; } = 0;
+        public double Amount { get; set; } = 1;
 
         public string Key { get; set; }
 

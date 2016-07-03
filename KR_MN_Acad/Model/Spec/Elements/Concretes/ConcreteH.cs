@@ -101,7 +101,7 @@ namespace KR_MN_Acad.Spec.Elements.Concretes
             return Round2Digits(0.000000001 * len * width * height);
         }
 
-        public Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<Type, ISpecElement> indexTypeGroup)
+        public Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<int, ISpecElement> indexTypeGroup)
         {
             throw new NotImplementedException();
         }

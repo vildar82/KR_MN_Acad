@@ -33,8 +33,10 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
         protected const string PropNameArmVerticPos = "ПОЗВЕРТИКАРМ";
         protected const string PropNameArmVerticDesc = "ОПИСАНИЕВЕРТИКАРМ";
         protected const string PropNameShacklePos = "ПОЗХОМУТА";
-        protected const string PropNameShackleDesc = "ОПИСАНИЕХОМУТА";      
-        
+        protected const string PropNameShackleDesc = "ОПИСАНИЕХОМУТА";
+        protected const string PropNamePosVerticBentDirect = "ПОЗВЕРТИКГС";
+        protected const string PropNameDescVerticBentDirect = "ОПИСАНИЕВЕРТИКГС";
+
         public virtual List<ISpecElement> Elementary { get; set; } = new List<ISpecElement>();
         /// <summary>
         /// Высота колонны
@@ -70,6 +72,11 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
         public Shackle Shackle { get; set; }
         //public Column Column { get; set; }
 
+        /// <summary>
+        /// Гнутые вертикальные стержни
+        /// </summary>
+        public BentBarDirect BentBarDirect { get; set; }
+
         public ISpecElement ConstructionElement { get; set; }
 
         public ColumnBase (Autodesk.AutoCAD.DatabaseServices.BlockReference blRef, string blName) : base(blRef, blName)
@@ -100,14 +107,18 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
             Concrete = new ConcreteH(classB, Width, Thickness, Height, this);
             Concrete.Calc();            
             // Определние вертикальной арматуры            
-            ArmVertic = defineVerticArm();            
+            ArmVertic = defineVerticArm();
+
+            // Если диам вертик арм >= 20, то 4 стержня гнутся.
+            checkBentBarDirect(ArmVertic, 4);
+
             // Хомут
             if (defaultShackle)
             {
                 Shackle = defineShackleByGab(width, thickness, Height, ArmVertic.Diameter, a, PropNameShackleDiam,
                     PropNameShacklePos, PropNameShackleStep);                
             }
-            AddElementarys();
+            AddElementarys();            
         }
 
         public override void Calculate ()
@@ -139,11 +150,12 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
             AddElementary(ArmVertic);
             AddElementary(Shackle);
             AddElementary(Concrete);
+            AddElementary(BentBarDirect);
         }
 
         protected void AddElementary(ISpecElement elem)
         {
-            if (elem != null)
+            if (elem != null && elem.Amount != 0)
             {
                 Elementary.Add(elem);
             }
@@ -167,6 +179,22 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
             FillElemPropNameDesc(ArmVertic, PropNameArmVerticPos, PropNameArmVerticDesc);
             // Хомут
             FillElemPropNameDesc(Shackle, PropNameShacklePos, PropNameShackleDesc);
-        }        
+            // ВертикГс
+            FillElemPropNameDesc(BentBarDirect, PropNamePosVerticBentDirect, PropNameDescVerticBentDirect);
+        }
+
+        /// <summary>
+        /// Определение вертикальных гнутых стержней.        
+        /// </summary>
+        protected void checkBentBarDirect (Bar armVertic, int countBent)
+        {
+            if (Requirements.IsNeedToBentVerticArm(armVertic.Diameter))
+            {
+                //armVertic.Count -= countBent;
+                armVertic.AddCount(-countBent);
+                //if (armVertic.Count == 0) Elements.Remove(armVertic);
+                BentBarDirect = defineBentDirect(armVertic.Diameter, countBent, Height, Outline, PropNamePosVerticBentDirect);
+            }
+        }
     }
 }

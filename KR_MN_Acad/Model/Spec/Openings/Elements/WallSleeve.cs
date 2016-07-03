@@ -18,7 +18,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
         public int Index { get; set; } = 1;
         public GroupType Group { get; set; } = WallOptions.GroupSleeve;
         public ISpecBlock SpecBlock { get; set; }
-        public double Amount { get; set; } = 0;
+        public double Amount { get; set; } = 1;
         public string Key { get; set; }
 
         public WallSleeve (string mark, int diam, int depth, double elev, string role, string desc, ISpecBlock specBlock)
