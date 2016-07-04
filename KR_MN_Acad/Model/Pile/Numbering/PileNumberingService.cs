@@ -65,7 +65,7 @@ namespace KR_MN_Acad.Model.Pile.Numbering
 
         private void CheckPiles(List<Pile> piles)
         {
-            STRtree<Pile> rtree = new STRtree<Pile>();
+            STRtree<Pile> rtree = new STRtree<Pile> ();
             foreach (var p in piles)
             {
                 var r = getPileEnvelope(p);
