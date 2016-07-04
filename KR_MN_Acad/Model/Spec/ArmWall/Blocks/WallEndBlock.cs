@@ -102,14 +102,14 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 			Concrete = new ConcreteH(concrete, Length, Thickness, Height, this);
 			Concrete.Calc();
 			// Определние вертикальной арматуры
-			ArmVertic = defineVerticArm(ArmVerticCount, PropNameArmVerticDiam, PropNamePosVerticArm);
+			ArmVertic = defineVerticArm(ArmVerticCount, PropNameArmVerticDiam, PropNameArmVerticPos);
 			// Определние горизонтальной арматуры
-			ArmHor = defineArmHor(Length, PropNameArmHorDiam, PropNamePosHorArm, PropNameArmHorStep);
+			ArmHor = defineArmHor(Length, PropNameArmHorDiam, PropNameArmHorPos, PropNameArmHorStep);
 			// Хомут
 			Shackle = defineShackleByGab(Length, Thickness, Height, ArmVertic.Diameter, a, PropNameShackleDiam, PropNamePosShackle,
 			   PropNameShackleStep);
 			// Скоба
-			BracketLength = Block.GetPropValue<int>(PropNameBracketLen, false);
+			BracketLength = Block.GetPropValue<int>(PropNameBracketLen, false);            
 			Bracket = defineEndBracket(PropNameBracketDiam, PropNamePosBracket, PropNameBracketStep,
 			   BracketLength, Thickness, ArmVertic.Diameter);
 

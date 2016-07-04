@@ -17,6 +17,6 @@ namespace KR_MN_Acad.ConstructionServices
         public static bool IsNeedToBentVerticArm (int diam)
         {
             return diam >= 20;
-        }
+        }    
     }
 }

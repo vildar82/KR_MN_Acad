@@ -35,12 +35,12 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         /// </summary>
         /// <param name="d">Диаметр скобы</param>        
         /// <param name="h">Длина нахлеста скобы - вылет (от внутренней грани стержня)</param>
-        /// <param name="t">Ширина скобы (по внутренней грани стержня)</param>        
+        /// <param name="t">Ширина скобы (по внутренней грани стержня) - округляется до 5</param>        
         /// <param name="step">Шаг скобы</param>
         /// <param name="width">Ширина распределения</param>
         /// <param name="pos">Позиция (из атрибута блока)</param>
         /// <param name="block">Блок</param>
-        public Bracket (int d, int h, int t, int step, int width, int rows, string pos, ISpecBlock block) 
+        public Bracket (int d, int h, int t, int step, int width, int rows, string pos, ISpecBlock block, string friendlyName) 
             : base(d, CalcLength(h, t, d), width, step, rows, PREFIX, pos, block, friendlyName)
         {            
             T = RoundHelper.Round5(t);

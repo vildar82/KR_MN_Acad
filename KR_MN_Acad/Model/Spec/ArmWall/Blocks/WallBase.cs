@@ -24,12 +24,12 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 		protected const string PropNameConcrete = "Бетон";
 		protected const string PropNameArmHorDiam = "ДиамГорАрм";
 		protected const string PropNameArmHorStep = "ШагГорАрм";
-		protected const string PropNamePosVerticArm = "ПОЗВЕРТИКАРМ";
-		protected const string PropNamePosHorArm = "ПОЗГОРАРМ";
-		protected const string PropNameDescHorArm = "ОПИСАНИЕГОРАРМ";
-		protected const string PropNameDescVerticArm = "ОПИСАНИЕВЕРТИКАРМ";
-		protected const string PropNamePosVerticBentDirect = "ПОЗВЕРТИКГС";
-		protected const string PropNameDescVerticBentDirect = "ОПИСАНИЕВЕРТИКГС";
+		protected const string PropNameArmVerticPos = "ПОЗВЕРТИКАРМ";
+		protected const string PropNameArmHorPos = "ПОЗГОРАРМ";
+		protected const string PropNameArmHorDesc = "ОПИСАНИЕГОРАРМ";
+		protected const string PropNameArmVerticDesc = "ОПИСАНИЕВЕРТИКАРМ";
+		protected const string PropNameVerticBentDirectPos = "ПОЗВЕРТИКГС";
+		protected const string PropNameVerticBentDirectDesc = "ОПИСАНИЕВЕРТИКГС";
 		/// <summary>
 		/// Высота стены
 		/// </summary>
@@ -41,7 +41,7 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 		/// <summary>
 		/// Горизонтальные арматурные стержни - погоннаж
 		/// </summary>
-		public BarRunning ArmHor { get; set; }
+		public virtual BarRunning ArmHor { get; set; }
 		/// <summary>
 		/// Бетон
 		/// </summary>
@@ -62,11 +62,11 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 		public override void Numbering ()
 		{
 			// ГорАрм         
-			FillElemPropNameDesc(ArmHor, PropNamePosHorArm, PropNameDescHorArm);
+			FillElemPropNameDesc(ArmHor, PropNameArmHorPos, PropNameArmHorDesc);
 			// ВертикАрм         
-			FillElemPropNameDesc(ArmVertic, PropNamePosVerticArm, PropNameDescVerticArm);
+			FillElemPropNameDesc(ArmVertic, PropNameArmVerticPos, PropNameArmVerticDesc);
 			// ВертикГс
-			FillElemPropNameDesc(BentBarDirect, PropNamePosVerticBentDirect, PropNameDescVerticBentDirect);
+			FillElemPropNameDesc(BentBarDirect, PropNameVerticBentDirectPos, PropNameVerticBentDirectDesc);
 		}
 
 		protected virtual void AddElements ()
@@ -100,7 +100,7 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 		/// <summary>
 		/// Вертикальная распределенная арматура
 		/// </summary>
-		/// <param name="length">Длина по бетону (отступ вычисляется тут)</param>
+		/// <param name="length">Ширина распределения по бетону (отступ вычисляется тут)</param>
 		/// <param name="propDiam">Парам диам</param>
 		/// <param name="propStep">Парам шаг</param>
 		/// <param name="propPos">Парам поз</param>        
@@ -118,7 +118,8 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 
 		protected Bracket defineEndBracket (string propDiam, string propPos,
 			string propStep, int bracketLen, int thickness, int diamVerticArm)
-		{            
+		{
+			if (bracketLen == 0) return null;
 			int wBracket = Height;
 			return defineBracket(propDiam, propPos, propStep, bracketLen, thickness, a, wBracket, diamVerticArm);
 		}
@@ -133,7 +134,7 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 				//armVertic.Count -= countBent;
 				armVertic.AddCount(-countBent);
 				//if (armVertic.Count == 0) Elements.Remove(armVertic);
-				BentBarDirect = defineBentDirect(armVertic.Diameter, countBent, Height, Outline, PropNamePosVerticBentDirect);
+				BentBarDirect = defineBentDirect(armVertic.Diameter, countBent, Height, Outline, PropNameVerticBentDirectPos);
 			}
 		}
 	}

@@ -68,12 +68,18 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
         {
             // Хомут
             Shackle = defineShackleByLen(PropNameShackleLength, Thickness,a, Height, ArmVertic.Diameter, PropNameShackleDiam,
-                PropNameShacklePos, PropNameShackleStep);                    
-            // Если есть второй хомут.
-            var shackleCount = Block.GetPropValue<int>(PropNameShackleCount);
-            if (shackleCount > 1)
+                PropNameShacklePos, PropNameShackleStep);
+            // Добавление кол хомутов в усиленной части
+            int countShackle = GetCountShackle(Shackle.Rows);
+            if (countShackle - Shackle.Count > 0)
             {
-                Shackle.AddCount(Shackle.Count);                
+                Shackle.AddCount(countShackle- Shackle.Count);
+            }
+            // Если есть второй хомут.
+            var shacklePs = Block.GetPropValue<int>(PropNameShackleCount);
+            if (shacklePs > 1)
+            {
+                Shackle.AddCount(Shackle.Count * (shacklePs-1));
             }            
             AddElementary(Shackle);
 
@@ -82,7 +88,11 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
             if (springCount != 0)
             {                
                 Spring = defineSpring(PropNameShackleDiam, PropNameSpringPos,PropNameShackleStep, Thickness, a, Height, 
-                    PropNameSpringCount);
+                    PropNameSpringCount);                
+                if (Shackle.Count- Spring.Count > 0)
+                {
+                    Spring.AddCount(Shackle.Count - Spring.Count);
+                }
                 AddElementary(Spring);
             }
         }        

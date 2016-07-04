@@ -87,7 +87,7 @@ namespace KR_MN_Acad.Spec
                     var firstGroups = GroupsFirstForNumbering(indexGroup);
 
                     foreach (var firstGroup in firstGroups)
-                    {
+                    {                        
                         // группировка по назначению
                         var secGroups = GroupsSecondForNumbering(firstGroup);
                         if (secGroups.Skip(1).Any())

@@ -54,6 +54,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             Weight = RoundHelper.Round3Digits(WeightUnit);
             // Масса общая
             WeightTotal = RoundHelper.Round2Digits(Weight * Meters);
+            Amount = WeightTotal;
         } 
 
         public override string GetDesc()

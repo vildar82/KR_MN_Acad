@@ -108,9 +108,9 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 			Concrete = new ConcreteH(concrete, volume, this);
 			Concrete.Calc();
 			// Определние вертикальной арматуры
-			ArmVertic = defineVerticArm(ArmVerticCount, PropNameArmVerticDiam, PropNamePosVerticArm);
+			ArmVertic = defineVerticArm(ArmVerticCount, PropNameArmVerticDiam, PropNameArmVerticPos);
 			// Определние горизонтальной арматуры
-			ArmHor = defineArmHor(Thickness1+Thickness2, PropNameArmHorDiam, PropNamePosHorArm, PropNameArmHorStep);
+			ArmHor = defineArmHor(Thickness1+Thickness2, PropNameArmHorDiam, PropNameArmHorPos, PropNameArmHorStep);
 			// Скоба 1
 			Bracket1Length = Block.GetPropValue<int>(PropNameBracket1Len, false);            
 			Bracket1 = defineEndBracket(PropNameBracket1Diam, PropNamePosBracket1, PropNameBracket1Step,
@@ -120,9 +120,9 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 			Bracket2 = defineEndBracket(PropNameBracket2Diam, PropNamePosBracket2, PropNameBracket2Step,
 				Bracket2Length, Thickness2, ArmVertic.Diameter);
 
-            // Если диам вертик арм >= 20, то 4 стержня гнутся.
-            checkBentBarDirect(ArmVertic, 4);
-        }
+			// Если диам вертик арм >= 20, то 4 стержня гнутся.
+			checkBentBarDirect(ArmVertic, 4);
+		}
 
 		/// <summary>
 		/// Объем бетона - в м3

@@ -78,9 +78,10 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
             Concrete = new ConcreteH(concrete, Length, Thickness, Height, this);
             Concrete.Calc();
             // Определние вертикальной арматуры
-            ArmVertic = defineVerticArm(Length, PropNameArmVerticDiam, PropNameArmVerticStep, PropNamePosVerticArm);
+            int widthVerticArm = Length;
+            ArmVertic = defineVerticArm(widthVerticArm, PropNameArmVerticDiam, PropNameArmVerticStep, PropNameArmVerticPos);
             // Определние горизонтальной арматуры
-            ArmHor = defineArmHor(Length, PropNameArmHorDiam, PropNamePosHorArm, PropNameArmHorStep);
+            ArmHor = defineArmHor(Length, PropNameArmHorDiam, PropNameArmHorPos, PropNameArmHorStep);
             // Шпильки
             Spring = defineSpring(PropNameSpringDiam, PropNamePosSpring, PropNameSpringStepHor, PropNameSpringStepVertic,
                 Thickness, a, Length, Height);

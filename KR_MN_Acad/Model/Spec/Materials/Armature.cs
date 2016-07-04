@@ -75,6 +75,24 @@ namespace KR_MN_Acad.Spec.Materials
             defineBaseParams();            
         }
 
+        /// <summary>
+        /// Длина нахлеста арматуры
+        /// </summary>        
+        public static int GetLapLength (int diam, Concrete concrete)
+        {
+            int factor = 0;
+            switch (concrete.ClassB)
+            {
+                case Concrete.ClassB25:
+                    factor = 50;
+                    break;
+                case Concrete.ClassB30:
+                    factor = 46;
+                    break;
+            }
+            return factor * diam;
+        }
+
         private void defineBaseParams()
         {
             switch (Diameter)

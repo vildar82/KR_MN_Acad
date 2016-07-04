@@ -12,7 +12,7 @@ using KR_MN_Acad.Spec.Materials;
 namespace KR_MN_Acad.Spec
 {
     public abstract class SpecBlock : ISpecBlock
-    {        
+    {   
         public IBlock Block { get; set; }
         public virtual List<ISpecElement> Elements { get; set; } = new List<ISpecElement>();
         public Error Error { get { return Block.Error; } }
@@ -60,7 +60,7 @@ namespace KR_MN_Acad.Spec
         /// <returns></returns>
         protected Bar defineBar (int countArm, int length, string propDiam, string propPos, string friendName)
         {
-            if (countArm == 0) return null;
+            if (countArm == 0 || length ==0) return null;
             int diam = Block.GetPropValue<int>(propDiam);
             if (diam == 0) return null;
             string pos = Block.GetPropValue<string>(propPos);
@@ -145,7 +145,8 @@ namespace KR_MN_Acad.Spec
         /// <param name="diamWorkArm">Диам раб арм</param>
         /// <returns></returns>
         protected Bracket defineBracket (string propDiam, string propPos,
-            string propStep, int bracketLen, int thicknessWall, int a, int widthRun, int diamWorkArm, int rows = 1)
+            string propStep, int bracketLen, int thicknessWall, int a, int widthRun, int diamWorkArm, int rows = 1, 
+            string friendlyName = "Скоба")
         {
             int diam = Block.GetPropValue<int>(propDiam);
             if (diam == 0) return null;
@@ -153,7 +154,7 @@ namespace KR_MN_Acad.Spec
             int step = Block.GetPropValue<int>(propStep);
             // ширина скобы
             int tBracket = thicknessWall - 2 * a + diamWorkArm;
-            Bracket b = new Bracket(diam, bracketLen, tBracket , step, widthRun,rows, pos, this);
+            Bracket b = new Bracket(diam, bracketLen, tBracket , step, widthRun,rows, pos, this, friendlyName);
             b.Calc();
             return b;
         }
@@ -172,7 +173,7 @@ namespace KR_MN_Acad.Spec
         protected Shackle defineShackleByGab (int width, int thickness, int range, int diamWorkArm, int a,
             string propDiam, string propPos, string propStep, int rows = 1)
         {
-            int diam = Block.GetPropValue<int>(propDiam);
+            int diam = Block.GetPropValue<int>(propDiam, false);
             if (diam == 0) return null;
             string pos = Block.GetPropValue<string>(propPos);
             int step = Block.GetPropValue<int>(propStep);
@@ -200,7 +201,8 @@ namespace KR_MN_Acad.Spec
         {
             int diam = Block.GetPropValue<int>(propDiam);
             if (diam == 0) return null;
-            var shackleLen = Block.GetPropValue<int>(propShLen);            
+            var shackleLen = Block.GetPropValue<int>(propShLen);
+            if (shackleLen == 0) return null;
             string pos = Block.GetPropValue<string>(propPos);
             int step = Block.GetPropValue<int>(propStep);
             int shackleH = thickness-(2*a)+diamWorkArm;

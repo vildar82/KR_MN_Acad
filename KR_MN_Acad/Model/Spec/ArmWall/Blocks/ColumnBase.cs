@@ -36,6 +36,8 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
         protected const string PropNameShackleDesc = "ОПИСАНИЕХОМУТА";
         protected const string PropNamePosVerticBentDirect = "ПОЗВЕРТИКГС";
         protected const string PropNameDescVerticBentDirect = "ОПИСАНИЕВЕРТИКГС";
+        protected const string PropNameAddLength = "ВысотаУсиления";
+        protected const string PropNameAddStep = "ШагУсиления";
 
         public virtual List<ISpecElement> Elementary { get; set; } = new List<ISpecElement>();
         /// <summary>
@@ -112,12 +114,19 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 
             // Хомут
             if (defaultShackle)
-            {
+            {                
                 Shackle = defineShackleByGab(width, thickness, Height, ArmVertic.Diameter, a, PropNameShackleDiam,
-                    PropNameShacklePos, PropNameShackleStep);                
+                    PropNameShacklePos, PropNameShackleStep);
+                int countShackle = GetCountShackle(Shackle.Rows);
+                if (countShackle- Shackle.Count > 0)
+                {
+                    Shackle.AddCount(countShackle- Shackle.Count);
+                }
             }
             AddElementarys();            
         }
+
+        
 
         public override void Calculate ()
         {
@@ -192,6 +201,32 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
                 //if (armVertic.Count == 0) Elements.Remove(armVertic);
                 BentBarDirect = defineBentDirect(armVertic.Diameter, countBent, Height, Outline, PropNamePosVerticBentDirect);
             }
+        }
+
+        /// <summary>
+        /// Определение количества хомутов в колонне, с учетом усиленной части
+        /// </summary>
+        /// <returns></returns>
+        protected int GetCountShackle (int rows)
+        {
+            int resCount = 0;
+            var addLength = Block.GetPropValue<int>(PropNameAddLength);
+            int step = Block.GetPropValue<int>(PropNameShackleStep);
+            if (addLength>0)
+            {
+                // Кол в усиленной части
+                int addStep = Block.GetPropValue<int>(PropNameAddStep);
+                var addCount = Bar.CalcCountByStep((addLength-50), addStep);
+                // Кол в верхней части
+                int topCount = Bar.CalcCountByStep((Height-addLength-50-step), step);
+                resCount = addCount + topCount;
+            }
+            else
+            {
+                // Без усиления
+                resCount = Bar.CalcCountByStep(Height - 100, step);
+            }
+            return resCount * rows;
         }
     }
 }

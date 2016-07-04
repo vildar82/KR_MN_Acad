@@ -30,7 +30,8 @@ namespace KR_MN_Acad.Spec.ArmWall
                 { Blocks.PylonBlock.BlockName, typeof(Blocks.PylonBlock) },
                 { Blocks.SleeveBlock.BlockName, typeof(Blocks.SleeveBlock) },
                 { Blocks.AddHorArmBlock.BlockName, typeof(Blocks.AddHorArmBlock) },
-                { Blocks.AddVerticLShapedArmBlock.BlockName, typeof(Blocks.AddVerticLShapedArmBlock) }
+                { Blocks.AddVerticLShapedArmBlock.BlockName, typeof(Blocks.AddVerticLShapedArmBlock) },
+                { Blocks.DoorBlock.BlockName, typeof(Blocks.DoorBlock) }                
             };
 
             TableService = new SpecGroup.SpecGroupService(db);            

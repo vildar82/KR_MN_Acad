@@ -72,7 +72,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         {
             Rows = rows;
             Width = width;
-            Step = step;
+            Step = step;            
         }
 
         public virtual void Calc()

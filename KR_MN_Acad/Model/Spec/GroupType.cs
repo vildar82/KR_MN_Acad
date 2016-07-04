@@ -11,11 +11,7 @@ namespace KR_MN_Acad.Spec
     /// </summary>
     public class GroupType : IEquatable<GroupType>, IComparable<GroupType>
     {
-        public static readonly GroupType None = new GroupType("",0);
-        /// <summary>
-        /// Стержни
-        /// </summary>
-        public static readonly GroupType Bars = new GroupType("Стержни",1);
+        public static readonly GroupType None = new GroupType("",0);        
         /// <summary>
         /// Балки монолитные
         /// </summary>
@@ -33,23 +29,30 @@ namespace KR_MN_Acad.Spec
         /// </summary>
         public static readonly GroupType MonolithWall = new GroupType("Стены монолоитные",5);
         /// <summary>
+        /// Стержни
+        /// </summary>
+        public static readonly GroupType Bars = new GroupType("Стержни",6);
+        /// <summary>
         /// Детали
         /// </summary>
-        public static readonly GroupType Details = new GroupType("Детали",6);
+        public static readonly GroupType Details = new GroupType("Детали",7);
         /// <summary>
         /// Гильзы
         /// </summary>
-        public static readonly GroupType Sleeves = new GroupType("Гильзы",7);
+        public static readonly GroupType Sleeves = new GroupType("Гильзы",8);
         /// <summary>
         /// Закладные детали
         /// </summary>
-        public static readonly GroupType EmbeddedDetails = new GroupType("Закладные детали",8);
+        public static readonly GroupType EmbeddedDetails = new GroupType("Закладные детали",9);
         /// <summary>
         /// Материалы
         /// </summary>
-        public static readonly GroupType Materials = new GroupType("Материалы",9);        
+        public static readonly GroupType Materials = new GroupType("Материалы",10);        
 
         public string Name { get; set; }
+        /// <summary>
+        /// Индекс группы - определяет порядок групп в спецификации - чем меньше индекс группы, тем выше в спецификации
+        /// </summary>
         public int Index { get; set; }
         private GroupType (string name, int index)
         {

@@ -96,9 +96,9 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 			// ГорАрм         
 			FillElemPropNameDesc(ArmHor, PropNamePosHorArm, PropNameDescHorArm);
 			// ВертикАрм         
-			FillElemPropNameDesc(ArmVertic, PropNamePosVerticArm, PropNameDescVerticArm);
+			FillElemPropNameDesc(ArmVertic, PropNameArmVerticPos, PropNameArmVerticDesc);
 			// ВертикГс
-			FillElemPropNameDesc(BentBarDirect, PropNamePosVerticBentDirect, PropNameDescVerticBentDirect);
+			FillElemPropNameDesc(BentBarDirect, PropNameVerticBentDirectPos, PropNameVerticBentDirectDesc);
 
 
 			// ГорАрм2
@@ -118,7 +118,7 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 			Concrete = new ConcreteH(concrete, Length, Thickness, Height, this);
 			Concrete.Calc();
 			// Определние вертикальной арматуры
-			ArmVertic = defineVerticArm(ArmVerticCount, PropNameArmVerticDiam, PropNamePosVerticArm);
+			ArmVertic = defineVerticArm(ArmVerticCount, PropNameArmVerticDiam, PropNameArmVerticPos);
 			// Определние горизонтальной арматуры1
 			ArmHor = defineArmHor(Length, PropNameArmHorDiam, PropNamePosHorArm, PropNameArmHorStep);
 			// Определние горизонтальной арматуры2
