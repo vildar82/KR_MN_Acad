@@ -86,7 +86,7 @@ namespace KR_MN_Acad.Spec.Elements.Concretes
         {
             return "";
         }
-        public void SetNumber (string num)
+        public void SetNumber (string num, int indexFirst, int indexSecond)
         {
             // без позиции            
         }
@@ -101,12 +101,12 @@ namespace KR_MN_Acad.Spec.Elements.Concretes
             return Round2Digits(0.000000001 * len * width * height);
         }
 
-        public Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<int, ISpecElement> indexTypeGroup)
+        public Dictionary<string, List<ISpecElement>> GroupsFirst (IGrouping<GroupType, ISpecElement> indexTypeGroup)
         {
             throw new InvalidOperationException();
         }
 
-        public Dictionary<string, List<ISpecElement>> GroupsByArm (List<ISpecElement> value)
+        public Dictionary<string, List<ISpecElement>> GroupsSecond (List<ISpecElement> value)
         {
             throw new InvalidOperationException();
         }

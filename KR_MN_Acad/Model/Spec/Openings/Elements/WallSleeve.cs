@@ -41,7 +41,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
             return "Г" + index;
         }
 
-        public void SetNumber (string num)
+        public void SetNumber (string num, int indexFirst, int indexSecond)
         {
             Mark = num;
         }

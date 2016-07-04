@@ -35,7 +35,7 @@ namespace KR_MN_Acad.Spec.Monolith.Elements
         {
             return prefix + index;
         }
-        public void SetNumber (string num)
+        public void SetNumber (string num, int indexFirst, int indexSecond)
         {
             Mark = num;
         }

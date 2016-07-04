@@ -101,7 +101,7 @@ namespace KR_MN_Acad.Spec.Monolith
             return res;
         }       
 
-        protected override Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<int, ISpecElement> indexGroup)
+        protected override Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<GroupType, ISpecElement> indexGroup)
         {
             var uniqElems = indexGroup.GroupBy(g=>g).OrderByDescending(o=>o.Key);
             return uniqElems.ToDictionary(k => ((Elements.IConstruction)k.Key).Name, i => i.ToList());

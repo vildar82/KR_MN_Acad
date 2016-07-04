@@ -19,7 +19,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         protected const int indexBarRunning = 0;
         protected const int indexBar = 1;        
 
-        protected string prefix = string.Empty;
+        public string prefix = string.Empty;
         public string Key { get; set; }
         public virtual int Index { get; set; } = indexBar;
         public string Mark { get; set; }
@@ -51,7 +51,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         public double WeightTotal { get; set; }        
         public ISpecBlock SpecBlock { get; set; }
         public string FriendlyName { get; set; }
-        public bool IsDefaultGroupings { get; set; } = true;
+        public virtual bool IsDefaultGroupings { get; set; } = true;
 
         /// <summary>
         /// Стержень по количеству штук
@@ -122,10 +122,10 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             if (res != 0) return res;
 
             res = Diameter.CompareTo(arm.Diameter);
-            if (res != 0) return res;
+            if (res != 0) return -res;
 
             res = Length.CompareTo(arm.Length);
-            if (res != 0) return res * (-1);
+            if (res != 0) return -res;
 
             res = Class.CompareTo(arm.Class);
             if (res != 0) return res;
@@ -208,17 +208,17 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             return GetName();
         }
 
-        public void SetNumber (string num)
+        public virtual void SetNumber (string num, int indexFirst, int indexSecond)
         {
             Mark = num;
         }
 
-        public Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<int, ISpecElement> indexTypeGroup)
+        public virtual Dictionary<string, List<ISpecElement>> GroupsFirst (IGrouping<GroupType, ISpecElement> indexTypeGroup)
         {
             throw new InvalidOperationException();
         }
 
-        public Dictionary<string, List<ISpecElement>> GroupsByArm (List<ISpecElement> value)
+        public virtual Dictionary<string, List<ISpecElement>> GroupsSecond (List<ISpecElement> value)
         {
             throw new InvalidOperationException();
         }

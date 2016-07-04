@@ -81,7 +81,7 @@ namespace KR_MN_Acad.Spec.Constructions
             return Name;
         }        
 
-        public void SetNumber (string num)
+        public void SetNumber (string num, int indexFirst, int indexSecond)
         {
             Mark = num;
         }
@@ -97,13 +97,13 @@ namespace KR_MN_Acad.Spec.Constructions
             row.Description = (Weight * count).ToString("0.00");            
         }
 
-        public Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<int, ISpecElement> indexTypeGroup)
+        public Dictionary<string, List<ISpecElement>> GroupsFirst (IGrouping<GroupType, ISpecElement> indexTypeGroup)
         {
             var sizes = indexTypeGroup.GroupBy(g=>((ConstructionElement)g).Size).OrderByDescending(o=>o.Key);
             return sizes.ToDictionary(k => k.Key.Key, i => i.ToList());
         }
 
-        public Dictionary<string, List<ISpecElement>> GroupsByArm (List<ISpecElement> value)
+        public Dictionary<string, List<ISpecElement>> GroupsSecond (List<ISpecElement> value)
         {            
             var uniqElems = value.GroupBy(g=>g).OrderByDescending(o=>o.Key);
             return uniqElems.ToDictionary(k => k.Key.Key, i => i.ToList());

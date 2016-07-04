@@ -29,7 +29,7 @@ namespace KR_MN_Acad.Spec
         /// <param name="index">авто индекс</param>
         /// <returns>Индекс для строки элементов - может быть нужен префикс, и т.д.</returns>
         string GetNumber (string index);
-        void SetNumber (string num);
+        void SetNumber (string num, int indexFirst, int indexSecond);
         string GetParamInfo ();
         string GetDesc ();
         /// <summary>

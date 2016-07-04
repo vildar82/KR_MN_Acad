@@ -18,7 +18,7 @@ namespace KR_MN_Acad.Spec.SpecGroup
         /// items - элементы в одной строке спецификации
         /// </summary>        
         void SumAndSetRow (SpecGroupRow row, List<ISpecElement> elems);
-        Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<int, ISpecElement> indexTypeGroup);
-        Dictionary<string, List<ISpecElement>> GroupsByArm (List<ISpecElement> value);
+        Dictionary<string, List<ISpecElement>> GroupsFirst (IGrouping<GroupType, ISpecElement> indexTypeGroup);
+        Dictionary<string, List<ISpecElement>> GroupsSecond (List<ISpecElement> value);
     }
 }

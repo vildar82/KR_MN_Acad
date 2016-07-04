@@ -134,7 +134,7 @@ namespace KR_MN_Acad.Spec.Elements
             return "";
         }
 
-        public void SetNumber (string num)
+        public void SetNumber (string num, int indexFirst, int indexSecond)
         {            
         }
 
@@ -143,12 +143,12 @@ namespace KR_MN_Acad.Spec.Elements
             return Name;
         }
 
-        public Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<int, ISpecElement> indexTypeGroup)
+        public Dictionary<string, List<ISpecElement>> GroupsFirst (IGrouping<GroupType, ISpecElement> indexTypeGroup)
         {
             throw new NotImplementedException();
         }
 
-        public Dictionary<string, List<ISpecElement>> GroupsByArm (List<ISpecElement> value)
+        public Dictionary<string, List<ISpecElement>> GroupsSecond (List<ISpecElement> value)
         {
             throw new NotImplementedException();
         }

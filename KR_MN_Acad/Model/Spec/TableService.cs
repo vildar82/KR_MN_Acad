@@ -29,7 +29,7 @@ namespace KR_MN_Acad.Spec
         protected abstract void SetColumnsAndCap (ColumnsCollection columns);
         protected abstract void FillCells (Table table);
         protected abstract ISpecRow GetNewRow (string group, List<ISpecElement> list);
-        protected abstract Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<int, ISpecElement> indexTypeGroup);
+        protected abstract Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<GroupType, ISpecElement> indexTypeGroup);
         protected abstract Dictionary<string, List<ISpecElement>> GroupsSecondForNumbering (KeyValuePair<string, List<ISpecElement>> firstGroup);        
 
         /// <summary>
@@ -77,17 +77,18 @@ namespace KR_MN_Acad.Spec
             // Группировыка по именам групп
             var groupGroups = elements.GroupBy(g=>g.Group).OrderBy(o=>o.Key.Index);
             foreach (var group in groupGroups)
-            {                
+            {
                 string groupName = group.First().Group.Name;
-                // Группировка по индексам - как располагать строки элементов в спецификации
-                var indexGroups = group.GroupBy(g=>g.Index).OrderBy(o=>o.Key);
-                foreach (var indexGroup in indexGroups)
-                {
-                    int index = 1;
-                    var firstGroups = GroupsFirstForNumbering(indexGroup);
 
-                    foreach (var firstGroup in firstGroups)
-                    {                        
+                int index = 1;
+                var firstGroups = GroupsFirstForNumbering(group);
+
+                foreach (var firstGroup in firstGroups)
+                {
+                    // Группировка по индексам - как располагать строки элементов в спецификации
+                    var indexGroups = firstGroup.Value.GroupBy(g=>g.Index).OrderBy(o=>o.Key);
+                    foreach (var indexGroup in indexGroups)
+                    {
                         // группировка по назначению
                         var secGroups = GroupsSecondForNumbering(firstGroup);
                         if (secGroups.Skip(1).Any())
@@ -98,27 +99,27 @@ namespace KR_MN_Acad.Spec
                             {
                                 string indexSubgroup = index + "." + indexSecond;
                                 var row = GetNewRow(groupName, secGroup.Value);
-                                NumberingRow(row, indexSubgroup);
+                                NumberingRow(row, indexSubgroup, index, indexSecond);
                                 indexSecond++;
                             }
                         }
                         else
                         {
                             var row = GetNewRow(groupName, firstGroup.Value);
-                            NumberingRow(row, index.ToString());
+                            NumberingRow(row, index.ToString(), index, 0);
                         }
-                        index++;
                     }
-                }                
+                    index++;
+                }
             }
         }
 
-        private void NumberingRow (ISpecRow row, string index)
+        private void NumberingRow (ISpecRow row, string index, int indexFirst, int indexSecond)
         {
             string num =row.Elements.First().GetNumber(index);
             foreach (var item in row.Elements)
             {
-                item.SetNumber(num);
+                item.SetNumber(num, indexFirst, indexSecond);
             }
         }    
 

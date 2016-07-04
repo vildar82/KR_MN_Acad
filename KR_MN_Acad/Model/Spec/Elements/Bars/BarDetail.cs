@@ -19,6 +19,8 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         public override int Index { get; set; } = 0;
         public override GroupType Group { get; set; }= GroupType.Details;
 
+        public override bool IsDefaultGroupings { get; set; } = false;
+
         /// <summary>
         /// Деталь по штукам
         /// </summary>        
@@ -37,7 +39,13 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             : base(diam, len, width, step, rows, pos, block, friendlyName)
         {
             this.prefix = prefix;
-        }        
+        }
+
+        public override void SetNumber (string num, int indexFirst, int indexSecond)
+        {
+            int index = indexSecond == 0 ? indexFirst : indexSecond;
+            Mark = prefix + index;
+        }
 
         public override int CompareTo (ISpecElement other)
         {
@@ -47,11 +55,11 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             var res = prefix.CompareTo(det.prefix);
             if (res != 0) return res;
 
-            res = BlockNameDetail.CompareTo(det.BlockNameDetail);
-            if (res != 0) return res;
-
             res = base.CompareTo(other);
             if (res != 0) return res;
+
+            res = BlockNameDetail.CompareTo(det.BlockNameDetail);
+            if (res != 0) return res;            
 
             res = this.CompareTo(det);
 
@@ -72,7 +80,8 @@ namespace KR_MN_Acad.Spec.Elements.Bars
 
         public override int GetHashCode ()
         {
-            return BlockNameDetail.GetHashCode();
+            var res = BlockNameDetail.GetHashCode();
+            return res;
         }
 
         //public override string GetDesc ()
@@ -105,6 +114,17 @@ namespace KR_MN_Acad.Spec.Elements.Bars
 
         public abstract bool Equals (IDetail other);
 
-        public abstract int CompareTo (IDetail other);        
+        public abstract int CompareTo (IDetail other);
+
+        public override Dictionary<string, List<ISpecElement>> GroupsFirst (IGrouping<GroupType, ISpecElement> indexTypeGroup)
+        {
+            var bars = indexTypeGroup.Cast<BarDetail>().GroupBy(g=>g.prefix).OrderBy(o=>o.Key, AcadLib.Comparers.AlphanumComparator.New);
+            return bars.ToDictionary(k => k.Key, i => i.Cast<ISpecElement>().ToList());
+        }
+        public override Dictionary<string, List<ISpecElement>> GroupsSecond (List<ISpecElement> value)
+        {
+            var bars = value.GroupBy(g=>g).OrderBy(o=>o.Key);
+            return bars.ToDictionary(k => k.Key.Key, i => i.Cast<ISpecElement>().ToList());
+        }
     }
 }

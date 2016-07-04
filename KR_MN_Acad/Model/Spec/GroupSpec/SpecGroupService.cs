@@ -107,15 +107,15 @@ namespace KR_MN_Acad.Spec.SpecGroup
             return res;
         }       
 
-        protected override Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<int, ISpecElement> indexTypeGroup)
+        protected override Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<GroupType, ISpecElement> indexTypeGroup)
         {
             var firstElement = indexTypeGroup.First() as IGroupSpecElement;
             if (!firstElement.IsDefaultGroupings)
             {
-                return firstElement.GroupsBySize(indexTypeGroup);
+                return firstElement.GroupsFirst(indexTypeGroup);
             }
             {
-                var uniqElems = indexTypeGroup.GroupBy(g=>g).OrderByDescending(o=>o.Key);
+                var uniqElems = indexTypeGroup.GroupBy(g=>g).OrderBy(o=>o.Key);
                 return uniqElems.ToDictionary(k => k.Key.Key, i => i.ToList());
             }
         }
@@ -125,7 +125,7 @@ namespace KR_MN_Acad.Spec.SpecGroup
             var firstElement = firstGroup.Value.First() as IGroupSpecElement;
             if (!firstElement.IsDefaultGroupings)
             {
-                return firstElement.GroupsByArm(firstGroup.Value);
+                return firstElement.GroupsSecond(firstGroup.Value);
             }
             else
             {
