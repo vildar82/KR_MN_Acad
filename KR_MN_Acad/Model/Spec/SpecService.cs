@@ -20,7 +20,8 @@ namespace KR_MN_Acad.Spec
         protected Document doc;
         protected Database db;
         protected Editor ed;
-        ISpecOptions options;        
+        ISpecOptions options;
+        List<ISpecBlock> blocks;       
 
         public SpecService(Document doc, ISpecOptions options)
         {
@@ -38,11 +39,12 @@ namespace KR_MN_Acad.Spec
             // Выбор блоков
             var sel = SelectBlocks();
             // Определение блоков схемы армирования
-            var blocks = FilterBlocks(sel);
+            blocks = FilterBlocks(sel);
             // Проверка правил расположение блоков
             //CheckRules();               
-            // Калькуляция всех элементов            
-            options.TableService.Numbering(blocks);
+            // Калькуляция всех элементов     
+            var elements = options.TableService.FilterElements(blocks, false);
+            options.TableService.Numbering(elements);
             NumberingBlocks(blocks);
         }       
 
@@ -54,11 +56,12 @@ namespace KR_MN_Acad.Spec
             // Выбор блоков
             var sel = SelectBlocks();
             // Определение блоков схемы армирования
-            var blocks = FilterBlocks(sel);
+            blocks = FilterBlocks(sel);
             // Проверка правил расположение блоков
             //CheckRules();
-            // Калькуляция всех элементов            
-            options.TableService.CalcRows(blocks);
+            // Калькуляция всех элементов   
+            var elements = options.TableService.FilterElements(blocks, false);
+            options.TableService.CalcRows(elements);
             // Проверка позиций
             //CheckPositions();
             // Создание спецификаций.
@@ -157,7 +160,7 @@ namespace KR_MN_Acad.Spec
                 Point3d ptNextTable = new Point3d(table.Position.X, table.Position.Y - table.Height - 10*scale, 0);
                 if (options.HasBillTable)
                 {
-                    Bill.BillService billService = new Bill.BillService (db, options.TableService.GetElementsForBill());
+                    Bill.BillService billService = new Bill.BillService (db, options.TableService.GetElementsForBill(blocks));
                     var billTable = billService.CreateTable();
                     billTable.Position = ptNextTable;
                     billTable.TransformBy(Matrix3d.Scaling(scale, billTable.Position));

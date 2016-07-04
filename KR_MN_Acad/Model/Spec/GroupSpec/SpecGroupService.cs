@@ -99,13 +99,7 @@ namespace KR_MN_Acad.Spec.SpecGroup
                     row++;
                 }
             }
-        }
-
-        protected override IEnumerable<ISpecElement> FilterElements (IEnumerable<ISpecBlock> blocks, bool isNumbering)
-        {
-            var specGroupElements = blocks.SelectMany(s=>s.Elements.OfType<IGroupSpecElement>());
-            return specGroupElements;
-        }
+        }        
 
         protected override ISpecRow GetNewRow (string group, List<ISpecElement> items)
         {
@@ -143,12 +137,12 @@ namespace KR_MN_Acad.Spec.SpecGroup
 
         public override List<IDetail> GetDetails ()
         {            
-            var details = blocks.SelectMany(s=>s.Elements).OfType<IDetail>().GroupBy(g=>g.Mark).
+            var details = elements.OfType<IDetail>().GroupBy(g=>g.Mark).
                 OrderBy(o => o.Key, AcadLib.Comparers.AlphanumComparator.New).Select(s=>s.First()).ToList();
             return details;
         }
 
-        public override List<ISpecElement> GetElementsForBill ()
+        public override List<ISpecElement> GetElementsForBill (List<ISpecBlock> blocks)
         {
             List < ISpecElement > res = new List<ISpecElement> ();
             foreach (var block in blocks)

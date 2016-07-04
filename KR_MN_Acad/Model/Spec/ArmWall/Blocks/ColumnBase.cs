@@ -81,9 +81,7 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 
         public ColumnBase (Autodesk.AutoCAD.DatabaseServices.BlockReference blRef, string blName) : base(blRef, blName)
         {
-        }
-
-        //protected abstract ISpecElement GetColumn (string mark);
+        }        
 
         protected virtual ISpecElement GetConstruction (string mark)
         {
@@ -123,16 +121,15 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 
         public override void Calculate ()
         {
-            // Нумерация элементов в конструкции
-            Elements = Elementary.ToList();
+            // Нумерация элементов в конструкции            
             SpecGroup.SpecGroupService service = new SpecGroup.SpecGroupService (Block.IdBlRef.Database);
-            service.Numbering(new List<ISpecBlock>() { this });
+            service.Numbering(Elementary);
             NumberingElementary();                        
 
             string mark = Block.GetPropValue<string> (propMark);
-            ConstructionElement = GetConstruction(mark);            
-            Elements.Clear();
+            ConstructionElement = GetConstruction(mark);                        
             base.AddElement(ConstructionElement);
+            base.AddElement(Concrete);
         }
 
         protected override void AddElement (ISpecElement elem)

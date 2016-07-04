@@ -103,12 +103,12 @@ namespace KR_MN_Acad.Spec.Elements.Concretes
 
         public Dictionary<string, List<ISpecElement>> GroupsBySize (IGrouping<int, ISpecElement> indexTypeGroup)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
 
         public Dictionary<string, List<ISpecElement>> GroupsByArm (List<ISpecElement> value)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
     }
 }

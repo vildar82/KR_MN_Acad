@@ -131,8 +131,8 @@ namespace KR_MN_Acad.Spec.Elements.Bars
 		{
 			var s = other as Spring;
 			if (s == null) return -1;
-            var res = AcadLib.Comparers.AlphanumComparator.New.Compare(Mark,s.Mark);
-            if (res != 0) return res;
+			var res = AcadLib.Comparers.AlphanumComparator.New.Compare(Mark,s.Mark);
+			if (res != 0) return res;
 
 			res = LRab.CompareTo(s.LRab);
 			if (res != 0) return res;

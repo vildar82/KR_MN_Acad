@@ -55,13 +55,7 @@ namespace KR_MN_Acad.Spec.Bill
             // Заполнение расходов
             int row = rowNameIndex+1;
             // Строка в ведомости расхода стали                
-            table.Cells[row, 0].TextString = data.Name;
-
-            //foreach (var item in data.Cells)
-            //{
-            //    var colBil = BillColumn.GetColumn(item);
-            //    table.Cells[row, colBil.Index].TextString = item.Amount.ToString();
-            //}
+            table.Cells[row, 0].TextString = data.Name;            
 
             row++;
 

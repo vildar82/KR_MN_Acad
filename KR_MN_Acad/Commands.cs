@@ -8,8 +8,6 @@ using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Runtime;
 using KR_MN_Acad.Model.Pile.Numbering;
-using KR_MN_Acad.Spec;
-using SpecBlocks;
 
 [assembly: CommandClass(typeof(KR_MN_Acad.Commands))]
 [assembly: ExtensionApplication(typeof(KR_MN_Acad.Commands))]
@@ -21,8 +19,7 @@ namespace KR_MN_Acad
         const string groupPik = AutoCAD_PIK_Manager.Commands.Group;                       
 
         public void Initialize()
-        {
-            AcadLib.LoadService.LoadSpecBlocks();
+        {            
             AcadLib.LoadService.LoadNetTopologySuite();
         }
 
@@ -34,9 +31,7 @@ namespace KR_MN_Acad
         {
             AcadLib.CommandStart.Start(doc =>
             {
-                // Спецификация монолитных блоков                         
-                //SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecMonolith());
-                //specService.CreateSpec();
+                // Спецификация монолитных блоков                                         
                 Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Monolith.MonolithOptions(doc.Database));
                 spec.Spec();
             });            
@@ -48,9 +43,7 @@ namespace KR_MN_Acad
         public void KR_MonolithNumbering ()
         {
             AcadLib.CommandStart.Start(doc =>
-            {
-                //SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecMonolith());
-                //specService.Numbering();
+            {                
                 Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Monolith.MonolithOptions(doc.Database));
                 spec.Numbering();
             });
@@ -64,9 +57,7 @@ namespace KR_MN_Acad
         {
             AcadLib.CommandStart.Start(doc =>
             {
-                // Спецификация проекмов
-                //SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecAperture());
-                //specService.CreateSpec();
+                // Спецификация проекмов                
                 Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Openings.ApertureOptions(doc.Database));
                 spec.Spec();
             });                
@@ -78,9 +69,7 @@ namespace KR_MN_Acad
         public void KR_AperturesNumbering ()
         {
             AcadLib.CommandStart.Start(doc =>
-            {
-                //SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecAperture());
-                //specService.Numbering();
+            {                
                 Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Openings.ApertureOptions(doc.Database));
                 spec.Numbering();
             });
@@ -94,9 +83,7 @@ namespace KR_MN_Acad
         {
             AcadLib.CommandStart.Start(doc =>
             {
-                // Спецификация отверстий
-                //SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecOpenings());
-                //specService.CreateSpec();
+                // Спецификация отверстий                
                 Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Openings.WallOptions(doc.Database));
                 spec.Spec();
             });            
@@ -108,9 +95,7 @@ namespace KR_MN_Acad
         public void KR_OpeningsNumbering ()
         {
             AcadLib.CommandStart.Start(doc =>
-            {
-                //SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecOpenings());
-                //specService.Numbering();
+            {                
                 Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Openings.WallOptions(doc.Database));
                 spec.Numbering();
             });
@@ -124,9 +109,7 @@ namespace KR_MN_Acad
         {
             AcadLib.CommandStart.Start(doc =>
             {
-                // Спецификация отверстий
-                //SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecSlabOpenings());
-                //specService.CreateSpec();   
+                // Спецификация отверстий                
                 Spec.SpecService spec = new Spec.SpecService (doc, new Spec.SlabOpenings.SlabOptions(doc.Database));
                 spec.Spec();
             });
@@ -138,9 +121,7 @@ namespace KR_MN_Acad
         public void KR_SlabOpeningsNumbering ()
         {
             AcadLib.CommandStart.Start(doc =>
-            {
-                //SpecBlocks.SpecService specService = new SpecBlocks.SpecService(new SpecSlabOpenings());
-                //specService.Numbering();    
+            {                
                 Spec.SpecService spec = new Spec.SpecService (doc, new Spec.SlabOpenings.SlabOptions(doc.Database));
                 spec.Numbering();
             });
@@ -203,9 +184,7 @@ namespace KR_MN_Acad
         public void KR_ArmWallNumbering()
         {
             AcadLib.CommandStart.Start(doc =>
-            {
-                //var service = new Scheme.SchemeService(Scheme.Wall.WallSchemeOptions.GetSchemeOptions());
-                //service.Numbering();
+            {                
                 var spec = new Spec.SpecService(doc, new Spec.ArmWall.ArmWallOptions(doc.Database));
                 spec.Numbering();
             });
@@ -218,9 +197,7 @@ namespace KR_MN_Acad
         public void KR_ArmWallSpec()
         {
             AcadLib.CommandStart.Start(doc =>
-            {
-                //var service = new Scheme.SchemeService(Scheme.Wall.WallSchemeOptions.GetSchemeOptions());
-                //service.Spec();
+            {                
                 var spec = new Spec.SpecService(doc, new Spec.ArmWall.ArmWallOptions(doc.Database));
                 spec.Spec();
             });
@@ -233,9 +210,7 @@ namespace KR_MN_Acad
         public void KR_ConstructionBlockSpec ()
         {
             AcadLib.CommandStart.Start(doc =>
-            {
-                //var service = new Scheme.SchemeService(Scheme.Wall.WallSchemeOptions.GetSchemeOptions());
-                //service.Spec();
+            {                
                 Spec.Constructions.ConstructionService spec = new Spec.Constructions.ConstructionService(doc);
                 spec.Spec();
             });

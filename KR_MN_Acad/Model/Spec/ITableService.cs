@@ -17,17 +17,18 @@ namespace KR_MN_Acad.Spec
         /// Нумерация элементов.
         /// Группировка элементов, сортировка, простановка позиций.
         /// </summary>        
-        void Numbering (List<ISpecBlock> blocks);
+        void Numbering (List<ISpecElement> elements);
         /// <summary>
         /// Группировка элементов спецификации - формирование строк для таблицы.
         /// Нумерация берется из блоков.
         /// </summary>        
-        void CalcRows (List<ISpecBlock> blocks);
+        void CalcRows (List<ISpecElement> elements);
         /// <summary>
         /// Создание спецификации
         /// </summary>        
         Table CreateTable ();
-        List<ISpecElement> GetElementsForBill ();
+        List<ISpecElement> GetElementsForBill (List<ISpecBlock> blocks);
         List<IDetail> GetDetails ();
+        List<ISpecElement> FilterElements (List<ISpecBlock> blocks, bool isNumbering);
     }
 }

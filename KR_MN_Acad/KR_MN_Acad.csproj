@@ -72,10 +72,6 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="SpecBlocks">
-      <HintPath>..\..\..\ОБЩЕЕ\SpecBlocks\SpecBlocks\bin\Release\SpecBlocks.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -199,7 +195,6 @@
     <Compile Include="Model\Spec\ISpecOptions.cs" />
     <Compile Include="Model\Spec\ISpecRow.cs" />
     <Compile Include="Model\Spec\ITableService.cs" />
-    <Compile Include="Model\Spec\Old\SpecSlabOpenings.cs" />
     <Compile Include="Model\Spec\Openings\Blocks\ApertureBase.cs" />
     <Compile Include="Model\Spec\SlabOpenings\Elements\ISlabElement.cs" />
     <Compile Include="Model\Spec\SlabOpenings\Elements\SlabSleeve.cs" />
@@ -221,9 +216,6 @@
     <Compile Include="Model\Spec\Openings\OpeningRow.cs" />
     <Compile Include="Model\Spec\Openings\OpeningService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Model\Spec\Old\SpecOpenings.cs" />
-    <Compile Include="Model\Spec\Old\SpecAperture.cs" />
-    <Compile Include="Model\Spec\Old\SpecMonolith.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AutoCADNetLoad.scr" />

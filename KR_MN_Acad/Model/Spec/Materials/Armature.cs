@@ -21,8 +21,8 @@ namespace KR_MN_Acad.Spec.Materials
         public const string GostNewName = "Прокат арматурный свариваемый периодического профиля классов А500С и В500С для армирования железобетонных конструкций.";
         public const string GostOldNumber = "ГОСТ 5781-82";//http://docs.cntd.ru/document/gost-5781-82
         public const string GostOldName = "Сталь горячекатаная для армирования железобетонных конструкций.";
-        public static Gost GostNew = new Gost (GostNewNumber, GostNewName);// Gost.GetGost(GostNewNumber);
-        public static Gost GostOld = new Gost (GostOldNumber, GostOldName);// Gost.GetGost(GostOldNumber);
+        public static Gost GostNew = new Gost (GostNewNumber, GostNewName);
+        public static Gost GostOld = new Gost (GostOldNumber, GostOldName);
 
         public const int DefaultDiameter = 10;
         public const string DefaultClass = ClassA500C;
@@ -56,14 +56,12 @@ namespace KR_MN_Acad.Spec.Materials
         /// Класс арматуры
         /// </summary>
         public string Class { get; set; } = DefaultClass;
-
         public string BillTitle { get; set; } = "Изделия арматурные, кг";
         public int BillTitleIndex { get; } = 0;
         public string BillGroup { get; set; } = "Арматура класса";
         public string BillMark { get { return Class; } }
         public string BillGOST { get { return Gost.Number; } }
         public string BillName { get { return Symbols.Diam + Diameter; } }
-
         public double Amount { get; set; }
 
         /// <summary>
@@ -76,22 +74,6 @@ namespace KR_MN_Acad.Spec.Materials
             Diameter = diameter;
             defineBaseParams();            
         }
-
-        //public Armature(int diameter, string classArm, Gost gost) : this(diameter)
-        //{
-        //    Class = classArm;
-        //    Gost = gost;
-        //}
-
-        ///// <summary>
-        ///// Диаметры арматуры
-        ///// </summary>
-        //public static List<Armature> Diameters { get; } = new List<Armature>
-        //{ new Armature(6), new Armature(8),new Armature(10),new Armature(12),new Armature(14),
-        //    new Armature(16),new Armature(18),new Armature(20),new Armature(22),new Armature(25),
-        //    new Armature(28),new Armature(32),new Armature(36),new Armature(40),new Armature(45),
-        //    new Armature(50),new Armature(55),new Armature(60),new Armature(70),new Armature(80)
-        //};        
 
         private void defineBaseParams()
         {

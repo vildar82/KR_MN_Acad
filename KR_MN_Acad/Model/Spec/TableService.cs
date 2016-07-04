@@ -18,8 +18,7 @@ namespace KR_MN_Acad.Spec
     {
         public static AcadLib.Comparers.AlphanumComparator alpha = AcadLib.Comparers.AlphanumComparator.New;
 
-        private List<ISpecElement> elements;
-        protected List<ISpecBlock> blocks;
+        protected List<ISpecElement> elements;        
         
         protected List<KeyValuePair<string, List<ISpecRow>>> groupRows;
         protected abstract Database Db { get; set; }
@@ -37,13 +36,12 @@ namespace KR_MN_Acad.Spec
         /// Группировка элементов спецификации.
         /// Нумерация берется из объектов
         /// </summary>        
-        public void CalcRows (List<ISpecBlock> blocks)
+        public void CalcRows (List<ISpecElement> elements)
         {
-            this.blocks = blocks;
+            this.elements = elements;
             int numrows = 0;
             groupRows = new List<KeyValuePair<string, List<ISpecRow>>>();
-            // Все элементы спецификации
-            elements = FilterElements(blocks, false).ToList();
+            
             // группировка по именам групп
             var groupsGroup = elements.OrderBy(o => o.Index).GroupBy(g => g.Group).OrderBy(o=>o.Key.Index);
             foreach (var group in groupsGroup)
@@ -73,11 +71,9 @@ namespace KR_MN_Acad.Spec
         /// Нумерация элементов
         /// </summary>
         /// <param name="blocks"></param>
-        public void Numbering (List<ISpecBlock> blocks)
+        public void Numbering (List<ISpecElement> elements)
         {
-            this.blocks = blocks;
-            // Все элементы спецификации
-            var elements = FilterElements(blocks, true);
+            this.elements = elements;
             // Группировыка по именам групп
             var groupGroups = elements.GroupBy(g=>g.Group).OrderBy(o=>o.Key.Index);
             foreach (var group in groupGroups)
@@ -87,37 +83,32 @@ namespace KR_MN_Acad.Spec
                 var indexGroups = group.GroupBy(g=>g.Index).OrderBy(o=>o.Key);
                 foreach (var indexGroup in indexGroups)
                 {
-                    // группировка по типам
-                    //var typeGroups = indexGroup.GroupBy(g=>g.GetType());
-                    //foreach (var type in typeGroups)
-                    //{
-                        int index = 1;
-                        var firstGroups = GroupsFirstForNumbering(indexGroup);
+                    int index = 1;
+                    var firstGroups = GroupsFirstForNumbering(indexGroup);
 
-                        foreach (var firstGroup in firstGroups)
-                        {                            
-                            // группировка по назначению
-                            var secGroups = GroupsSecondForNumbering(firstGroup);
-                            if (secGroups.Skip(1).Any())
+                    foreach (var firstGroup in firstGroups)
+                    {
+                        // группировка по назначению
+                        var secGroups = GroupsSecondForNumbering(firstGroup);
+                        if (secGroups.Skip(1).Any())
+                        {
+                            // Есть подгруппы вида - одинаковые размеры у отв но разное назначение - нумерация вида 1.1
+                            int indexSecond = 1;
+                            foreach (var secGroup in secGroups)
                             {
-                                // Есть подгруппы вида - одинаковые размеры у отв но разное назначение - нумерация вида 1.1
-                                int indexSecond = 1;
-                                foreach (var secGroup in secGroups)
-                                {
-                                    string indexSubgroup = index + "." + indexSecond;
-                                    var row = GetNewRow(groupName, secGroup.Value);
-                                    NumberingRow(row, indexSubgroup);
-                                    indexSecond++;
-                                }
+                                string indexSubgroup = index + "." + indexSecond;
+                                var row = GetNewRow(groupName, secGroup.Value);
+                                NumberingRow(row, indexSubgroup);
+                                indexSecond++;
                             }
-                            else
-                            {
-                                var row = GetNewRow(groupName, firstGroup.Value);
-                                NumberingRow(row, index.ToString());
-                            }
-                            index++;
-                        }                        
-                    //}                    
+                        }
+                        else
+                        {
+                            var row = GetNewRow(groupName, firstGroup.Value);
+                            NumberingRow(row, index.ToString());
+                        }
+                        index++;
+                    }
                 }                
             }
         }
@@ -143,7 +134,7 @@ namespace KR_MN_Acad.Spec
         private void CheckUniqueMarks (IOrderedEnumerable<IGrouping<ISpecElement, ISpecElement>> groups)
         {
             var markGroups = groups.GroupBy(g => g.Key.Mark, (k, g) =>
-                new { Key = k, Error = g.Where(w=>!(w.Key.SpecBlock is Constructions.IConstructionBlock)).Skip(1).Any(), Elements = g.SelectMany(s => s.Select(i => i)) }).
+                new { Key = k, Error = g.Skip(1).Any(), Elements = g.SelectMany(s => s.Select(i => i)) }).
                 Where(w=>w.Error);
             foreach (var item in markGroups)
             {
@@ -173,9 +164,9 @@ namespace KR_MN_Acad.Spec
         /// <summary>
         /// Фильтрация всех элементов из блоков для спецификации
         /// </summary>        
-        protected virtual IEnumerable<ISpecElement> FilterElements (IEnumerable<ISpecBlock> blocks, bool isNumbering)
+        public virtual List<ISpecElement> FilterElements (List<ISpecBlock> blocks, bool isNumbering)
         {
-            return blocks.SelectMany(b => b.Elements);
+            return blocks.SelectMany(b => b.Elements).ToList();
         }
 
         /// <summary>
@@ -223,7 +214,7 @@ namespace KR_MN_Acad.Spec
             return table;
         }
 
-        public virtual List<ISpecElement> GetElementsForBill ()
+        public virtual List<ISpecElement> GetElementsForBill (List<ISpecBlock> blocks)
         {
             return elements;
         }
@@ -233,6 +224,6 @@ namespace KR_MN_Acad.Spec
             var details = elements.OfType<IDetail>().GroupBy(g=>g.Mark).
                 OrderBy(o=>o.Key, AcadLib.Comparers.AlphanumComparator.New).Select(s=>s.First()).ToList();
             return details;
-        }
+        }        
     }
 }

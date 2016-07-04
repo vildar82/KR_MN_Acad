@@ -106,7 +106,7 @@ namespace KR_MN_Acad.Spec.Constructions
         public Dictionary<string, List<ISpecElement>> GroupsByArm (List<ISpecElement> value)
         {            
             var uniqElems = value.GroupBy(g=>g).OrderByDescending(o=>o.Key);
-            return uniqElems.ToDictionary(k => k.Key.Key, i => i.Cast<ISpecElement>().ToList());
+            return uniqElems.ToDictionary(k => k.Key.Key, i => i.ToList());
         }
     }        
 }

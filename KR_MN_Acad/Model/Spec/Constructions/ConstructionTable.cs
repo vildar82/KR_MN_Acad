@@ -19,11 +19,11 @@ namespace KR_MN_Acad.Spec.Constructions
             Title = "Спецификация конструкции";            
         }
 
-        protected override IEnumerable<ISpecElement> FilterElements (IEnumerable<ISpecBlock> blocks, bool isNumbering)
+        public override List<ISpecElement> FilterElements (List<ISpecBlock> blocks, bool isNumbering)
         {
             if (!isNumbering)
             {
-                // Заголовок таблицы по марке колонны в блоке (блок один, колонна одна).
+                // Заголовок таблицы по марке конструкции в блоке (блок один - одна конструкция).
                 constrBlock = blocks.First() as IConstructionBlock;
                 var constrElem = constrBlock.ConstructionElement;
                 Title += $" {constrElem.FriendlyName} {constrElem.Mark}";                
