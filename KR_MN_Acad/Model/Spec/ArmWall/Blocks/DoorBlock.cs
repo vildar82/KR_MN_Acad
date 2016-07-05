@@ -17,7 +17,7 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
         protected new const string PropNameArmHorDiam = "ДиамГорАрмФон";
         protected new const string PropNameArmHorStep = "ШагГорАрмФон";
         protected new const string PropNameArmVerticPos = "ПОЗВЕРТИКАРМПОГОННОЙ";
-        protected new const string PropNameArmHorPos = "ПОЗГОРПОГОННОЙ";
+        protected new const string PropNameArmHorPos = "ПОЗГОРАРМПОГОННОЙ";
         protected new const string PropNameArmHorDesc = "ОПИСАНИЕГОРПОГОННОЙ";
         protected new const string PropNameArmVerticDesc = "ОПИСАНИЕВЕРТИКПОГОННОЙ";
 

@@ -26,9 +26,8 @@ namespace KR_MN_Acad.Spec
         public abstract void Numbering ();
 
         protected void FillElemPropNameDesc (ISpecElement elem, string posPropertyName, string descPropertyName)
-        {
-            if (elem == null) return;
-            if (elem.Amount!=0)
+        {            
+            if (elem != null && elem.Amount!=0)
             {
                 // Поз
                 Block.FillPropValue(posPropertyName, elem.Mark);
@@ -38,9 +37,9 @@ namespace KR_MN_Acad.Spec
             else
             {
                 // Поз
-                Block.FillPropValue(posPropertyName, "");
+                Block.FillPropValue(posPropertyName, "", isRequired:false);
                 // Опис            
-                Block.FillPropValue(descPropertyName, "");
+                Block.FillPropValue(descPropertyName, "", isRequired: false);
             }
         }
 
@@ -148,6 +147,7 @@ namespace KR_MN_Acad.Spec
             string propStep, int bracketLen, int thicknessWall, int a, int widthRun, int diamWorkArm, int rows = 1, 
             string friendlyName = "Скоба")
         {
+            if (bracketLen == 0) return null;
             int diam = Block.GetPropValue<int>(propDiam);
             if (diam == 0) return null;
             string pos = Block.GetPropValue<string>(propPos);
@@ -173,6 +173,7 @@ namespace KR_MN_Acad.Spec
         protected Shackle defineShackleByGab (int width, int thickness, int range, int diamWorkArm, int a,
             string propDiam, string propPos, string propStep, int rows = 1)
         {
+            if (width == 0 || thickness == 0) return null;
             int diam = Block.GetPropValue<int>(propDiam, false);
             if (diam == 0) return null;
             string pos = Block.GetPropValue<string>(propPos);

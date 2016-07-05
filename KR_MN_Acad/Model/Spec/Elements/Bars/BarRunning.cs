@@ -60,7 +60,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         public override string GetDesc()
         {
             // 3, ⌀12
-            string desc = $"{Mark}, {Symbols.Diam}{Diameter}, L={Count}м.п.";
+            string desc = $"{Mark}, {Symbols.Diam}{Diameter}, L={Meters}м.п.";
             if (Step != 0)
                 desc += ", ш." + Step; ;
             return desc;
