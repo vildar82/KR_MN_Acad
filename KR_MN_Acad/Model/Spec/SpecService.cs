@@ -145,7 +145,7 @@ namespace KR_MN_Acad.Spec
         {
             using (var t = db.TransactionManager.StartTransaction())
             {
-                var scale = AcadLib.Scale.ScaleHelper.GetCurrentAnnoScale(db);
+                var scale =100; //AcadLib.Scale.ScaleHelper.GetCurrentAnnoScale(db);
                 var cs = db.CurrentSpaceId.GetObject( OpenMode.ForWrite) as BlockTableRecord;                
 
                 table.TransformBy(Matrix3d.Scaling(scale, table.Position));

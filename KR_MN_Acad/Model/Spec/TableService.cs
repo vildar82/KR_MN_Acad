@@ -133,12 +133,14 @@ namespace KR_MN_Acad.Spec
         }
 
         private void CheckUniqueMarks (IOrderedEnumerable<IGrouping<ISpecElement, ISpecElement>> groups)
-        {
+        {            
             var markGroups = groups.GroupBy(g => g.Key.Mark, (k, g) =>
                 new { Key = k, Error = g.Skip(1).Any(), Elements = g.SelectMany(s => s.Select(i => i)) }).
                 Where(w=>w.Error);
             foreach (var item in markGroups)
             {
+                if (string.IsNullOrEmpty(item.Key))
+                    continue;
                 foreach (var elem in item.Elements)
                 {
                     Inspector.AddError($"Одинаковая марка у разных элементов - {elem.Mark}",
