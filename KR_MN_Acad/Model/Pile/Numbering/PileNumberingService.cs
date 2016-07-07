@@ -108,7 +108,7 @@ namespace KR_MN_Acad.Model.Pile.Numbering
         private List<Pile> Sort(List<Pile> piles)
         {
             List<Pile> resVal;
-            var rowWidth = Options.PileSide * PileOptions.PileRatioLmin * 0.5;
+            var rowWidth = Options.PileSide * (PileOptions.PileRatioLmin==0?1 :PileOptions.PileRatioLmin) * 0.5;
 
             AcadLib.Comparers.DoubleEqualityComparer comparer = new AcadLib.Comparers.DoubleEqualityComparer(rowWidth);
             if (Options.NumberingOrder == EnumNumberingOrder.RightToLeft)
@@ -116,6 +116,7 @@ namespace KR_MN_Acad.Model.Pile.Numbering
                 // Слева-направо
                 resVal = piles.OrderBy(p => p.Pt.X).GroupBy(p => p.Pt.Y, comparer)
                      .OrderByDescending(g => g.Key).SelectMany(g => g).ToList();
+                var leftToR = piles.OrderBy(p => p.Pt.X);
             }
             else
             {
