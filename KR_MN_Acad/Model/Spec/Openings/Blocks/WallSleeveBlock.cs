@@ -33,7 +33,7 @@ namespace KR_MN_Acad.Spec.Openings.Blocks
             string mark = Block.GetPropValue<string>(propMark);
             int diam = Block.GetPropValue<int>(propDiam);
             int depth = Block.GetPropValue<int>(propDepth);
-            double elev = Block.GetPropValue<double>(propElevation);
+            string elev = Block.GetPropValue<string>(propElevation);
             string role = SlabOpenings.SlabService.GetRole(Block);            
             string desc = Block.GetPropValue<string>(propDesc, false);
             sleeve = new WallSleeve (mark, diam, depth, elev, role, desc, this);

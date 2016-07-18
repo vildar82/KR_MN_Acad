@@ -10,7 +10,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
     {
         public override string FriendlyName { get; set; } = "Окно";
 
-        public Window (string mark, int lenght, int height, double elevation, string role, string desc, ISpecBlock specBlock)
+        public Window (string mark, int lenght, int height, string elevation, string role, string desc, ISpecBlock specBlock)
             : base(1, "ОП-", mark, lenght, height, elevation, role, desc, specBlock)
         {
             Group = ApertureOptions.GroupWindow;

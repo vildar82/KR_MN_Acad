@@ -5,8 +5,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
     public class WallSleeve: ISpecElement, IOpeningElement
     {
         private int diam;
-        private int depth;
-        private double elev;
+        private int depth;        
 
         public string Dimension { get; set; }
         public string Elevation { get; set; }
@@ -21,13 +20,12 @@ namespace KR_MN_Acad.Spec.Openings.Elements
         public double Amount { get; set; } = 1;
         public string Key { get; set; }
 
-        public WallSleeve (string mark, int diam, int depth, double elev, string role, string desc, ISpecBlock specBlock)
+        public WallSleeve (string mark, int diam, int depth, string elev, string role, string desc, ISpecBlock specBlock)
         {
             SpecBlock = specBlock;
             this.diam = diam;
-            this.depth = depth;
-            this.elev = elev;
-            Elevation = "Ось отв. " + elev.ToString("0.000");
+            this.depth = depth;            
+            Elevation = "Ось отв. " + elev;
             Mark = mark;            
             Role = role;            
             Description = desc;
@@ -50,7 +48,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
         {
             var s = other as WallSleeve;
             if (s == null) return false;
-            return Mark == s.Mark && diam == s.diam && depth == s.depth && Role == s.Role && elev == s.elev;
+            return Mark == s.Mark && diam == s.diam && depth == s.depth && Role == s.Role && Elevation == s.Elevation;
         }
 
         public int CompareTo (ISpecElement other)
@@ -67,7 +65,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
             if (res != 0) return res;
             res = Role.CompareTo(s.Role);
             if (res != 0) return res;
-            res = elev.CompareTo(s.elev);
+            res = AcadLib.Comparers.AlphanumComparator.New.Compare(Elevation, s.Elevation);
             return res;
         }
 
@@ -78,7 +76,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
 
         public string GetParamInfo ()
         {
-            return $"{Dimension} {elev} {Role}";
+            return $"{Dimension} {Elevation} {Role}";
         }
 
         public string GetDesc ()

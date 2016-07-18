@@ -12,8 +12,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
     public class Opening : ISpecElement, IOpeningElement
     {        
         private int length;
-        private int height;
-        private double elev;    
+        private int height;        
         public string Mark { get; set; }
         public string Dimension { get; set; }
         public string Elevation { get; set; }
@@ -31,7 +30,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
         public double Amount { get; set; } = 1;
         public string Key { get; set; }
 
-        public Opening (string mark, int lenght, int height, double elevation, string role, string desc,
+        public Opening (string mark, int lenght, int height, string elevation, string role, string desc,
             ISpecBlock specBlock)
         {
             SpecBlock = specBlock;
@@ -39,10 +38,9 @@ namespace KR_MN_Acad.Spec.Openings.Elements
             Role = role;
             Count = 1;
             Description = desc;
-            Elevation = elevation.ToString("0.000");
+            Elevation = elevation;
             this.length = lenght;
-            this.height = height;
-            this.elev = elevation;
+            this.height = height;            
             Dimension = length + "х" + height + "(h)";
             Key = Dimension + Elevation + Role;
         }
@@ -65,7 +63,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
             var s = other as Opening;
             if (s == null) return false;
             return Mark == s.Mark && length == s.length && height == s.height 
-                && Role == s.Role && elev == s.elev;
+                && Role == s.Role && Elevation == s.Elevation;
         }
 
         public int CompareTo (ISpecElement other)
@@ -82,7 +80,7 @@ namespace KR_MN_Acad.Spec.Openings.Elements
             if (res != 0) return res;
             res = Role.CompareTo(s.Role);
             if (res != 0) return res;
-            res = elev.CompareTo(s.elev);
+            res = AcadLib.Comparers.AlphanumComparator.New.Compare(Elevation,s.Elevation);
             return res;
         }
 

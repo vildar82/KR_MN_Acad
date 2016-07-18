@@ -66,6 +66,7 @@ namespace KR_MN_Acad.Spec.Openings
                 foreach (var item in group.Value.Cast<OpeningRow>())
                 {
                     cell = table.Cells[row, 0];
+                    cell.Borders.Horizontal.Margin = 0;
                     cell.TextString = item.Mark;                    
 
                     cell = table.Cells[row, 1];

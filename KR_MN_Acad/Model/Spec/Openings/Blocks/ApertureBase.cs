@@ -23,9 +23,9 @@ namespace KR_MN_Acad.Openings.Blocks
 
         protected string mark;
         protected int length;
-        protected int height;
-        protected double elev;
+        protected int height;        
         protected string desc;
+        protected string elev;
 
         Aperture opening;
 
@@ -40,7 +40,7 @@ namespace KR_MN_Acad.Openings.Blocks
             mark = Block.GetPropValue<string>(propMark);
             length = Block.GetPropValue<int>(propLength);
             height = Block.GetPropValue<int>(propHeight);
-            elev = Block.GetPropValue<double>(propElevation);            
+            elev = Block.GetPropValue<string>(propElevation);            
             desc = Block.GetPropValue<string>(propDesc, false);
             opening = GetAperture();
             AddElement(opening);

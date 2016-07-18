@@ -14,8 +14,7 @@ namespace KR_MN_Acad.Model.Pile
 {
     [Serializable]
     public class PileOptions
-    {   
-        [XmlIgnore]
+    {           
         public static string FileXml = Path.Combine(AutoCAD_PIK_Manager.Settings.PikSettings.ServerShareSettingsFolder, @"КР-МН\Сваи\PileOptions.xml");
         public const string DictNod = "PIK";
         public const string RecAbsoluteZero = "AbsoluteZero";
