@@ -72,7 +72,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         {
             var b = other as Bracket;
             if (b == null) return false;
-            var res = Mark == b.Mark && L == b.L && T == b.T;
+            var res = L == b.L && T == b.T;
             return res;
         }
 

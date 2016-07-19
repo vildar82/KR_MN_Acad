@@ -72,10 +72,11 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             if (det == null) return false;
             if (ReferenceEquals(this, det)) return true;
 
-            return prefix == det.prefix &&
+            var res = prefix == det.prefix &&
                 BlockNameDetail == det.BlockNameDetail &&
                 base.Equals(other) &&
-                this.Equals(det);           
+                this.Equals(det);
+            return res;
         }
 
         public override int GetHashCode ()

@@ -29,21 +29,28 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         public BarRunning(int diam, double meters, string pos, ISpecBlock block, string friendlyName) 
             : base(diam, 0, 1, pos, block, friendlyName)
         {
-            Meters = RoundHelper.Round2Digits(meters);            
-        }
+            Meters = RoundHelper.Round2Digits(meters);
+            Key = GetKey();          
+        }        
 
         /// <summary>
         /// Погонные стержни с шагом и диапазоном распределения
         /// </summary>        
         public BarRunning (int diam, double length, int widthRun, int step, int rows, string pos,
             ISpecBlock block, string friendlyName)
-            : base(diam,0,1, pos, block, friendlyName)
+            : base(diam, 0, 1, pos, block, friendlyName)
         {
             Rows = rows;
             Width = widthRun;
             Step = step;
-            Meters = CalcMeters(length);            
-        }        
+            Meters = CalcMeters(length);
+            Key = GetKey();
+        }
+
+        private string GetKey ()
+        {
+            return Key += Meters + "L=" + Length;
+        }
 
         /// <summary>
         /// Перед вызовом

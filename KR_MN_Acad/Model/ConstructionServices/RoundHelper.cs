@@ -34,11 +34,9 @@ namespace KR_MN_Acad.ConstructionServices
 
         /// <summary>
         /// Округление целого число до 5 вверх. Например: 189=190, 182=185.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
+        /// </summary>        
         public static int Round5(int value)
-        {
+        {            
             return AcadLib.MathExt.RoundTo5(value);
         }
     }

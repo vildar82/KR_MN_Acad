@@ -10,10 +10,8 @@ using KR_MN_Acad.Spec.Materials;
 
 namespace KR_MN_Acad.Spec.ArmWall.Blocks
 {
-    public class DoorBlock : WallBase
-    {
-        public const string BlockName = "КР_Арм_Стена_Дверь";
-
+    public abstract class ApertureBase : WallBase
+    {        
         protected new const string PropNameArmHorDiam = "ДиамГорАрмФон";
         protected new const string PropNameArmHorStep = "ШагГорАрмФон";
         protected new const string PropNameArmVerticPos = "ПОЗВЕРТИКАРМПОГОННОЙ";
@@ -21,12 +19,20 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
         protected new const string PropNameArmHorDesc = "ОПИСАНИЕГОРПОГОННОЙ";
         protected new const string PropNameArmVerticDesc = "ОПИСАНИЕВЕРТИКПОГОННОЙ";
 
-        const string PropNameView = "Вид торцов";
-        const string PropNameDoorHeight = "ВысотаПроема";
-        const string PropNameDoorWidth = "ШиринаПроема";
+        /// <summary>
+        /// Высота проема
+        /// </summary>
+        protected string PropNameApertureHeight;
+        /// <summary>
+        /// Высота до низа проема (для дверей 0, для окна 900)
+        /// </summary>
+        protected string PropNameApertureHeightAbove;
+        const string PropNameView = "Вид торцов";        
+        const string PropNameApertureWidth = "ШиринаПроема";
         const string PropNameThickness = "ТолщинаСтены";
         const string PropNameAddArmDiam = "ДиамАрмУсиления";
-        const string PropNameAddArmHorCount = "КолГорАрмУсиления";
+        protected string PropNameAddArmHorCountTop;
+        protected string PropNameAddArmHorCountBottom;
         const string PropNameArmVerticDiam = "ДиамВертикАрмФон";
         const string PropNameArmVerticStep = "ШагВертикАрмФон";        
         const string PropNameBracketLeftLength = "ДлинаСкобыСлева";
@@ -40,32 +46,44 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
         const string PropNameAddArmHorDesc = "ОПИСАНИЕГОРАРМУСИЛЕНИЯ";
         const string PropNameBracketTopPos = "ПОЗСКОБЫВЕРХНЕЙ";
         const string PropNameBracketTopDesc = "ОПИСАНИЕСКОБЫВЕРХНЕЙ";
+        const string PropNameBracketBottomPos = "ПОЗСКОБЫНИЖНЕЙ";
+        const string PropNameBracketBottomDesc = "ОПИСАНИЕСКОБЫНИЖНЕЙ";
         const string PropNameBracketLeftPos = "ПОЗСКОБЫСЛЕВА";
         const string PropNameBracketLeftDesc = "ОПИСАНИЕСКОБЫСЛЕВА";
         const string PropNameBracketRightPos = "ПОЗСКОБЫСПРАВА";
         const string PropNameBracketRightDesc = "ОПИСАНИЕСКОБЫСПРАВА";
-        const string PropNameShacklePos = "ПОЗХОМУТА";
-        const string PropNameShackleDesc = "ОПИСАНИЕХОМУТА";
+        protected string PropNameShackleTopPos = "ПОЗХОМУТАСВЕРХУ";
+        protected string PropNameShackleTopDesc = "ОПИСАНИЕХОМУТАСВЕРХУ";
+        const string PropNameShackleBottomPos = "ПОЗХОМУТАСНИЗУ";
+        const string PropNameShackleBottomDesc = "ОПИСАНИЕХОМУТАСНИЗУ";
         const string PropNameArmDiagonalPos = "ПОЗДИАГАНАЛЬНОЙАРМ";
         const string PropNameArmDiagonalDesc = "ОПИСАНИЕДИАГАРМ";
 
+        bool hasBottomArm;
         bool hasLeftEnd;
         bool hasRightEnd;
         int endsLength = 200;
+        int addArmHorTopCount;
+        int addArmHorBottomCount;
 
         public int Thickness { get; set; }
-        public int DoorWidth { get; set; }
-        public int DoorHeight { get; set; }
-        
+        public int ApertureWidth { get; set; }
+        public int ApertureHeight { get; set; }
+        /// <summary>
+        /// Высота до проема
+        /// </summary>
+        public int ApertureHeightUnder { get; set; }
         public Bar AddArmVertic { get; set; }
         public Bar AddArmHor { get; set; }
         public Bracket BracketLeft { get; set; }
         public Bracket BracketRight { get; set; }
         public Bracket BracketTop { get; set; }
         public Shackle ShackleTop { get; set; }
+        public Bracket BracketBottom { get; set; }
+        public Shackle ShackleBottom { get; set; }
         public Bar BarDiagonal { get; set; }
 
-        public DoorBlock (BlockReference blRef, string blName) : base(blRef, blName)
+        public ApertureBase (BlockReference blRef, string blName) : base(blRef, blName)
         {
         }
 
@@ -102,8 +120,12 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
             FillElemPropNameDesc(BracketRight, PropNameBracketRightPos, PropNameBracketRightDesc);
             // Скоба сверху
             FillElemPropNameDesc(BracketTop, PropNameBracketTopPos, PropNameBracketTopDesc);
-            // Хомут
-            FillElemPropNameDesc(ShackleTop, PropNameShacklePos, PropNameShackleDesc);
+            // Скоба снизу
+            FillElemPropNameDesc(BracketBottom, PropNameBracketBottomPos, PropNameBracketBottomDesc);
+            // Хомут Сверху
+            FillElemPropNameDesc(ShackleTop, PropNameShackleTopPos, PropNameShackleTopDesc);
+            // Хомут Снизу
+            FillElemPropNameDesc(ShackleBottom, PropNameShackleBottomPos, PropNameShackleBottomDesc);
         }
         protected override void AddElements ()
         {
@@ -113,7 +135,9 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
             AddElement(BracketLeft);
             AddElement(BracketRight);
             AddElement(BracketTop);
-            AddElement(ShackleTop);            
+            AddElement(ShackleTop);
+            AddElement(BracketBottom);
+            AddElement(ShackleBottom);
             AddElement(ArmHor);
             AddElement(ArmVertic);            
             AddElement(Concrete);
@@ -124,8 +148,9 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
             // определение наличия торцов
             defineEnds();
 
-            DoorWidth = Block.GetPropValue<int>(PropNameDoorWidth);
-            DoorHeight = Block.GetPropValue<int>(PropNameDoorHeight);
+            ApertureWidth = Block.GetPropValue<int>(PropNameApertureWidth);
+            ApertureHeight = Block.GetPropValue<int>(PropNameApertureHeight);
+            ApertureHeightUnder = Block.GetPropValue<int>(PropNameApertureHeightAbove, isRequired:false);
             Height = Block.GetPropValue<int>(PropNameHeight);
             Thickness = Block.GetPropValue<int>(PropNameThickness);
             Outline = Block.GetPropValue<int>(PropNameOutline);
@@ -141,6 +166,7 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 
             // Определение стержней над проемом - Скоба, Хомут, Гор погонная, Вертик погонная если надо
             defineAbove();
+            defineUnder();
 
             // Скобы
             defineSideBrackets();
@@ -149,13 +175,14 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
             int diamDiag = 10;
             int lapLenDiagonal = Armature.GetLapLength(diamDiag, Concrete);
             string posDiag = Block.GetPropValue<string>(PropNameArmDiagonalPos);
-            BarDiagonal = new Bar(diamDiag, lapLenDiagonal * 2, 4, posDiag, this, "Диагональные стержни над проемом");
+            int countDiagArm = 4 + (hasBottomArm ? 4 : 0);
+            BarDiagonal = new Bar(diamDiag, lapLenDiagonal * 2, countDiagArm, posDiag, this, "Диагональные стержни проема");
             BarDiagonal.Calc();            
-        }
+        }        
 
         private void defineSideBrackets ()
         {
-            int widthRun = DoorHeight -50;
+            int widthRun = ApertureHeight -50;
             if (hasLeftEnd)
             {
                 int brLenLeft = Block.GetPropValue<int>(PropNameBracketLeftLength);
@@ -172,18 +199,21 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 
         private void defineAddHorArm ()
         {
-            int countAddArmHor = Block.GetPropValue<int>(PropNameAddArmHorCount);
+            addArmHorTopCount = Block.GetPropValue<int>(PropNameAddArmHorCountTop);
+            addArmHorBottomCount = Block.GetPropValue<int>(PropNameAddArmHorCountBottom, isRequired:false);
+            int countAddArmHor = addArmHorTopCount + addArmHorBottomCount;
             int diamAddArmHor = Block.GetPropValue<int>(PropNameAddArmDiam);
             int lapLengthArmHor =  Armature.GetLapLength(diamAddArmHor, Concrete);
-            int lengthAddArmHor = DoorWidth + (hasLeftEnd? lapLengthArmHor : 0) +(hasRightEnd? lapLengthArmHor : 0);
-            AddArmHor = defineBar(countAddArmHor, lengthAddArmHor, PropNameAddArmDiam, PropNameAddArmHorPos, "Горизонтальные стержни усиления над проемом");
+            int lengthAddArmHor = ApertureWidth + (hasLeftEnd? lapLengthArmHor : 0) +(hasRightEnd? lapLengthArmHor : 0);
+            AddArmHor = defineBar(countAddArmHor, lengthAddArmHor, PropNameAddArmDiam, PropNameAddArmHorPos, "Горизонтальные стержни усиления проема");
         }
 
         private void defineAddVerticArm ()
         {
             int countAddVerticArm = (hasLeftEnd? 4:0) + (hasRightEnd? 4:0);
             int lenAddVerticArm = Height+Outline;
-            AddArmVertic = defineBar(countAddVerticArm, lenAddVerticArm, PropNameAddArmDiam, PropNameAddArmVerticPos, "Вертикальные стержни усиления проема");
+            AddArmVertic = defineBar(countAddVerticArm, lenAddVerticArm, PropNameAddArmDiam, PropNameAddArmVerticPos,
+                "Вертикальные стержни усиления проема");
         }
 
         private void defineAbove ()
@@ -195,14 +225,14 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
             int stepVerticArm = Block.GetPropValue<int>(PropNameArmVerticStep);
             // Длина нахлести вертик арм (для скобы)
             int lapLengthVerticArm = Armature.GetLapLength(diamVerticArm, Concrete);
-            int widthRun = DoorWidth-100;
+            int widthRun = ApertureWidth-100;
             if (widthRun <= 0) return;            
 
-            int lengthVerticArm = Height - DoorHeight + Outline -20;
+            int lengthVerticArm = Height - ApertureHeight + Outline -20;
             int bracketLen = lapLengthVerticArm;
 
             // Если высота стены над проемом больше двух длин нахлеста, то добавляется вертикальная погонная арматура
-            if  (Height-DoorHeight> lapLengthVerticArm*2)
+            if  (Height-ApertureHeight> lapLengthVerticArm*2)
             {
                 // Добавление вертик погонной арм - без коэф нахлести погонной арм!!!                
                 string posArmVertic = Block.GetPropValue<string>(PropNameArmVerticPos);
@@ -225,28 +255,111 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
             int stepShackle = Block.GetPropValue<int>(PropNameShackleStep);
             int diamShackle = Block.GetPropValue<int>(PropNameShackleDiam);
             int wShackle = Thickness - 2*a + diamVerticArm + AddArmHor.Diameter*2;
-            int hShackle = (AddArmHor.Count == 4 ? 100: 200) + AddArmHor.Diameter;
-            string posShackle = Block.GetPropValue<string>(PropNameShacklePos);
+            int hShackle = (addArmHorTopCount == 4 ? 100: 200) + AddArmHor.Diameter;
+            string posShackle = Block.GetPropValue<string>(PropNameShackleTopPos);
             ShackleTop = new Shackle(diamShackle, wShackle, hShackle, stepShackle, widthRun, 1, posShackle, this);
             ShackleTop.Calc();
 
             // Горизонтальная погонная арм - Фоновая
             int stepHorArm = Block.GetPropValue<int>(PropNameArmHorStep);
-            int widthHorArm = Height - DoorHeight - a - (AddArmHor.Count == 4 ? 100: 200)  - stepHorArm - 50;
+            int widthHorArm = Height - ApertureHeight - a - (addArmHorTopCount == 4 ? 100: 200)  - stepHorArm - 50;
             if (widthHorArm > 0)
             {
-                ArmHor = defineBarRunStep(DoorWidth, widthHorArm, 2, PropNameArmHorDiam, PropNameArmHorPos,
+                ArmHor = defineBarRunStep(ApertureWidth, widthHorArm, 2, PropNameArmHorDiam, PropNameArmHorPos,
                     PropNameArmHorStep, Concrete, "Горизонтальная фоновая арматура");
                 ArmHor.Calc();
             }
-        }        
+        }
 
+        private void defineUnder ()
+        {
+            // Определение арматуры снизу проема            
+            if (ApertureHeightUnder < 200)
+            {
+                return;
+            }
+            hasBottomArm = true;
+
+            int diamVerticArm = Block.GetPropValue<int>(PropNameArmVerticDiam);
+            int stepVerticArm = Block.GetPropValue<int>(PropNameArmVerticStep);
+            // Длина нахлести вертик арм (для скобы)
+            int lapLengthVerticArm = Armature.GetLapLength(diamVerticArm, Concrete);
+            int widthRun = ApertureWidth - 100;
+            if (widthRun <= 0) return;
+
+            int lengthVerticArm = ApertureHeightUnder  - 20;
+            int bracketLen = lapLengthVerticArm;
+
+            // Если высота подоконника больше двух длин нахлеста, то добавляется вертикальная погонная арматура
+            if (ApertureHeightUnder > lapLengthVerticArm * 2)
+            {
+                // Добавление вертик погонной арм - без коэф нахлести погонной арм!!!   
+                string posArmVertic = Block.GetPropValue<string>(PropNameArmVerticPos);
+                var barRunArmVerticTemp =new BarRunning(diamVerticArm, lengthVerticArm, widthRun, stepVerticArm, 2, posArmVertic, this, "Вертикальная погонная арматура");
+                barRunArmVerticTemp.Calc();
+                if (ArmVertic == null)
+                {
+                    ArmVertic = barRunArmVerticTemp;
+                }
+                else
+                {
+                    // Добавить метры к существующей верхней вертик погонной арм 
+                    var barRunArmVertic = (BarRunning)ArmVertic;
+                    barRunArmVertic.Meters += barRunArmVerticTemp.Meters;
+                    barRunArmVertic.Calc();
+                }
+            }
+            else
+            {
+                // Скоба на всю высоту выпуска вертик стержней (без погонной арматуры)
+                bracketLen = lengthVerticArm;
+            }
+            // Скоба нижняя
+            int tBracket = Thickness - 2 * a - diamVerticArm;
+            string posBracket = Block.GetPropValue<string>(PropNameBracketBottomPos);
+            BracketBottom = new Bracket(diamVerticArm, bracketLen, tBracket, stepVerticArm, widthRun, 1, posBracket,
+                this, "Скоба нижняя");
+            BracketBottom.Calc();
+
+            // Хомут
+            int stepShackle = Block.GetPropValue<int>(PropNameShackleStep);
+            int diamShackle = Block.GetPropValue<int>(PropNameShackleDiam);
+            int wShackle = Thickness - 2 * a + diamVerticArm + AddArmHor.Diameter * 2;
+            int hShackle = (addArmHorBottomCount == 4 ? 100 : 200) + AddArmHor.Diameter;
+            string posShackle = Block.GetPropValue<string>(PropNameShackleBottomPos);
+            ShackleBottom = new Shackle(diamShackle, wShackle, hShackle, stepShackle, widthRun, 1, posShackle, this);
+            ShackleBottom.Calc();
+
+            // Горизонтальная погонная арм - Фоновая
+            int stepHorArm = Block.GetPropValue<int>(PropNameArmHorStep);
+            int widthHorArm = ApertureHeightUnder - a - (addArmHorBottomCount == 4 ? 100 : 200) - stepHorArm - 50;
+            if (widthHorArm > 0)
+            {
+                var armHorTemp = defineBarRunStep(ApertureWidth, widthHorArm, 2, PropNameArmHorDiam, PropNameArmHorPos,
+                        PropNameArmHorStep, Concrete, "Горизонтальная фоновая арматура");
+                armHorTemp.Calc();
+                if (ArmHor == null)
+                {
+                    ArmHor = armHorTemp;
+                }
+                else
+                {
+                    ArmHor.Meters += armHorTemp.Meters;
+                    ArmHor.Count += armHorTemp.Count;
+                    ArmHor.Width += armHorTemp.Width;
+                    ArmHor.Calc();
+                }
+            }
+        }
+        
         private void defineConcrete ()
         {
             var classB =Block.GetPropValue<string>(PropNameConcrete);
             double volume = 0;
             // Объем верхней части            
-            volume += (Height - DoorHeight) * DoorWidth * Thickness;
+            volume += (Height - ApertureHeight) * ApertureWidth * Thickness;
+            // Объем нижней части
+            volume += ApertureHeightUnder * ApertureWidth * Thickness;
             // бетон в торцах
             if (hasLeftEnd)
             {

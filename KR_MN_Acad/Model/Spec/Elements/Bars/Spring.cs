@@ -123,7 +123,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
 		{
 			var s = other as Spring;
 			if (s == null) return false;
-			var res = Mark == s.Mark && LRab == s.LRab && tail == s.tail;
+			var res = LRab == s.LRab && tail == s.tail;
 			return res;
 		}
 

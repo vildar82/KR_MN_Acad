@@ -123,11 +123,13 @@
     </Compile>
     <Compile Include="Model\Spec\ArmWall\Blocks\AddHorArmBlock.cs" />
     <Compile Include="Model\Spec\ArmWall\Blocks\AddVerticLShapedArmBlock.cs" />
+    <Compile Include="Model\Spec\ArmWall\Blocks\Apertures\DoorBlock.cs" />
     <Compile Include="Model\Spec\ArmWall\Blocks\ColumnBase.cs" />
     <Compile Include="Model\Spec\ArmWall\Blocks\ColumnSquareBigBlock.cs" />
     <Compile Include="Model\Spec\ArmWall\Blocks\ColumnSquareSmallBlock.cs" />
     <Compile Include="Model\Spec\ArmWall\ArmWallOptions.cs" />
-    <Compile Include="Model\Spec\ArmWall\Blocks\DoorBlock.cs" />
+    <Compile Include="Model\Spec\ArmWall\Blocks\Apertures\WindowBlock.cs" />
+    <Compile Include="Model\Spec\ArmWall\Blocks\Apertures\ApertureBase.cs" />
     <Compile Include="Model\Spec\ArmWall\Blocks\PylonBlock.cs" />
     <Compile Include="Model\Spec\ArmWall\Blocks\SleeveBlock.cs" />
     <Compile Include="Model\Spec\ArmWall\Blocks\WallBase.cs" />

@@ -83,7 +83,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         {
             var s = other as Shackle;
             if (s == null) return false;
-            var res = Mark == s.Mark && L == s.L && H == s.H && tail == s.tail;
+            var res = L == s.L && H == s.H && tail == s.tail;
             return res;          
         }
 

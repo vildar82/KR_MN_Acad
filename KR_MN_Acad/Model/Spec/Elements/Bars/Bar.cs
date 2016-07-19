@@ -142,12 +142,13 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             if (arm == null) return false;
             if (ReferenceEquals(this, arm)) return true;
 
-            return Index == arm.Index &&
+            var res = Index == arm.Index &&
                 prefix == arm.prefix &&
                 Diameter == arm.Diameter &&
                 Length == arm.Length &&
                 Class == arm.Class &&
                 Gost.Equals(arm.Gost);
+            return res;
         }
 
         public virtual string GetDesc()
