@@ -51,7 +51,8 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             LStart = lStart;
             LEnd = lEnd;
             HDif = hDif;
-            LDif = lDif;            
+            LDif = lDif;
+            Key += "s" + LStart + "e" + LEnd  + "hd"+ HDif + "ld" + LDif;
         }
         
         private static int getLength (int lStart, int lEnd, int lDif, int hDif, int diam)
@@ -78,7 +79,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         {
             var b = other as BentBarDirect;
             if (b == null) return false;
-            var res = Mark == b.Mark && LStart == b.LStart && LEnd == b.LEnd && HDif == b.HDif && LDif == b.LDif;
+            var res = LStart == b.LStart && LEnd == b.LEnd && HDif == b.HDif && LDif == b.LDif;
             return res;
         }
 

@@ -55,6 +55,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
 			Class = ClassA240C;
 			Gost = GostOld;            
 			Count = CalcCountByArea(widthHor, widthVertic, stepHor, stepVert);
+            Key = GetName() + "t" + tail + "lr" + LRab;
 		}
 
 		/// <summary>

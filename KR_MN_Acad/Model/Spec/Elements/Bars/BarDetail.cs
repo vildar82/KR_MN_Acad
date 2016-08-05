@@ -19,7 +19,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         public override int Index { get; set; } = 0;
         public override GroupType Group { get; set; }= GroupType.Details;
 
-        public override bool IsDefaultGroupings { get; set; } = false;
+        public override bool IsDefaultGroupings { get; set; } = false;        
 
         /// <summary>
         /// Деталь по штукам
@@ -28,7 +28,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             ISpecBlock block, string friendlyName) 
             : base(diam, len,count, pos, block, friendlyName)
         {
-            this.prefix = prefix;
+            this.prefix = prefix;            
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             ISpecBlock block, string friendlyName)
             : base(diam, len, width, step, rows, pos, block, friendlyName)
         {
-            this.prefix = prefix;
+            this.prefix = prefix;            
         }
 
         public override void SetNumber (string num, int indexFirst, int indexSecond)

@@ -51,7 +51,8 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             L = RoundHelper.Round5(wShackle);
             H = RoundHelper.Round5(hShackle);
             Class = ClassA240C;
-            Gost = GostOld;            
+            Gost = GostOld;
+            Key = GetName() + "t" + tail + "L" + L + "h" + H;         
         }
 
         private static int getTail (int diam)

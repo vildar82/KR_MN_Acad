@@ -44,7 +44,8 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             : base(d, CalcLength(h, t, d), width, step, rows, PREFIX, pos, block, friendlyName)
         {            
             T = RoundHelper.Round5(t);
-            L = h;            
+            L = h;
+            Key += "t" + T + "l" + L;
         }
         
         /// <summary>

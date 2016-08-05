@@ -45,7 +45,8 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         {            
             H = hGs;
             L = lGs;
-            //descEnd = ", шт." + count;            
+            //descEnd = ", шт." + count;        
+            Key += "h" +  H + "l" + L;    
         }
 
         /// <summary>
@@ -57,6 +58,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
             H = hGs;
             L = lGs;
             //descEnd = ", ш." + step;
+            Key += "h" + H + "l" + L;
         }
 
         /// <summary>
@@ -87,7 +89,7 @@ namespace KR_MN_Acad.Spec.Elements.Bars
         {
             var b = other as BentBarLshaped;
             if (b == null) return false;
-            var res = Mark == b.Mark && L == b.L && H == b.H;
+            var res = L == b.L && H == b.H;
             return res;
         }
 
