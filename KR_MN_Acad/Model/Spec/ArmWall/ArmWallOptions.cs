@@ -23,6 +23,7 @@ namespace KR_MN_Acad.Spec.ArmWall
             TypesBlock = new Dictionary<string, Type>() {
                 { Blocks.WallBlock.BlockName, typeof(Blocks.WallBlock) },
                 { Blocks.WallEndBlock.BlockName, typeof(Blocks.WallEndBlock) },
+                { Blocks.WallEndBlock.BlockName2, typeof(Blocks.WallEndBlock) },
                 { Blocks.WallEndCornerBlock.BlockName, typeof(Blocks.WallEndCornerBlock) },
                 { Blocks.WallEndTBlock.BlockName, typeof(Blocks.WallEndTBlock) },
                 { Blocks.ColumnSquareSmallBlock.BlockName, typeof(Blocks.ColumnSquareSmallBlock) },

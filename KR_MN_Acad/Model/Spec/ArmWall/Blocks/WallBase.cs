@@ -83,9 +83,9 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 		protected int getWidthVerticArm (int step, int length)
 		{
 			// Вычесть отступ у торцов стены = шаг вертик стержней - а.  
-            var res = length - (step - a) * 2;
-            if (res < 0) res = 0;
-            return res;
+			var res = length - (step - a) * 2;
+			if (res < 0) res = 0;
+			return res;
 		}
 
 		/// <summary>

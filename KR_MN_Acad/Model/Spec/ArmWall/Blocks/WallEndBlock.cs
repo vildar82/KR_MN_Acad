@@ -16,7 +16,8 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 	public class WallEndBlock : WallBase
 	{        
 		public const string BlockName = "КР_Арм_Стена_Торец";
-				
+		public const string BlockName2 = "КР_Арм_Стена_Торец_2ст";
+
 		const string PropNameLength = "Длина торца";
 		const string PropNameThickness = "Толщина стены";        
 		const string PropNameArmVerticDiam = "ДиамВертикАрм";
@@ -97,8 +98,8 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
 			Height = Block.GetPropValue<int>(PropNameHeight);
 			Thickness = Block.GetPropValue<int>(PropNameThickness);
 			Outline = Block.GetPropValue<int>(PropNameOutline);            
-			ArmVerticCount = Block.GetPropValue<int>(PropNameArmVerticCount);
-			var concrete = Block.GetPropValue<string>(PropNameConcrete);
+			ArmVerticCount = Block.GetPropValue<int>(PropNameArmVerticCount);            
+            var concrete = Block.GetPropValue<string>(PropNameConcrete);
 			Concrete = new ConcreteH(concrete, Length, Thickness, Height, this);
 			Concrete.Calc();
 			// Определние вертикальной арматуры
