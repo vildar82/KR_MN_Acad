@@ -142,14 +142,15 @@ namespace KR_MN_Acad.Spec
         }
 
         private void InsertTables (Table table)
-        {
-            var ids = new List<ObjectId>();
+        {            
             using (var t = db.TransactionManager.StartTransaction())
             {
                 var scale =100; //AcadLib.Scale.ScaleHelper.GetCurrentAnnoScale(db);
                 var cs = db.CurrentSpaceId.GetObject( OpenMode.ForWrite) as BlockTableRecord;                
 
                 table.TransformBy(Matrix3d.Scaling(scale, table.Position));
+
+                var ids = new List<ObjectId>();
 
                 cs.AppendEntity(table);
                 t.AddNewlyCreatedDBObject(table, true);                                
@@ -174,11 +175,10 @@ namespace KR_MN_Acad.Spec
                     Details.DetailService detailService = new Details.DetailService (options.TableService.GetDetails(), db);
                     var idsDetails = detailService.CreateTable(ptNextTable);
                     ids.AddRange(idsDetails);
-                }               
+                }
+                DragSel.Drag(ed, ids.ToArray(), Point3d.Origin);
                 t.Commit();
-            }
-
-            DragSel.Drag(ed, ids.ToArray(), Point3d.Origin);
+            }            
         }
     }
 }
