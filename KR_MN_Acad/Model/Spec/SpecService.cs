@@ -143,6 +143,7 @@ namespace KR_MN_Acad.Spec
 
         private void InsertTables (Table table)
         {
+            var ids = new List<ObjectId>();
             using (var t = db.TransactionManager.StartTransaction())
             {
                 var scale =100; //AcadLib.Scale.ScaleHelper.GetCurrentAnnoScale(db);
@@ -151,9 +152,7 @@ namespace KR_MN_Acad.Spec
                 table.TransformBy(Matrix3d.Scaling(scale, table.Position));
 
                 cs.AppendEntity(table);
-                t.AddNewlyCreatedDBObject(table, true);
-
-                var ids = new List<ObjectId> ();
+                t.AddNewlyCreatedDBObject(table, true);                                
                 ids.Add(table.Id);
 
                 // Если нужны дополнительные таблицы - ВРС, Ведомость деталей
@@ -175,18 +174,11 @@ namespace KR_MN_Acad.Spec
                     Details.DetailService detailService = new Details.DetailService (options.TableService.GetDetails(), db);
                     var idsDetails = detailService.CreateTable(ptNextTable);
                     ids.AddRange(idsDetails);
-                }
-
-                if (!DragSel.Drag(ed, ids.ToArray(), Point3d.Origin))
-                {
-                    foreach (var id in ids)
-                    {
-                        var ent = id.GetObject( OpenMode.ForWrite);
-                        ent.Erase();
-                    }
-                }
+                }               
                 t.Commit();
-            }                
+            }
+
+            DragSel.Drag(ed, ids.ToArray(), Point3d.Origin);
         }
     }
 }
