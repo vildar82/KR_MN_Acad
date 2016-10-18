@@ -100,7 +100,7 @@ namespace KR_MN_Acad.Model.Pile
             {
                 if (Pos == 0)
                 {
-                    return Result.Fail($"Не допустимый номер сваи '{Pos}'");
+                    return Result.Fail($"Недопустимый номер сваи '{Pos}'");
                 }
             }
             return Result.Ok();
