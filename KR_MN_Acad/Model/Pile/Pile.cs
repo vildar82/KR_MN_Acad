@@ -23,7 +23,7 @@ namespace KR_MN_Acad.Model.Pile
         public const string ParamLengthName = "Длина_сваи_мм";
         public const string ParamSideName = "Размер сваи";        
         public const string ParamViewName = "Вид";
-        public const string ParamBottomGrillageName = "Низ_ростверка_м";
+        public const string ParamBottomRostverkName = "Низ_ростверка_м";
         public const string ParamPitHeightName = "Глубина_приямка_мм";
 
         public static HashSet<string> _ignoreParams = new HashSet<string> { "origin" };
@@ -58,7 +58,7 @@ namespace KR_MN_Acad.Model.Pile
         /// <summary>
         /// Отметка низа ростверка,м
         /// </summary>
-        public double BottomGrillage { get; set; }
+        public double BottomRostverk { get; set; }
         /// <summary>
         /// Вид сваи
         /// </summary>
@@ -189,13 +189,13 @@ namespace KR_MN_Acad.Model.Pile
         public void CalcHightMarks()
         {
             // отметка верха сваи после забивки
-            TopPileAfterBeat = BottomGrillage + (PileCalcService.PileOptions.DimPileBeatToCut+ PileCalcService.PileOptions.DimPileCutToRostwerk) * 0.001;
+            TopPileAfterBeat = BottomRostverk + (PileCalcService.PileOptions.DimPileBeatToCut+ PileCalcService.PileOptions.DimPileCutToRostwerk - PitHeight) * 0.001;
             // отметка верха сваи после срубки = 'низ ростверка' + 'расст от низа ростверка до верха сваи после срубки'(50). 
-            TopPileAfterCut = BottomGrillage + (PileCalcService.PileOptions.DimPileCutToRostwerk-PitHeight) * 0.001;
+            TopPileAfterCut = BottomRostverk + (PileCalcService.PileOptions.DimPileCutToRostwerk-PitHeight) * 0.001;
             // отметка острия сваи
             PilePike = TopPileAfterBeat - (Length * 0.001);
             // Отметка низа ростверка
-            BottomGrillage -= PitHeight*0.001;
+            BottomRostverk -= PitHeight*0.001;
         }
 
         private void defineParameters(BlockReference blRef)
@@ -230,7 +230,7 @@ namespace KR_MN_Acad.Model.Pile
             // сторона сваи
             Side = GetParamValueInt(ParamSideName, dictParams);
             // Низ ростверка
-            BottomGrillage = GetParamValueDouble(ParamBottomGrillageName, dictParams);
+            BottomRostverk = GetParamValueDouble(ParamBottomRostverkName, dictParams);
             // Масса
             Weight = GetParamValueDouble(ParamWeightName, dictParams);
         }

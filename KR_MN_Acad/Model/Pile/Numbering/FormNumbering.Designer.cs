@@ -95,7 +95,7 @@
             this.MinimizeBox = false;
             this.Name = "FormNumbering";
             this.ShowIcon = false;
-            this.Text = "FormNumbering";
+            this.Text = "Нумерация свай";
             this.ResumeLayout(false);
 
         }

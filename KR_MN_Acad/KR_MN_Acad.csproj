@@ -114,6 +114,7 @@
     <Compile Include="Model\Pile\PileFilter.cs" />
     <Compile Include="Model\Pile\Numbering\PileNumberingService.cs" />
     <Compile Include="Model\Pile\PileOptions.cs" />
+    <Compile Include="Model\Pile\SchemaEnum.cs" />
     <Compile Include="Model\Spec\ArmTypes\ArmTypesService.cs" />
     <Compile Include="Model\Spec\ArmTypes\ArmTypeWall.cs" />
     <Compile Include="Model\Spec\ArmTypes\UI\ViewArmTypes.cs" />

@@ -54,7 +54,7 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
             View = p.View;
             TopPileAfterBeat = p.TopPileAfterBeat;
             TopPileAfterCut = p.TopPileAfterCut;
-            BottomGrillage = p.BottomGrillage;
+            BottomGrillage = p.BottomRostverk;
             PilePike = p.PilePike;
             Piles = piles;
             IdBtr = p.IdBtrAnonym;

@@ -7,35 +7,40 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using AcadLib;
+using AcadLib.XData;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
 
 namespace KR_MN_Acad.Model.Pile
 {
     [Serializable]
-    public class PileOptions
+    public class PileOptions : IExtDataSave, ITypedDataValues
     {           
         public static string FileXml = Path.Combine(AutoCAD_PIK_Manager.Settings.PikSettings.ServerShareSettingsFolder, @"КР-МН\Сваи\PileOptions.xml");
-        public const string DictNod = "PIK";
+        public const string DicPluginName = "KR_MN";
+        public const string DicPileName = "Pile";
         public const string RecAbsoluteZero = "AbsoluteZero";
         public const string RecDimPileBeatToCut = "Срубка";
         public const string RecDimPileCutToRostwerk = "Заделка";
+        public const string RecSchema = "Схема";
 
-        [Category("Общие")]
-        [DisplayName("Имя блока сваи")]
-        [Description("^КР_свая - имя блока начинается с КР_свая. Регистр игнорируется.")]
-        [DefaultValue("^КР_свая")]
+        [Browsable(false)]
+        //[Category("Общие")]
+        //[DisplayName("Имя блока сваи")]
+        //[Description("^КР_свая - имя блока начинается с КР_свая. Регистр игнорируется.")]
+        //[DefaultValue("^КР_свая")]
         public string PileBlockNameMatch { get; set; } = "^КР_свая";
 
-        [Category("Общие")]
-        [DisplayName("Атрибут номера")]
-        [Description("Тэг атрибута номера сваи.")]
-        [DefaultValue("ПОЗ")]
+        [Browsable(false)]
+        //[Category("Общие")]
+        //[DisplayName("Атрибут номера")]
+        //[Description("Тэг атрибута номера сваи.")]
+        //[DefaultValue("ПОЗ")]
         public string PileAttrPos { get; set; } = "ПОЗ";
 
         [Category("Общие")]
         [DisplayName("Минимальное расстояние")]
-        [Description("Коэфициент минимального расстояния между сваями. Lmin = k * 'сторона сваи'.")]
+        [Description("Коэфициент минимального расстояния между сваями. Lmin = k * 'сторона сваи'. При нумерации свай, будет проверяться соблюдение минимального расстояния между сваями.")]
         [DefaultValue(3)]
         public double PileRatioLmin { get; set; } = 3;
 
@@ -60,10 +65,18 @@ namespace KR_MN_Acad.Model.Pile
         [DefaultValue(150.00)]
         public double AbsoluteZero { get; set; } = 150.00;
 
-        [Category("Разное")]
-        [DisplayName("Слой таблиц")]
-        [Description("Слой для вставки таблиц свай.")]
-        [DefaultValue("КР_Таблицы")]
+        //[XmlIgnore]
+        //[Category("Ростверк")]
+        //[DisplayName("Схема")]
+        //[Description("Схема ростверка - обычная или с промежуточной плитой.")]
+        //[DefaultValue(SchemaEnum.Normal)]
+        //public SchemaEnum Schema { get; set; }
+
+        [Browsable(false)]
+        //[Category("Разное")]
+        //[DisplayName("Слой таблиц")]
+        //[Description("Слой для вставки таблиц свай.")]
+        //[DefaultValue("КР_Таблицы")]
         public string TableLayer { get; set; } = "КР_Таблицы";
 
         public PileOptions PromptOptions()
@@ -80,7 +93,7 @@ namespace KR_MN_Acad.Model.Pile
             try
             {
                 resVal = thisCopy;
-                Save();
+                resVal.Save();
             }
             catch (Exception ex)
             {
@@ -139,18 +152,59 @@ namespace KR_MN_Acad.Model.Pile
 
         private void SaveToNOD()
         {
-            var nod = new DictNOD(DictNod);
-            nod.Save(AbsoluteZero, RecAbsoluteZero);
-            nod.Save(DimPileBeatToCut, RecDimPileBeatToCut);
-            nod.Save(DimPileCutToRostwerk, RecDimPileCutToRostwerk);
+            var nod = new DictNOD(DicPluginName, true);
+            DicED dicPile = GetExtDic(null);            
+            nod.Save(dicPile);
+            //nod.Save(AbsoluteZero, RecAbsoluteZero);
+            //nod.Save(DimPileBeatToCut, RecDimPileBeatToCut);
+            //nod.Save(DimPileCutToRostwerk, RecDimPileCutToRostwerk);
         }
 
         private void LoadFromNOD()
         {
-            var nod = new DictNOD(DictNod);
-            AbsoluteZero = nod.Load(RecAbsoluteZero, AbsoluteZero);
-            DimPileBeatToCut = nod.Load(RecDimPileBeatToCut, DimPileBeatToCut);
-            DimPileCutToRostwerk = nod.Load(RecDimPileCutToRostwerk, DimPileCutToRostwerk);
+            var nod = new DictNOD(DicPluginName, true);
+            SetExtDic(nod.LoadED(DicPileName), null);
+            //AbsoluteZero = nod.Load(RecAbsoluteZero, AbsoluteZero);
+            //DimPileBeatToCut = nod.Load(RecDimPileBeatToCut, DimPileBeatToCut);
+            //DimPileCutToRostwerk = nod.Load(RecDimPileCutToRostwerk, DimPileCutToRostwerk);
+        }
+
+        public DicED GetExtDic (Document doc)
+        {
+            DicED dic = new DicED(DicPileName);
+            dic.AddRec("Options", GetDataValues(null));
+            return dic;
+        }
+
+        public void SetExtDic (DicED dicPile, Document doc)
+        {            
+            SetDataValues(dicPile?.GetRec("Options")?.Values, null);
+        }
+
+        public List<TypedValue> GetDataValues (Document doc)
+        {
+            return new List<TypedValue> {
+                TypedValueExt.GetTvExtData(AbsoluteZero),
+                TypedValueExt.GetTvExtData(DimPileBeatToCut),
+                TypedValueExt.GetTvExtData(DimPileCutToRostwerk),
+                //TypedValueExt.GetTvExtData(Schema),
+            };
+        }
+
+        public void SetDataValues (List<TypedValue> values, Document doc)
+        {
+            if (values == null) return;
+            try
+            {
+                int i = 0;
+                AbsoluteZero = values[i++].GetTvValue<double>();
+                DimPileBeatToCut = values[i++].GetTvValue<double>();
+                DimPileCutToRostwerk = values[i++].GetTvValue<double>();
+                //Schema = (SchemaEnum)values[i++].GetTvValue<int>();
+            }
+            catch
+            {                
+            }
         }
     }
 }

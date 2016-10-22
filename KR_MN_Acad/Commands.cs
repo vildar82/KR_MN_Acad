@@ -150,8 +150,7 @@ namespace KR_MN_Acad
             AcadLib.CommandStart.Start(doc =>
             {
                 var pileOpt = Model.Pile.PileOptions.Load();
-                pileOpt = pileOpt.PromptOptions();
-                pileOpt.Save();
+                pileOpt = pileOpt.PromptOptions();                
                 doc.Editor.WriteMessage("\nНастойки сохранены.");
             });            
         }

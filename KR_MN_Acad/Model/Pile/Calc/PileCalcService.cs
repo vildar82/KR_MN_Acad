@@ -60,7 +60,7 @@ namespace KR_MN_Acad.Model.Pile.Calc
         private List<HightMarkRow> getHightMarkRows(List<Pile> piles)
         {
             List<HightMarkRow> res = new List<HightMarkRow>();                        
-            var groups = piles.GroupBy(g => new { g.View, g.TopPileAfterBeat, g.TopPileAfterCut, g.BottomGrillage, g.PilePike })
+            var groups = piles.GroupBy(g => new { g.View, g.TopPileAfterBeat, g.TopPileAfterCut, g.BottomRostverk, g.PilePike })
                                 .OrderBy(g=>g.Key.View, AcadLib.Comparers.AlphanumComparator.New);
             foreach (var g in groups)
             {
