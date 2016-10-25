@@ -6,16 +6,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AcadLib;
+using AcadLib.XData;
 using Autodesk.AutoCAD.ApplicationServices;
+using Autodesk.AutoCAD.DatabaseServices;
 
 namespace KR_MN_Acad.Model.Pile.Numbering
 {
-    class Options
+    class Options : ITypedDataValues, IExtDataSave
     {
-        private static AcadLib.DictNOD dictNod = new AcadLib.DictNOD("PileNumberingOptions");
-        private const string RecOrder = "NumberingOrder";
-        private const string RecSide = "PileSide";
-        private const string RecPileStartNum = "PileStartNum";        
+        //private static AcadLib.DictNOD dictNod = new AcadLib.DictNOD("PileNumberingOptions");
+        //private const string RecOrder = "NumberingOrder";
+        //private const string RecSide = "PileSide";
+        //private const string RecPileStartNum = "PileStartNum";        
 
         [Category("Пользовательские")]
         [DisplayName("Порядок нумерации")]
@@ -24,23 +26,24 @@ namespace KR_MN_Acad.Model.Pile.Numbering
         [TypeConverter(typeof(EnumOrderConvertor))]
         public EnumNumberingOrder NumberingOrder { get; set; }
 
+        [Browsable(false)]
         [Category("Пользовательские")]
         [DisplayName("Сторона сваи")]
         [Description("Размер сваи.")]
         [DefaultValue(300)]
-        public int PileSide { get; set; }
+        public int PileSide { get; set; } = 300;
 
         [Category("Пользовательские")]
         [DisplayName("Начальный номер")]
-        [Description("Номер с которого начнется нумерация свай.")]        
+        [Description("Номер с которого начнется нумерация свай.")]
         [DefaultValue(1)]
-        public int PileStartNum { get; set; }        
+        public int PileStartNum { get; set; } = 1;      
 
         public void LoadDefault()
-        {
-            NumberingOrder = (EnumNumberingOrder)dictNod.Load(RecOrder, 0);            
-            PileSide = dictNod.Load(RecSide, 300);
-            PileStartNum = dictNod.Load(RecPileStartNum, 1);
+        {            
+            var dicNOD = new DictNOD("PileNumberingOptions", true);
+            var dicOpt = dicNOD.LoadED();
+            SetDataValues(dicOpt?.GetRec("Options")?.Values, null);
         }
 
         public Options PromptOptions()
@@ -66,13 +69,45 @@ namespace KR_MN_Acad.Model.Pile.Numbering
 
         private void Save(Options opt)
         {
-            dictNod.Save((int)opt.NumberingOrder, RecOrder);
-            dictNod.Save(opt.PileSide, RecSide);
-            dictNod.Save(opt.PileStartNum, RecPileStartNum);            
+            var dicNOD = new DictNOD("PileNumberingOptions", true);            
+            dicNOD.Save(GetExtDic(null));            
+        }
+
+        public List<TypedValue> GetDataValues (Document doc)
+        {
+            return new List<TypedValue> {
+                TypedValueExt.GetTvExtData((int)NumberingOrder),
+                TypedValueExt.GetTvExtData(PileStartNum),
+            };
+        }
+
+        public void SetDataValues (List<TypedValue> values, Document doc)
+        {
+            if (values == null) return;
+            try
+            {
+                NumberingOrder = (EnumNumberingOrder)values[0].GetTvValue<int>();
+                PileStartNum = values[1].GetTvValue<int>();
+            }
+            catch 
+            {                
+            }
+        }
+
+        public DicED GetExtDic (Document doc)
+        {
+            var dic = new DicED("PileNumberingOptions");
+            dic.AddRec("Options", GetDataValues(doc));
+            return dic;
+        }
+
+        public void SetExtDic (DicED dic, Document doc)
+        {
+            SetDataValues(dic.GetRec("Options")?.Values, doc);
         }
     }           
 
-    public class EnumOrderConvertor : EnumConverter
+    public class EnumOrderConvertor : System.ComponentModel.EnumConverter
     {
         public EnumOrderConvertor() : base(typeof(EnumNumberingOrder)) { }
 

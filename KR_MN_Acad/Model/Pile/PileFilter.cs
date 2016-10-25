@@ -12,31 +12,36 @@ namespace KR_MN_Acad.Model.Pile
         public static List<Pile> Filter(List<ObjectId> selblocks, PileOptions pileOptions, bool checkNum)
         {
             List<Pile> resVal = new List<Pile>();
-            foreach (var idBlRef in selblocks)
+            var db = HostApplicationServices.WorkingDatabase;
+            using (var t = db.TransactionManager.StartTransaction())
             {
-                using (var blRef = idBlRef.Open( OpenMode.ForRead, false, true) as BlockReference)
+                foreach (var idBlRef in selblocks)
                 {
-                    string blName = blRef.GetEffectiveName();
-                    if (Regex.IsMatch(blName, pileOptions.PileBlockNameMatch))
+                    using (var blRef = idBlRef.GetObject(OpenMode.ForRead, false, true) as BlockReference)
                     {
-                        Pile pile = new Pile(blRef, blName, pileOptions);
-                        var checkResult = pile.Check(checkNum);
-                        if (checkResult.Success)
+                        string blName = blRef.GetEffectiveName();
+                        if (Regex.IsMatch(blName, pileOptions.PileBlockNameMatch))
                         {
-                            resVal.Add(pile);
-                            if (!string.IsNullOrEmpty(pile.Error))
+                            Pile pile = new Pile(blRef, blName, pileOptions);
+                            var checkResult = pile.Check(checkNum);
+                            if (checkResult.Success)
                             {
-                                Inspector.AddError($"В блоке сваи '{blName}' обнаружены ошибки: {pile.Error}",
-                                blRef, System.Drawing.SystemIcons.Error);
-                            }                            
-                        }
-                        else
-                        {
-                            Inspector.AddError($"В блоке сваи '{blName}' обнаружены ошибки: {checkResult.Error}", 
-                                blRef,System.Drawing.SystemIcons.Error);
+                                resVal.Add(pile);
+                                if (!string.IsNullOrEmpty(pile.Error))
+                                {
+                                    Inspector.AddError($"В блоке сваи '{blName}' обнаружены ошибки: {pile.Error}",
+                                    blRef, System.Drawing.SystemIcons.Error);
+                                }
+                            }
+                            else
+                            {
+                                Inspector.AddError($"В блоке сваи '{blName}' обнаружены ошибки: {checkResult.Error}",
+                                    blRef, System.Drawing.SystemIcons.Error);
+                            }
                         }
                     }
                 }
+                t.Commit();
             }
             return resVal;
         }

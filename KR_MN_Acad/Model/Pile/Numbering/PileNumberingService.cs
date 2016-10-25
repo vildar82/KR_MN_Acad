@@ -22,7 +22,7 @@ namespace KR_MN_Acad.Model.Pile.Numbering
         private Options Options { get; set; }
         public PileOptions PileOptions { get; set; }
 
-        private double pileHalfSide;
+        //private double pileHalfSide;
 
         public PileNumberingService()
         {
@@ -42,13 +42,16 @@ namespace KR_MN_Acad.Model.Pile.Numbering
             Options.LoadDefault();
             Options = Options.PromptOptions();
 
-            pileHalfSide = Options.PileSide * 0.5;
+            //pileHalfSide = Options.PileSide * 0.5;
 
             // Выбор свай для нумерации
             var selblocks = Ed.SelectBlRefs("Выбор блоков свай для нумерации");
 
             // фильтр блоков свай            
             var piles = PileFilter.Filter(selblocks, PileOptions, false);
+
+            // Определения стороны сваи и проверка ее одинаковости
+            Options.PileSide = GetPileSides(ref piles);
 
             // Проверка дубликатов
             AcadLib.Blocks.Dublicate.CheckDublicateBlocks.Check(piles.Select(p => p.IdBlRef));
@@ -61,6 +64,20 @@ namespace KR_MN_Acad.Model.Pile.Numbering
 
             // Перенумерация
             Num(pilesSort);       
+        }
+
+        private int GetPileSides (ref List<Pile> piles)
+        {
+            var groupBySide = piles.GroupBy(g => g.Side).OrderByDescending(o => o.Key).ToList();
+            if (groupBySide.Skip(1).Any())
+            {
+                // Ошибка - несколько размеров свай
+                string sides = string.Join(", ", groupBySide.Select(s => $"{s.Key} - {s.Count()}шт."));
+                Inspector.AddError($"Определено несколько размеров сторон свай: {sides}. Рекомендуется выбирать сваи с одним размером сторон.",
+                    System.Drawing.SystemIcons.Error);
+            }
+            var side = groupBySide.First().Key;
+            return side;
         }
 
         private void CheckPiles(List<Pile> piles)

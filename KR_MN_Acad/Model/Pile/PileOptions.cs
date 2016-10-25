@@ -19,10 +19,10 @@ namespace KR_MN_Acad.Model.Pile
         public static string FileXml = Path.Combine(AutoCAD_PIK_Manager.Settings.PikSettings.ServerShareSettingsFolder, @"КР-МН\Сваи\PileOptions.xml");
         public const string DicPluginName = "KR_MN";
         public const string DicPileName = "Pile";
-        public const string RecAbsoluteZero = "AbsoluteZero";
-        public const string RecDimPileBeatToCut = "Срубка";
-        public const string RecDimPileCutToRostwerk = "Заделка";
-        public const string RecSchema = "Схема";
+        //public const string RecAbsoluteZero = "AbsoluteZero";
+        //public const string RecDimPileBeatToCut = "Срубка";
+        //public const string RecDimPileCutToRostwerk = "Заделка";
+        //public const string RecSchema = "Схема";
 
         [Browsable(false)]
         //[Category("Общие")]
@@ -38,10 +38,11 @@ namespace KR_MN_Acad.Model.Pile
         //[DefaultValue("ПОЗ")]
         public string PileAttrPos { get; set; } = "ПОЗ";
 
-        [Category("Общие")]
-        [DisplayName("Минимальное расстояние")]
-        [Description("Коэфициент минимального расстояния между сваями. Lmin = k * 'сторона сваи'. При нумерации свай, будет проверяться соблюдение минимального расстояния между сваями.")]
-        [DefaultValue(3)]
+        [Browsable(false)]
+        //[Category("Общие")]
+        //[DisplayName("Минимальное расстояние")]
+        //[Description("Коэфициент минимального расстояния между сваями. Lmin = k * 'сторона сваи'. При нумерации свай, будет проверяться соблюдение минимального расстояния между сваями.")]
+        //[DefaultValue(3)]
         public double PileRatioLmin { get; set; } = 3;
 
         [XmlIgnore]
@@ -102,38 +103,12 @@ namespace KR_MN_Acad.Model.Pile
             return resVal;
         }
 
-        public static PileOptions Load()
+        public static PileOptions Load ()
         {
-            PileOptions options = null;
-            if (File.Exists(FileXml))
-            {
-                try
-                {
-                    // Загрузка настроек таблицы из файла XML
-                    options = PileOptions.LoadFromXml();                    
-                }
-                catch (Exception ex)
-                {
-                    Logger.Log.Error(ex, $"Ошибка при попытке загрузки настроек таблицы из XML файла {FileXml}");
-                }
-            }
-            if (options == null)
-            {
-                // Создать дефолтные
-                options = new PileOptions();                
-                // Сохранение дефолтных настроек 
-                try
-                {
-                    options.Save();
-                }
-                catch (Exception exSave)
-                {
-                    Logger.Log.Error(exSave, $"Попытка сохранение настроек в файл {FileXml}");
-                }
-            }
+            // Создать дефолтные
+            var options = new PileOptions();            
             // Загрузка начтроек чертежа
             options.LoadFromNOD();
-
             return options;
         }               
 
@@ -146,8 +121,8 @@ namespace KR_MN_Acad.Model.Pile
         public void Save()
         {
             SaveToNOD();
-            AcadLib.Files.SerializerXml ser = new AcadLib.Files.SerializerXml(FileXml);
-            ser.SerializeList(this);
+            //AcadLib.Files.SerializerXml ser = new AcadLib.Files.SerializerXml(FileXml);
+            //ser.SerializeList(this);
         }
 
         private void SaveToNOD()
@@ -177,7 +152,8 @@ namespace KR_MN_Acad.Model.Pile
         }
 
         public void SetExtDic (DicED dicPile, Document doc)
-        {            
+        {
+            if (dicPile == null) return;
             SetDataValues(dicPile?.GetRec("Options")?.Values, null);
         }
 
@@ -187,7 +163,7 @@ namespace KR_MN_Acad.Model.Pile
                 TypedValueExt.GetTvExtData(AbsoluteZero),
                 TypedValueExt.GetTvExtData(DimPileBeatToCut),
                 TypedValueExt.GetTvExtData(DimPileCutToRostwerk),
-                //TypedValueExt.GetTvExtData(Schema),
+                //TypedValueExt.GetTvExtData(PileRatioLmin),
             };
         }
 
@@ -200,7 +176,7 @@ namespace KR_MN_Acad.Model.Pile
                 AbsoluteZero = values[i++].GetTvValue<double>();
                 DimPileBeatToCut = values[i++].GetTvValue<double>();
                 DimPileCutToRostwerk = values[i++].GetTvValue<double>();
-                //Schema = (SchemaEnum)values[i++].GetTvValue<int>();
+                //PileRatioLmin = values[i++].GetTvValue<double>();
             }
             catch
             {                
