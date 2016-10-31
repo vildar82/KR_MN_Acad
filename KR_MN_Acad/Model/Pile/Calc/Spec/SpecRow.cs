@@ -15,6 +15,7 @@ namespace KR_MN_Acad.Model.Pile.Calc.Spec
         /// Условное обозначение сваи
         /// </summary>
         public string View { get; set; }
+        public string PileType { get; set; }
         /// <summary>
         /// Номера свай
         /// </summary>
@@ -48,13 +49,14 @@ namespace KR_MN_Acad.Model.Pile.Calc.Spec
         {
             get
             {
-                return View + ": Серия=" + DocLink + ", Нименование=" + Name + ", Масса=" + Weight;
+                return View + ": Серия=" + DocLink + ", Нименование=" + Name + ", Масса=" + Weight + ", тип " + PileType;
             }
         }
 
         public SpecRow(Pile p, List<Pile> piles)
         {
             View = p.View;
+            PileType = p.GetPileType();
             Piles = piles;
             DocLink = p.DocLink;
             Name = p.Name;

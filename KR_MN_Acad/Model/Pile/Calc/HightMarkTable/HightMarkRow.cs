@@ -14,6 +14,8 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
         /// Условное обозначение сваи
         /// </summary>
         public string View { get; set; }
+        public string PileType { get; set; }
+        
         /// <summary>
         /// Номера свай
         /// </summary>
@@ -45,13 +47,14 @@ namespace KR_MN_Acad.Model.Pile.Calc.HightMark
         {
             get
             {
-                return View + ": ВерхЗабивки=" + TopPileAfterBeat + ", ВерхСрубки=" + TopPileAfterCut + ", НизРостверка=" + BottomGrillage;
+                return View + ": ВерхЗабивки=" + TopPileAfterBeat + ", ВерхСрубки=" + TopPileAfterCut + ", НизРостверка=" + BottomGrillage + ", тип " + PileType;
             }
         }
 
         public HightMarkRow(Pile p, List<Pile> piles)
         {
             View = p.View;
+            PileType = p.GetPileType();
             TopPileAfterBeat = p.TopPileAfterBeat;
             TopPileAfterCut = p.TopPileAfterCut;
             BottomGrillage = p.BottomRostverk;

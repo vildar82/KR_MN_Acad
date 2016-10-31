@@ -20,9 +20,7 @@ namespace KR_MN_Acad.Model.Pile.Numbering
         public Database Db { get; private set; }
         public Editor Ed { get; private set; }
         private Options Options { get; set; }
-        public PileOptions PileOptions { get; set; }
-
-        //private double pileHalfSide;
+        public PileOptions PileOptions { get; set; }        
 
         public PileNumberingService()
         {
@@ -40,9 +38,7 @@ namespace KR_MN_Acad.Model.Pile.Numbering
             PileOptions = PileOptions.Load();
             Options = new Options();
             Options.LoadDefault();
-            Options = Options.PromptOptions();
-
-            //pileHalfSide = Options.PileSide * 0.5;
+            Options = Options.PromptOptions();            
 
             // Выбор свай для нумерации
             var selblocks = Ed.SelectBlRefs("Выбор блоков свай для нумерации");
@@ -91,33 +87,25 @@ namespace KR_MN_Acad.Model.Pile.Numbering
 
             var minLenAbs = Options.PileSide * PileOptions.PileRatioLmin;
             var minLen = minLenAbs - 0.1;
-
-            HashSet<Pile> pilesHash = new HashSet<Pile>();
-            HashSet<Pile> pilesErrMinLen = new HashSet<Pile>();
+            
+            List<Pile> pilesErrMinLen = new List<Pile>();
 
             foreach (var p in piles)
             {                
-                Envelope envelope = new Envelope(p.Pt.X-minLen, p.Pt.X+minLen, p.Pt.Y-minLen, p.Pt.Y+minLen);                 
+                var envelope = new Envelope(p.Position.X-minLen, p.Position.X+minLen, p.Position.Y-minLen, p.Position.Y+minLen);                 
                 var pilesMinLen = rtree.Query(envelope);                
                 foreach (var item in pilesMinLen)
                 {
-                    if (p==item)
+                    if (p == item) continue;
+                    if (p.Position.DistanceTo(item.Position) < minLen)
                     {
-                        pilesHash.Add(item);
-                    }
-
-                    if (p.Pt.DistanceTo(item.Pt)<minLen)
-                    {
-                        if (pilesHash.Add(item))
-                        {
-                            pilesErrMinLen.Add(p);
-                        }
+                        pilesErrMinLen.Add(p);
                     }
                 }
             }
             foreach (var item in pilesErrMinLen)
             {
-                Inspector.AddError($"Нарушено минимальное расстояние между сваями - Сторона сваи * {PileOptions.PileRatioLmin} = {minLenAbs}. Точка вставки сваи {item.Pt}",
+                Inspector.AddError($"Нарушено минимальное расстояние между сваями - Сторона сваи * {PileOptions.PileRatioLmin} = {minLenAbs}. Точка вставки сваи {item.Position}",
                     item.IdBlRef, System.Drawing.SystemIcons.Warning);
             }
         }        
@@ -131,14 +119,14 @@ namespace KR_MN_Acad.Model.Pile.Numbering
             if (Options.NumberingOrder == EnumNumberingOrder.RightToLeft)
             {
                 // Слева-направо
-                resVal = piles.OrderBy(p => p.Pt.X).GroupBy(p => p.Pt.Y, comparer)
+                resVal = piles.OrderBy(p => p.Position.X).GroupBy(p => p.Position.Y, comparer)
                      .OrderByDescending(g => g.Key).SelectMany(g => g).ToList();
-                var leftToR = piles.OrderBy(p => p.Pt.X);
+                var leftToR = piles.OrderBy(p => p.Position.X);
             }
             else
             {
                 // Сверху-вниз
-                resVal = piles.OrderByDescending(p => p.Pt.Y).GroupBy(p => p.Pt.X, comparer)
+                resVal = piles.OrderByDescending(p => p.Position.Y).GroupBy(p => p.Position.X, comparer)
                      .OrderBy(g => g.Key).SelectMany(g => g).ToList();
             }
             return resVal;
@@ -151,9 +139,8 @@ namespace KR_MN_Acad.Model.Pile.Numbering
                 int pos = Options.PileStartNum;
                 foreach (var pile in piles)
                 {
-                    var atrPos = pile.PosAttrRef.IdAtr.GetObject(OpenMode.ForWrite, false, true) as AttributeReference;
-                    atrPos.TextString = pos.ToString();
                     pile.Pos = pos;
+                    pile.FillPos();
                     pos++;
                 }
                 t.Commit();
@@ -162,7 +149,7 @@ namespace KR_MN_Acad.Model.Pile.Numbering
 
         private Envelope getPileEnvelope(Pile p)
         {            
-            Coordinate c = new Coordinate(p.Pt.X, p.Pt.Y);
+            Coordinate c = new Coordinate(p.Position.X, p.Position.Y);
             return new Envelope(c);
         }        
     }

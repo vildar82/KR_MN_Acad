@@ -14,26 +14,26 @@ using KR_MN_Acad.Model.Pile.Calc;
 
 namespace KR_MN_Acad.Model.Pile
 { 
-    public class Pile
+    /// <summary>
+    /// Блок сваи
+    /// Сравнение по группе параметров - без ПОЗ!!!
+    /// </summary>
+    public class Pile : BlockBase, IEquatable<Pile>
     {
+        public const string ParamSideName = "Размер сваи";
+        public const string ParamViewName = "Вид";
+        public const string ParamViewNamePrefix = "Пр";
+        public const string ParamTypeName = "Тип";        
+        public const string ParamBottomRostverkName = "Низ_ростверка_м";
+        public const string ParamLengthName = "Длина_сваи_мм";
+        public const string ParamPitHeightName = "Глубина_приямка_мм";
+        public const string ParamPosName = "ПОЗ";
         public const string ParamDocLinkName = "ОБОЗНАЧЕНИЕ";
         public const string ParamName = "НАИМЕНОВАНИЕ";
         public const string ParamDescriptionName = "ПРИМЕЧАНИЕ";
         public const string ParamWeightName = "МАССА";
-        public const string ParamLengthName = "Длина_сваи_мм";
-        public const string ParamSideName = "Размер сваи";        
-        public const string ParamViewName = "Вид";
-        public const string ParamBottomRostverkName = "Низ_ростверка_м";
-        public const string ParamPitHeightName = "Глубина_приямка_мм";
-
-        public static HashSet<string> _ignoreParams = new HashSet<string> { "origin" };
-
-        public string BlName { get; set; }        
-        public ObjectId IdBlRef { get; set; }
-        public ObjectId IdBtrAnonym { get; set; }
-        public Point3d Pt { get; set; }                
-        public AttributeInfo PosAttrRef { get; set; }
-        public PileOptions Options { get; set; }
+        
+        public ObjectId IdBtrAnonym { get; set; }        
         /// <summary>
         /// Номер сваи
         /// </summary>
@@ -42,12 +42,14 @@ namespace KR_MN_Acad.Model.Pile
         /// Обозначение - документ, альбом, или пусто
         /// </summary>
         public string DocLink { get; set; }
+
+        
+
         /// <summary>
         /// Наименование
         /// </summary>
         public string Name { get; set; }
-        public string Description { get; set; }               
-
+        public string Description { get; set; } 
         public double Weight { get; set; }
         public int Length { get; set; }
         /// <summary>
@@ -63,9 +65,7 @@ namespace KR_MN_Acad.Model.Pile
         /// Вид сваи
         /// </summary>
         public string View { get; set; }
-
-        public string Error { get; set; }
-
+        public PileTypeEnum PileType { get; set; }
         /// <summary>
         /// Верх сваи после забивки
         /// </summary>
@@ -79,31 +79,36 @@ namespace KR_MN_Acad.Model.Pile
         /// </summary>
         public double PilePike { get; set; }
 
-        public Pile(BlockReference blRef, string blName, PileOptions pileOptions)
+        public Pile(BlockReference blRef, string blName) : base(blRef, blName)
         {
-            BlName = blName;
-            IdBlRef = blRef.Id;
-            IdBtrAnonym = blRef.BlockTableRecord;
-            Pt = blRef.Position;                        
-            Options = pileOptions;
+            IdBtrAnonym = blRef.BlockTableRecord;            
             // Определение параметров сваи
             defineParameters(blRef);           
-        }       
+        }
 
-        public Result Check(bool checkNum)
-        {            
-            if (PosAttrRef == null)
+        private bool _extendsHasCalc;
+        private Extents3d _extents;
+        public void Show (Editor ed)
+        {
+            if (!_extendsHasCalc)
             {
-                return Result.Fail($"Не найден атрибут '{Options.PileAttrPos}'");
-            }            
-            if (checkNum)
-            {
-                if (Pos == 0)
+                _extendsHasCalc = true;
+                using (var blRef = IdBlRef.Open(OpenMode.ForRead, false, true) as BlockReference)
                 {
-                    return Result.Fail($"Недопустимый номер сваи '{Pos}'");
+                    try
+                    {
+                        _extents = blRef.GeometricExtents;
+                    }
+                    catch
+                    {
+                        var ptMin = new Point3d(Position.X - Side, Position.Y - Side, 0);
+                        var ptMax = new Point3d(Position.X + Side, Position.Y + Side, 0);
+                        _extents = new Extents3d(ptMin, ptMax);
+                    }
                 }
             }
-            return Result.Ok();
+            ed.Zoom(_extents);
+            IdBlRef.FlickObjectHighlight(2, 100, 100);
         }
 
         public static void Check(List<Pile> piles)
@@ -139,7 +144,51 @@ namespace KR_MN_Acad.Model.Pile
             }
         }
 
-        public static ObjectId GetAttDefPos(ObjectId idBtr)
+        /// <summary>
+        /// обновление параметра Поз
+        /// </summary>
+        public void UpdateDefinePropPos ()
+        {
+            var blRef = IdBlRef.GetObject(OpenMode.ForRead) as BlockReference;
+            var attrs = AcadLib.Blocks.AttributeInfo.GetAttrRefs(blRef);
+            var attrPos = attrs.FirstOrDefault(p => p.Tag.Equals(PileCalcService.PileOptions.PileAttrPos, StringComparison.OrdinalIgnoreCase));
+            if (attrPos != null)
+            {
+                var paramPos = GetProperty(ParamPosName);
+                if (paramPos != null)
+                {
+                    paramPos.IdAtrRef = attrPos.IdAtr;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Установка Вида свае
+        /// </summary>
+        /// <param name="index"></param>
+        public void SetView (int index)
+        {
+            var view = ParamViewNamePrefix + index;
+            View = view;
+            FillPropValue(ParamViewName, view);
+        }
+
+        /// <summary>
+        /// Расчет высотных отметок сваи
+        /// </summary>
+        public void CalcHightMarks()
+        {
+            // отметка верха сваи после забивки
+            TopPileAfterBeat = Math.Round (BottomRostverk + (PileCalcService.PileOptions.DimPileBeatToCut+ PileCalcService.PileOptions.DimPileCutToRostwerk - PitHeight) * 0.001, 3);
+            // отметка верха сваи после срубки = 'низ ростверка' + 'расст от низа ростверка до верха сваи после срубки'(50). 
+            TopPileAfterCut = Math.Round (BottomRostverk + (PileCalcService.PileOptions.DimPileCutToRostwerk-PitHeight) * 0.001,3);
+            // отметка острия сваи
+            PilePike = Math.Round (TopPileAfterBeat - (Length * 0.001), 3);
+            // Отметка низа ростверка ???
+            //BottomRostverk = Math.Round( BottomRostverk - PitHeight*0.001,3);
+        }
+
+        public static ObjectId GetAttDefPos (ObjectId idBtr)
         {
             using (var btr = idBtr.Open(OpenMode.ForRead) as BlockTableRecord)
             {
@@ -157,164 +206,96 @@ namespace KR_MN_Acad.Model.Pile
             return ObjectId.Null;
         }
 
-        private bool _extendsHasCalc;        
-        private Extents3d _extents;
-        public void Show(Editor ed)
-        {
-            if (!_extendsHasCalc)
-            {
-                _extendsHasCalc = true;
-                using (var blRef = IdBlRef.Open(OpenMode.ForRead, false, true) as BlockReference)
-                {
-                    try
-                    {
-                        _extents= blRef.GeometricExtents;
-                    }
-                    catch
-                    {
-                        var ptMin = new Point3d(Pt.X - Side, Pt.Y - Side, 0);
-                        var ptMax = new Point3d(Pt.X + Side, Pt.Y + Side, 0);
-                        _extents = new Extents3d(ptMin, ptMax);
-                    }
-                }
-            }
-            ed.Zoom(_extents);
-            IdBlRef.FlickObjectHighlight(2, 100, 100);
-        }
-
-        /// <summary>
-        /// Расчет высотных отметок сваи
-        /// </summary>
-        /// <param name="pileOptions"></param>
-        public void CalcHightMarks()
-        {
-            // отметка верха сваи после забивки
-            TopPileAfterBeat = BottomRostverk + (PileCalcService.PileOptions.DimPileBeatToCut+ PileCalcService.PileOptions.DimPileCutToRostwerk - PitHeight) * 0.001;
-            // отметка верха сваи после срубки = 'низ ростверка' + 'расст от низа ростверка до верха сваи после срубки'(50). 
-            TopPileAfterCut = BottomRostverk + (PileCalcService.PileOptions.DimPileCutToRostwerk-PitHeight) * 0.001;
-            // отметка острия сваи
-            PilePike = TopPileAfterBeat - (Length * 0.001);
-            // Отметка низа ростверка
-            BottomRostverk -= PitHeight*0.001;
-        }
-
         private void defineParameters(BlockReference blRef)
         {
-            Dictionary<string, object> dictParams = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-            // список атрибутов
-            List<AttributeInfo> attrRefs =AttributeInfo.GetAttrRefs(blRef);
-            attrRefs.ForEach(a => dictParams.Add(a.Tag, a.Text));            
-            // Добавление всех дин параметров в словарь параметров
-            defineDynParams(blRef, ref dictParams);
-
             // ПОЗ
-            PosAttrRef = attrRefs.FirstOrDefault(a => a.Tag.Equals(Options.PileAttrPos, StringComparison.OrdinalIgnoreCase));
-            if (PosAttrRef != null)
-            {
-                int num;
-                int.TryParse(PosAttrRef.Text, out num);
-                Pos = num;
-            }
+            Pos = GetPropValue<int>(ParamPosName);
             // Обозначение
-            DocLink = GetParamValueString(ParamDocLinkName, dictParams);
+            DocLink = GetPropValue<string>(ParamDocLinkName);
             // Наименование
-            Name = GetParamValueString(ParamName, dictParams);
+            Name = GetPropValue<string>(ParamName);
             // Примечание
-            Description = GetParamValueString(ParamDescriptionName, dictParams);
-            // Примечание
-            View = GetParamValueString(ParamViewName, dictParams);
+            Description = GetPropValue<string>(ParamDescriptionName, false);
+            // Вид
+            View = GetPropValue<string>(ParamViewName);
+            // Тип
+            var pileTypeString = GetPropValue<string>(ParamTypeName);
+            PileType = GetPileType(pileTypeString);
             // длина сваи
-            Length = GetParamValueInt(ParamLengthName, dictParams);
+            Length = GetPropValue<int>(ParamLengthName);
             // высота приямка
-            PitHeight = GetParamValueInt(ParamPitHeightName, dictParams);
+            PitHeight = GetPropValue<int>(ParamPitHeightName);
             // сторона сваи
-            Side = GetParamValueInt(ParamSideName, dictParams);
+            Side = GetPropValue<int>(ParamSideName);
             // Низ ростверка
-            BottomRostverk = GetParamValueDouble(ParamBottomRostverkName, dictParams);
+            BottomRostverk = Math.Round( GetPropValue<double>(ParamBottomRostverkName), 4);
             // Масса
-            Weight = GetParamValueDouble(ParamWeightName, dictParams);
+            Weight = Math.Round ( GetPropValue<double>(ParamWeightName), 4);
+        }        
+
+        /// <summary>
+        /// Заполнение атрибута номера Позиции сваи в блок
+        /// </summary>
+        public void FillPos()
+        {
+            FillPropValue(ParamPosName, Pos);
         }
 
-        private string GetParamValueString(string paramName, Dictionary<string, object> dictParams)
+        private PileTypeEnum GetPileType (string pileTypeString)
         {
-            object value;
-            if (dictParams.TryGetValue(paramName, out value))
+            switch (pileTypeString)
             {
-                return value.ToString();
+                case "Рядовая":
+                    return PileTypeEnum.Ordinary;
+                case "Статическая":
+                    return PileTypeEnum.Static;
+                case "Динамическая":
+                    return PileTypeEnum.Dynamic;
+                case "Анкерная":
+                    return PileTypeEnum.Anchor;
+                default:
+                    break;                        
             }
-            else
-            {
-                addError($"Не определен параметр '{paramName}'");
-                return string.Empty;                
-            }
+            AddError("Недопустимый тип сваи - " + pileTypeString);
+            return PileTypeEnum.Ordinary;
         }
 
-        private int GetParamValueInt(string paramName, Dictionary<string, object> dictParams)
+        public string GetPileType ()
         {
-            object value = null;
-            if (dictParams.TryGetValue(paramName, out value))
+            switch (PileType)
             {
-                try
-                {
-                    return Convert.ToInt32(value);
-                }
-                catch { }
-            }            
-            addError($"Не определен параметр '{paramName}'");
-            return 0;
+                case PileTypeEnum.Ordinary:
+                    return "Рядовая";
+                case PileTypeEnum.Static:
+                    return "Статическая";
+                case PileTypeEnum.Dynamic:
+                    return "Динамическая";
+                case PileTypeEnum.Anchor:
+                    return "Анкерная";                
+            }
+            return "Не определено";
         }
 
-        private double GetParamValueDouble(string paramName, Dictionary<string, object> dictParams)
+        public bool Equals (Pile other)
         {
-            object value;
-            if (dictParams.TryGetValue(paramName, out value))
-            {
-                try
-                {
-                    return Convert.ToDouble(value);
-                }
-                catch { }
-            }
-            addError($"Не определен параметр '{paramName}'");
-            return 0;
+            if (other == null) return false;
+            if (ReferenceEquals(this, other)) return true;
+
+            var res = Length == other.Length &&
+                Side == other.Side &&
+                BottomRostverk == other.BottomRostverk &&
+                PitHeight == other.PitHeight &&
+                Name.Equals(other.Name, StringComparison.OrdinalIgnoreCase) &&
+                DocLink.Equals(other.DocLink, StringComparison.OrdinalIgnoreCase) &&
+                PilePike == other.PilePike &&                
+                TopPileAfterBeat == other.TopPileAfterBeat &&
+                TopPileAfterCut == other.TopPileAfterCut;                
+            return res;
         }
 
-        private void defineDynParams (BlockReference blRef,ref Dictionary<string, object> dictParams)
+        public override int GetHashCode ()
         {
-            if (blRef.IsDynamicBlock)
-            {
-                foreach (DynamicBlockReferenceProperty prop in blRef.DynamicBlockReferencePropertyCollection)
-                {
-                    if (!_ignoreParams.Contains(prop.PropertyName, StringComparer.OrdinalIgnoreCase))
-                    {                        
-                        addParam(dictParams, prop.PropertyName, prop.Value);
-                    }
-                }
-            }
-        }
-
-        private void addParam(Dictionary<string, object> parameters, string name, object value)
-        {
-            if (parameters.ContainsKey(name))
-            {
-                addError($"Дублирование параметра '{name}'");                
-            }
-            else
-            {                
-                parameters.Add(name, value);
-            }
-        }
-
-        private void addError (string err)
-        {
-            if (Error == null)
-            {
-                Error = err;
-            }
-            else
-            {
-                Error += "; " + err;
-            }
+            return Length.GetHashCode();
         }
     }
 }

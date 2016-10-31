@@ -11,7 +11,7 @@ namespace KR_MN_Acad.Model.Pile
     {
         public static List<Pile> Filter(List<ObjectId> selblocks, PileOptions pileOptions, bool checkNum)
         {
-            List<Pile> resVal = new List<Pile>();
+            var resVal = new List<Pile>();
             var db = HostApplicationServices.WorkingDatabase;
             using (var t = db.TransactionManager.StartTransaction())
             {
@@ -19,24 +19,17 @@ namespace KR_MN_Acad.Model.Pile
                 {
                     using (var blRef = idBlRef.GetObject(OpenMode.ForRead, false, true) as BlockReference)
                     {
-                        string blName = blRef.GetEffectiveName();
+                        var blName = blRef.GetEffectiveName();
                         if (Regex.IsMatch(blName, pileOptions.PileBlockNameMatch))
                         {
-                            Pile pile = new Pile(blRef, blName, pileOptions);
-                            var checkResult = pile.Check(checkNum);
-                            if (checkResult.Success)
+                            var pile = new Pile(blRef, blName);
+                            if (pile.Error == null)
                             {
                                 resVal.Add(pile);
-                                if (!string.IsNullOrEmpty(pile.Error))
-                                {
-                                    Inspector.AddError($"В блоке сваи '{blName}' обнаружены ошибки: {pile.Error}",
-                                    blRef, System.Drawing.SystemIcons.Error);
-                                }
                             }
                             else
                             {
-                                Inspector.AddError($"В блоке сваи '{blName}' обнаружены ошибки: {checkResult.Error}",
-                                    blRef, System.Drawing.SystemIcons.Error);
+                                Inspector.AddError(pile.Error);
                             }
                         }
                     }
