@@ -178,10 +178,10 @@ namespace KR_MN_Acad.Model.Pile
         /// </summary>
         public void CalcHightMarks()
         {
-            // отметка верха сваи после забивки
-            TopPileAfterBeat = Math.Round (BottomRostverk + (PileCalcService.PileOptions.DimPileBeatToCut+ PileCalcService.PileOptions.DimPileCutToRostwerk - PitHeight) * 0.001, 3);
-            // отметка верха сваи после срубки = 'низ ростверка' + 'расст от низа ростверка до верха сваи после срубки'(50). 
-            TopPileAfterCut = Math.Round (BottomRostverk + (PileCalcService.PileOptions.DimPileCutToRostwerk-PitHeight) * 0.001,3);
+            // отметка верха сваи после забивки = Низ роств + Срубка + Забивка
+            TopPileAfterBeat = Math.Round (BottomRostverk + (PileCalcService.PileOptions.DimPileBeatToCut+ PileCalcService.PileOptions.DimPileCutToRostwerk) * 0.001, 3);
+            // отметка верха сваи после срубки = Низ роств + Забивка - Глубина приямка 
+            TopPileAfterCut = Math.Round (BottomRostverk + (PileCalcService.PileOptions.DimPileCutToRostwerk - PitHeight) * 0.001,3);
             // отметка острия сваи
             PilePike = Math.Round (TopPileAfterBeat - (Length * 0.001), 3);
             // Отметка низа ростверка ???
