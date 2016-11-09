@@ -271,6 +271,10 @@ namespace KR_MN_Acad.Model.Pile
             {
                 try
                 {
+                    if (value is string)
+                    {
+                        return ((string)value).ToDouble();
+                    }
                     return Convert.ToDouble(value);
                 }
                 catch { }
