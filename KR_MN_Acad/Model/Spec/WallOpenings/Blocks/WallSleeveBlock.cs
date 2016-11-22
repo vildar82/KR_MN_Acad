@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using AcadLib.Blocks;
 using AcadLib.Errors;
 using Autodesk.AutoCAD.DatabaseServices;
-using KR_MN_Acad.Spec.Openings.Elements;
+using KR_MN_Acad.Spec.WallOpenings.Elements;
+using KR_MN_Acad.Spec.Elements;
 
-namespace KR_MN_Acad.Spec.Openings.Blocks
+namespace KR_MN_Acad.Spec.WallOpenings.Blocks
 {
     /// <summary>
     /// Блок гильзы в плите
@@ -19,10 +20,19 @@ namespace KR_MN_Acad.Spec.Openings.Blocks
         private const string propMark = "МАРКА";
         private const string propDiam = "Диаметр";
         private const string propDepth = "ТОЛЩИНАГИЛЬЗЫ";
+        private const string propLength = "Толщина стены";
         private const string propElevation = "ОТМЕТКА";
-        private const string propDesc = "ПОЯСНЕНИЕ";        
+        private const string propDesc = "ПОЯСНЕНИЕ";
+        private const string propWeightUnit = "МАССА_МП";
 
-        WallSleeve sleeve;       
+        /// <summary>
+        /// гильза
+        /// </summary>
+        WallSleeve sleeve;
+        /// <summary>
+        /// Труба (для спецификации)
+        /// </summary>
+        Tube tube;
 
         public WallSleeveBlock (BlockReference blRef, string blName) : base(blRef, blName)
         {            
@@ -33,11 +43,19 @@ namespace KR_MN_Acad.Spec.Openings.Blocks
             string mark = Block.GetPropValue<string>(propMark);
             int diam = Block.GetPropValue<int>(propDiam);
             int depth = Block.GetPropValue<int>(propDepth);
+            int length = Block.GetPropValue<int>(propLength);
             string elev = Block.GetPropValue<string>(propElevation);
             string role = SlabOpenings.SlabService.GetRole(Block);            
             string desc = Block.GetPropValue<string>(propDesc, false);
-            sleeve = new WallSleeve (mark, diam, depth, elev, role, desc, this);
+            sleeve = new WallSleeve (mark, diam, depth, length, elev, role, desc, this);
             AddElement(sleeve);
+
+            string wuAtr = Block.GetPropValue<string>(propWeightUnit);
+            double wu = double.Parse(wuAtr);
+            tube = new Tube(diam, depth, length, wu, this);
+            tube.Mark = mark;
+            tube.Calc();
+            AddElement(tube);            
         }        
 
         public override void Numbering ()

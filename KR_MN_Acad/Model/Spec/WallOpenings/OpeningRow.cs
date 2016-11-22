@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AcadLib.Errors;
-using KR_MN_Acad.Spec.Openings.Elements;
+using KR_MN_Acad.Spec.WallOpenings.Elements;
 
-namespace KR_MN_Acad.Spec.Openings
+namespace KR_MN_Acad.Spec.WallOpenings
 {
     /// <summary>
     /// строка таблицы отверстий в плите
@@ -23,17 +23,20 @@ namespace KR_MN_Acad.Spec.Openings
         public string Description { get; set; }        
 
         public OpeningRow (string group, List<ISpecElement> items)
-        {
-            Group = group;
-            Elements = items;
-            var slabElems = items.Cast<IOpeningElement>();       
-            var first = slabElems.First();
-            Mark = first.Mark;
-            Dimension = first.Dimension;
-            Elevation = first.Elevation;
-            Role = first.Role;
-            Count = slabElems.Sum(s => s.Count);
-            Description = first.Description;            
+        {            
+            var slabElems = items.OfType<IOpeningElement>();
+            if (slabElems.Any())
+            {
+                Group = group;
+                Elements = items;
+                var first = slabElems.First();
+                Mark = first.Mark;
+                Dimension = first.Dimension;
+                Elevation = first.Elevation;
+                Role = first.Role;
+                Count = slabElems.Sum(s => s.Count);
+                Description = first.Description;
+            }
         }        
     }
 }

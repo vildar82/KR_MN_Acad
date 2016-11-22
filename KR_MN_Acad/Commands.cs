@@ -58,7 +58,7 @@ namespace KR_MN_Acad
             AcadLib.CommandStart.Start(doc =>
             {
                 // Спецификация проекмов                
-                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Openings.ApertureOptions(doc.Database));
+                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.WallOpenings.ApertureOptions(doc.Database));
                 spec.Spec();
             });                
         }
@@ -70,7 +70,7 @@ namespace KR_MN_Acad
         {
             AcadLib.CommandStart.Start(doc =>
             {                
-                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Openings.ApertureOptions(doc.Database));
+                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.WallOpenings.ApertureOptions(doc.Database));
                 spec.Numbering();
             });
         }
@@ -84,7 +84,7 @@ namespace KR_MN_Acad
             AcadLib.CommandStart.Start(doc =>
             {
                 // Спецификация отверстий                
-                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Openings.WallOptions(doc.Database));
+                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.WallOpenings.WallOptions(doc.Database));
                 spec.Spec();
             });            
         }
@@ -96,7 +96,7 @@ namespace KR_MN_Acad
         {
             AcadLib.CommandStart.Start(doc =>
             {                
-                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.Openings.WallOptions(doc.Database));
+                Spec.SpecService spec = new Spec.SpecService (doc, new Spec.WallOpenings.WallOptions(doc.Database));
                 spec.Numbering();
             });
         }

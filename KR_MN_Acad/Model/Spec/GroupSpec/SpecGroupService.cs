@@ -68,6 +68,7 @@ namespace KR_MN_Acad.Spec.SpecGroup
             Cell cell;
             foreach (var group in groupRows)
             {
+                if (!group.Value.Any()) continue;
                 var groupName = group.Value.First().Group;
                 if (!string.IsNullOrEmpty(groupName))
                 {
@@ -103,7 +104,12 @@ namespace KR_MN_Acad.Spec.SpecGroup
 
         protected override ISpecRow GetNewRow (string group, List<ISpecElement> items)
         {
-            var res = new SpecGroupRow(group, items);
+            var specItems = items.Where(i => i is IGroupSpecElement);
+            ISpecRow res = null;
+            if (specItems.Any())
+            {
+                res = new SpecGroupRow(group, specItems.ToList());
+            }
             return res;
         }       
 

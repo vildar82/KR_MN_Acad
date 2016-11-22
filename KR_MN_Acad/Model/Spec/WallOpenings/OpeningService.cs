@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using AcadLib.Blocks;
 using AcadLib.Errors;
 using Autodesk.AutoCAD.DatabaseServices;
-using KR_MN_Acad.Spec.Openings.Elements;
+using KR_MN_Acad.Spec.WallOpenings.Elements;
 
-namespace KR_MN_Acad.Spec.Openings
+namespace KR_MN_Acad.Spec.WallOpenings
 {
     public class OpeningService : TableService
     {        
@@ -91,20 +91,33 @@ namespace KR_MN_Acad.Spec.Openings
 
         protected override ISpecRow GetNewRow (string group, List<ISpecElement> items)
         {
-            var res = new OpeningRow(group, items);
+            ISpecRow res = null;
+            var specItems = items.Where(i => i is IOpeningElement);
+            if (specItems.Any())
+            {
+                res = new OpeningRow(group, specItems.ToList());
+            }
             return res;
-        }        
+        }
 
-        protected override Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<GroupType, ISpecElement> indexGroup)
+        protected override Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering(IGrouping<GroupType, ISpecElement> indexGroup)
         {
-            var dimRoleGroups = indexGroup.GroupBy(g=>((IOpeningElement)g).Dimension+((IOpeningElement)g).Role).OrderByDescending(o=>o.Key, alpha);
-            return dimRoleGroups.ToDictionary(k => k.Key, i => i.ToList());
+            var dimRoleGroups = indexGroup.Where(w=>w is IOpeningElement).GroupBy(g => ((IOpeningElement)g).Dimension + ((IOpeningElement)g).Role).OrderByDescending(o => o.Key, alpha);
+            if (dimRoleGroups.Any())
+            {
+                return dimRoleGroups.ToDictionary(k => k.Key, i => i.ToList());
+            }
+            return new Dictionary<string, List<ISpecElement>>();
         }
 
         protected override Dictionary<string, List<ISpecElement>> GroupsSecondForNumbering (KeyValuePair<string, List<ISpecElement>> firstGroup)
         {
-            var elevGroups = firstGroup.Value.GroupBy(g=>((IOpeningElement)g).Elevation).OrderBy(o=>o.Key);
-            return elevGroups.ToDictionary(k => k.Key, i => i.ToList());
+            var elevGroups = firstGroup.Value.Where(w=>w is IOpeningElement).GroupBy(g=>((IOpeningElement)g).Elevation).OrderBy(o=>o.Key);
+            if (elevGroups.Any())
+            {
+                return elevGroups.ToDictionary(k => k.Key, i => i.ToList());
+            }
+            return new Dictionary<string, List<ISpecElement>>();
         }
     }
 }

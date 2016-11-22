@@ -67,6 +67,16 @@ namespace KR_MN_Acad.Spec
             // Создание спецификаций.
             var table = options.TableService.CreateTable();            
             InsertTables(table);        
+            if (options.OtherTableService != null)
+            {
+                foreach (var item in options.OtherTableService)
+                {
+                    item.FilterElements(blocks, false);
+                    item.CalcRows(elements);
+                    var itable = item.CreateTable();
+                    InsertTables(itable);
+                }
+            }
         }        
 
         /// <summary>

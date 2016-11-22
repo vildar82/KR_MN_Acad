@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace KR_MN_Acad.Spec.Openings.Elements
+namespace KR_MN_Acad.Spec.WallOpenings.Elements
 {
     public interface IOpeningElement : ISpecElement
     {        

@@ -17,6 +17,7 @@ namespace KR_MN_Acad.Spec.SlabOpenings
 
         public Dictionary<string, Type> TypesBlock { get; set; }
         public ITableService TableService { get; set; }
+        public List<ITableService> OtherTableService { get; set; }
         public bool CheckDublicates { get; set; } = true;
         public bool HasBillTable { get; set; } = false;
         public bool HasDetailTable { get; set; } = false;
@@ -28,7 +29,10 @@ namespace KR_MN_Acad.Spec.SlabOpenings
                 { Blocks.SlabSleeveBlock.BlockName, typeof(Blocks.SlabSleeveBlock) }
             };
 
-            TableService = new SlabService(db);            
+            TableService = new SlabService(db);
+            // Групповая спецификация для Гильз
+            OtherTableService = new List<ITableService>();
+            OtherTableService.Add(new SpecGroup.SpecGroupService(db));
         }
     }
 }

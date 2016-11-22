@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KR_MN_Acad.Spec.Openings.Elements
+namespace KR_MN_Acad.Spec.WallOpenings.Elements
 {
     /// <summary>
     /// Проем

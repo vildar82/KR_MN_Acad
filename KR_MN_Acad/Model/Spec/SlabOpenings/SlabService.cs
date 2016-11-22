@@ -127,20 +127,33 @@ namespace KR_MN_Acad.Spec.SlabOpenings
 
         protected override ISpecRow GetNewRow (string group, List<ISpecElement> items)
         {
-            var res = new SlabRow(group, items);
+            ISpecRow res = null;
+            var specItems = items.Where(i => i is ISlabElement);
+            if (specItems.Any())
+            {
+                res = new SlabRow(group, items);
+            }            
             return res;
         }
 
         protected override Dictionary<string, List<ISpecElement>> GroupsFirstForNumbering (IGrouping<GroupType, ISpecElement> indexGroup)
         {            
-            var dimGroups = indexGroup.GroupBy(g=>((ISlabElement)g).Dimension).OrderByDescending(o=>o.Key, alpha);
-            return dimGroups.ToDictionary(k => k.Key, i => i.ToList());
+            var dimGroups = indexGroup.Where(w=>w is ISlabElement).GroupBy(g=>((ISlabElement)g).Dimension).OrderByDescending(o=>o.Key, alpha);
+            if (dimGroups.Any()                )
+            {
+                return dimGroups.ToDictionary(k => k.Key, i => i.ToList());
+            }
+            return new Dictionary<string, List<ISpecElement>>();            
         }
 
         protected override Dictionary<string, List<ISpecElement>> GroupsSecondForNumbering (KeyValuePair<string, List<ISpecElement>> firstGroup)
         {
-            var roleGroups = firstGroup.Value.GroupBy(g=>((ISlabElement)g).Role).OrderBy(o=>o.Key);            
-            return roleGroups.ToDictionary(k => k.Key, i => i.ToList());
+            var roleGroups = firstGroup.Value.Where(w => w is ISlabElement).GroupBy(g=>((ISlabElement)g).Role).OrderBy(o=>o.Key);
+            if (roleGroups.Any())
+            {
+                return roleGroups.ToDictionary(k => k.Key, i => i.ToList());
+            }
+            return new Dictionary<string, List<ISpecElement>>();
         }
     }
 }

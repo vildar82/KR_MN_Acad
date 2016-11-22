@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Autodesk.AutoCAD.DatabaseServices;
 
-namespace KR_MN_Acad.Spec.Openings
+namespace KR_MN_Acad.Spec.WallOpenings
 {
     /// <summary>
     /// Настройка спецификации блоков отверстий в плитах
@@ -20,6 +20,8 @@ namespace KR_MN_Acad.Spec.Openings
         public bool CheckDublicates { get; set; } = true;
         public bool HasBillTable { get; set; } = false;
         public bool HasDetailTable { get; set; } = false;
+
+        public List<ITableService> OtherTableService { get; set; }
 
         public ApertureOptions (Database db)
         {

@@ -1,11 +1,15 @@
 ﻿using System;
 
-namespace KR_MN_Acad.Spec.Openings.Elements
+namespace KR_MN_Acad.Spec.WallOpenings.Elements
 {    
+    /// <summary>
+    /// Гильза в стене
+    /// </summary>
     public class WallSleeve: ISpecElement, IOpeningElement
     {
         private int diam;
-        private int depth;        
+        private int depth;
+        private int length;    
 
         public string Dimension { get; set; }
         public string Elevation { get; set; }
@@ -20,17 +24,18 @@ namespace KR_MN_Acad.Spec.Openings.Elements
         public double Amount { get; set; } = 1;
         public string Key { get; set; }
 
-        public WallSleeve (string mark, int diam, int depth, string elev, string role, string desc, ISpecBlock specBlock)
+        public WallSleeve (string mark, int diam, int depth, int length, string elev, string role, string desc, ISpecBlock specBlock)
         {
             SpecBlock = specBlock;
             this.diam = diam;
-            this.depth = depth;            
+            this.depth = depth;
+            this.length = length;
             Elevation = "Ось отв. " + elev;
             Mark = mark;            
             Role = role;            
             Description = desc;
             Count = 1;
-            Dimension = "Гильза " + AcadLib.General.Symbols.Diam + diam + "х" + depth;
+            Dimension = $"Гильза {AcadLib.General.Symbols.Diam}{diam}х{depth}, L={length}";
             Key = Dimension + Elevation + Role;
         }                
 
@@ -48,7 +53,8 @@ namespace KR_MN_Acad.Spec.Openings.Elements
         {
             var s = other as WallSleeve;
             if (s == null) return false;
-            return Mark == s.Mark && diam == s.diam && depth == s.depth && Role == s.Role && Elevation == s.Elevation;
+            return Mark == s.Mark && diam == s.diam && depth == s.depth && length == s.length &&
+                Role == s.Role && Elevation == s.Elevation;
         }
 
         public int CompareTo (ISpecElement other)
@@ -62,6 +68,8 @@ namespace KR_MN_Acad.Spec.Openings.Elements
             res = diam.CompareTo(s.diam);
             if (res != 0) return res;
             res = depth.CompareTo(s.depth);
+            if (res != 0) return res;
+            res = length.CompareTo(s.length);
             if (res != 0) return res;
             res = Role.CompareTo(s.Role);
             if (res != 0) return res;

@@ -118,8 +118,9 @@ namespace KR_MN_Acad.Spec.Elements
         public void SumAndSetRow (SpecGroupRow row, List<ISpecElement> elems)
         {
             // Обозначения, Наименования, Кол, Массы ед, примечания
-            row.Description = Gost.Number;
+            row.Designation = Gost.Number;
             row.Name = $"Труба {Name}, L={Length}";
+            row.Mark = Mark;         
 
             int countTotal = elems.Count;
             double weightTotal = RoundHelper.Round2Digits(Weight * countTotal);

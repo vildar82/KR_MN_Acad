@@ -7,8 +7,8 @@ using AcadLib.Blocks;
 using AcadLib.Errors;
 using Autodesk.AutoCAD.DatabaseServices;
 using KR_MN_Acad.Spec;
-using KR_MN_Acad.Spec.Openings.Blocks;
-using KR_MN_Acad.Spec.Openings.Elements;
+using KR_MN_Acad.Spec.WallOpenings.Blocks;
+using KR_MN_Acad.Spec.WallOpenings.Elements;
 
 namespace KR_MN_Acad.Openings.Blocks
 {

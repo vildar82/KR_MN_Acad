@@ -18,6 +18,8 @@ namespace KR_MN_Acad.Spec.Monolith
         public bool HasBillTable { get; set; } = false;
         public bool HasDetailTable { get; set; } = false;
 
+        public List<ITableService> OtherTableService { get; set; }
+
         public MonolithOptions (Database db)
         {
             TypesBlock = new Dictionary<string, Type>() {
