@@ -83,7 +83,8 @@ namespace KR_MN_Acad.Model.Pile.Calc
         {
             var res = new List<SpecRow>();
             var groups = piles.GroupBy(g => new { g.View, g.PileType, g.DocLink, g.Name})
-                            .OrderBy(g => g.Key.View, AcadLib.Comparers.AlphanumComparator.New)
+                            .OrderBy(g => g.Key.DocLink, AcadLib.Comparers.AlphanumComparator.New)
+                            .ThenBy(o=>o.Key.Name, AcadLib.Comparers.AlphanumComparator.New)
                             .ThenByDescending(o=>o.Key.PileType);
             foreach (var g in groups)
             {
