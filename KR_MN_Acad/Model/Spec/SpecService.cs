@@ -118,7 +118,7 @@ namespace KR_MN_Acad.Spec
                     }
                     catch (Exception ex)
                     {
-                        Inspector.AddError($"Ошибка при обработке блока {blName} - {ex.Message}", 
+                        Inspector.AddError($"Ошибка при обработке блока {blName} - {ex}", 
                             blRef, System.Drawing.SystemIcons.Error);
                     }
                 }
