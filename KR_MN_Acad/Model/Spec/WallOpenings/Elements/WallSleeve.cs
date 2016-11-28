@@ -54,7 +54,8 @@ namespace KR_MN_Acad.Spec.WallOpenings.Elements
             var s = other as WallSleeve;
             if (s == null) return false;
             return Mark == s.Mark && diam == s.diam && depth == s.depth && length == s.length &&
-                Role == s.Role && Elevation == s.Elevation;
+                string.Equals(Role,s.Role, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(Elevation,s.Elevation, StringComparison.OrdinalIgnoreCase);
         }
 
         public int CompareTo (ISpecElement other)

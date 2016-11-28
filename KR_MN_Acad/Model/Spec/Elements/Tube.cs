@@ -120,7 +120,14 @@ namespace KR_MN_Acad.Spec.Elements
             // Обозначения, Наименования, Кол, Массы ед, примечания
             row.Designation = Gost.Number;
             row.Name = $"Труба {Name}, L={Length}";
-            row.Mark = Mark;         
+            //row.Mark = Mark;         
+            row.Mark = "";
+            Mark = "";
+            var tubes = elems.OfType<Tube>();
+            foreach (var item in tubes)
+            {
+                item.Mark = "";
+            }
 
             int countTotal = elems.Count;
             double weightTotal = RoundHelper.Round2Digits(Weight * countTotal);
