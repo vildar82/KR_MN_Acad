@@ -41,99 +41,18 @@ namespace KR_MN_Acad.Spec.WallOpenings.Blocks
 
         public override void Calculate ()
         {
-            string mark = string.Empty;
-            try
-            {
-                mark = Block.GetPropValue<string>(propMark);
-            }
-            catch(Exception ex)
-            {
-                Logger.Log.Error(ex, "WallSleeveBlock - string mark = Block.GetPropValue<string>(propMark);");
-            }
-
-            int diam = 0;
-            try
-            {
-                diam = Block.GetPropValue<int>(propDiam);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log.Error(ex, "WallSleeveBlock - diam = Block.GetPropValue<int>(propDiam);");
-            }
-
-            int depth = 0;
-            try
-            {
-                depth = Block.GetPropValue<int>(propDepth);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log.Error(ex, "WallSleeveBlock - depth = Block.GetPropValue<int>(propDepth);");
-            }
-
-            int length = 0;
-            try
-            {
-                length = Block.GetPropValue<int>(propLength);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log.Error(ex, "WallSleeveBlock - length = Block.GetPropValue<int>(propLength);");
-            }
-
-            string elev = string.Empty;
-            try
-            {
-                elev = Block.GetPropValue<string>(propElevation);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log.Error(ex, "WallSleeveBlock - elev = Block.GetPropValue<string>(propElevation);");
-            }
-
-            string role = string.Empty;
-            try
-            {
-                role = SlabOpenings.SlabService.GetRole(Block);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log.Error(ex, "WallSleeveBlock - role = SlabOpenings.SlabService.GetRole(Block);");
-            }
-
-            string desc = string.Empty;
-            try
-            {
-                desc = Block.GetPropValue<string>(propDesc, false);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log.Error(ex, "WallSleeveBlock - desc = Block.GetPropValue<string>(propDesc, false);");
-            }
+            string mark =Block.GetPropValue<string>(propMark);            
+            int diam = Block.GetPropValue<int>(propDiam);            
+            int depth = Block.GetPropValue<int>(propDepth);  
+            int length = Block.GetPropValue<int>(propLength);
+            string elev = Block.GetPropValue<string>(propElevation);            
+            string role = SlabOpenings.SlabService.GetRole(Block);
+            string desc = Block.GetPropValue<string>(propDesc, false);
 
             sleeve = new WallSleeve (mark, diam, depth, length, elev, role, desc, this);
             AddElement(sleeve);
 
-            string wuAtr = string.Empty;
-            try
-            {
-                wuAtr = Block.GetPropValue<string>(propWeightUnit);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log.Error(ex, "WallSleeveBlock - wuAtr = Block.GetPropValue<string>(propWeightUnit);");
-            }
-
-            double wu = 0;
-            try
-            {                
-                wu = wuAtr.ToDouble();
-            }
-            catch (Exception ex)
-            {
-                Logger.Log.Error(ex, "WallSleeveBlock - wuAtr = Block.GetPropValue<string>(propWeightUnit);");
-            }
-
+            double wu = Block.GetPropValue<double>(propWeightUnit, isRequired:false);
             tube = new Tube(diam, depth, length, wu, this);
             tube.Mark = mark;
             tube.Calc();

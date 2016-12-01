@@ -43,9 +43,8 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Blocks
             sleeve = new SlabSleeve (mark, diam, depth, length, role, desc, this);
             AddElement(sleeve);
 
-            string wuAtr = Block.GetPropValue<string>(propWeightUnit);
-            double wu = double.Parse(wuAtr);
-            tube = new Tube(diam, depth, length, wu, this);
+            double weightUnit = Block.GetPropValue<double>(propWeightUnit, isRequired:false);            
+            tube = new Tube(diam, depth, length, weightUnit, this);
             tube.Mark = mark;
             tube.Calc();
             AddElement(tube);
