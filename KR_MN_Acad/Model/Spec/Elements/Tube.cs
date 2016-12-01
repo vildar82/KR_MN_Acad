@@ -37,11 +37,11 @@ namespace KR_MN_Acad.Spec.Elements
         /// <summary>
         /// Диаметр
         /// </summary>
-        public int Diametr { get; set; }
+        public double Diametr { get; set; }
         /// <summary>
         /// Толщина стенки
         /// </summary>
-        public int Thickness { get; set; }
+        public double Thickness { get; set; }
         /// <summary>
         /// Масса 1 п.м.,кг
         /// </summary>
@@ -60,14 +60,14 @@ namespace KR_MN_Acad.Spec.Elements
         /// </summary>
         /// <param name="diam">Диаметр</param>
         /// <param name="t">Толщина стенки</param>
-        public Tube (int diam, int t, int length, double weightUnit, ISpecBlock block) : 
+        public Tube (double diam, double t, int length, ISpecBlock block) : 
             base(GostElectricWelded, Symbols.Diam + diam + "х" + t)
         {
             SpecBlock = block;            
             Diametr = diam;
             Thickness = t;
             Length = length;
-            WeightUnit = weightUnit;
+            WeightUnit = CalcWeightTube(diam, t); //weightUnit;
             FriendlyName = "Труба " + Name;
             Key = Name;
         }       
@@ -149,6 +149,22 @@ namespace KR_MN_Acad.Spec.Elements
         public string GetParamInfo ()
         {
             return Name;
+        }
+
+        /// <summary>
+        /// Расчет массы погонного метра трубы
+        /// </summary>
+        /// <param name="diamMM">Диаметр трубы, мм</param>
+        /// <param name="depthMM">Толщина стенки, мм</param>
+        /// <returns>Масса, кг</returns>
+        private static double CalcWeightTube(double diamMM, double depthMM)
+        {
+            var radius = diamMM * 0.5 * 0.001; // из мм в м
+            var depth = depthMM * 0.001; // из мм в м
+            var r = radius - depth;
+            var volumeUnit = Math.PI * (radius * radius - r * r);
+            var resWeightUnit = Math.Round(volumeUnit * 7850, 2); // кг на 1м.
+            return resWeightUnit;
         }
 
         public Dictionary<string, List<ISpecElement>> GroupsFirst (IGrouping<GroupType, ISpecElement> indexTypeGroup)

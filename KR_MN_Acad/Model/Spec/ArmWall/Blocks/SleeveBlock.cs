@@ -62,9 +62,9 @@ namespace KR_MN_Acad.Spec.ArmWall.Blocks
             int len = Block.GetPropValue<int>(PropNameLength);
             int t = Block.GetPropValue<int>(PropNameThickness);
             string wuAtr = Block.GetPropValue<string>(PropNameWeightUnit);
-            double wu = double.Parse(wuAtr);
+            //double wu = double.Parse(wuAtr);
             //string mark = Block.GetPropValue<string>(PropNameMark);
-            Tube = new Tube(diam, t, len, wu, this);
+            Tube = new Tube(diam, t, len, this);
             Tube.Calc();
         }        
     }

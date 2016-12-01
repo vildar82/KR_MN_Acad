@@ -35,16 +35,16 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Blocks
         public override void Calculate ()
         {
             string mark = Block.GetPropValue<string>(propMark);
-            int diam = Block.GetPropValue<int>(propDiam);
-            int depth = Block.GetPropValue<int>(propDepth);
+            double diam = Block.GetPropValue<double>(propDiam);
+            double depth = Block.GetPropValue<double>(propDepth);
             int length = Block.GetPropValue<int>(propLength);
             string role = SlabService.GetRole(Block);            
             string desc = Block.GetPropValue<string>(propDesc, false);
             sleeve = new SlabSleeve (mark, diam, depth, length, role, desc, this);
             AddElement(sleeve);
 
-            double weightUnit = Block.GetPropValue<double>(propWeightUnit, isRequired:false);            
-            tube = new Tube(diam, depth, length, weightUnit, this);
+            //double weightUnit = Block.GetPropValue<double>(propWeightUnit, isRequired:false);            
+            tube = new Tube(diam, depth, length, this);
             tube.Mark = mark;
             tube.Calc();
             AddElement(tube);

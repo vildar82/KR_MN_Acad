@@ -42,8 +42,8 @@ namespace KR_MN_Acad.Spec.WallOpenings.Blocks
         public override void Calculate ()
         {
             string mark =Block.GetPropValue<string>(propMark);            
-            int diam = Block.GetPropValue<int>(propDiam);            
-            int depth = Block.GetPropValue<int>(propDepth);  
+            double diam = Block.GetPropValue<double>(propDiam);            
+            double depth = Block.GetPropValue<double>(propDepth);  
             int length = Block.GetPropValue<int>(propLength);
             string elev = Block.GetPropValue<string>(propElevation);            
             string role = SlabOpenings.SlabService.GetRole(Block);
@@ -52,8 +52,8 @@ namespace KR_MN_Acad.Spec.WallOpenings.Blocks
             sleeve = new WallSleeve (mark, diam, depth, length, elev, role, desc, this);
             AddElement(sleeve);
 
-            double wu = Block.GetPropValue<double>(propWeightUnit, isRequired:false);
-            tube = new Tube(diam, depth, length, wu, this);
+            //double wu = Block.GetPropValue<double>(propWeightUnit, isRequired:false);
+            tube = new Tube(diam, depth, length, this);
             tube.Mark = mark;
             tube.Calc();
             AddElement(tube);            

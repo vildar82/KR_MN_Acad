@@ -7,8 +7,8 @@ namespace KR_MN_Acad.Spec.WallOpenings.Elements
     /// </summary>
     public class WallSleeve: ISpecElement, IOpeningElement
     {
-        private int diam;
-        private int depth;
+        private double diam;
+        private double depth;
         private int length;    
 
         public string Dimension { get; set; }
@@ -24,7 +24,7 @@ namespace KR_MN_Acad.Spec.WallOpenings.Elements
         public double Amount { get; set; } = 1;
         public string Key { get; set; }
 
-        public WallSleeve (string mark, int diam, int depth, int length, string elev, string role, string desc, ISpecBlock specBlock)
+        public WallSleeve (string mark, double diam, double depth, int length, string elev, string role, string desc, ISpecBlock specBlock)
         {
             SpecBlock = specBlock;
             this.diam = diam;

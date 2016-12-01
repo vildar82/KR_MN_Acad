@@ -7,8 +7,8 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
     /// </summary>
     public class SlabSleeve: ISpecElement, ISlabElement
     {
-        private int diam;
-        private int depth;
+        private double diam;
+        private double depth;
         private int length;
         public string Dimension { get; set; }
         public string Mark { get; set; }
@@ -25,7 +25,7 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
         public double Amount { get; set; } = 1;
         public string Key { get; set; }
 
-        public SlabSleeve (string mark, int diam, int depth, int length, string role, string desc, ISpecBlock specBlock)
+        public SlabSleeve (string mark, double diam, double depth, int length, string role, string desc, ISpecBlock specBlock)
         {
             SpecBlock = specBlock;
             this.diam = diam;
