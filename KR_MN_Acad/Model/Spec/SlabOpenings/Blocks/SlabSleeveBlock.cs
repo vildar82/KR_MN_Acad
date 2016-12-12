@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using AcadLib.Blocks;
 using AcadLib.Errors;
 using Autodesk.AutoCAD.DatabaseServices;
-using KR_MN_Acad.Spec.Openings.Blocks;
+using KR_MN_Acad.Spec.WallOpenings.Blocks;
 using KR_MN_Acad.Spec.SlabOpenings.Elements;
+using KR_MN_Acad.Spec.Elements;
 
 namespace KR_MN_Acad.Spec.SlabOpenings.Blocks
 {
@@ -18,11 +19,14 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Blocks
     {
         public const string BlockName = "КР_Гильза в плите";
         private const string propMark = "МАРКА";
-        private const string propDiam = "Диаметр";
-        private const string propDepth = "ТОЛЩИНАГИЛЬЗЫ";        
-        private const string propDesc = "ПОЯСНЕНИЕ";        
+        private const string propDiam = "Диаметр";        
+        private const string propDepth = "ТОЛЩИНАГИЛЬЗЫ";
+        private const string propLength = "Толщина_плиты";
+        private const string propDesc = "ПОЯСНЕНИЕ";
+        private const string propWeightUnit = "МАССА_МП";
 
-        SlabSleeve sleeve;        
+        SlabSleeve sleeve;
+        Tube tube;
 
         public SlabSleeveBlock (BlockReference blRef, string blName) : base(blRef, blName)
         {            
@@ -31,12 +35,19 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Blocks
         public override void Calculate ()
         {
             string mark = Block.GetPropValue<string>(propMark);
-            int diam = Block.GetPropValue<int>(propDiam);
-            int depth = Block.GetPropValue<int>(propDepth);
+            double diam = Block.GetPropValue<double>(propDiam);
+            double depth = Block.GetPropValue<double>(propDepth);
+            int length = Block.GetPropValue<int>(propLength);
             string role = SlabService.GetRole(Block);            
             string desc = Block.GetPropValue<string>(propDesc, false);
-            sleeve = new SlabSleeve (mark, diam, depth, role, desc, this);
+            sleeve = new SlabSleeve (mark, diam, depth, length, role, desc, this);
             AddElement(sleeve);
+
+            //double weightUnit = Block.GetPropValue<double>(propWeightUnit, isRequired:false);            
+            tube = new Tube(diam, depth, length, this);
+            tube.Mark = mark;
+            tube.Calc();
+            AddElement(tube);
         }        
 
         public override void Numbering ()

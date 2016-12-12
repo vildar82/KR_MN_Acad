@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Autodesk.AutoCAD.DatabaseServices;
 using KR_MN_Acad.Openings.Blocks;
-using KR_MN_Acad.Spec.Openings.Elements;
+using KR_MN_Acad.Spec.WallOpenings.Elements;
 
-namespace KR_MN_Acad.Spec.Openings.Blocks
+namespace KR_MN_Acad.Spec.WallOpenings.Blocks
 {
     public class DoorBlock : ApertureBase
     {

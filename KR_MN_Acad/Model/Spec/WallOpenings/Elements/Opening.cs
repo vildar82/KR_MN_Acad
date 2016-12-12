@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KR_MN_Acad.Spec.Openings.Elements
+namespace KR_MN_Acad.Spec.WallOpenings.Elements
 {
     /// <summary>
     /// Проем
@@ -58,12 +58,13 @@ namespace KR_MN_Acad.Spec.Openings.Elements
             Mark = num;
         }
 
-        public bool Equals (ISpecElement other)
-        {            
+        public bool Equals(ISpecElement other)
+        {
             var s = other as Opening;
             if (s == null) return false;
-            return Mark == s.Mark && length == s.length && height == s.height 
-                && Role == s.Role && Elevation == s.Elevation;
+            return Mark == s.Mark && length == s.length && height == s.height &&
+                string.Equals(Role, s.Role, StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(Elevation, s.Elevation, StringComparison.OrdinalIgnoreCase);
         }
 
         public int CompareTo (ISpecElement other)

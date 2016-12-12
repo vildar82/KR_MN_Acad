@@ -57,12 +57,16 @@ namespace KR_MN_Acad.Spec
                 foreach (var item in uniqElemGroup)
                 {
                     var row = GetNewRow(groupName, item.ToList());
+                    if (row == null || row.Elements == null || row.Elements.Count == 0) continue;
                     // Проверка одинаковости марки
                     CheckSomeMark(row.Elements);
                     rows.Add(row);
                     numrows++;
                 }
-                groupRows.Add(new KeyValuePair<string, List<ISpecRow>>(groupName, rows.ToList()));
+                if (rows.Any())
+                {
+                    groupRows.Add(new KeyValuePair<string, List<ISpecRow>>(groupName, rows.ToList()));
+                }
             }
             NumRows = numrows + 2;
         }        

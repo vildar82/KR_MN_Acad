@@ -64,6 +64,7 @@
     </Reference>
     <Reference Include="MicroMvvm">
       <HintPath>..\..\..\Package\MVVM\MicroMvvm.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="NetTopologySuite, Version=1.14.0.0, Culture=neutral, PublicKeyToken=f580a05016ebada1, processorArchitecture=MSIL">
       <HintPath>..\packages\NetTopologySuite.1.14\lib\net45\NetTopologySuite.dll</HintPath>
@@ -187,19 +188,19 @@
     <Compile Include="Model\Spec\Monolith\MonolithOptions.cs" />
     <Compile Include="Model\Spec\Monolith\MonolithRow.cs" />
     <Compile Include="Model\Spec\Monolith\MonolithService.cs" />
-    <Compile Include="Model\Spec\Openings\Blocks\WindowBlock.cs" />
-    <Compile Include="Model\Spec\Openings\Blocks\DoorBlock.cs" />
-    <Compile Include="Model\Spec\Openings\ApertureOptions.cs" />
-    <Compile Include="Model\Spec\Openings\Elements\Aperture.cs" />
-    <Compile Include="Model\Spec\Openings\Elements\Window.cs" />
-    <Compile Include="Model\Spec\Openings\Elements\Door.cs" />
+    <Compile Include="Model\Spec\WallOpenings\Blocks\WindowBlock.cs" />
+    <Compile Include="Model\Spec\WallOpenings\Blocks\DoorBlock.cs" />
+    <Compile Include="Model\Spec\WallOpenings\ApertureOptions.cs" />
+    <Compile Include="Model\Spec\WallOpenings\Elements\Aperture.cs" />
+    <Compile Include="Model\Spec\WallOpenings\Elements\Window.cs" />
+    <Compile Include="Model\Spec\WallOpenings\Elements\Door.cs" />
     <Compile Include="Model\Spec\SpecBlock.cs" />
     <Compile Include="Model\Spec\ISpecBlock.cs" />
     <Compile Include="Model\Spec\ISpecElement.cs" />
     <Compile Include="Model\Spec\ISpecOptions.cs" />
     <Compile Include="Model\Spec\ISpecRow.cs" />
     <Compile Include="Model\Spec\ITableService.cs" />
-    <Compile Include="Model\Spec\Openings\Blocks\ApertureBase.cs" />
+    <Compile Include="Model\Spec\WallOpenings\Blocks\ApertureBase.cs" />
     <Compile Include="Model\Spec\SlabOpenings\Elements\ISlabElement.cs" />
     <Compile Include="Model\Spec\SlabOpenings\Elements\SlabSleeve.cs" />
     <Compile Include="Model\Spec\SlabOpenings\Blocks\SlabSleeveBlock.cs" />
@@ -211,14 +212,14 @@
     <Compile Include="Model\Spec\SlabOpenings\SlabOptions.cs" />
     <Compile Include="Model\Spec\SpecService.cs" />
     <Compile Include="Model\Spec\TableService.cs" />
-    <Compile Include="Model\Spec\Openings\Blocks\WallOpeningBlock.cs" />
-    <Compile Include="Model\Spec\Openings\Blocks\WallSleeveBlock.cs" />
-    <Compile Include="Model\Spec\Openings\Elements\IOpeningElement.cs" />
-    <Compile Include="Model\Spec\Openings\Elements\Opening.cs" />
-    <Compile Include="Model\Spec\Openings\Elements\WallSleeve.cs" />
-    <Compile Include="Model\Spec\Openings\WallOptions.cs" />
-    <Compile Include="Model\Spec\Openings\OpeningRow.cs" />
-    <Compile Include="Model\Spec\Openings\OpeningService.cs" />
+    <Compile Include="Model\Spec\WallOpenings\Blocks\WallOpeningBlock.cs" />
+    <Compile Include="Model\Spec\WallOpenings\Blocks\WallSleeveBlock.cs" />
+    <Compile Include="Model\Spec\WallOpenings\Elements\IOpeningElement.cs" />
+    <Compile Include="Model\Spec\WallOpenings\Elements\Opening.cs" />
+    <Compile Include="Model\Spec\WallOpenings\Elements\WallSleeve.cs" />
+    <Compile Include="Model\Spec\WallOpenings\WallOptions.cs" />
+    <Compile Include="Model\Spec\WallOpenings\OpeningRow.cs" />
+    <Compile Include="Model\Spec\WallOpenings\OpeningService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

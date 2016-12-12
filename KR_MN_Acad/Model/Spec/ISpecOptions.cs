@@ -13,6 +13,10 @@ namespace KR_MN_Acad.Spec
         /// Сервис расчета спецификации
         /// </summary>
         ITableService TableService { get; set; }
+        /// <summary>
+        /// Если есть дополнительные таблицы (спецификация, детали и т.п.)
+        /// </summary>
+        List<ITableService> OtherTableService { get; set; }
         bool CheckDublicates { get; set; }
         bool HasBillTable { get; set; }
         bool HasDetailTable { get; set; }

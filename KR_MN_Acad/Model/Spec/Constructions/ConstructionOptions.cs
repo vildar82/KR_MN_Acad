@@ -18,6 +18,7 @@ namespace KR_MN_Acad.Spec.Constructions
         public bool CheckDublicates { get; set; } = true;
         public bool HasBillTable { get; set; } = true;
         public bool HasDetailTable { get; set; } = true;
+        public List<ITableService> OtherTableService { get; set; }
 
         public ConstructionOptions (Database db)
         {

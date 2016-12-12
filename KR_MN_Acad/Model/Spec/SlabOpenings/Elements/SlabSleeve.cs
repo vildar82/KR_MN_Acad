@@ -7,8 +7,9 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
     /// </summary>
     public class SlabSleeve: ISpecElement, ISlabElement
     {
-        private int diam;
-        private int depth;
+        private double diam;
+        private double depth;
+        private int length;
         public string Dimension { get; set; }
         public string Mark { get; set; }
         public string Role { get; set; }
@@ -24,16 +25,17 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
         public double Amount { get; set; } = 1;
         public string Key { get; set; }
 
-        public SlabSleeve (string mark, int diam, int depth, string role, string desc, ISpecBlock specBlock)
+        public SlabSleeve (string mark, double diam, double depth, int length, string role, string desc, ISpecBlock specBlock)
         {
             SpecBlock = specBlock;
             this.diam = diam;
             this.depth = depth;
+            this.length = length;
             Mark = mark;            
             Role = role;
             Description = desc;
             Count = 1;
-            Dimension = "Гильза " + AcadLib.General.Symbols.Diam + diam + "х" + depth;
+            Dimension = $"Гильза {AcadLib.General.Symbols.Diam}{diam}х{depth}, L={length}";            
             Key = Dimension + Role;
         }                
 
@@ -51,7 +53,7 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
         {
             var s = other as SlabSleeve;
             if (s == null) return false;
-            return Mark == s.Mark && diam == s.diam && depth == s.depth && Role == s.Role;
+            return Mark == s.Mark && diam == s.diam && depth == s.depth && length == s.length && Role == s.Role;
         }
 
         public int CompareTo (ISpecElement other)
@@ -65,6 +67,8 @@ namespace KR_MN_Acad.Spec.SlabOpenings.Elements
             res = diam.CompareTo(s.diam);
             if (res != 0) return res;
             res = depth.CompareTo(s.depth);
+            if (res != 0) return res;
+            res = length.CompareTo(s.length);
             if (res != 0) return res;
             return Role.CompareTo(s.Role);
         }

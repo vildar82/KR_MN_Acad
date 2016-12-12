@@ -18,6 +18,8 @@ namespace KR_MN_Acad.Spec.ArmWall
         public bool HasBillTable { get; set; } = true;
         public bool HasDetailTable { get; set; } = true;
 
+        public List<ITableService> OtherTableService { get; set; }
+
         public ArmWallOptions (Database db)
         {
             TypesBlock = new Dictionary<string, Type>() {
