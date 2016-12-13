@@ -8,6 +8,7 @@ using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
 using GeoAPI.Geometries;
+using KR_MN_Acad.Model.Pile.Calc;
 
 namespace KR_MN_Acad.Model.Pile.Numbering
 {
@@ -19,7 +20,7 @@ namespace KR_MN_Acad.Model.Pile.Numbering
         public Document Doc { get; private set; }
         public Database Db { get; private set; }
         public Editor Ed { get; private set; }
-        private Options Options { get; set; }
+        private PileNumberingOptions Options { get; set; }
         public PileOptions PileOptions { get; set; }        
 
         public PileNumberingService()
@@ -36,7 +37,7 @@ namespace KR_MN_Acad.Model.Pile.Numbering
         {
             // Форма настроек нумерации свай - порядок нумерации, имя блока сваи, имя атрибута номера сваи.
             PileOptions = PileOptions.Load();
-            Options = new Options();
+            Options = new PileNumberingOptions();
             Options.LoadDefault();
             Options = Options.PromptOptions();            
 
@@ -45,6 +46,9 @@ namespace KR_MN_Acad.Model.Pile.Numbering
 
             // фильтр блоков свай            
             var piles = PileFilter.Filter(selblocks, PileOptions, false);
+
+            // Сброс положения атрибута номера сваи если задано в настройках
+            ResetPos(ref piles);            
 
             // Определения стороны сваи и проверка ее одинаковости
             Options.PileSide = GetPileSides(ref piles);
@@ -60,7 +64,7 @@ namespace KR_MN_Acad.Model.Pile.Numbering
 
             // Перенумерация
             Num(pilesSort);       
-        }
+        }        
 
         private int GetPileSides (ref List<Pile> piles)
         {
@@ -151,6 +155,35 @@ namespace KR_MN_Acad.Model.Pile.Numbering
         {            
             Coordinate c = new Coordinate(p.Position.X, p.Position.Y);
             return new Envelope(c);
-        }        
+        }
+
+        /// <summary>
+        /// Сброс положения атрибута номера сваи
+        /// </summary>        
+        private void ResetPos(ref List<Pile> piles)
+        {
+            if (Options == null || Options.ResetPos == PileResetEnum.None) return;
+
+            using (var t = Db.TransactionManager.StartTransaction())
+            {
+                var groupPiles = piles.GroupBy(g => g);
+                foreach (var groupByParams in groupPiles)
+                {
+                    // группировка по виду и типу
+                    var groupByViews = groupByParams.GroupBy(g => g.PileType);
+                    foreach (var group in groupByViews)
+                    {
+                        var firstPile = group.First();
+                        firstPile.ResetBlock();                        
+
+                        foreach (var pile in group.Skip(1))
+                        {                            
+                            PileCalcService.CopyPile(Db, firstPile.IdBlRef, firstPile.IdBtrOwner, pile);                            
+                        }                        
+                    }
+                }
+                t.Commit();
+            }            
+        }
     }
 }

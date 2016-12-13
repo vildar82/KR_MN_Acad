@@ -26,7 +26,7 @@ namespace KR_MN_Acad.Model.Pile.Calc
             piles = piles.OrderBy(p => p.Pos).ToList();
 
             // проверка номеров свай
-            Pile.Check(piles);
+            CheckNums(piles);
 
             Inspector.ShowDialog();
             Inspector.Clear();
@@ -124,8 +124,11 @@ namespace KR_MN_Acad.Model.Pile.Calc
                         {
                             if (pile.View != fp.View)
                             {
+                                var num = pile.Pos;
                                 CopyPile(db, fp.IdBlRef, pile.IdBtrOwner, pile);
                                 pile.View = fp.View;
+                                pile.Pos = num;
+                                pile.FillPos();
                             }
                         }
                     }                    
@@ -135,7 +138,14 @@ namespace KR_MN_Acad.Model.Pile.Calc
             }
         }
 
-        private void CopyPile (Database db, ObjectId idCopy, ObjectId idOwner, Pile pile)
+        /// <summary>
+        /// Копирование сваи
+        /// </summary>
+        /// <param name="db">Чертеж</param>
+        /// <param name="idCopy">Свая из которой будет делаться копия</param>
+        /// <param name="idOwner">Пространство</param>
+        /// <param name="pile">Свая старая в место которой будет вставлена новая. Эта свая будет удалена</param>
+        public static void CopyPile (Database db, ObjectId idCopy, ObjectId idOwner, Pile pile)
         {
             using (IdMapping map = new IdMapping())
             {
@@ -143,19 +153,49 @@ namespace KR_MN_Acad.Model.Pile.Calc
                 idColCopy.Add(idCopy);
                 db.DeepCloneObjects(idColCopy, idOwner, map, false);
                 ObjectId idCopyVal = map[idCopy].Value;
+
                 var blRefCopy = idCopyVal.GetObject(OpenMode.ForWrite) as BlockReference;                
 
                 var matrix = Matrix3d.Displacement(pile.Position - blRefCopy.Position);
                 blRefCopy.TransformBy(matrix);                
 
                 var blRefPileOld = pile.IdBlRef.GetObject(OpenMode.ForWrite) as BlockReference;
-                blRefPileOld.Erase();
+                blRefPileOld.Erase();    
+                            
+                pile.Update(blRefCopy);                                
+            }
+        }
 
-                pile.IdBlRef = blRefCopy.Id;
-                pile.IdBtr = blRefCopy.DynamicBlockTableRecord;
-                pile.IdBtrAnonym = blRefCopy.BlockTableRecord;
-                pile.UpdateDefinePropPos();
-                pile.FillPos();                    
+        public static void CheckNums(List<Pile> piles)
+        {
+            // Проверка последовательности номеров.
+            //var sortNums = piles.OrderBy(p => p.Pos);
+
+            // Проверка повторяющихся номеров
+            var repeatNums = piles.GroupBy(g => g.Pos).Where(g => g.Skip(1).Any());
+            foreach (var repaet in repeatNums)
+            {
+                foreach (var item in repaet)
+                {
+                    Inspector.AddError($"Повтор номера {item.Pos}", item.IdBlRef, System.Drawing.SystemIcons.Error);
+                }
+            }
+
+            // Проверка пропущенных номеров
+            var minNum = piles.First().Pos;
+            var maxNum = piles.Last().Pos;
+            var trueSeq = Enumerable.Range(minNum, maxNum - minNum);
+            var missNums = trueSeq.Except(piles.Select(p => p.Pos)).Where(p => p > 0);
+            foreach (var item in missNums)
+            {
+                Inspector.AddError($"Пропущен номер сваи {item}", System.Drawing.SystemIcons.Error);
+            }
+
+            // Недопустимые номера - меньше 1
+            var negateNums = piles.Where(p => p.Pos < 1);
+            foreach (var item in negateNums)
+            {
+                Inspector.AddError($"Недопустимый номер сваи {item.Pos}", item.IdBlRef, System.Drawing.SystemIcons.Error);
             }
         }
     }

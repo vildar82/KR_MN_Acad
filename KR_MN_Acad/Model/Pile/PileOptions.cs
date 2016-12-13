@@ -10,6 +10,7 @@ using AcadLib;
 using AcadLib.XData;
 using Autodesk.AutoCAD.ApplicationServices;
 using Autodesk.AutoCAD.DatabaseServices;
+using System.Globalization;
 
 namespace KR_MN_Acad.Model.Pile
 {
@@ -17,7 +18,7 @@ namespace KR_MN_Acad.Model.Pile
     public class PileOptions : IExtDataSave, ITypedDataValues
     {           
         public static string FileXml = Path.Combine(AutoCAD_PIK_Manager.Settings.PikSettings.ServerShareSettingsFolder, @"КР-МН\Сваи\PileOptions.xml");
-        public const string DicPluginName = "KR_MN";
+        //public const string DicPluginName = "KR_MN";
         public const string DicPileName = "Pile";
         //public const string RecAbsoluteZero = "AbsoluteZero";
         //public const string RecDimPileBeatToCut = "Срубка";
@@ -31,12 +32,12 @@ namespace KR_MN_Acad.Model.Pile
         //[DefaultValue("^КР_свая")]
         public string PileBlockNameMatch { get; set; } = "^КР_свая";
 
-        [Browsable(false)]
-        //[Category("Общие")]
-        //[DisplayName("Атрибут номера")]
-        //[Description("Тэг атрибута номера сваи.")]
-        //[DefaultValue("ПОЗ")]
-        public string PileAttrPos { get; set; } = "ПОЗ";
+        //[Browsable(false)]
+        ////[Category("Общие")]
+        ////[DisplayName("Атрибут номера")]
+        ////[Description("Тэг атрибута номера сваи.")]
+        ////[DefaultValue("ПОЗ")]
+        //public string PileAttrPos { get; set; } = "ПОЗ";
 
         [Browsable(false)]
         //[Category("Общие")]
@@ -79,6 +80,8 @@ namespace KR_MN_Acad.Model.Pile
         //[Description("Слой для вставки таблиц свай.")]
         //[DefaultValue("КР_Таблицы")]
         public string TableLayer { get; set; } = "КР_Таблицы";
+
+        
 
         public PileOptions PromptOptions()
         {
@@ -127,8 +130,8 @@ namespace KR_MN_Acad.Model.Pile
 
         private void SaveToNOD()
         {
-            var nod = new DictNOD(DicPluginName, true);
-            DicED dicPile = GetExtDic(null);            
+            var nod = new DictNOD(DicPileName, true);
+            var dicPile = GetExtDic(null);            
             nod.Save(dicPile);
             //nod.Save(AbsoluteZero, RecAbsoluteZero);
             //nod.Save(DimPileBeatToCut, RecDimPileBeatToCut);
@@ -137,8 +140,8 @@ namespace KR_MN_Acad.Model.Pile
 
         private void LoadFromNOD()
         {
-            var nod = new DictNOD(DicPluginName, true);
-            SetExtDic(nod.LoadED(DicPileName), null);
+            var nod = new DictNOD(DicPileName, true);
+            SetExtDic(nod.LoadED("PileOptions"), null);
             //AbsoluteZero = nod.Load(RecAbsoluteZero, AbsoluteZero);
             //DimPileBeatToCut = nod.Load(RecDimPileBeatToCut, DimPileBeatToCut);
             //DimPileCutToRostwerk = nod.Load(RecDimPileCutToRostwerk, DimPileCutToRostwerk);
@@ -146,7 +149,7 @@ namespace KR_MN_Acad.Model.Pile
 
         public DicED GetExtDic (Document doc)
         {
-            DicED dic = new DicED(DicPileName);
+            var dic = new DicED("PileOptions");
             dic.AddRec("Options", GetDataValues(null));
             return dic;
         }
@@ -160,27 +163,23 @@ namespace KR_MN_Acad.Model.Pile
         public List<TypedValue> GetDataValues (Document doc)
         {
             return new List<TypedValue> {
+                TypedValueExt.GetTvExtData("AbsoluteZero"),
                 TypedValueExt.GetTvExtData(AbsoluteZero),
+                TypedValueExt.GetTvExtData("DimPileBeatToCut"),
                 TypedValueExt.GetTvExtData(DimPileBeatToCut),
-                TypedValueExt.GetTvExtData(DimPileCutToRostwerk),
+                TypedValueExt.GetTvExtData("DimPileCutToRostwerk"),
+                TypedValueExt.GetTvExtData(DimPileCutToRostwerk),                
                 //TypedValueExt.GetTvExtData(PileRatioLmin),
             };
         }
 
-        public void SetDataValues (List<TypedValue> values, Document doc)
+        public void SetDataValues(List<TypedValue> values, Document doc)
         {
             if (values == null) return;
-            try
-            {
-                int i = 0;
-                AbsoluteZero = values[i++].GetTvValue<double>();
-                DimPileBeatToCut = values[i++].GetTvValue<double>();
-                DimPileCutToRostwerk = values[i++].GetTvValue<double>();
-                //PileRatioLmin = values[i++].GetTvValue<double>();
-            }
-            catch
-            {                
-            }
-        }
+            var dictValues = values.ToDictionary();
+            AbsoluteZero = dictValues.GetValue("AbsoluteZero", 150);
+            DimPileBeatToCut = dictValues.GetValue("DimPileBeatToCut", 250);
+            DimPileCutToRostwerk = dictValues.GetValue("DimPileCutToRostwerk", 50);            
+        }        
     }
 }

@@ -12,9 +12,9 @@ namespace KR_MN_Acad.Model.Pile.Numbering
 {
     partial class FormNumbering : Form
     {
-        public Options Options { get; set; }
+        public PileNumberingOptions Options { get; set; }
 
-        public FormNumbering(Options options)
+        public FormNumbering(PileNumberingOptions options)
         {
             InitializeComponent();
             propertyGrid1.SelectedObject = options;

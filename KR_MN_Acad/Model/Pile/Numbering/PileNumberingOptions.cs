@@ -12,14 +12,14 @@ using Autodesk.AutoCAD.DatabaseServices;
 
 namespace KR_MN_Acad.Model.Pile.Numbering
 {
-    class Options : ITypedDataValues, IExtDataSave
+    class PileNumberingOptions : ITypedDataValues, IExtDataSave
     {
         //private static AcadLib.DictNOD dictNod = new AcadLib.DictNOD("PileNumberingOptions");
         //private const string RecOrder = "NumberingOrder";
         //private const string RecSide = "PileSide";
         //private const string RecPileStartNum = "PileStartNum";        
 
-        [Category("Пользовательские")]
+        [Category("Основное")]
         [DisplayName("Порядок нумерации")]
         [Description("Порядок нумерации свай.")]
         [DefaultValue(EnumNumberingOrder.RightToLeft)]
@@ -27,30 +27,30 @@ namespace KR_MN_Acad.Model.Pile.Numbering
         public EnumNumberingOrder NumberingOrder { get; set; }
 
         [Browsable(false)]
-        [Category("Пользовательские")]
+        [Category("Основное")]
         [DisplayName("Сторона сваи")]
         [Description("Размер сваи.")]
         [DefaultValue(300)]
         public int PileSide { get; set; } = 300;
 
-        [Category("Пользовательские")]
+        [Category("Основное")]
         [DisplayName("Начальный номер")]
         [Description("Номер с которого начнется нумерация свай.")]
         [DefaultValue(1)]
-        public int PileStartNum { get; set; } = 1;      
+        public int PileStartNum { get; set; } = 1;
+        
+        [Category("Дополнительно")]
+        [DisplayName("Сброс блоков свай")]
+        [Description("Установка стандартного положения блока сваи и атрибута номера - без поворота, масштабирования, зеркалирования.")]
+        [DefaultValue(PileResetEnum.None)]
+        [TypeConverter(typeof(EnumResetPosConvertor))]
+        public PileResetEnum ResetPos { get; set; } = PileResetEnum.None;        
 
-        public void LoadDefault()
-        {            
-            var dicNOD = new DictNOD("PileNumberingOptions", true);
-            var dicOpt = dicNOD.LoadED();
-            SetDataValues(dicOpt?.GetRec("Options")?.Values, null);
-        }
-
-        public Options PromptOptions()
+        public PileNumberingOptions PromptOptions()
         {
-            Options resVal = this;
+            PileNumberingOptions resVal = this;
             //Запрос начальных значений
-            FormNumbering formNum = new FormNumbering((Options)resVal.MemberwiseClone());
+            FormNumbering formNum = new FormNumbering((PileNumberingOptions)resVal.MemberwiseClone());
             if (Application.ShowModalDialog(formNum) != System.Windows.Forms.DialogResult.OK)
             {
                 throw new System.Exception(AcadLib.General.CanceledByUser);
@@ -58,7 +58,7 @@ namespace KR_MN_Acad.Model.Pile.Numbering
             try
             {
                 resVal = formNum.Options;
-                Save(resVal);                
+                resVal.Save();// Save(resVal);                
             }
             catch (Exception ex)
             {
@@ -67,31 +67,38 @@ namespace KR_MN_Acad.Model.Pile.Numbering
             return resVal;
         }
 
-        private void Save(Options opt)
+        public void LoadDefault()
         {
-            var dicNOD = new DictNOD("PileNumberingOptions", true);            
+            var dicNOD = new DictNOD(PileOptions.DicPileName, true);
+            var dicOpt = dicNOD.LoadED("PileNumberingOptions");
+            SetDataValues(dicOpt?.GetRec("Options")?.Values, null);
+        }
+
+        private void Save()
+        {
+            var dicNOD = new DictNOD(PileOptions.DicPileName, true);            
             dicNOD.Save(GetExtDic(null));            
         }
 
         public List<TypedValue> GetDataValues (Document doc)
         {
             return new List<TypedValue> {
-                TypedValueExt.GetTvExtData((int)NumberingOrder),
+                TypedValueExt.GetTvExtData("NumberingOrder"),
+                TypedValueExt.GetTvExtData(NumberingOrder),
+                TypedValueExt.GetTvExtData("PileStartNum"),
                 TypedValueExt.GetTvExtData(PileStartNum),
+                TypedValueExt.GetTvExtData("ResetPos"),
+                TypedValueExt.GetTvExtData(ResetPos)
             };
         }
 
         public void SetDataValues (List<TypedValue> values, Document doc)
         {
             if (values == null) return;
-            try
-            {
-                NumberingOrder = (EnumNumberingOrder)values[0].GetTvValue<int>();
-                PileStartNum = values[1].GetTvValue<int>();
-            }
-            catch 
-            {                
-            }
+            var dictValues = values.ToDictionary();
+            NumberingOrder = dictValues.GetValue("NumberingOrder", EnumNumberingOrder.RightToLeft);
+            PileStartNum = dictValues.GetValue("PileStartNum", 1);
+            ResetPos = dictValues.GetValue("ResetPos", PileResetEnum.None);
         }
 
         public DicED GetExtDic (Document doc)
@@ -140,6 +147,42 @@ namespace KR_MN_Acad.Model.Pile.Numbering
                     return "Сверху-вниз";
             }
             return value.ToString();                        
+        }
+    }
+
+    public class EnumResetPosConvertor : System.ComponentModel.EnumConverter
+    {
+        public EnumResetPosConvertor() : base(typeof(PileResetEnum)) { }
+
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            return sourceType == typeof(string);
+        }
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+            switch (value.ToString())
+            {
+                case "Не изменять":
+                    return PileResetEnum.None;
+                case "По умолчанию":
+                    return PileResetEnum.Default;
+            }
+            return PileResetEnum.None;
+        }
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        {
+            return destinationType == typeof(string);
+        }
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        {
+            switch (value.ToString())
+            {
+                case "None":
+                    return "Не изменять";
+                case "Default":
+                    return "По умолчанию";
+            }
+            return value.ToString();
         }
     }
 }

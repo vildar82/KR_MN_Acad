@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetLib;
 using AcadLib;
 using AcadLib.Blocks;
 using AcadLib.Errors;
@@ -41,9 +42,7 @@ namespace KR_MN_Acad.Model.Pile
         /// <summary>
         /// Обозначение - документ, альбом, или пусто
         /// </summary>
-        public string DocLink { get; set; }
-
-        
+        public string DocLink { get; set; }        
 
         /// <summary>
         /// Наименование
@@ -80,10 +79,9 @@ namespace KR_MN_Acad.Model.Pile
         public double PilePike { get; set; }
 
         public Pile(BlockReference blRef, string blName) : base(blRef, blName)
-        {
-            IdBtrAnonym = blRef.BlockTableRecord;            
+        {            
             // Определение параметров сваи
-            defineParameters(blRef);           
+            DefineParameters(blRef);           
         }
 
         private bool _extendsHasCalc;
@@ -111,56 +109,7 @@ namespace KR_MN_Acad.Model.Pile
             IdBlRef.FlickObjectHighlight(2, 100, 100);
         }
 
-        public static void Check(List<Pile> piles)
-        {
-            // Проверка последовательности номеров.
-            //var sortNums = piles.OrderBy(p => p.Pos);
-
-            // Проверка повторяющихся номеров
-            var repeatNums = piles.GroupBy(g => g.Pos).Where(g => g.Skip(1).Any());
-            foreach (var repaet in repeatNums)
-            {
-                foreach (var item in repaet)
-                {
-                    Inspector.AddError($"Повтор номера {item.Pos}", item.IdBlRef, System.Drawing.SystemIcons.Error);
-                }
-            }
-
-            // Проверка пропущенных номеров
-            var minNum = piles.First().Pos;
-            var maxNum = piles.Last().Pos;
-            var trueSeq = Enumerable.Range(minNum, maxNum - minNum);
-            var missNums = trueSeq.Except(piles.Select(p => p.Pos)).Where(p=>p>0);
-            foreach (var item in missNums)
-            {
-                Inspector.AddError($"Пропущен номер сваи {item}", System.Drawing.SystemIcons.Error);
-            }
-
-            // Недопустимые номера - меньше 1
-            var negateNums = piles.Where(p => p.Pos < 1);
-            foreach (var item in negateNums)
-            {
-                Inspector.AddError($"Недопустимый номер сваи {item.Pos}", item.IdBlRef, System.Drawing.SystemIcons.Error);
-            }
-        }
-
-        /// <summary>
-        /// обновление параметра Поз
-        /// </summary>
-        public void UpdateDefinePropPos ()
-        {
-            var blRef = IdBlRef.GetObject(OpenMode.ForRead) as BlockReference;
-            var attrs = AcadLib.Blocks.AttributeInfo.GetAttrRefs(blRef);
-            var attrPos = attrs.FirstOrDefault(p => p.Tag.Equals(PileCalcService.PileOptions.PileAttrPos, StringComparison.OrdinalIgnoreCase));
-            if (attrPos != null)
-            {
-                var paramPos = GetProperty(ParamPosName);
-                if (paramPos != null)
-                {
-                    paramPos.IdAtrRef = attrPos.IdAtr;
-                }
-            }
-        }
+        
 
         /// <summary>
         /// Установка Вида свае
@@ -171,7 +120,7 @@ namespace KR_MN_Acad.Model.Pile
             var view = ParamViewNamePrefix + index;
             View = view;
             FillPropValue(ParamViewName, view);
-        }
+        }        
 
         /// <summary>
         /// Расчет высотных отметок сваи
@@ -188,6 +137,28 @@ namespace KR_MN_Acad.Model.Pile
             //BottomRostverk = Math.Round( BottomRostverk - PitHeight*0.001,3);
         }
 
+        /// <summary>
+        /// Вставка чистого блока сваи и установка текущих параметров
+        /// </summary>        
+        public void ResetBlock()
+        {
+            var t = IdBtrOwner.Database.TransactionManager.TopTransaction;
+            var owner = IdBtrOwner.GetObject(OpenMode.ForWrite) as BlockTableRecord;
+            var blRef = BlockInsert.InsertBlockRef(BlName, Position, owner, t);            
+            blRef.LayerId = LayerId;
+
+            var oldBlRef = IdBlRef.GetObject(OpenMode.ForWrite) as BlockReference;
+            oldBlRef.Erase();
+
+            var oldProps = Properties.Select(s => (Property)s.Clone());
+            Update(blRef);
+            foreach (var item in Properties.Where(p=>p.IsShow))
+            {
+                var oldProp = oldProps.First(p => p.Name == item.Name);
+                FillProp(item, oldProp.Value);
+            }            
+        }
+
         public static ObjectId GetAttDefPos (ObjectId idBtr)
         {
             using (var btr = idBtr.Open(OpenMode.ForRead) as BlockTableRecord)
@@ -196,7 +167,7 @@ namespace KR_MN_Acad.Model.Pile
                 {
                     using (var atrDef = idEnt.Open(OpenMode.ForRead, false, true) as AttributeDefinition)
                     {
-                        if (atrDef != null && atrDef.Tag.Equals(PileCalcService.PileOptions.PileAttrPos))
+                        if (atrDef != null && atrDef.Tag.Equals(ParamPosName))
                         {
                             return atrDef.Id;
                         }
@@ -206,8 +177,9 @@ namespace KR_MN_Acad.Model.Pile
             return ObjectId.Null;
         }
 
-        private void defineParameters(BlockReference blRef)
+        private void DefineParameters(BlockReference blRef)
         {
+            IdBtrAnonym = blRef.BlockTableRecord;
             // ПОЗ
             Pos = GetPropValue<int>(ParamPosName);
             // Обозначение
@@ -230,7 +202,13 @@ namespace KR_MN_Acad.Model.Pile
             // Низ ростверка
             BottomRostverk = Math.Round( GetPropValue<double>(ParamBottomRostverkName), 4);
             // Масса
-            Weight = Math.Round ( GetPropValue<double>(ParamWeightName), 4);
+            Weight = Math.Round(GetPropValue<double>(ParamWeightName), 4);
+            // Объем_пр
+            var propVolume = GetProperty("ОБЪЕМ_ПР");
+            if (propVolume != null)
+            {
+                propVolume.IsReadOnly = true;
+            }
         }        
 
         /// <summary>
@@ -296,6 +274,12 @@ namespace KR_MN_Acad.Model.Pile
         public override int GetHashCode ()
         {
             return Length.GetHashCode();
+        }
+
+        public override void Update(BlockReference blRef)
+        {
+            base.Update(blRef);
+            DefineParameters(blRef);
         }
     }
 }
