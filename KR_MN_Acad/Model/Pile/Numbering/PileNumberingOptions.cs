@@ -86,9 +86,7 @@ namespace KR_MN_Acad.Model.Pile.Numbering
                 TypedValueExt.GetTvExtData("NumberingOrder"),
                 TypedValueExt.GetTvExtData(NumberingOrder),
                 TypedValueExt.GetTvExtData("PileStartNum"),
-                TypedValueExt.GetTvExtData(PileStartNum),
-                TypedValueExt.GetTvExtData("ResetPos"),
-                TypedValueExt.GetTvExtData(ResetPos)
+                TypedValueExt.GetTvExtData(PileStartNum),                
             };
         }
 
@@ -97,8 +95,7 @@ namespace KR_MN_Acad.Model.Pile.Numbering
             if (values == null) return;
             var dictValues = values.ToDictionary();
             NumberingOrder = dictValues.GetValue("NumberingOrder", EnumNumberingOrder.RightToLeft);
-            PileStartNum = dictValues.GetValue("PileStartNum", 1);
-            ResetPos = dictValues.GetValue("ResetPos", PileResetEnum.None);
+            PileStartNum = dictValues.GetValue("PileStartNum", 1);            
         }
 
         public DicED GetExtDic (Document doc)
