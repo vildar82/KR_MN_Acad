@@ -177,9 +177,9 @@ namespace KR_MN_Acad.Model.Pile
         {
             if (values == null) return;
             var dictValues = values.ToDictionary();
-            AbsoluteZero = dictValues.GetValue("AbsoluteZero", 150);
-            DimPileBeatToCut = dictValues.GetValue("DimPileBeatToCut", 250);
-            DimPileCutToRostwerk = dictValues.GetValue("DimPileCutToRostwerk", 50);            
+            AbsoluteZero = dictValues.GetValue("AbsoluteZero", 150d);
+            DimPileBeatToCut = dictValues.GetValue("DimPileBeatToCut", 250d);
+            DimPileCutToRostwerk = dictValues.GetValue("DimPileCutToRostwerk", 50d);            
         }        
     }
 }
