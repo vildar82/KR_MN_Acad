@@ -126,7 +126,7 @@ namespace KR_MN_Acad.Model.Pile.Calc.Spec
             //cellColName.Alignment = CellAlignment.MiddleCenter;                        
             // Заголовок Примечание
             cellColName = table.Cells[1, 6];
-            cellColName.TextString = "Примечание";
+            cellColName.TextString = "Примеча-\nние";
             cellColName.TextHeight = 250;
             //cellColName.Alignment = CellAlignment.MiddleCenter;                        
 
